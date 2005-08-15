@@ -1,0 +1,1230 @@
+<!-- 
+
+  main.xml            IO package documentation           Max Neunhoeffer
+
+         Copyright (C) 2005, Lehrstuhl D für Mathematik, RWTH-Aachen
+
+This is the main chapter of the documentation.
+
+-->
+
+<Chapter Label="Chap-IO">
+<Heading>The <Package>IO</Package>-Package</Heading>
+<Index><Package>IO</Package></Index>
+
+<Emph>Bindings for low level C library I/O routines</Emph><P/>
+
+This  chapter describes  the  functions defined  in  the &GAP;4  package
+<Package>IO</Package>.  
+
+By   default  the   <Package>IO</Package>   is  not automatically   loaded
+by   &GAP;   when   it   is  installed.   You  must   load  the   package
+with   <C>LoadPackage("IO");</C>   before  its   functions   become
+available.<P/>
+
+Please,            send             me            an            e-mail
+(<Email>max.neunhoeffer@math.rwth-aachen.de</Email>)  if  you  have  any
+questions,  remarks, suggestions,  etc. concerning  this package.
+Also, I would like to hear about applications of this package.<P/>
+
+Max Neunhöffer
+
+<Section Label="Sect-Install">
+<Heading>Installation of the <Package>IO</Package>-package</Heading>
+
+To install this  package (after extracting the packages  archive file to
+the  GAP  <F>pkg</F>  directory)  go to  the  directory  <F>io</F>  (the
+directory containing this README file) and call<P/>
+
+<C>./configure [path]</C><P/>
+
+where <C>path</C>  is a path  to  the main <Package>GAP</Package> root
+directory (if not given, the default <F>../..</F> is assumed). <P/>
+
+Afterwards call <C>make</C>  to  compile  a binary file. <P/>
+
+If you  installed GAP on several  architectures, you must execute this
+<C>configure/make</C> step  on each  of the architectures  immediately
+after configuring GAP itself on this architecture. <P/>
+
+The package will  not  work  without this step.<P/>
+
+The <F>INSTALL</F>  in the main  package directory also explains  how to
+compile the kernel function into a static module.
+
+You  can  also  run  a test of    the installation  by  typing <C>make
+test</C>.
+
+</Section>
+
+<!-- ############################################################ -->
+<Section Label="Sect-CLibFuncs">
+<Heading>Functions directly available from the C library</Heading>
+
+The following functions from the C library are made available as
+&GAP; functions: <P/>
+
+<C>accept</C>, 
+<C>bind</C>, 
+<C>chdir</C>, 
+<C>chmod</C>, 
+<C>chown</C>, 
+<C>close</C>,
+<C>closedir</C>, 
+<C>connect</C>, 
+<C>creat</C>, 
+<C>dup</C>, 
+<C>dup2</C>, 
+<C>execv</C>,
+<C>execve</C>,
+<C>execvp</C>,
+<C>exit</C>
+<C>fchmod</C>, 
+<C>fchown</C>, 
+<C>fork</C>,
+<C>fstat</C>, 
+<C>gethostbyname</C>, 
+<C>getsockopt</C>, 
+<C>lchown</C>,
+<C>link</C>, 
+<C>listen</C>,
+<C>lseek</C>, 
+<C>lstat</C>,
+<C>mkdir</C>, 
+<C>mkfifo</C>, 
+<C>mknod</C>, 
+<C>open</C>, 
+<C>opendir</C>, 
+<C>pipe</C>,
+<C>read</C>, 
+<C>readdir</C>, 
+<C>readlink</C>,
+<C>recv</C>, 
+<C>recvfrom</C>, 
+<C>rename</C>, 
+<C>rewinddir</C>, 
+<C>rmdir</C>, 
+<C>seekdir</C>,
+<C>select</C>,
+<C>send</C>, 
+<C>sendto</C>,
+<C>setsockopt</C>, 
+<C>socket</C>,
+<C>stat</C>, 
+<C>symlink</C>, 
+<C>telldir</C>, 
+<C>unlink</C>, 
+<C>write</C>
+. <P/>
+
+Use the <C>man</C> command in your shell to get information about these
+functions.<P/>
+
+For each of these functions there is a corresponding &GAP; function in
+the global record <C>IO</C> bound to its name. Apart from minor differences
+(see below) they take exactly the same arguments as their C
+counterparts. Strings must be specified as &GAP; strings and integers
+as &GAP; immediate integers. Return values are in general the same as
+for the C counterparts. However, an error condition is indicated by the
+value <C>fail</C> instead of -1, and if the result can only be success
+or failure, <C>true</C> indicates success. <P/>
+
+All errors are reported via the <C>LastSystemError</C> function.<P/>
+
+In the C library a lot of integers are defined as macros in header files.
+All the necessary values for the above functions are bound to their name
+in the global <C>IO</C> record. <P/>
+
+<Subsection>
+<Heading>Differences in arguments - an overview</Heading>
+
+The <C>open</C> function has to be called with three arguments. The
+version with two arguments is not available on the &GAP; level. <P/>
+
+The <C>read</C> function takes four arguments: <A>fd</A> is an integer
+file descriptor, <A>st</A> is a &GAP; string, <A>offset</A> is an offset
+within this string (zero based), and <A>count</A> is the maximal number 
+of bytes to read. The data is read and stored into the string <A>st</A>,
+starting at position <M><A>offset</A>+1</M>. The string <A>st</A> is 
+made long enough, such that <A>count</A> bytes would fit into it, beginning
+at position <M><A>offset</A>+1</M>. The number of bytes read is returned
+or <C>fail</C> in case of an error. <P/>
+
+The <C>write</C> function is similar, it also takes four arguments:
+<A>fd</A> is an integer file descriptor, <A>st</A> is a &GAP; string,
+<A>offset</A> is an offset within this string (zero based), and 
+<A>count</A> is the number of bytes to write, starting from position
+<M><A>offset</A>+1</M> in the string <A>st</A>. The number of bytes
+written is returned, or an <C>fail</C> in case of an error. <P/>
+
+The <C>opendir</C> function only returns <C>true</C> or <C>fail</C>. <P/>
+
+The <C>readdir</C> function takes no argument. It reads the directory that
+was specified in the last call to <C>opendir</C>. It just returns a string,
+which is the name of a file or subdirectory in the corresponding directory.
+It returns <C>false</C> after the last file name in the directory or
+<C>fail</C> in case of an error. <P/>
+
+The <C>closedir</C> function takes no argument. It should be called after
+<C>readdir</C> returned <C>false</C> or <C>fail</C> to avoid excessive
+use of file descriptors. <P/>
+
+The functions <C>stat</C>, <C>fstat</C>, and <C>lstat</C> only take one
+argument and return a &GAP; record that has the same entries as
+a <C>struct stat</C>.<P/>
+
+The function <C>socket</C> can optionally take a string as third argument.
+In that case it automatically calls <C>getprotobyname</C> to look up the
+protocol name.<P/>
+
+The functions <C>bind</C> and <C>connect</C> take only one string argument
+as address field, because the string already encodes the length.<P/>
+
+There are two convenience functions <C>IO.make_sockaddr_in</C> and
+<C>IO.MakeIPAddressPort</C> to create such addresses. The first takes
+two arguments <A>addr</A> and <A>port</A>, where <A>addr</A> is
+a string of length 4, containing the 4 bytes of the IP address and
+<A>port</A> is a port number as &GAP; integer. The function
+<C>IO.MakeIPAddressPort</C> takes the same arguments, but the first can
+be a string containing an IP address in dot notation like
+<Q>137.226.152.77</Q>.<P/>
+
+The <C>setsockopt</C> function has no argument <A>optlen</A>. The length
+of the string <A>optval</A> is taken.<P/>
+
+The <C>select</C> function works as the function <C>UNIXSelect</C> in the
+&GAP; library.<P/>
+</Subsection>
+
+<ManSection>
+<Func Name="IO.accept" Arg="fd, addr"
+      Comm="Accepts an incoming network connection"/>
+<Description>
+Accepts an incoming network connection.
+For details see <Q><C>man 2 accept</C></Q>. The argument <A>addr</A> can be
+made with <Ref Func="IO.make_sockaddr_in"/> and contains its length such
+that no third argument is necessary.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO.bind" Arg="fd, my_addr"
+      Comm="Binds a local address to a socket."/>
+<Description>
+Binds a local address to a socket.
+For details see <Q><C>man 2 bind</C></Q>. The argument <A>my_addr</A> can be
+made with <Ref Func="IO.make_sockaddr_in"/> and contains its length such
+that no third argument is necessary.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO.chdir" Arg="path"
+      Comm="Changes the current working directory."/>
+<Description>
+Changes the current working directory.
+For details see <Q><C>man 2 chdir</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.chmod" Arg="pathname, mode"
+      Comm="Changes the mode of a file."/>
+<Description>
+Changes the mode of a file.
+For details see <Q><C>man 2 chmod</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.chown" Arg="path, owner, group"
+      Comm="Sets owner and/or group of file."/>
+<Description>
+Sets owner and/or group of file.
+For details see <Q><C>man 2 chown</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.close" Arg="fd"
+      Comm="Closes a file descriptor."/>
+<Description>
+Closes a file descriptor.
+For details see <Q><C>man 2 close</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.closedir" Arg=""
+      Comm="Closes a directory."/>
+<Description>
+Closes a directory.
+For details see <Q><C>man 3 closedir</C></Q>. Has no arguments, because we only
+have one <C>DIR</C> struct in the C part.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.connect" Arg="fd, serv_addr"
+      Comm="Connects to a remote socket."/>
+<Description>
+Connects to a remote socket.
+For details see <Q><C>man 2 connect</C></Q>. The argument <A>my_addr</A> can be
+made with <Ref Func="IO.make_sockaddr_in"/> and contains its length such
+that no third argument is necessary.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.creat" Arg="pathname, mode"
+      Comm="Creates a new file."/>
+<Description>
+Creates a new file. For details see <Q><C>man 2 creat</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.dup" Arg="oldfd"
+      Comm="Duplicates a file descriptor."/>
+<Description>
+Duplicates a file descriptor. 
+For details see <Q><C>man 2 dup</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.dup2" Arg="oldfd, newfd"
+      Comm="Duplicates a file descriptor to a new one."/>
+<Description>
+Duplicates a file descriptor to a new one.
+For details see <Q><C>man 2 dup2</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.execv" Arg="path, argv"
+      Comm="Replaces the process with another process."/>
+<Description>
+Replaces the process with another process.
+For details see <Q><C>man 3 execv</C></Q>. The argument <A>argv</A> is a list
+of strings. The called program does not have to be the first argument
+in this list.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.execve" Arg="path, argv, envp"
+      Comm="Replaces the process with another process."/>
+<Description>
+Replaces the process with another process.
+For details see <Q><C>man 3 execve</C></Q>. The arguments <A>argv</A> and
+<A>envp</A> are both lists of strings. The called program does not have to
+be the first argument in <A>argv</A>. The list <A>envp</A> can be made
+with <Ref Func="IO.MakeEnvList"/> from a record acquired from <Ref
+Func="IO.Environment"/> and modified later.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.execvp" Arg="path, argv"
+      Comm="Replaces the process with another process."/>
+<Description>
+Replaces the process with another process.
+For details see <Q><C>man 3 execvp</C></Q>. The argument <A>argv</A> is a list
+of strings. The called program does not have to be the first argument
+in this list.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.exit" Arg="status"
+      Comm="Stops process immediately with return code status."/>
+<Description>
+Stops process immediately with return code <A>status</A>.
+For details see <Q><C>man 2 exit</C></Q>. The argument <A>status</A> must
+be an integer. Does not return.
+</Description> 
+</ManSection>
+
+<ManSection>
+<Func Name="IO.fchmod" Arg="fd, mode"
+      Comm="Changes mode of an opened file."/>
+<Description>
+Changes mode of an opened file.
+For details see <Q><C>man 2 fchmod</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.fchown" Arg="fd, owner, group"
+      Comm="Changes owner and/or group of an opened file."/>
+<Description>
+Changes owner and/or group of an opened file.
+For details see <Q><C>man 2 fchown</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.fork" Arg=""
+      Comm="Forks off a child process, which is an identical copy."/>
+<Description>
+Forks off a child process, which is an identical copy.
+For details see <Q><C>man 2 fork</C></Q>. Note that if you want to use the
+<Ref Func="IO.WaitPid"/> function to wait or check for the termination of
+child processes, you have to activate the SIGCHLD handler for this
+package beforehand by using the function <Ref
+Func="IO.InstallSIGCHLDHandler"/>. Note further that after that you cannot use
+the function <Ref Func="InputOutputLocalProcess" BookName="ref"/>
+any more, since its SIGCHLD handler does not work any more. To switch
+back to that functionality use the function <Ref
+Func="IO.RestoreSIGCHLDHandler"/>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.fstat" Arg="fd"
+      Comm="Returns the file meta data for an opened file."/>
+<Description>
+Returns the file meta data for an opened file.
+For details see <Q><C>man 2 fstat</C></Q>. A &GAP; record is returned with
+the same entries than a <C>struct stat</C>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.gethostbyname" Arg="name"
+      Comm="Return host information by name."/>
+<Description>
+Return host information by name.
+For details see <Q><C>man 3 gethostbyname</C></Q>. A &GAP; record is returned
+with all the relevant information about the host.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.getsockopt" Arg="fd, level, optname, optval"
+      Comm="Get a socket option."/>
+<Description>
+Get a socket option. For details see <Q><C>man 2 getsockopt</C></Q>.
+Note that the argument <A>optval</A> carries its length around, such that
+no 5th argument is necessary.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.lchown" Arg="path, owner, group"
+      Comm="Changes owner and/or group of a file not following links."/>
+<Description>
+Changes owner and/or group of a file not following links.
+For details see <Q><C>man 2 lchown</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.link" Arg="oldpath, newpath"
+      Comm="Create a hard link."/>
+<Description>
+Create a hard link.
+For details see <Q><C>man 2 link</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.listen" Arg="fd, backlog"
+      Comm="Switch a socket to listening."/>
+<Description>
+Switch a socket to listening.
+For details see <Q><C>man 2 listen</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.lseek" Arg="fd, offset, whence"
+      Comm="Seeks with in an open file."/>
+<Description>
+Seeks with in an open file.
+For details see <Q><C>man 2 lseek</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.lstat" Arg="name"
+      Comm="Returns the file meta data for a file not following links."/>
+<Description>
+Returns the file meta data for a file not following links.
+For details see <Q><C>man 2 lstat</C></Q>. A &GAP; record is returned with
+the same entries than a <C>struct stat</C>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.mkdir" Arg="pathname, mode"
+      Comm="Creates a directory."/>
+<Description>
+Creates a directory.
+For details see <Q><C>man 2 mkdir</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.mkfifo" Arg="pathname, mode"
+      Comm="Makes a FIFO special file (a named pipe)."/>
+<Description>
+Makes a FIFO special file (a named pipe).
+For details see <Q><C>man 3 mkfifo</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.mknod" Arg="pathname, mode, dev"
+      Comm="Create a special or ordinary file."/>
+<Description>
+Create a special or ordinary file.
+For details see <Q><C>man 2 mknod</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.open" Arg="pathname, flags, mode"
+      Comm="Open and possibly create a file or device."/>
+<Description>
+Open and possibly create a file or device.
+For details see <Q><C>man 2 open</C></Q>. Only the variant with 3 arguments
+can be used.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.opendir" Arg="name"
+      Comm="Opens a directory."/>
+<Description>
+Opens a directory.
+For details see <Q><C>man 3 opendir</C></Q>. Note that only <K>true</K> is
+returned if everything is OK, since only one <C>DIR</C> struct is 
+stored on the C level and thus only one directory can be open at any
+time.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.pipe" Arg=""
+      Comm="Create a pair of file descriptors with a pipe between them."/>
+<Description>
+Create a pair of file descriptors with a pipe between them.
+For details see <Q><C>man 2 pipe</C></Q>. Note that no arguments are needed. The
+result is either <K>fail</K> in case of an error or a record with two
+components <C>toread</C> and <C>towrite</C> bound to the two
+filedescriptors for reading and writing repectively.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO.read" Arg="fd, st, offset, count"
+      Comm="Reads from file descriptor."/>
+<Description>
+Reads from file descriptor.
+For details see <Q><C>man 2 read</C></Q>. Note that there is one more argument
+<A>offset</A> to specify at which position in the string <A>st</A> the
+read data should be stored. Note that <A>offset</A> zero means at the
+beginning of the string, which is position 1 in &GAP;.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.readdir" Arg=""
+      Comm="Reads from a directory."/>
+<Description>
+Reads from a directory.
+For details see <Q><C>man 2 readdir</C></Q>. Note that no argument is required
+as we have only one <C>DIR</C> struct on the C level.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.readlink" Arg="path, buf, bufsize"
+      Comm="Reads the value of a symbolic link."/>
+<Description>
+Reads the value of a symbolic link.
+For details see <Q><C>man 2 readlink</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.recv" Arg="fd, st, offset, len, flags"
+      Comm="Receives data from a socket."/>
+<Description>
+Receives data from a socket.
+For details see <Q><C>man 2 recv</C></Q>. Note the additional argument
+<A>offset</A> which plays the same role as for the <Ref Func="IO.read"/>
+function.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.recvfrom" Arg="fd, st, offset, len, flags, addr"
+      Comm="Receives data from a socket with given address."/>
+<Description>
+Receives data from a socket with given address.
+For details see <Q><C>man 2 recvfrom</C></Q>. Note the additional argument 
+<A>offset</A> which plays the same role as for the <Ref Func="IO.read"/>
+function. The argument <A>addr</A> can be
+made with <Ref Func="IO.make_sockaddr_in"/> and contains its length such
+that no 7th argument is necessary.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.rename" Arg="oldpath, newpath"
+      Comm="Renames a file or moves it."/>
+<Description>
+Renames a file or moves it.
+For details see <Q><C>man 2 rename</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.rewinddir" Arg=""
+      Comm="Rewinds a directory."/>
+<Description>
+Rewinds a directory.
+For details see <Q><C>man 2 rewinddir</C></Q>. Note that no argument is required
+as we have only one <C>DIR</C> struct on the C level.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.rmdir" Arg="name"
+      Comm="Removes an empty directory."/>
+<Description>
+Removes an empty directory.
+For details see <Q><C>man 2 rmdir</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.seekdir" Arg="offset"
+      Comm="Sets the position of the next readdir call."/>
+<Description>
+Sets the position of the next readdir call.
+For details see <Q><C>man 3 seekdir</C></Q>. Note that no second argument is required
+as we have only one <C>DIR</C> struct on the C level.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.select" Arg="inlist, outlist, exclist, timeoutsec, timeoutusec"
+      Comm="Used for I/O multiplexing."/>
+<Description>
+Used for I/O multiplexing.
+For details see <Q><C>man 2 select</C></Q>. <A>inlist</A>, <A>outlist</A> and
+<A>exclist</A> are lists of filedescriptors, which are modified. If the
+corresponding file descriptor is not yet ready, it is replaced by
+<K>fail</K>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.send" Arg="fd, st, offset, len, flags"
+      Comm="Sends data to a socket."/>
+<Description>
+Sends data to a socket.
+For details see <Q><C>man 2 send</C></Q>. Note that the additional argument
+<A>offset</A> specifies the position of the data to send within the
+string <A>st</A>. It is zero based, meaning that zero indicates the
+start of the string, which is position 1 in &GAP;. 
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.sendto" Arg="fd, st, offset, len, flags, addr"
+      Comm="Sends data to a socket."/>
+<Description>
+Sends data to a socket.
+For details see <Q><C>man 2 sendto</C></Q>. Note that the additional argument
+<A>offset</A> specifies the position of the data to send within the
+string <A>st</A>. It is zero based, meaning that zero indicates the
+start of the string, which is position 1 in &GAP;. The argument
+<A>addr</A> can be
+made with <Ref Func="IO.make_sockaddr_in"/> and contains its length such
+that no 7th argument is necessary.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.setsockopt" Arg="fd, level, optname, optval"
+      Comm="Sets a socket option."/>
+<Description>
+Sets a socket option.
+For details see <Q><C>man 2 setsockopt</C></Q>. Note that the argument
+<A>optval</A> carries its length around, such that
+no 5th argument is necessary.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.socket" Arg="domain, type, protocol"
+      Comm="Creates a socket, an endpoint for communication."/>
+<Description>
+Creates a socket, an endpoint for communication.
+For details see <Q><C>man 2 socket</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.stat" Arg="pathname"
+      Comm="Returns the file metadata for the file pathname."/>
+<Description>
+Returns the file metadata for the file <A>pathname</A>.
+For details see <Q><C>man 2 stat</C></Q>. A &GAP; record is returned with
+the same entries than a <C>struct stat</C>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.symlink" Arg="oldpath, newpath"
+      Comm="Creates a symbolic link."/>
+<Description>
+Creates a symbolic link.
+For details see <Q><C>man 2 symlink</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.telldir" Arg=""
+      Comm="Return current location in directory."/>
+<Description>
+Return current location in directory.
+For details see <Q><C>man 3 telldir</C></Q>. Note that no second argument is
+required as we have only one <C>DIR</C> struct on the C level.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.unlink" Arg="pathname"
+      Comm="Delete a name and possibly the file it refers to."/>
+<Description>
+Delete a name and possibly the file it refers to.
+For details see <Q><C>man 2 unlink</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.WaitPid" Arg="pid, wait"
+      Comm="Waits for the termination of a child process."/>
+<Description>
+Waits for the termination of a child process.
+For details see <Q><C>man 2 waitpid</C></Q>. Returns a &GAP; record
+describing PID and exit status. The second argument <A>wait</A> must
+be either <K>true</K> or <K>false</K>. In the first case, the call
+blocks until new information about a terminated child process is
+available. In the second case no such waiting is performed, the
+call returns immediately. See <Ref Func="IO.fork"/>.
+</Description> 
+</ManSection>
+ 
+
+<ManSection>
+<Func Name="IO.write" Arg="fd, st, offset, count"
+      Comm="Writes to a file descriptor."/>
+<Description>
+Writes to a file descriptor.
+For details see <Q><C>man 2 write</C></Q>. Note that the additional argument
+<A>offset</A> specifies the position of the data to send within the
+string <A>st</A>. It is zero based, meaning that zero indicates the
+start of the string, which is position 1 in &GAP;. 
+</Description> 
+</ManSection>
+ 
+</Section>
+
+<Section>
+<Heading>Further C level functions</Heading>
+
+The following functions do not correspond to functions in the C library,
+but are there to provide convenience to use other functions:
+
+<ManSection>
+<Func Name="IO.make_sockaddr_in" Arg="ip, port"
+      Comm="Makes a struct sockaddr_in from IP address and port."/>
+<Description>
+Makes a struct sockaddr_in from IP address and port. The IP address
+must be given as a string of length four, containing the four 
+bytes of an IPv4 address in natural order. The port must be a port
+number. Returns a string containing the struct, which can be given
+to all functions above having an address argument.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.MakeEnvList" Arg="r"
+      Comm="Makes an envp list for execve."/>
+<Description>
+Returns a list of strings for usage with <Ref Func="IO.execve"/> made from the 
+components of the record <A>r</A> in the form <Q>key=value</Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.environ" Arg=""
+      Comm="Returns environment as list of strings."/>
+<Description>
+For details see <Q><C>man environ</C></Q>. Returns the current environment
+as a list of strings of the form <Q>key=value</Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.Environment" Arg=""
+      Comm="Returns environment as record."/>
+<Description>
+For details see <Q><C>man environ</C></Q>. Returns the current environment
+as a &GAP; record.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.InstallSIGCHLDHandler" Arg=""
+      Comm="Installs our SIGCHLD handler."/>
+<Description>
+Installs our SIGCHLD handler. See <Ref Func="IO.fork"/>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO.RestoreSIGCHLDHandler" Arg=""
+      Comm="Restores the original SIGCHLD handler."/>
+<Description>
+Restores the original SIGCHLD handler. See <Ref Func="IO.fork"/>.
+</Description> 
+</ManSection>
+
+</Section>
+
+<Section>
+<Heading>Higher level functions for buffered I/O</Heading>
+
+The functions in the previous sections are intended to be a possibility
+for direct access to the low level I/O functions in the C library. Thus,
+the calling conventions are strictly like in the original.<P/>
+
+The functionality described in this section is implemented completely
+in the &GAP; language and is intended to provide a good interface
+for programming in &GAP;. The basic idea is to wrap up (integer)
+file descriptors in &GAP; objects that do the buffering.<P/>
+
+The wrapped objects are in the following category:
+
+<ManSection>
+<Filt Name="IsFile" Arg="o" Type="Category"/>
+<Description> The category of <K>File</K> objects. </Description>
+</ManSection>
+
+To create objects in this category, one uses the following function:
+
+<ManSection>
+<Func Name="IO.WrapFD" Arg="fd, rbufsize, wbufsize" 
+      Comm="creates buffering I/O objects, called File objects"/>
+<Description>
+The argument <A>fd</A> must be a file descripter (i.e. an integer)
+or -1 (see below). <P/>
+
+<A>rbufsize</A> can either be <K>false</K> for
+unbuffered reading or an integer buffer size or a string. If it is
+an integer, a read buffer of that size is used. If it is a string,
+then <A>fd</A> must be -1 and a <K>File</K> object that reads from that string
+is created.<P/>
+
+<A>wbufsize</A> can either be <K>false</K> for
+unbuffered writing or an integer buffer size or a string. If it is
+an integer, a write buffer of that size is used. If it is a string,
+then <A>fd</A> must be -1 and a <K>File</K> object that appends to that string
+is created.<P/>
+
+The result of this function is a new <K>File</K> object.
+</Description>
+</ManSection>
+
+A convenient way to do this for reading or writing of files on disk
+is the following function:
+<ManSection>
+<Func Name="IO.File" Arg="filename [,mode]"
+      Comm="open a file for reading or writing and create a File object"/>
+<Description>
+The argument <A>filename</A> must be a string specifying the path name
+of the file to work on. <A>mode</A> must also be a string with possible
+values <Q>r</Q>, <Q>w</Q>, or <Q>a</Q>, meaning read access, write
+access (with creating and truncating), and append access respectively.
+If <A>mode</A> is omitted, it defaults to <Q>r</Q>. Internally, the
+<C>IO.open</C> function is used and the result file descripter is 
+wrapped using <Ref Func="IO.WrapFD"/> with <C>IO.DefaultBufSize</C>
+as the buffer size. <P/>
+
+The result is either <K>fail</K> in case of an error or a <K>File</K> object
+in case of success.
+</Description>
+</ManSection>
+
+Once a <K>File</K> object is created, one can use the following
+functions on it:
+
+<ManSection>
+<Func Name="IO.Read" Arg="f [,len]"
+      Comm="buffered read from File object"/>
+<Description>
+The function gets one or two arguments, the first of which must always
+be a <K>File</K> object <A>f</A>. It reads data either until end of file
+(without a second argument) or up to <A>len</A> bytes (with a second
+argument <A>len</A>). A string with the result is returned, if everything
+went well and <K>fail</K> otherwise. In the latter case, one can query
+the error with <Ref Func="LastSystemError" BookName="ref"/>.<P/>
+
+Note that the reading is done via the buffer of <A>f</A>, such that
+this function will be quite fast also for large amounts of data.<P/>
+
+If the file is already at the end of the file, the function returns
+a string of length 0. Note that this is not an error!
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO.ReadLine" Arg="f"
+      Comm="buffered read from File object, one line"/>
+<Description>
+This function gets exactly one argument, which must be a <K>File</K> object
+<A>f</A>. It reads one line of data, where the definition of line is
+operating system dependent. The line end character(s) are included in
+the result. The function returns a string with the line in case of
+success and <K>fail</K> in case of an error. <P/>
+
+Note that the reading is done via the buffer of <A>f</A>, such that
+this function will be quite fast also for large amounts of data.<P/>
+
+If the end of file is hit without a line end, the rest of the file
+is returned. If the file is already at end of file before the call,
+then a string of length 0 is returned. Note that this
+is not an error!
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO.ReadLines" Arg="f [,max]"
+      Comm="buffered read from File object, many lines"/>
+<Description>
+This function gets one or two arguments, the first of which must always
+be a <K>File</K> object <A>f</A>. It reads lines of data (where the
+definition of line is operating system dependent) either until
+end of file (without a second argument) or up to <A>max</A> lines
+(with a second argument <A>max</A>. A list of strings with the result is
+returned, if everything went well and <K>fail</K> oterwise. In the
+latter case, one can query the error with <Ref Func="LastSystemError"
+BookName="ref"/>.<P/>
+
+Note that the reading is done via the buffer of <A>f</A>, such that
+this function will be quite fast also for large amounts of data.<P/>
+
+If the file is already at the end of file, the function returns
+a list of length 0. Note that this is not an error!
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO.Write" Arg="f [,things ... ]"
+      Comm="buffered write to File object"/>
+<Description>
+This function can get an arbitrary number of arguments, the first of which
+must be <K>File</K> object <A>f</A>. All the other arguments are just
+written to <A>f</A> if they are strings. Otherwise, the <K>String</K>
+function is called on them and the result is written out to <A>f</A>.<P/>
+
+Note that the writing is done buffered. That is, the data is first written
+to the buffer and only really written out after the buffer is full or
+after the user explicitly calls <Ref Func="IO.Flush"/> on <A>f</A>.<P/>
+
+The result is either the number of bytes written in case of success or
+<K>fail</K> in case of an error. In the latter case the error can be
+queried with <Ref Func="LastSystemError" BookName="ref"/>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO.WriteLine" Arg="f, line"
+      Comm="buffered write to File object, one line"/>
+<Description>
+Behaves like <Ref Func="IO.Write"/> but works on a single string
+<A>line</A> and sends an (operating system dependent) end of line
+string afterwards. Also <Ref Func="IO.Flush"/> is called automatically
+after the operation, such that one can be sure, that the data is actually
+written out after the function has completed.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO.WriteLines" Arg="f, list"
+      Comm="buffered write to File object, many lines"/>
+<Description>
+Behaves like <Ref Func="IO.Write"/> but works on a list of strings
+<A>list</A> and sends an (operating system dependent) end of line
+string after each string in the list. Also <Ref Func="IO.Flush"/> is
+called automatically after the operation, such that one can be sure,
+that the data is actually written out after the function has completed.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO.Flush" Arg="f"
+      Comm="writes stuff in the buffer to the file"/>
+<Description>
+This function gets one argument <A>f</A>, which must be a <K>File</K>
+object. It writes out all the data that is in the writing buffer. This
+is not necessary before the call to the function <Ref Func="IO.Close"/>.
+However, it is necessary to call <Ref Func="IO.Flush"/> after calls to
+<Ref Func="IO.Write"/> to be sure that the data is really sent out.<P/>
+
+Remember that the functions <Ref Func="IO.WriteLine"/> and <Ref
+Func="IO.WriteLines"/> implicitly call <Ref Func="IO.Flush"/> after
+they are done.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO.Close" Arg="f"
+      Comm="closes file and file descriptor"/>
+<Description>
+This function closes the <K>File</K> object <A>f</A> after writing all data
+in the write buffer out and closing the file descriptor. All buffers are
+freed. In case of an error, the function returns <K>fail</K> and otherwise
+<K>true</K>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO.GetFD" Arg="f"
+      Comm="returns the real file descriptor as an integer"/>
+<Description>
+This function returns the real file descripter that is behind the
+<K>File</K> object <A>f</A>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO.GetWBuf" Arg="f"
+      Comm="returns the writing buffer as a string"/>
+<Description>
+This function gets one argument <A>f</A> which must be a <K>File</K> object
+and returns the writing buffer of that <K>File</K> object. This is
+necessary for <K>File</K> objects, that are not associated to a
+real file descripter but just collect everything that was written
+in their writing buffer. Remember to use this function before closing
+the <K>File</K> object.
+</Description>
+</ManSection>
+
+The following function is a convenience function for directory access:
+
+<ManSection>
+<Func Name="IO.ListDir" Arg="pathname"
+      Comm="returns a list of file names in the directory pathname"/>
+<Description>
+This function gets a string containing a path name as single argument
+and returns a list of strings that are the names of the files in that
+directory, or <K>fail</K>, if an error occurred.
+</Description>
+</ManSection>
+
+The following function is used to create strings describing a pair of
+an IP address and a port number in a binary way. These strings can be
+used in connection with the C library functions <C>connect</C>,
+<C>bind</C>, <C>recvfrom</C>, and <C>sendto</C> for the arguments
+needing such address pairs.
+
+<ManSection>
+<Func Name="IO.MakeIPAddressPort" Arg="ipstring, portnr"
+      Comm="creates an IP address port number pair for usage with connect"/>
+<Description>
+This function gets a string <A>ipstring</A> containing an IP address
+in dot notation, i.e. four numbers in the range from 0 to 255 separated
+by dots <Q>.</Q>, and an integer <A>portnr</A>, which is a port number.
+The result is a string of the correct length to be used for the
+low level C library functions, wherever IP address port number pairs
+are needed.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO.Environment" Arg=""
+      Comm="returns a record describing the environment"/>
+<Description>
+Takes no arguments, uses <Ref Func="IO.environ"/> to get the environment
+and returns a record in which the component names are the names of the
+environment variables and the values are the values. This can then be
+changed and the changed record can be given to <Ref Func="IO.MakeEnvList"/>
+to produce again a list which can be used for <Ref Func="IO.execve"/> as
+third argument.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO.MakeEnvList" Arg="r"
+      Comm="takes an environment record and returns a list for execve"/>
+<Description>
+Takes a record as returned by <Ref Func="IO.Environment"/> and turns it
+into a list of strings as needed by <Ref Func="IO.execve"/> as third
+argument.
+</Description>
+</ManSection>
+</Section>
+
+<Section>
+<Heading>High level functions for inter process communication</Heading>
+
+<ManSection>
+<Func Name="IO.CloseAllFDs" Arg="exceptions"
+      Comm="Closes all file descriptors except those listed in exceptions"/>
+<Description>
+Closes all file descriptors except those listed in <A>exceptions</A>, which
+must be a list of integers.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO.Popen" Arg="path, argv, mode"
+      Comm="Starts a child process with either stdout or stdin being a pipe"/>
+<Description>
+Starts a child process with either stdout or stdin being a pipe. The 
+argument <A>mode</A> must be either the string <Q><C>r</C></Q> or the
+string <Q><C>w</C></Q>. <P/>
+
+In the first case, the standard output of the
+child process will be the writing end of a pipe. A <C>File</C> object
+for reading connected to the reading end of the pipe is returned. The
+standard input and standard error of the child process will be the same
+than the calling &GAP; process. <P/>
+
+In the second case, the standard input of the child process will be the
+reading end of a pipe. A <C>File</C> object for writing connected to the
+writing end of the pipe is returned. The standard output and standard error 
+of the child process will be the same than the calling &GAP; process. <P/>
+
+In case of an error, <K>fail</K> is returned. <P/>
+
+The process will usually die, when the pipe is closed, but can also
+do so without that. It lies in the
+responsability of the caller to <Ref Func="IO.WaitPid"/> for it, 
+if our SIGCHLD handler has been activated (see <Ref
+Func="IO.InstallSIGCHLDHandler"/>). <P/>
+
+In either case the <C>File</C> object will have the attribute
+<Q><K>ProcessID</K></Q> set to the process ID of the child process.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO.Popen2" Arg="path, argv"
+      Comm="Starts a child process with stdin and stdout being a pipe"/>
+<Description>
+A new child process is started. The standard input and standard output of it 
+are pipes. The writing end of the input pipe and the reading end of the
+output pipe are returned as <K>File</K> objects bound to two components
+<Q><C>stdin</C></Q> and <Q><C>stdout</C></Q> (resp.) of the returned record. 
+This means, you have to <E>write</E> to <Q><C>stdin</C></Q> and <E>read</E> 
+from <Q><C>stdout</C></Q> in the calling &GAP; process. 
+The standard error of the child process will be 
+the same as the one of the calling &GAP; process. <P/>
+
+Returns <K>fail</K> if an error occurred. <P/>
+
+The process will usually die, when one of the pipes is closed. It
+lies in the responsability of the caller to <Ref Func="IO.WaitPid"/> for it, 
+if our SIGCHLD handler has been activated (see <Ref
+Func="IO.InstallSIGCHLDHandler"/>). <P/>
+
+Both <C>File</C> objects will have the attribute <Q><K>ProcessID</K></Q>
+set to the process ID of the child process, which will also be bound to
+the <Q><K>pid</K></Q> component of the returned record.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO.Popen3" Arg="path, argv"
+   Comm="Starts a child process with stdin, stdout, and stderr being a pipe"/>
+<Description>
+A new child process is started. The standard input, standard output, and
+standard error of it 
+are pipes. The writing end of the input pipe, the reading end of the
+output pipe and the reading end of the error pie 
+are returned as <K>File</K> objects bound to two components
+<Q><C>stdin</C></Q>, <Q><C>stdout</C></Q>, and <Q><C>stderr</C></Q> 
+(resp.) of the returned record. 
+This means, you have to <E>write</E> to <Q><C>stdin</C></Q> and <E>read</E> 
+from <Q><C>stdout</C></Q> and <Q><C>stderr</C></Q> in the calling
+&GAP; process.<P/>
+
+Returns <K>fail</K> if an error occurred. <P/>
+
+The process will usually die, when one of the pipes is closed. It
+lies in the responsability of the caller to <Ref Func="IO.WaitPid"/> for it, 
+if our SIGCHLD handler has been activated (see <Ref
+Func="IO.InstallSIGCHLDHandler"/>). <P/>
+
+All three <C>File</C> objects will have the attribute <Q><K>ProcessID</K></Q>
+set to the process ID of the child process, which will also be bound to
+the <Q><K>pid</K></Q> component of the returned record.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO.SendStringBackground" Arg="f, st"
+      Comm="Sends away the string st to f in the background"/>
+<Description>
+This functions uses <Ref Func="IO.Write"/> to write the whole string
+<A>st</A> to the <K>File</K> object <A>f</A>. However, this is done
+by forking off a child process identical to the calling &GAP; process
+that does the sending. The calling &GAP; process returns immediately, even 
+before anything has been sent away with the result <K>true</K>. 
+The forked off sender process terminates itself immediately, after it
+has sent all data away.<P/>
+
+The reason for having this function available is the following: If one 
+uses <Ref Func="IO.Popen2"/> or <Ref Func="IO.Popen3"/> to start up
+a child process with standard input and standard output being a pipe,
+then one usually has the problem, that the child process starts reading
+some data, but then wants to write data, before it received all data
+coming. If the calling &GAP; process would first try to write all data
+and only start to read the output of the
+child process after sending away all data, 
+a deadlock situation would occur.
+This is avoided with the forking and backgrounding approach.<P/>
+
+Remember to close the writing end of the standard input pipe in the
+calling &GAP; process directly after <Ref Func="IO.SendStringBackground"/>
+has returned, because otherwise the child process might not notice that
+all data has arrived, because the pipe persists! See the file
+<F>popen2.g</F> in the <F>example</F> directory for an example.<P/>
+
+Note that with most modern operating systems the forking off of an
+identical child process does in fact <E>not</E> mean a duplication of the
+total main memory used by both processes, because the operating system
+kernel will use <Q>copy on write</Q>. However, if a garbage collection
+happens to become necessary during the sending of the data in the
+forked off sending process, this might trigger doubled memory usage.
+</Description>
+</ManSection>
+
+</Section>
+
+<Section>
+<Heading>Examples of usage</Heading>
+
+See the <F>example</F> directory of the package for some examples of
+usage. You find there a small server using the TCP/IP protocol and
+a corresponding client and another small server using the UDP protocol
+and a corresponding client. <P/>
+
+Further, there is an example for the
+usage of <K>File</K> objects, that read from or write to strings.<P/>
+
+Finally, there is an example starting up a child process and piping
+a few megabytes through it using <Ref Func="IO.Popen2"/>.
+</Section>
+
+</Chapter>

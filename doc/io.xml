@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE Book SYSTEM "gapdoc.dtd">
+
+<!--
+
+  io.xml          IO package documentation                Max Neunhoeffer
+
+  Copyright (C) 2005, Lehrstuhl D für Mathematik, RWTH-Aachen
+
+-->
+
+<Book Name="IO">
+
+<TitlePage>
+    <Title>GAP 4 Package <Package>IO</Package></Title>
+    <Subtitle>Bindings for low level C library I/O routines</Subtitle>
+    <Version>
+      <#Include SYSTEM "../VERSION">
+    </Version>
+    <Author>Max Neunhöffer
+<Address>
+Lehrstuhl D für Mathematik
+RWTH Aachen
+Templergraben 64
+52062 Aachen
+Germany
+</Address>
+    <Email>max.neunhoeffer@math.rwth-aachen.de</Email>
+    <Homepage>http://www.math.rwth-aachen.de/&tilde;Max.Neunhoeffer</Homepage>
+    </Author>
+    <Date>May 2005</Date>
+</TitlePage>
+
+<!--  TableOfContents  . . . . . .  generate a table of contents   -->
+<TableOfContents/>
+
+<!--  The only chapter of the book  --> 
+<Body>
+<#Include SYSTEM "main.xml">
+</Body>
+
+<!--  We do not need a bibliography  -->
+<!-- <Bibliography Databases="edim"/>-->
+
+<!--  And finally an index as well   -->
+<TheIndex/>
+
+</Book>
+

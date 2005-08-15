@@ -1,0 +1,31 @@
+# makefile for the IO package                             Max Neunhoeffer
+CC=cc
+
+GAPINCL=-I$(GAPPATH)/src -I$(GAPPATH)/bin/@GAPARCH@
+
+.PHONY: bindir clean doc test
+
+default: bindir bin/@GAPARCH@/io.so
+
+# this target creates a bin-directory
+bindir:
+	if test ! -d bin;  then mkdir bin;  fi
+	if test ! -d bin/@GAPARCH@;  then mkdir bin/@GAPARCH@;  fi
+
+bin/@GAPARCH@/io.so: src/io.c
+	cp $(GAPPATH)/bin/@GAPARCH@/config.h bin/@GAPARCH@
+	$(GAPPATH)/bin/@GAPARCH@/gac -d -o bin/@GAPARCH@/io.so src/io.c
+
+# make a statically linked GAP including the io module
+static:
+	(cd $(GAPPATH)/bin/@GAPARCH@; \
+	./gac -o gap-static -p "-DIOSTATIC" -P "-static" \
+	../../pkg/io/src/io.c)
+
+doc: doc/manual.six
+
+doc/manual.six: doc/main.xml doc/io.xml
+	($(GAPPATH)/bin/gap.sh makedoc.g)
+
+clean:
+	rm -rf bin/@GAPARCH@ Makefile

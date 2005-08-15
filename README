@@ -1,0 +1,64 @@
+      README file for the `IO' GAP4 package (Max Neunhoeffer)
+        
+To get the newest version of this GAP 4 package download one of the
+archive files
+    io-x.x.tar.gz
+    io-x.x.zoo
+    io-x.x.tar.bz2
+    io-x.x.zip
+and unpack it using 
+    gunzip io-x.x.tar.gz; tar xvf io-x.x.tar
+respectively
+    unzoo -x io-x.x.zoo
+and so on.
+
+(Note that if you use a browser like `netscape' for downloading the
+archive file the `gunzip' step above may already be done by the browser,
+although the name of your file may still have the misleading `.gz'
+extension.)
+
+Do this preferably (but not necessarily) inside the `pkg' subdirectory
+of your GAP 4 installation. It creates a subdirectory called `io'.
+
+To install this package do
+
+    cd io
+    ./configure [path]
+
+where `path' is a path to the main GAP root directory (if not given the
+default `../..' is assumed).
+
+Afterwards call `make' to compile a binary file.
+
+If you installed GAP on several architectures, you must execute this
+configure/make step on each of the architectures immediately after
+configuring GAP itself on this architecture.
+
+The package  will not work without  this  step.
+
+----------------------------------------------------------------------------
+STATIC LINKING: This might be interesting for M$ Windows users, as
+dynamic loading of binary modules does not work there.
+
+You can also create a new statically linked `gap' binary as follows:
+Go into the main GAP directory and then into `bin/..bindir..'. Here
+..bindir.. means the directory containing the `gap' executable after
+compiling `gap'. This directory also contains the GAP compiler script
+`gac'. Assuming IO in the standard location you can then say
+
+   ./gac -o gap-static -P "-static" ../../pkg/io/src/io.c
+
+Then copy your `gap' start script to, say, `gapbig' and change the
+references to the GAP binary to `gap-static'. On my Linux system with
+2GB RAM and kernel compiled with 4GB memory support I can nicely run
+`gapbig -m 1800m -K 1800m' and after loading IO.
+----------------------------------------------------------------------------
+
+Recompiling the documentation is possible by the command `gap makedoc.g'
+in the IO directory. But this should not be necessary.
+
+E-mail me if there are any questions, remarks, suggestions. Also, I
+would like to hear about applications of this package.
+
+
+Max Neunhoeffer, e-mail: max.neunhoeffer@math.rwth-aachen.de 
