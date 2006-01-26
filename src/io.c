@@ -1442,7 +1442,7 @@ Obj FuncIO_execve(Obj self,Obj path,Obj Argv,Obj Envp)
             SyClearErrorNo();
             return Fail;
         }
-        argv[i-1] = CHARS_STRING(tmp);
+        envp[i-1] = CHARS_STRING(tmp);
     }
     envp[i-1] = 0;
     i = execve(CHARS_STRING(path),argv,envp);
@@ -1510,64 +1510,64 @@ Obj FuncIO_exit(Obj self,Obj status)
 */
 static StructGVarFunc GVarFuncs [] = {
 
-  { "open", 3, "pathname, flags, mode", 
+  { "IO_open", 3, "pathname, flags, mode", 
     FuncIO_open, 
     "io.c:IO_open" },
 
-  { "creat", 2, "pathname, mode", 
+  { "IO_creat", 2, "pathname, mode", 
     FuncIO_creat, 
     "io.c:IO_creat" },
 
-  { "read", 4, "fd, st, offset, count", 
+  { "IO_read", 4, "fd, st, offset, count", 
     FuncIO_read, 
     "io.c:IO_read" },
 
-  { "write", 4, "fd, st, offset, count", 
+  { "IO_write", 4, "fd, st, offset, count", 
     FuncIO_write, 
     "io.c:IO_write" },
 
-  { "close", 1, "fd", 
+  { "IO_close", 1, "fd", 
     FuncIO_close, 
     "io.c:IO_close" },
 
-  { "lseek", 3, "fd, offset, whence", 
+  { "IO_lseek", 3, "fd, offset, whence", 
     FuncIO_lseek, 
     "io.c:IO_lseek" },
 
 #ifdef HAVE_DIRENT_H
 
 #ifdef HAVE_OPENDIR
-  { "opendir", 1, "name",
+  { "IO_opendir", 1, "name",
     FuncIO_opendir, 
     "io.c:IO_opendir" },
 #endif
 
 #ifdef HAVE_READDIR
-  { "readdir", 0, "",
+  { "IO_readdir", 0, "",
     FuncIO_readdir, 
     "io.c:IO_readdir" },
 #endif
 
 #ifdef HAVE_REWINDDIR
-  { "rewinddir", 0, "",
+  { "IO_rewinddir", 0, "",
     FuncIO_rewinddir, 
     "io.c:IO_rewinddir" },
 #endif
 
 #ifdef HAVE_CLOSEDIR
-  { "closedir", 0, "",
+  { "IO_closedir", 0, "",
     FuncIO_closedir, 
     "io.c:IO_closedir" },
 #endif
 
 #ifdef HAVE_TELLDIR
-  { "telldir", 0, "",
+  { "IO_telldir", 0, "",
     FuncIO_telldir, 
     "io.c:IO_telldir" },
 #endif
 
 #ifdef HAVE_SEEKDIR
-  { "seekdir", 1, "offset",
+  { "IO_seekdir", 1, "offset",
     FuncIO_seekdir, 
     "io.c:IO_seekdir" },
 #endif
@@ -1575,248 +1575,248 @@ static StructGVarFunc GVarFuncs [] = {
 #endif   /* HAVE_DIRENT_H */
 
 #ifdef HAVE_UNLINK
-  { "unlink", 1, "pathname", 
+  { "IO_unlink", 1, "pathname", 
     FuncIO_unlink, 
     "io.c:IO_unlink" },
 #endif
 
 #ifdef HAVE_LINK
-  { "link", 2, "oldpath, newpath", 
+  { "IO_link", 2, "oldpath, newpath", 
     FuncIO_link, 
     "io.c:IO_link" },
 #endif
 
 #ifdef HAVE_RENAME
-  { "rename", 2, "oldpath, newpath", 
+  { "IO_rename", 2, "oldpath, newpath", 
     FuncIO_rename, 
     "io.c:IO_rename" },
 #endif
 
 #ifdef HAVE_SYMLINK
-  { "symlink", 2, "oldpath, newpath", 
+  { "IO_symlink", 2, "oldpath, newpath", 
     FuncIO_symlink, 
     "io.c:IO_symlink" },
 #endif
 
 #ifdef HAVE_READLINK
-  { "readlink", 3, "path, buf, bufsize", 
+  { "IO_readlink", 3, "path, buf, bufsize", 
     FuncIO_readlink, 
     "io.c:IO_readlink" },
 #endif
 
 #ifdef HAVE_MKDIR
-  { "mkdir", 2, "pathname, mode", 
+  { "IO_mkdir", 2, "pathname, mode", 
     FuncIO_mkdir, 
     "io.c:IO_mkdir" },
 #endif
 
-  { "chdir", 1, "path", 
+  { "IO_chdir", 1, "path", 
     FuncIO_chdir, 
     "io.c:IO_chdir" },
 
 #ifdef HAVE_RMDIR
-  { "rmdir", 1, "pathname", 
+  { "IO_rmdir", 1, "pathname", 
     FuncIO_rmdir, 
     "io.c:IO_rmdir" },
 #endif
 
 #ifdef HAVE_STAT
-  { "stat", 1, "pathname", 
+  { "IO_stat", 1, "pathname", 
     FuncIO_stat, 
     "io.c:IO_stat" },
 #endif
 
 #ifdef HAVE_FSTAT
-  { "fstat", 1, "fd", 
+  { "IO_fstat", 1, "fd", 
     FuncIO_fstat, 
     "io.c:IO_fstat" },
 #endif
 
 #ifdef HAVE_LSTAT
-  { "lstat", 1, "pathname", 
+  { "IO_lstat", 1, "pathname", 
     FuncIO_lstat, 
     "io.c:IO_lstat" },
 #endif
 
 #ifdef HAVE_CHMOD
-  { "chmod", 2, "path, mode", 
+  { "IO_chmod", 2, "path, mode", 
     FuncIO_chmod, 
     "io.c:IO_chmod" },
 #endif
 
 #ifdef HAVE_FCHMOD
-  { "fchmod", 2, "fd, mode", 
+  { "IO_fchmod", 2, "fd, mode", 
     FuncIO_fchmod, 
     "io.c:IO_fchmod" },
 #endif
 
 #ifdef HAVE_CHOWN
-  { "chown", 3, "path, owner, group", 
+  { "IO_chown", 3, "path, owner, group", 
     FuncIO_chown, 
     "io.c:IO_chown" },
 #endif
 
 #ifdef HAVE_FCHOWN
-  { "fchown", 3, "fd, owner, group", 
+  { "IO_fchown", 3, "fd, owner, group", 
     FuncIO_fchown, 
     "io.c:IO_fchown" },
 #endif
 
 #ifdef HAVE_LCHOWN
-  { "lchown", 3, "path, owner, group", 
+  { "IO_lchown", 3, "path, owner, group", 
     FuncIO_lchown, 
     "io.c:IO_lchown" },
 #endif
 
 #ifdef HAVE_MKNOD
-  { "mknod", 3, "path, mode, dev", 
+  { "IO_mknod", 3, "path, mode, dev", 
     FuncIO_mknod, 
     "io.c:IO_mknod" },
 #endif
 
 #ifdef HAVE_MKFIFO
-  { "mkfifo", 2, "path, mode", 
+  { "IO_mkfifo", 2, "path, mode", 
     FuncIO_mkfifo, 
     "io.c:IO_mkfifo" },
 #endif
 
 #ifdef HAVE_DUP
-  { "dup", 1, "oldfd", 
+  { "IO_dup", 1, "oldfd", 
     FuncIO_dup, 
     "io.c:IO_dup" },
 #endif
 
 #ifdef HAVE_DUP2
-  { "dup2", 2, "oldfd, newfd", 
+  { "IO_dup2", 2, "oldfd, newfd", 
     FuncIO_dup2, 
     "io.c:IO_dup2" },
 #endif
 
 #ifdef HAVE_SOCKET
-  { "socket", 3, "domain, type, protocol", 
+  { "IO_socket", 3, "domain, type, protocol", 
     FuncIO_socket, 
     "io.c:IO_socket" },
 #endif
 
 #ifdef HAVE_BIND
-  { "bind", 2, "fd, my_addr", 
+  { "IO_bind", 2, "fd, my_addr", 
     FuncIO_bind, 
     "io.c:IO_bind" },
 #endif
   
 #ifdef HAVE_CONNECT
-  { "connect", 2, "fd, serv_addr", 
+  { "IO_connect", 2, "fd, serv_addr", 
     FuncIO_connect, 
     "io.c:IO_connect" },
 #endif
 
 #ifdef HAVE_SOCKET
-  { "make_sockaddr_in", 2, "ip, port", 
+  { "IO_make_sockaddr_in", 2, "ip, port", 
     FuncIO_make_sockaddr_in, 
     "io.c:IO_make_sockaddr_in" },
 #endif
 
 #ifdef HAVE_GETHOSTBYNAME
-  { "gethostbyname", 1, "name", 
+  { "IO_gethostbyname", 1, "name", 
     FuncIO_gethostbyname, 
     "io.c:IO_gethostbyname" },
 #endif
 
 #ifdef HAVE_LISTEN
-  { "listen", 2, "s, backlog", 
+  { "IO_listen", 2, "s, backlog", 
     FuncIO_listen, 
     "io.c:IO_listen" },
 #endif
 
 #ifdef HAVE_ACCEPT
-  { "accept", 2, "fd, addr", 
+  { "IO_accept", 2, "fd, addr", 
     FuncIO_accept, 
     "io.c:IO_accept" },
 #endif
 
 #ifdef HAVE_RECV
-  { "recv", 5, "fd, st, offset, len, flags", 
+  { "IO_recv", 5, "fd, st, offset, len, flags", 
     FuncIO_recv, 
     "io.c:IO_recv" },
 #endif
 
 #ifdef HAVE_RECVFROM
-  { "recvfrom", 6, "fd, st, offset, len, flags, from", 
+  { "IO_recvfrom", 6, "fd, st, offset, len, flags, from", 
     FuncIO_recvfrom, 
     "io.c:IO_recvfrom" },
 #endif
 
 #ifdef HAVE_SEND
-  { "send", 5, "fd, st, offset, len, flags", 
+  { "IO_send", 5, "fd, st, offset, len, flags", 
     FuncIO_send, 
     "io.c:IO_send" },
 #endif
 
 #ifdef HAVE_SENDTO
-  { "sendto", 6, "fd, st, offset, len, flags, to", 
+  { "IO_sendto", 6, "fd, st, offset, len, flags, to", 
     FuncIO_sendto, 
     "io.c:IO_sendto" },
 #endif
 
 #ifdef HAVE_GETSOCKOPT
-  { "getsockopt", 5, "fd, level, optname, optval, optlen", 
+  { "IO_getsockopt", 5, "fd, level, optname, optval, optlen", 
     FuncIO_getsockopt, 
     "io.c:IO_getsockopt" },
 #endif
 
 #ifdef HAVE_SETSOCKOPT
-  { "setsockopt", 4, "fd, level, optname, optval", 
+  { "IO_setsockopt", 4, "fd, level, optname, optval", 
     FuncIO_setsockopt, 
     "io.c:IO_setsockopt" },
 #endif
 
 #ifdef HAVE_SELECT
-  { "select", 5, "inlist, outlist, exclist, timeoutsec, timeoutusec",
+  { "IO_select", 5, "inlist, outlist, exclist, timeoutsec, timeoutusec",
     FuncIO_select, 
     "io.c:IO_select" },
 #endif
 
-  { "WaitPid", 2, "pid, wait",
+  { "IO_WaitPid", 2, "pid, wait",
     FuncIO_WaitPid, 
     "io.c:IO_WaitPid" },
 
 #ifdef HAVE_FORK
-  { "fork", 0, "",
+  { "IO_fork", 0, "",
     FuncIO_fork, 
     "io.c:IO_fork" },
 #endif
 
-  { "execv", 2, "path, argv",
+  { "IO_execv", 2, "path, argv",
     FuncIO_execv,
     "io.c:IO_execv" },
 
-  { "execvp", 2, "path, argv",
+  { "IO_execvp", 2, "path, argv",
     FuncIO_execvp,
     "io.c:IO_execvp" },
 
-  { "execve", 3, "path, argv, envp",
+  { "IO_execve", 3, "path, argv, envp",
     FuncIO_execve,
     "io.c:IO_execve" },
 
-  { "environ", 0, "",
+  { "IO_environ", 0, "",
     FuncIO_environ,
     "io.c:IO_environ" },
 
 #ifdef HAVE_SIGNAL
-  { "InstallSIGCHLDHandler", 0, "",
+  { "IO_InstallSIGCHLDHandler", 0, "",
     FuncIO_InstallSIGCHLDHandler,
     "io.c:IO_InstallSIGCHLDHandler" },
 
-  { "RestoreSIGCHLDHandler", 0, "",
+  { "IO_RestoreSIGCHLDHandler", 0, "",
     FuncIO_RestoreSIGCHLDHandler,
     "io.c:IO_RestoreSIGCHLDHandler" },
 #endif 
 
-  { "pipe", 0, "",
+  { "IO_pipe", 0, "",
     FuncIO_pipe,
     "io.c:IO_pipe" },
 
-  { "exit", 1, "status",
+  { "IO_exit", 1, "status",
     FuncIO_exit,
     "io.c:IO_exit" },
 
@@ -1846,13 +1846,14 @@ static Int InitLibrary ( StructInitInfo *module )
 
     /* init filters and functions
        we assign the functions to components of a record "IO"         */
-    tmp = NEW_PREC(0);
-    for ( i = 0;  GVarFuncs[i].name != 0;  i++ ) {
-      AssPRec(tmp, RNamName((Char*)GVarFuncs[i].name),
-              NewFunctionC( GVarFuncs[i].name, GVarFuncs[i].nargs,
-                 GVarFuncs[i].args, GVarFuncs[i].handler ) );
+    for ( i = 0; GVarFuncs[i].name != 0;  i++ ) {
+      gvar = GVarName(GVarFuncs[i].name);
+      AssGVar(gvar,NewFunctionC( GVarFuncs[i].name, GVarFuncs[i].nargs,
+                                 GVarFuncs[i].args, GVarFuncs[i].handler )); 
+      MakeReadOnlyGVar(gvar);
     }
     
+    tmp = NEW_PREC(0);
     /* Constants for the flags: */
     AssPRec(tmp, RNamName("O_RDONLY"), INTOBJ_INT((Int) O_RDONLY));
     AssPRec(tmp, RNamName("O_WRONLY"), INTOBJ_INT((Int) O_WRONLY));

@@ -10,3 +10,27 @@
 DeclareCategory( "IsFile", IsObject );
 DeclareGlobalVariable( "FileType" );
 DeclareAttribute( "ProcessID", IsFile );
+
+DeclareGlobalFunction( "IO_WrapFD" );
+DeclareGlobalFunction( "IO_File" );
+DeclareGlobalFunction( "IO_Close" );
+DeclareGlobalFunction( "IO_Read" );
+DeclareGlobalFunction( "IO_ReadLine" );
+DeclareGlobalFunction( "IO_ReadLines" );
+DeclareGlobalFunction( "IO_Write" );
+DeclareGlobalFunction( "IO_WriteLine" );
+DeclareGlobalFunction( "IO_WriteLines" );
+DeclareGlobalFunction( "IO_Flush" );
+DeclareGlobalFunction( "IO_GetFD" );
+DeclareGlobalFunction( "IO_GetWBuf" );
+DeclareGlobalFunction( "IO_ListDir" );
+DeclareGlobalFunction( "IO_MakeIPAddressPort" );
+DeclareGlobalFunction( "IO_Environment" );
+DeclareGlobalFunction( "IO_MakeEnvList" );
+DeclareGlobalFunction( "IO_CloseAllFDs" );
+DeclareGlobalFunction( "IO_Popen" );
+DeclareGlobalFunction( "IO_Popen2" );
+DeclareGlobalFunction( "IO_Popen3" );
+DeclareGlobalFunction( "IO_SendStringBackground" );
+
+

@@ -52,7 +52,7 @@ fi;
 # Now the functions to create and work with objects in the filter IsFile: #
 ###########################################################################
 
-IO.WrapFD := function(fd,rbuf,wbuf)
+InstallGlobalFunction(IO_WrapFD,function(fd,rbuf,wbuf)
   # fd: a small integer (a file descriptor).
   # rbuf: either false (for unbuffered) or a size for the read buffer size
   # wbuf: either false (for unbuffered) or a size for the write buffer size
@@ -90,12 +90,12 @@ IO.WrapFD := function(fd,rbuf,wbuf)
       fi;
   fi;
   return Objectify(FileType,f);
-end;
+end );
 
 IO.DefaultBufSize := 65536;
 
 # A convenience function for files on disk:
-IO.File := function( arg )
+InstallGlobalFunction(IO_File, function( arg )
   # arguments: filename [,mode]
   # filename is a string and mode can be:
   #   "r" : open for reading only (default)
@@ -109,29 +109,29 @@ IO.File := function( arg )
       filename := arg[1];
       mode := arg[2];
   else
-      Error("IO: Usage: IO.File( filename [,mode] ) with IsString(filename)");
+      Error("IO: Usage: IO_File( filename [,mode] ) with IsString(filename)");
   fi;
   if not(IsString(filename)) and not(IsString(mode)) then
-      Error("IO: Usage: IO.File( filename [,mode] ) with IsString(filename)");
+      Error("IO: Usage: IO_File( filename [,mode] ) with IsString(filename)");
   fi;
   if mode = "r" then
-      fd := IO.open(filename,IO.O_RDONLY,0);
+      fd := IO_open(filename,IO.O_RDONLY,0);
       if fd = fail then return fail; fi;
-      return IO.WrapFD(fd,IO.DefaultBufSize,false);
+      return IO_WrapFD(fd,IO.DefaultBufSize,false);
   elif mode = "w" then
-      fd := IO.open(filename,IO.O_CREAT+IO.O_WRONLY+IO.O_TRUNC,
+      fd := IO_open(filename,IO.O_CREAT+IO.O_WRONLY+IO.O_TRUNC,
                     IO.S_IRUSR+IO.S_IWUSR+IO.S_IRGRP+IO.S_IWGRP+
                     IO.S_IROTH+IO.S_IWOTH);
       if fd = fail then return fail; fi;
-      return IO.WrapFD(fd,false,IO.DefaultBufSize);
+      return IO_WrapFD(fd,false,IO.DefaultBufSize);
   elif mode = "a" then
-      fd := IO.open(filename,IO.O_APPEND+IO.O_WRONLY,0);
+      fd := IO_open(filename,IO.O_APPEND+IO.O_WRONLY,0);
       if fd = fail then return fail; fi;
-      return IO.WrapFD(fd,false,IO.DefaultBufSize);
+      return IO_WrapFD(fd,false,IO.DefaultBufSize);
   else
       Error("IO: Mode not supported!");
   fi;
-end;
+end );
 
 # A nice View method:
 InstallMethod( ViewObj, "for IsFile objects", [IsFile],
@@ -152,14 +152,14 @@ InstallMethod( ViewObj, "for IsFile objects", [IsFile],
   end);
 
 # Now a convenience function for closing:
-IO.Close := function( f )
+InstallGlobalFunction( IO_Close, function( f )
   # f must be an object of type IsFile
   if not(IsFile(f)) or f!.closed then
       return fail;
   fi;
   # First flush if necessary:
   if f!.wbufsize <> false and f!.wdata <> 0 then
-      IO.Flush( f );
+      IO_Flush( f );
   fi;
   f!.closed := true;
   f!.rbufsize := false;
@@ -168,14 +168,14 @@ IO.Close := function( f )
   f!.rbuf := fail;
   f!.wbuf := fail;
   if f!.fd <> -1 then
-      return IO.close(f!.fd);
+      return IO_close(f!.fd);
   else
       return true;
   fi;
-end;
+end );
 
 # The buffered read functionality:
-IO.Read := function( arg )
+InstallGlobalFunction( IO_Read, function( arg )
   # arguments: f [,length]
   # f must be an object of type IsFile
   # length is a maximal length
@@ -188,10 +188,10 @@ IO.Read := function( arg )
       f := arg[1];
       len := arg[2];
   else
-      Error("Usage: IO.Read( f [,len] ) with IsFile(f) and IsInt(len)");
+      Error("Usage: IO_Read( f [,len] ) with IsFile(f) and IsInt(len)");
   fi;
   if not(IsFile(f)) or not(IsInt(len)) then
-      Error("Usage: IO.Read( f [,len] ) with IsFile(f) and IsInt(len)");
+      Error("Usage: IO_Read( f [,len] ) with IsFile(f) and IsInt(len)");
   fi;
   if f!.closed then
       Error("Tried to read from closed file.");
@@ -211,7 +211,7 @@ IO.Read := function( arg )
           return res;
       fi;
       repeat
-          bytes := IO.read(f!.fd,res,Length(res),f!.rbufsize);
+          bytes := IO_read(f!.fd,res,Length(res),f!.rbufsize);
           if bytes = fail then return fail; fi;
       until bytes = 0;
       return res;
@@ -220,7 +220,7 @@ IO.Read := function( arg )
       # First the case of no buffer:
       if f!.rbufsize = false then
           while Length(res) < len do
-              bytes := IO.read(f!.fd,res,Length(res),len - Length(res));
+              bytes := IO_read(f!.fd,res,Length(res),len - Length(res));
               if bytes = fail then
                   return fail;
               fi;
@@ -249,7 +249,7 @@ IO.Read := function( arg )
           fi;
           if len - Length(res) > f!.rbufsize then   
               # In this case we read the whole thing:
-              bytes := IO.read(f!.fd,res,Length(res),len - Length(res));
+              bytes := IO_read(f!.fd,res,Length(res),len - Length(res));
               if bytes = fail then 
                   return fail;
               elif bytes = 0 then 
@@ -257,7 +257,7 @@ IO.Read := function( arg )
               fi;
           fi; 
           # Now the buffer is empty, so refill it:
-          bytes := IO.read(f!.fd,f!.rbuf,0,f!.rbufsize);
+          bytes := IO_read(f!.fd,f!.rbuf,0,f!.rbufsize);
           if bytes = fail then
               return fail;
           elif bytes = 0 then
@@ -267,14 +267,14 @@ IO.Read := function( arg )
       od;
       return res;
   fi;
-end;
+end );
 
-IO.ReadLine := function( f )
+InstallGlobalFunction( IO_ReadLine, function( f )
   # f must be an object of type IsFile
   # The IO.LineEndChars are not removed at the end
   local bytes,pos,res;
   if not(IsFile(f)) then
-      Error("Usage: IO.ReadLine( f ) with IsFile(f)");
+      Error("Usage: IO_ReadLine( f ) with IsFile(f)");
   fi;
   if f!.closed then
       Error("Tried to read from closed file.");
@@ -300,7 +300,7 @@ IO.ReadLine := function( f )
               return res;
           fi;
           # Now read more data into buffer:
-          bytes := IO.read(f!.fd,f!.rbuf,0,f!.rbufsize);
+          bytes := IO_read(f!.fd,f!.rbuf,0,f!.rbufsize);
           if bytes = fail then
               return fail;
           fi;
@@ -310,9 +310,9 @@ IO.ReadLine := function( f )
           f!.rdata := bytes;
       fi;
   od;
-end;
+end );
 
-IO.ReadLines := function (arg)
+InstallGlobalFunction( IO_ReadLines, function (arg)
   # arguments: f [,maxlines]
   # f must be an object of type IsFile
   # maxlines is the maximal number of lines read
@@ -326,17 +326,17 @@ IO.ReadLines := function (arg)
       f := arg[1];
       max := arg[2];
   else
-      Error("Usage: IO.ReadLines( f [,max] ) with IsFile(f) and IsInt(max)");
+      Error("Usage: IO_ReadLines( f [,max] ) with IsFile(f) and IsInt(max)");
   fi;
   if not(IsFile(f)) or not(IsInt(max) or max = infinity) then
-      Error("Usage: IO.ReadLines( f [,max] ) with IsFile(f) and IsInt(max)");
+      Error("Usage: IO_ReadLines( f [,max] ) with IsFile(f) and IsInt(max)");
   fi;
   if f!.closed then
       Error("Tried to read from closed file.");
   fi;
   li := [];
   while Length(li) < max do
-      l := IO.ReadLine(f);
+      l := IO_ReadLine(f);
       if l = fail then 
           return fail;
       fi;
@@ -346,10 +346,10 @@ IO.ReadLines := function (arg)
       Add(li,l);
   od;
   return li;
-end;
+end );
 
 # The buffered write functionality:
-IO.Write := function( arg )
+InstallGlobalFunction( IO_Write, function( arg )
   # arguments: f {,things ... }
   # f must be an object of type IsFile
   # all other arguments: either they are strings, in which case they are
@@ -357,7 +357,7 @@ IO.Write := function( arg )
   # and the result is being written.
   local bytes,f,i,pos,pos2,st,sumbytes;
   if Length(arg) < 2 or not(IsFile(arg[1])) then
-      Error("Usage: IO.Write( f ,things ... ) with IsFile(f)");
+      Error("Usage: IO_Write( f ,things ... ) with IsFile(f)");
   fi;
   f := arg[1];
   if f!.closed then
@@ -370,7 +370,7 @@ IO.Write := function( arg )
       if f!.wbufsize = false then
           pos := 0;
           while pos < Length(st) do
-              bytes := IO.write(f!.fd,st,pos,Length(st));
+              bytes := IO_write(f!.fd,st,pos,Length(st));
               if bytes = fail then
                   return fail;
               fi;
@@ -396,7 +396,7 @@ IO.Write := function( arg )
               # Write out the buffer:
               pos2 := 0;
               while pos2 < f!.wbufsize do
-                  bytes := IO.write(f!.fd,f!.wbuf,pos2,f!.wbufsize-pos2);
+                  bytes := IO_write(f!.fd,f!.wbuf,pos2,f!.wbufsize-pos2);
                   if bytes = fail then
                       return fail;
                   fi;
@@ -405,7 +405,7 @@ IO.Write := function( arg )
               f!.wdata := 0;
               # Perhaps we can write a big chunk:
               if Length(st)-pos > f!.wbufsize then
-                  bytes := IO.write(f!.fd,st,pos,Length(st)-pos);
+                  bytes := IO_write(f!.fd,st,pos,Length(st)-pos);
                   if bytes = fail then
                       return fail;
                   fi;
@@ -422,107 +422,107 @@ IO.Write := function( arg )
       else
           st := String(arg[i]);
       fi;
-      bytes := IO.Write(f,st);   # delegate to above
+      bytes := IO_Write(f,st);   # delegate to above
       if bytes = fail then
           return fail;
       fi;
       sumbytes := sumbytes + bytes;
   od;
   return sumbytes;
-end;
+end );
 
-IO.WriteLine := function( arg )
-  # The same as IO.write, except that a line end is written in the end
+InstallGlobalFunction( IO_WriteLine, function( arg )
+  # The same as IO_write, except that a line end is written in the end
   # and the buffer is flushed afterwards.
   local res;
   Add(arg,IO.LineEndChars);
-  res := CallFuncList( IO.Write, arg );
+  res := CallFuncList( IO_Write, arg );
   if res = fail then
       return fail;
   fi;
-  if IO.Flush(arg[1]) = fail then
+  if IO_Flush(arg[1]) = fail then
       return fail;
   else
       return res;
   fi;
-end;
+end );
 
-IO.WriteLines := function( f, l )
+InstallGlobalFunction( IO_WriteLines, function( f, l )
   # f must be an object of type IsFile
-  # l must be a list. Calls IO.Write( f, o, IO.LineEndChars ) for all o in l.
+  # l must be a list. Calls IO_Write( f, o, IO.LineEndChars ) for all o in l.
   local o,res,written;
   if not(IsFile(f)) or not(IsList(l)) then
-      Error("Usage: IO.WriteLines( f, l ) with IsFile(f) and IsList(l)");
+      Error("Usage: IO_WriteLines( f, l ) with IsFile(f) and IsList(l)");
   fi;
   written := 0;
   for o in l do
-      res := IO.Write(f, o, IO.LineEndChars);
+      res := IO_Write(f, o, IO.LineEndChars);
       if res = fail then
           return fail;
       fi;
       written := written + res;
   od;
-  if IO.Flush(f) = fail then
+  if IO_Flush(f) = fail then
       return fail;
   else
       return written;
   fi;
-end;
+end );
 
-IO.Flush := function( f )
+InstallGlobalFunction( IO_Flush, function( f )
   local res;
   if not(IsFile(f)) then
-      Error("Usage: IO.Flush( f ) with IsFile(f)");
+      Error("Usage: IO_Flush( f ) with IsFile(f)");
   fi;
   if f!.fd = -1 then  # Nothing to do for string Files
       return true;
   fi;
   while f!.wbufsize <> false and f!.wdata <> 0 do
-      res := IO.write( f!.fd, f!.wbuf, 0, f!.wdata );
+      res := IO_write( f!.fd, f!.wbuf, 0, f!.wdata );
       if res = fail then
           return fail;
       fi;
       f!.wdata := f!.wdata - res;
   od;
   return true;
-end;
+end );
  
 # Allow access to the file descriptor:
-IO.GetFD := function(f)
+InstallGlobalFunction( IO_GetFD, function(f)
   if not(IsFile(f)) then
-      Error("Usage: IO.GetFD( f ) with IsFile(f)");
+      Error("Usage: IO_GetFD( f ) with IsFile(f)");
   fi;
   return f!.fd;
-end;
+end );
 
 # Allow access to the buffers:
-IO.GetWBuf := function(f)
+InstallGlobalFunction( IO_GetWBuf, function(f)
   if not(IsFile(f)) then
-      Error("Usage IO.GetWBuf( f ) with IsFile(f)");
+      Error("Usage IO_GetWBuf( f ) with IsFile(f)");
   fi;
   return f!.wbuf;
-end;
+end );
 
 # Read a full directory:
-IO.ListDir := function( dirname )
+InstallGlobalFunction( IO_ListDir, function( dirname )
   local f,l,res;
   l := [];
-  res := IO.opendir( dirname );
+  res := IO_opendir( dirname );
   if res = fail then
       return fail;
   fi;
   repeat
-      f := IO.readdir();
+      f := IO_readdir();
       if IsString(f) then
           Add(l,f);
       fi;
   until f = false or f = fail;
-  IO.closedir();
+  IO_closedir();
   return l;
-end;
+end );
 
 # A helper to make pairs IP address and port for TCP and UDP transfer:
-IO.MakeIPAddressPort := function(ip,port)
+InstallGlobalFunction( IO_MakeIPAddressPort, function(ip,port)
   local i,l,nr,res;
   l := SplitString(ip,".");
   if Length(l) <> 4 then
@@ -539,19 +539,19 @@ IO.MakeIPAddressPort := function(ip,port)
   if port < 0 or port > 65535 then
       Error("IPv4 port numbers must be between 0 and 65535");
   fi;
-  return IO.make_sockaddr_in(res,port);
-end;
+  return IO_make_sockaddr_in(res,port);
+end );
 
 
 #############################################################################
 # Two helper functions to access and change the environment:                #
 #############################################################################
 
-IO.Environment := function()
+InstallGlobalFunction( IO_Environment, function()
   # Returns a record with the components corresponding to the set
   # environment variables.
   local l,ll,p,r,v;
-  l := IO.environ();
+  l := IO_environ();
   r := rec();
   for v in l do
     p := Position(v,'=');
@@ -560,9 +560,9 @@ IO.Environment := function()
     fi;
   od;
   return r;
-end;
+end );
   
-IO.MakeEnvList := function(r)
+InstallGlobalFunction( IO_MakeEnvList, function(r)
   # Returns a list of strings for usage with execve made from the 
   # components of r in the form "key=value".
   local k,l;
@@ -571,22 +571,22 @@ IO.MakeEnvList := function(r)
     Add(l,Concatenation(k,"=",r.(k)));
   od;
   return l;
-end;
+end );
 
 IO.MaxFDToClose := 64;
 
-IO.CloseAllFDs := function(exceptions)
+InstallGlobalFunction( IO_CloseAllFDs, function(exceptions)
   local i;
   exceptions := Set(exceptions);
   for i in [0..IO.MaxFDToClose] do
     if not(i in exceptions) then
-      IO.close(i);
+      IO_close(i);
     fi;
   od;
   return;
-end;
+end );
 
-IO.Popen := function(path,argv,mode)
+InstallGlobalFunction( IO_Popen, function(path,argv,mode)
   # mode can be "w" or "r". In the first case, the standard input of the
   # new process will be a pipe, the writing end is returned as a File object.
   # In the second case, the standard output of the new process will be a
@@ -603,55 +603,55 @@ IO.Popen := function(path,argv,mode)
       Error("Popen: <path> must refer to an executable file.");
   fi;
   if mode = "r" then
-      pipe := IO.pipe(); if pipe = fail then return fail; fi;
-      pid := IO.fork(); 
+      pipe := IO_pipe(); if pipe = fail then return fail; fi;
+      pid := IO_fork(); 
       if pid < 0 then 
-        IO.close(pipe.toread);
-        IO.close(pipe.towrite);
+        IO_close(pipe.toread);
+        IO_close(pipe.towrite);
         return fail; 
       fi;
       if pid = 0 then   # the child
           # First close all files
-          IO.CloseAllFDs([0,2,pipe.towrite]);
-          IO.dup2(pipe.towrite,1);
-          IO.close(pipe.towrite);
-          IO.execv(path,argv);
+          IO_CloseAllFDs([0,2,pipe.towrite]);
+          IO_dup2(pipe.towrite,1);
+          IO_close(pipe.towrite);
+          IO_execv(path,argv);
           # The following should not happen:
-          IO.exit(-1);
+          IO_exit(-1);
       fi;
       # Now the parent:
-      IO.close(pipe.towrite);
-      fil := IO.WrapFD(pipe.toread,IO.DefaultBufSize,false);
+      IO_close(pipe.towrite);
+      fil := IO_WrapFD(pipe.toread,IO.DefaultBufSize,false);
       SetProcessID(fil,pid);
       return fil;
   elif mode = "w" then
-      pipe := IO.pipe(); if pipe = fail then return fail; fi;
-      pid := IO.fork(); 
+      pipe := IO_pipe(); if pipe = fail then return fail; fi;
+      pid := IO_fork(); 
       if pid < 0 then 
-        IO.close(pipe.toread);
-        IO.close(pipe.towrite);
+        IO_close(pipe.toread);
+        IO_close(pipe.towrite);
         return fail; 
       fi;
       if pid = 0 then   # the child
           # First close all files
-          IO.CloseAllFDs([1,2,pipe.toread]);
-          IO.dup2(pipe.toread,0);
-          IO.close(pipe.toread);
-          IO.execv(path,argv);
+          IO_CloseAllFDs([1,2,pipe.toread]);
+          IO_dup2(pipe.toread,0);
+          IO_close(pipe.toread);
+          IO_execv(path,argv);
           # The following should not happen:
-          IO.exit(-1);
+          IO_exit(-1);
       fi;
       # Now the parent:
-      IO.close(pipe.toread);
-      fil := IO.WrapFD(pipe.towrite,false,IO.DefaultBufSize);
+      IO_close(pipe.toread);
+      fil := IO_WrapFD(pipe.towrite,false,IO.DefaultBufSize);
       SetProcessID(fil,pid);
       return fil;
   else
       Error("mode must be \"r\" or \"w\".");
   fi;
-end;
+end );
 
-IO.Popen2 := function(path,argv)
+InstallGlobalFunction( IO_Popen2, function(path,argv)
   # A new child process is started. The standard in and out of it are
   # pipes. The writing end of the input pipe and the reading end of the
   # output pipe are returned as File objects bound to two components
@@ -666,43 +666,43 @@ IO.Popen2 := function(path,argv)
   if not(IsExecutableFile(path)) then
       Error("Popen: <path> must refer to an executable file.");
   fi;
-  pipe := IO.pipe(); if pipe = fail then return fail; fi;
-  pipe2 := IO.pipe(); 
+  pipe := IO_pipe(); if pipe = fail then return fail; fi;
+  pipe2 := IO_pipe(); 
   if pipe2 = fail then
-    IO.close(pipe.toread);
-    IO.close(pipe.towrite);
+    IO_close(pipe.toread);
+    IO_close(pipe.towrite);
     return fail;
   fi;
-  pid := IO.fork(); 
+  pid := IO_fork(); 
   if pid < 0 then 
-    IO.close(pipe.toread);
-    IO.close(pipe.towrite);
-    IO.close(pipe2.toread);
-    IO.close(pipe2.towrite);
+    IO_close(pipe.toread);
+    IO_close(pipe.towrite);
+    IO_close(pipe2.toread);
+    IO_close(pipe2.towrite);
     return fail; 
   fi;
   if pid = 0 then   # the child
       # First close all files
-      IO.CloseAllFDs([2,pipe.toread,pipe2.towrite]);
-      IO.dup2(pipe.toread,0);
-      IO.close(pipe.toread);
-      IO.dup2(pipe2.towrite,1);
-      IO.close(pipe2.towrite);
-      IO.execv(path,argv);
+      IO_CloseAllFDs([2,pipe.toread,pipe2.towrite]);
+      IO_dup2(pipe.toread,0);
+      IO_close(pipe.toread);
+      IO_dup2(pipe2.towrite,1);
+      IO_close(pipe2.towrite);
+      IO_execv(path,argv);
       # The following should not happen:
-      IO.exit(-1);
+      IO_exit(-1);
   fi;
   # Now the parent:
-  IO.close(pipe.toread);
-  IO.close(pipe2.towrite);
-  stdin := IO.WrapFD(pipe.towrite,false,IO.DefaultBufSize);
-  stdout := IO.WrapFD(pipe2.toread,IO.DefaultBufSize,false);
+  IO_close(pipe.toread);
+  IO_close(pipe2.towrite);
+  stdin := IO_WrapFD(pipe.towrite,false,IO.DefaultBufSize);
+  stdout := IO_WrapFD(pipe2.toread,IO.DefaultBufSize,false);
   SetProcessID(stdin,pid);
   SetProcessID(stdout,pid);
   return rec(stdin := stdin, stdout := stdout, pid := pid);
-end;
+end );
 
-IO.Popen3 := function(path,argv)
+InstallGlobalFunction( IO_Popen3, function(path,argv)
   # A new child process is started. The standard in and out and error are
   # pipes. All three "other" ends of the pipes are returned as File
   # objectes bound to the three components "stdin", "stdout", and "stderr"
@@ -713,58 +713,58 @@ IO.Popen3 := function(path,argv)
   if not(IsExecutableFile(path)) then
       Error("Popen: <path> must refer to an executable file.");
   fi;
-  pipe := IO.pipe(); if pipe = fail then return fail; fi;
-  pipe2 := IO.pipe(); 
+  pipe := IO_pipe(); if pipe = fail then return fail; fi;
+  pipe2 := IO_pipe(); 
   if pipe2 = fail then
-    IO.close(pipe.toread);
-    IO.close(pipe.towrite);
+    IO_close(pipe.toread);
+    IO_close(pipe.towrite);
     return fail;
   fi;
-  pipe3 := IO.pipe(); 
+  pipe3 := IO_pipe(); 
   if pipe3 = fail then
-    IO.close(pipe.toread);
-    IO.close(pipe.towrite);
-    IO.close(pipe2.toread);
-    IO.close(pipe2.towrite);
+    IO_close(pipe.toread);
+    IO_close(pipe.towrite);
+    IO_close(pipe2.toread);
+    IO_close(pipe2.towrite);
     return fail;
   fi;
-  pid := IO.fork(); 
+  pid := IO_fork(); 
   if pid < 0 then 
-    IO.close(pipe.toread);
-    IO.close(pipe.towrite);
-    IO.close(pipe2.toread);
-    IO.close(pipe2.towrite);
-    IO.close(pipe3.toread);
-    IO.close(pipe3.towrite);
+    IO_close(pipe.toread);
+    IO_close(pipe.towrite);
+    IO_close(pipe2.toread);
+    IO_close(pipe2.towrite);
+    IO_close(pipe3.toread);
+    IO_close(pipe3.towrite);
     return fail; 
   fi;
   if pid = 0 then   # the child
       # First close all files
-      IO.CloseAllFDs([pipe.toread,pipe2.towrite,pipe3.towrite]);
-      IO.dup2(pipe.toread,0);
-      IO.close(pipe.toread);
-      IO.dup2(pipe2.towrite,1);
-      IO.close(pipe2.towrite);
-      IO.dup2(pipe3.towrite,2);
-      IO.close(pipe3.towrite);
-      IO.execv(path,argv);
+      IO_CloseAllFDs([pipe.toread,pipe2.towrite,pipe3.towrite]);
+      IO_dup2(pipe.toread,0);
+      IO_close(pipe.toread);
+      IO_dup2(pipe2.towrite,1);
+      IO_close(pipe2.towrite);
+      IO_dup2(pipe3.towrite,2);
+      IO_close(pipe3.towrite);
+      IO_execv(path,argv);
       # The following should not happen:
-      IO.exit(-1);
+      IO_exit(-1);
   fi;
   # Now the parent:
-  IO.close(pipe.toread);
-  IO.close(pipe2.towrite);
-  IO.close(pipe3.towrite);
-  stdin := IO.WrapFD(pipe.towrite,false,IO.DefaultBufSize);
-  stdout := IO.WrapFD(pipe2.toread,IO.DefaultBufSize,false);
-  stderr := IO.WrapFD(pipe3.toread,IO.DefaultBufSize,false);
+  IO_close(pipe.toread);
+  IO_close(pipe2.towrite);
+  IO_close(pipe3.towrite);
+  stdin := IO_WrapFD(pipe.towrite,false,IO.DefaultBufSize);
+  stdout := IO_WrapFD(pipe2.toread,IO.DefaultBufSize,false);
+  stderr := IO_WrapFD(pipe3.toread,IO.DefaultBufSize,false);
   SetProcessID(stdin,pid);
   SetProcessID(stdout,pid);
   SetProcessID(stderr,pid);
   return rec(stdin := stdin, stdout := stdout, stderr := stderr, pid := pid);
-end;
+end );
 
-IO.SendStringBackground := function(f,st)
+InstallGlobalFunction( IO_SendStringBackground, function(f,st)
   # The whole string st is send to the File object f but in the background.
   # This works by forking off a child process which sends away the string
   # such that the parent can go on and can already read from the other end.
@@ -773,16 +773,16 @@ IO.SendStringBackground := function(f,st)
   # The component pid will be bound to the process id of the child process.
   # Returns fail if an error occurred.
   local pid,len;
-  pid := IO.fork();
+  pid := IO_fork();
   if pid = -1 then
       return fail;
   fi;
   if pid = 0 then   # the child
-      len := IO.Write(f,st);
-      IO.Flush(f);
-      IO.Close(f);
-      IO.exit(0);
+      len := IO_Write(f,st);
+      IO_Flush(f);
+      IO_Close(f);
+      IO_exit(0);
   fi;
   return true;
-end;
+end );
 
