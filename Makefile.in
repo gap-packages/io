@@ -24,8 +24,20 @@ static:
 
 doc: doc/manual.six
 
-doc/manual.six: doc/main.xml doc/io.xml
+doc/manual.six: doc/main.xml doc/io.xml default
 	($(GAPPATH)/bin/gap.sh makedoc.g)
 
 clean:
 	rm -rf bin/@GAPARCH@ Makefile
+	(cd doc ; ./clean)
+
+archive: doc
+	(cd .. ; tar czvf io.tar.gz --exclude ".svn" --exclude @GAPARCH@ io)
+
+WEBPOS=/home/antares/neunhoef/webpage/Computer/Software/Gap/io
+
+towww: archive
+	cp PackageInfo.g ${WEBPOS}
+	cp README ${WEBPOS}/README.io
+	cp doc/manual.pdf ${WEBPOS}/io.pdf
+	cp ../io.tar.gz ${WEBPOS}

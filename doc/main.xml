@@ -180,12 +180,12 @@ protocol name.<P/>
 The functions <C>bind</C> and <C>connect</C> take only one string argument
 as address field, because the string already encodes the length.<P/>
 
-There are two convenience functions <C>IO_make_sockaddr_in</C> and
-<C>IO_MakeIPAddressPort</C> to create such addresses. The first takes
+There are two convenience functions <Ref Func="IO_make_sockaddr_in"/> and
+<Ref Func="IO_MakeIPAddressPort"/> to create such addresses. The first takes
 two arguments <A>addr</A> and <A>port</A>, where <A>addr</A> is
 a string of length 4, containing the 4 bytes of the IP address and
 <A>port</A> is a port number as &GAP; integer. The function
-<C>IO_MakeIPAddressPort</C> takes the same arguments, but the first can
+<Ref Func="IO_MakeIPAddressPort"/> takes the same arguments, but the first can
 be a string containing an IP address in dot notation like
 <Q>137.226.152.77</Q>.<P/>
 
@@ -212,9 +212,9 @@ that no third argument is necessary.
       Comm="Binds a local address to a socket."/>
 <Description>
 Binds a local address to a socket.
-For details see <Q><C>man 2 bind</C></Q>. The argument <A>my_addr</A> can be
-made with <Ref Func="IO_make_sockaddr_in"/> and contains its length such
-that no third argument is necessary.
+For details see <Q><C>man 2 bind</C></Q>. The argument
+<A>my&uscore;addr</A> can be made with <Ref Func="IO_make_sockaddr_in"/>
+and contains its length such that no third argument is necessary.
 </Description>
 </ManSection>
 
@@ -269,9 +269,9 @@ have one <C>DIR</C> struct in the C part.
       Comm="Connects to a remote socket."/>
 <Description>
 Connects to a remote socket.
-For details see <Q><C>man 2 connect</C></Q>. The argument <A>my_addr</A> can be
-made with <Ref Func="IO_make_sockaddr_in"/> and contains its length such
-that no third argument is necessary.
+For details see <Q><C>man 2 connect</C></Q>. The argument
+<A>my&uscore;addr</A> can be made with <Ref Func="IO_make_sockaddr_in"/>
+and contains its length such that no third argument is necessary.
 </Description> 
 </ManSection>
  
@@ -747,11 +747,11 @@ but are there to provide convenience to use other functions:
 <Func Name="IO_make_sockaddr_in" Arg="ip, port"
       Comm="Makes a struct sockaddr_in from IP address and port."/>
 <Description>
-Makes a struct sockaddr_in from IP address and port. The IP address
-must be given as a string of length four, containing the four 
-bytes of an IPv4 address in natural order. The port must be a port
-number. Returns a string containing the struct, which can be given
-to all functions above having an address argument.
+    Makes a struct <C>sockaddr&uscore;in</C> from IP address and port.
+The IP address must be given as a string of length four, containing the
+four bytes of an IPv4 address in natural order. The port must be a port
+number. Returns a string containing the struct, which can be given to
+all functions above having an address argument.
 </Description> 
 </ManSection>
  
@@ -855,7 +855,7 @@ of the file to work on. <A>mode</A> must also be a string with possible
 values <Q>r</Q>, <Q>w</Q>, or <Q>a</Q>, meaning read access, write
 access (with creating and truncating), and append access respectively.
 If <A>mode</A> is omitted, it defaults to <Q>r</Q>. Internally, the
-<C>IO_open</C> function is used and the result file descripter is 
+<Ref Func="IO_open"/> function is used and the result file descripter is 
 wrapped using <Ref Func="IO_WrapFD"/> with <C>IO.DefaultBufSize</C>
 as the buffer size. <P/>
 
