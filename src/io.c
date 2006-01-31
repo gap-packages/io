@@ -219,7 +219,8 @@ Obj FuncIO_open(Obj self,Obj path,Obj flags,Obj mode)
       SyClearErrorNo();
       return Fail;
   } else {
-      res = open(CHARS_STRING(path),INT_INTOBJ(flags),INT_INTOBJ(mode));
+      res = open((char *) CHARS_STRING(path),
+                 INT_INTOBJ(flags),INT_INTOBJ(mode));
       if (res < 0) {
           SySetErrorNo();
           return Fail;
@@ -235,7 +236,7 @@ Obj FuncIO_creat(Obj self,Obj path,Obj mode)
       SyClearErrorNo();
       return Fail;
   } else {
-      res = creat(CHARS_STRING(path),INT_INTOBJ(mode));
+      res = creat((char *) CHARS_STRING(path),INT_INTOBJ(mode));
       if (res < 0) {
           SySetErrorNo();
           return Fail;
@@ -339,7 +340,7 @@ Obj FuncIO_opendir(Obj self,Obj name)
       SyClearErrorNo();
       return Fail;
   } else {
-      ourDIR = opendir(CHARS_STRING(name));
+      ourDIR = opendir((char *) CHARS_STRING(name));
       if (ourDIR == 0) {
           SySetErrorNo();
           return Fail;
@@ -448,7 +449,7 @@ Obj FuncIO_unlink(Obj self,Obj path)
       SyClearErrorNo();
       return Fail;
   } else {
-      res = unlink(CHARS_STRING(path));
+      res = unlink((char *) CHARS_STRING(path));
       if (res < 0) {
           SySetErrorNo();
           return Fail;
@@ -467,7 +468,7 @@ Obj FuncIO_link(Obj self,Obj oldpath,Obj newpath)
       SyClearErrorNo();
       return Fail;
   } else {
-      res = link(CHARS_STRING(oldpath),CHARS_STRING(newpath));
+      res = link((char *) CHARS_STRING(oldpath),(char *) CHARS_STRING(newpath));
       if (res < 0) {
           SySetErrorNo();
           return Fail;
@@ -486,7 +487,8 @@ Obj FuncIO_rename(Obj self,Obj oldpath,Obj newpath)
       SyClearErrorNo();
       return Fail;
   } else {
-      res = rename(CHARS_STRING(oldpath),CHARS_STRING(newpath));
+      res = rename((char *) CHARS_STRING(oldpath),
+                   (char *) CHARS_STRING(newpath));
       if (res < 0) {
           SySetErrorNo();
           return Fail;
@@ -505,7 +507,8 @@ Obj FuncIO_symlink(Obj self,Obj oldpath,Obj newpath)
       SyClearErrorNo();
       return Fail;
   } else {
-      res = symlink(CHARS_STRING(oldpath),CHARS_STRING(newpath));
+      res = symlink((char *) CHARS_STRING(oldpath),
+                    (char *) CHARS_STRING(newpath));
       if (res < 0) {
           SySetErrorNo();
           return Fail;
@@ -525,7 +528,8 @@ Obj FuncIO_readlink(Obj self,Obj path,Obj buf,Obj bufsize)
       return Fail;
   } else {
       GrowString(buf,INT_INTOBJ(bufsize));
-      res = readlink(CHARS_STRING(path),CHARS_STRING(buf),INT_INTOBJ(bufsize));
+      res = readlink((char *) CHARS_STRING(path),
+                     (char *) CHARS_STRING(buf),INT_INTOBJ(bufsize));
       if (res < 0) {
           SySetErrorNo();
           return Fail;
@@ -545,7 +549,7 @@ Obj FuncIO_chdir(Obj self,Obj pathname)
       SyClearErrorNo();
       return Fail;
   } else {
-      res = chdir(CHARS_STRING(pathname));
+      res = chdir((char *) CHARS_STRING(pathname));
       if (res < 0) {
           SySetErrorNo();
           return Fail;
@@ -562,7 +566,7 @@ Obj FuncIO_mkdir(Obj self,Obj pathname,Obj mode)
       SyClearErrorNo();
       return Fail;
   } else {
-      res = mkdir(CHARS_STRING(pathname),INT_INTOBJ(mode));
+      res = mkdir((char *) CHARS_STRING(pathname),INT_INTOBJ(mode));
       if (res < 0) {
           SySetErrorNo();
           return Fail;
@@ -580,7 +584,7 @@ Obj FuncIO_rmdir(Obj self,Obj path)
       SyClearErrorNo();
       return Fail;
   } else {
-      res = rmdir(CHARS_STRING(path));
+      res = rmdir((char *) CHARS_STRING(path));
       if (res < 0) {
           SySetErrorNo();
           return Fail;
@@ -600,7 +604,7 @@ Obj FuncIO_stat(Obj self,Obj filename)
       SyClearErrorNo();
       return Fail;
   } else {
-      res = stat(CHARS_STRING(filename),&ourstatbuf);
+      res = stat((char *) CHARS_STRING(filename),&ourstatbuf);
       if (res < 0) {
         SySetErrorNo();
         return Fail;
@@ -668,7 +672,7 @@ Obj FuncIO_lstat(Obj self,Obj filename)
       SyClearErrorNo();
       return Fail;
   } else {
-      res = lstat(CHARS_STRING(filename),&ourlstatbuf);
+      res = lstat((char *) CHARS_STRING(filename),&ourlstatbuf);
       if (res < 0) {
         SySetErrorNo();
         return Fail;
@@ -700,7 +704,7 @@ Obj FuncIO_chmod(Obj self,Obj pathname,Obj mode)
       SyClearErrorNo();
       return Fail;
   } else {
-      res = chmod(CHARS_STRING(pathname),INT_INTOBJ(mode));
+      res = chmod((char *) CHARS_STRING(pathname),INT_INTOBJ(mode));
       if (res < 0) {
           SySetErrorNo();
           return Fail;
@@ -737,7 +741,8 @@ Obj FuncIO_chown(Obj self,Obj path,Obj owner,Obj group)
       SyClearErrorNo();
       return Fail;
   } else {
-      res = chown(CHARS_STRING(path),INT_INTOBJ(owner),INT_INTOBJ(group));
+      res = chown((char *) CHARS_STRING(path),
+                  INT_INTOBJ(owner),INT_INTOBJ(group));
       if (res < 0) {
           SySetErrorNo();
           return Fail;
@@ -774,7 +779,8 @@ Obj FuncIO_lchown(Obj self,Obj path,Obj owner,Obj group)
       SyClearErrorNo();
       return Fail;
   } else {
-      res = lchown(CHARS_STRING(path),INT_INTOBJ(owner),INT_INTOBJ(group));
+      res = lchown((char *) CHARS_STRING(path),
+                   INT_INTOBJ(owner),INT_INTOBJ(group));
       if (res < 0) {
           SySetErrorNo();
           return Fail;
@@ -793,7 +799,7 @@ Obj FuncIO_mknod(Obj self,Obj path,Obj mode,Obj dev)
       SyClearErrorNo();
       return Fail;
   } else {
-      res = mknod(CHARS_STRING(path),INT_INTOBJ(mode),INT_INTOBJ(dev));
+      res = mknod((char *) CHARS_STRING(path),INT_INTOBJ(mode),INT_INTOBJ(dev));
       if (res < 0) {
           SySetErrorNo();
           return Fail;
@@ -811,7 +817,7 @@ Obj FuncIO_mkfifo(Obj self,Obj path,Obj mode)
       SyClearErrorNo();
       return Fail;
   } else {
-      res = mkfifo(CHARS_STRING(path),INT_INTOBJ(mode));
+      res = mkfifo((char *) CHARS_STRING(path),INT_INTOBJ(mode));
       if (res < 0) {
           SySetErrorNo();
           return Fail;
@@ -876,7 +882,7 @@ Obj FuncIO_socket(Obj self,Obj domain,Obj type,Obj protocol)
   } else {
 #ifdef HAVE_GETPROTOBYNAME
       if (IS_STRING(protocol)) { /* we have to look up the protocol */
-           pe = getprotobyname(CHARS_STRING(protocol));
+           pe = getprotobyname((char *) CHARS_STRING(protocol));
            if (pe == NULL) {
                SySetErrorNo();
                return Fail;
@@ -971,7 +977,7 @@ Obj FuncIO_gethostbyname(Obj self,Obj name)
       SyClearErrorNo();
       return Fail;
   } else {
-      he = gethostbyname(CHARS_STRING(name));
+      he = gethostbyname((char *) CHARS_STRING(name));
       if (he == NULL) {
           SySetErrorNo();
           return Fail;
@@ -1090,7 +1096,7 @@ Obj FuncIO_recvfrom(Obj self,Obj fd,Obj st,Obj offset,Obj count,Obj flags,
   len = INT_INTOBJ(offset)+INT_INTOBJ(count);
   if (len > GET_LEN_STRING(st)) GrowString(st,len);
   fromlen = GET_LEN_STRING(from);
-  bytes = recvfrom(INT_INTOBJ(fd),CHARS_STRING(st)+INT_INTOBJ(offset),
+  bytes = recvfrom(INT_INTOBJ(fd),(char *) CHARS_STRING(st)+INT_INTOBJ(offset),
                    INT_INTOBJ(count),INT_INTOBJ(flags),
                    (struct sockaddr *)CHARS_STRING(from),&fromlen);
   if (bytes < 0) {
@@ -1120,7 +1126,8 @@ Obj FuncIO_send(Obj self,Obj fd,Obj st,Obj offset,Obj count,Obj flags)
       SyClearErrorNo();
       return Fail;
   }
-  bytes = (Int) send(INT_INTOBJ(fd),CHARS_STRING(st)+INT_INTOBJ(offset),
+  bytes = (Int) send(INT_INTOBJ(fd),
+                     (char *) CHARS_STRING(st)+INT_INTOBJ(offset),
                      INT_INTOBJ(count),INT_INTOBJ(flags));
   if (bytes < 0) {
       SySetErrorNo();
@@ -1148,7 +1155,8 @@ Obj FuncIO_sendto(Obj self,Obj fd,Obj st,Obj offset,Obj count,Obj flags,
       return Fail;
   }
   fromlen = GET_LEN_STRING(to);
-  bytes = (Int) sendto(INT_INTOBJ(fd),CHARS_STRING(st)+INT_INTOBJ(offset),
+  bytes = (Int) sendto(INT_INTOBJ(fd),
+                       (char *) CHARS_STRING(st)+INT_INTOBJ(offset),
                        INT_INTOBJ(count),INT_INTOBJ(flags),
                        (struct sockaddr *)CHARS_STRING(to),fromlen);
   if (bytes < 0) {
@@ -1174,7 +1182,7 @@ Obj FuncIO_getsockopt(Obj self,Obj fd,Obj level,Obj optname,
   olen = INT_INTOBJ(optlen);
   if (olen > GET_LEN_STRING(optval)) GrowString(optval,olen);
   res = (Int) getsockopt(INT_INTOBJ(fd),INT_INTOBJ(level),INT_INTOBJ(optname),
-                         CHARS_STRING(optval),&olen);
+                         (char *) CHARS_STRING(optval),&olen);
   if (res < 0) {
       SySetErrorNo();
       return Fail;
@@ -1198,7 +1206,7 @@ Obj FuncIO_setsockopt(Obj self,Obj fd,Obj level,Obj optname, Obj optval)
   }
   olen = GET_LEN_STRING(optval);
   res = (Int) setsockopt(INT_INTOBJ(fd),INT_INTOBJ(level),INT_INTOBJ(optname),
-                         CHARS_STRING(optval),olen);
+                         (char *) CHARS_STRING(optval),olen);
   if (res < 0) {
       SySetErrorNo();
       return Fail;
@@ -1345,7 +1353,7 @@ Obj FuncIO_execv(Obj self,Obj path,Obj Argv)
         SyClearErrorNo();
         return Fail;
     }
-    argv[0] = CHARS_STRING(path);
+    argv[0] = (char *) CHARS_STRING(path);
     argc = LEN_PLIST(Argv);
     if (argc > 1022) {
         Pr("#E Ignored arguments after the 1022th.\n",0,0);
@@ -1357,10 +1365,10 @@ Obj FuncIO_execv(Obj self,Obj path,Obj Argv)
             SyClearErrorNo();
             return Fail;
         }
-        argv[i] = CHARS_STRING(tmp);
+        argv[i] = (char *) CHARS_STRING(tmp);
     }
     argv[i] = 0;
-    i = execv(CHARS_STRING(path),argv);
+    i = execv((char *) CHARS_STRING(path),argv);
     if (i == -1) {
         SySetErrorNo();
         return INTOBJ_INT(i);
@@ -1381,7 +1389,7 @@ Obj FuncIO_execvp(Obj self,Obj file,Obj Argv)
         SyClearErrorNo();
         return Fail;
     }
-    argv[0] = CHARS_STRING(file);
+    argv[0] = (char *) CHARS_STRING(file);
     argc = LEN_PLIST(Argv);
     if (argc > 1022) {
         Pr("#E Ignored arguments after the 1022th.\n",0,0);
@@ -1393,10 +1401,10 @@ Obj FuncIO_execvp(Obj self,Obj file,Obj Argv)
             SyClearErrorNo();
             return Fail;
         }
-        argv[i] = CHARS_STRING(tmp);
+        argv[i] = (char *) CHARS_STRING(tmp);
     }
     argv[i] = 0;
-    i = execvp(CHARS_STRING(file),argv);
+    i = execvp((char *) CHARS_STRING(file),argv);
     if (i == -1) {
         SySetErrorNo();
         return INTOBJ_INT(i);
@@ -1416,7 +1424,7 @@ Obj FuncIO_execve(Obj self,Obj path,Obj Argv,Obj Envp)
         SyClearErrorNo();
         return Fail;
     }
-    argv[0] = CHARS_STRING(path);
+    argv[0] = (char *) CHARS_STRING(path);
     argc = LEN_PLIST(Argv);
     if (argc > 1022) {
         Pr("#E Ignored arguments after the 1022th.\n",0,0);
@@ -1428,7 +1436,7 @@ Obj FuncIO_execve(Obj self,Obj path,Obj Argv,Obj Envp)
             SyClearErrorNo();
             return Fail;
         }
-        argv[i] = CHARS_STRING(tmp);
+        argv[i] = (char *) CHARS_STRING(tmp);
     }
     argv[i] = 0;
     argc = LEN_PLIST(Envp);
@@ -1442,10 +1450,10 @@ Obj FuncIO_execve(Obj self,Obj path,Obj Argv,Obj Envp)
             SyClearErrorNo();
             return Fail;
         }
-        envp[i-1] = CHARS_STRING(tmp);
+        envp[i-1] = (char *) CHARS_STRING(tmp);
     }
     envp[i-1] = 0;
-    i = execve(CHARS_STRING(path),argv,envp);
+    i = execve((char *) CHARS_STRING(path),argv,envp);
     if (i == -1) {
         SySetErrorNo();
         return INTOBJ_INT(i);
