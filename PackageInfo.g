@@ -116,7 +116,7 @@ BinaryFiles := ["doc/manual.dvi", "doc/manual.pdf"],
 ##  
 Persons := [
   rec( 
-    LastName      := "Neunhöffer",
+    LastName      := "Neunhoeffer",
     FirstNames    := "Max",
     IsAuthor      := true,
     IsMaintainer  := true,
