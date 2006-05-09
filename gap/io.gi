@@ -1211,3 +1211,26 @@ InstallMethod( IO_Pickle, "IO_Results are forbidden",
     return IO_Error;
   end );
 
+InstallMethod( IO_Pickle, "for polynomials",
+  [ IsFile, IsRationalFunction ],
+  function( f, pol )
+    local ext,one;
+    one := One(CoefficientsFamily(FamilyObj(pol)));
+    ext := ExtRepPolynomialRatFun(pol);
+    if IO_Write(f,"POLY") = fail then return IO_Error; fi;
+    if IO_Pickle(f,one) = IO_Error then return IO_Error; fi;
+    if IO_Pickle(f,ext) = IO_Error then return IO_Error; fi;
+    return IO_OK;
+  end );
+
+IO_Unpicklers.POLY :=
+  function( f )
+    local ext,one,poly;
+    one := IO_Unpickle(f);
+    if one = IO_Error then return IO_Error; fi;
+    ext := IO_Unpickle(f);
+    if ext = IO_Error then return IO_Error; fi;
+    poly := PolynomialByExtRepNC( RationalFunctionsFamily(FamilyObj(one)),ext);
+    return poly;
+  end;
+
