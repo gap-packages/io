@@ -33,4 +33,16 @@ DeclareGlobalFunction( "IO_Popen2" );
 DeclareGlobalFunction( "IO_Popen3" );
 DeclareGlobalFunction( "IO_SendStringBackground" );
 
+DeclareGlobalFunction( "IO_WriteSmallInt" );
+DeclareGlobalFunction( "IO_ReadSmallInt" );
+DeclareOperation( "IO_Pickle", [ IsFile, IsObject  ] );
+DeclareOperation( "IO_Unpickle", [ IsFile ] );
+DeclareGlobalVariable( "IO_Unpicklers" );
+
+BindGlobal( "IO_ResultsFamily", NewFamily( "IO_ResultsFamily" ) );
+DeclareCategory( "IO_Result", IsComponentObjectRep );
+DeclareGlobalVariable( "IO_Error" );
+DeclareGlobalVariable( "IO_Nothing" );
+DeclareGlobalVariable( "IO_OK" );
+
 

@@ -1511,6 +1511,15 @@ Obj FuncIO_exit(Obj self,Obj status)
     return True;
 }
 
+Obj FuncIO_MasterPointerNumber(Obj self, Obj o)
+{
+    if ((void **) o >= (void **) MptrBags && (void **) o < (void **) OldBags) {
+        return INTOBJ_INT( ((void **) o - (void **) MptrBags) + 1 );
+    } else {
+        return INTOBJ_INT( 0 );
+    }
+}
+
 /*F * * * * * * * * * * * * * initialize package * * * * * * * * * * * * * * */
 
 /******************************************************************************
@@ -1827,6 +1836,10 @@ static StructGVarFunc GVarFuncs [] = {
   { "IO_exit", 1, "status",
     FuncIO_exit,
     "io.c:IO_exit" },
+
+  { "IO_MasterPointerNumber", 1, "obj",
+    FuncIO_MasterPointerNumber,
+    "io.c:IO_MasterPointerNumber" },
 
   { 0 }
 

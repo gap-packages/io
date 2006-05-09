@@ -786,3 +786,159 @@ InstallGlobalFunction( IO_SendStringBackground, function(f,st)
   return true;
 end );
 
+
+#################
+# (Un-)Pickling: 
+#################
+
+InstallValue( IO_Error,
+  Objectify( NewType( IO_ResultsFamily, IO_Result ), rec( val := "IO_Error" ))
+);
+InstallValue( IO_Nothing,
+  Objectify( NewType( IO_ResultsFamily, IO_Result ), rec( val := "IO_Nothing"))
+);
+InstallValue( IO_OK,
+  Objectify( NewType( IO_ResultsFamily, IO_Result ), rec( val := "IO_OK"))
+);
+InstallMethod( \=, "for two IO_Results",
+  [ IO_Result, IO_Result ],
+  function(a,b) return a!.val = b!.val; end );
+InstallMethod( \=, "for an IO_Result and another object",
+  [ IO_Result, IsObject ], ReturnFalse );
+InstallMethod( \=, "for another object and an IO_Result",
+  [ IsObject, IO_Result], ReturnFalse );
+InstallMethod( ViewObj, "for an IO_Result",
+  [ IO_Result ],
+  function(r) Print(r!.val); end );
+ 
+
+InstallGlobalFunction( IO_WriteSmallInt,
+  function( f, i )
+    local h,l;
+    h := HexStringInt(i);
+    l := Length(h);
+    Add(h,CHAR_INT(Length(h)),1);
+    if IO_Write(f,h) = fail then
+        return IO_Error;
+    else
+        return IO_OK;
+    fi;
+  end ); 
+
+InstallGlobalFunction( IO_ReadSmallInt,
+  function( f )
+    local h,l;
+    l := IO_Read(f,1);
+    if l = "" or l = fail then return IO_Error; fi;
+    h := IO_Read(f,INT_CHAR(l[1]));
+    if h = fail then return IO_Error; fi;
+    return IntHexString(h);
+  end );
+
+InstallMethod( IO_Unpickle, "for a file",
+  [ IsFile ],
+  function( f )
+    local magic,up;
+    magic := IO_Read(f,4);
+    if magic = fail then return IO_Error; 
+    elif magic = "" then return IO_Nothing; 
+    fi;
+    if not(IsBound(IO_Unpicklers.(magic))) then
+        Error("No unpickler for magic value \"",magic,"\"");
+        return IO_Error();
+    fi;
+    up := IO_Unpicklers.(magic);
+    if IsFunction(up) then
+        return up(f);
+    else
+        return up;
+    fi;
+  end );
+
+InstallValue( IO_Unpicklers, rec() );
+
+InstallMethod( IO_Pickle, "for an integer",
+  [ IsFile, IsInt ],
+  function( f, i )
+    local h;
+    if IO_Write( f, "INTG" ) = fail then return IO_Error; fi;
+    h := HexStringInt(i);
+    if IO_WriteSmallInt( f, Length(h) ) = fail then return IO_Error; fi;
+    if IO_Write(f,h) = fail then return fail; fi;
+    return IO_OK;
+  end );
+
+IO_Unpicklers.INTG :=
+  function( f )
+    local h,len;
+    len := IO_ReadSmallInt(f);
+    if len = IO_Error then return IO_Error; fi;
+    h := IO_Read(f,len);
+    if h = fail then return IO_Error; fi;
+    return IntHexString(h);
+  end;
+
+InstallMethod( IO_Pickle, "for a string",
+  [ IsFile, IsStringRep ],
+  function( f, s )
+    if IO_Write(f,"STRI") = fail then return IO_Error; fi;
+    if IO_WriteSmallInt(f, Length(s)) = IO_Error then return IO_Error; fi;
+    if IO_Write(f,s) = fail then return IO_Error; fi;
+    return IO_OK;
+  end );
+
+IO_Unpicklers.STRI :=
+  function( f )
+    local len,s;
+    len := IO_ReadSmallInt(f);
+    if len = IO_Error then return IO_Error; fi;
+    s := IO_Read(f,len);
+    if s = fail then return IO_Error; fi;
+    return s;
+  end;
+
+InstallMethod( IO_Pickle, "for a boolean",
+  [ IsFile, IsBool ],
+  function( f, b )
+    local val;
+    if b = false then val := "FALS";
+    elif b = true then val := "TRUE";
+    elif b = fail then val := "FAIL";
+    elif b = SuPeRfail then val := "SPRF";
+    else
+        Error("Unknown boolean value");
+    fi;
+    if IO_Write(f,val) = fail then 
+        return IO_Error;
+    else
+        return IO_OK;
+    fi;
+  end );
+
+IO_Unpicklers.FALS := false;
+IO_Unpicklers.TRUE := true;
+IO_Unpicklers.FAIL := fail;
+IO_Unpicklers.SPRF := SuPeRfail;
+
+InstallMethod( IO_Pickle, "for a permutation",
+  [ IsFile, IsPerm ],
+  function( f, p )
+    local s;
+    s := String(p);
+    if IO_Write(f,"PERM") = fail then return IO_Error; fi;
+    if IO_WriteSmallInt(f,Length(s)) = IO_Error then return IO_Error; fi;
+    if IO_Write(f,s) = fail then return IO_Error; fi;
+    return IO_OK;
+  end );
+
+IO_Unpicklers.PERM :=
+  function( f )
+    local len,s;
+    len := IO_ReadSmallInt(f);
+    if len = IO_Error then return IO_Error; fi;
+    s := IO_Read(f,len);
+    if s = fail then return IO_Error; fi;
+    return EvalString(s);
+  end;
+
+# Now records and list, with trapping recursion
