@@ -1204,4 +1204,10 @@ IO_Unpicklers.RECO :=
     return r;
   end;
 
+InstallMethod( IO_Pickle, "IO_Results are forbidden",
+  [ IsFile, IO_Result ],
+  function( f, ob )
+    Print("Pickling of IO_Result is forbidden!\n");
+    return IO_Error;
+  end );
 
