@@ -35,9 +35,16 @@ DeclareGlobalFunction( "IO_SendStringBackground" );
 
 DeclareGlobalFunction( "IO_WriteSmallInt" );
 DeclareGlobalFunction( "IO_ReadSmallInt" );
+DeclareGlobalFunction( "IO_PickleByString" );
+DeclareGlobalFunction( "IO_UnpickleByEvalString" );
 DeclareOperation( "IO_Pickle", [ IsFile, IsObject  ] );
 DeclareOperation( "IO_Unpickle", [ IsFile ] );
 DeclareGlobalVariable( "IO_Unpicklers" );
+DeclareGlobalVariable( "IO_PICKLECACHE" );
+DeclareGlobalFunction( "IO_AddToPickled" );
+DeclareGlobalFunction( "IO_FinalizePickled" );
+DeclareGlobalFunction( "IO_AddToUnpickled" );
+DeclareGlobalFunction( "IO_FinalizeUnpickled" );
 
 BindGlobal( "IO_ResultsFamily", NewFamily( "IO_ResultsFamily" ) );
 DeclareCategory( "IO_Result", IsComponentObjectRep );

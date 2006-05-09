@@ -811,6 +811,48 @@ InstallMethod( ViewObj, "for an IO_Result",
   [ IO_Result ],
   function(r) Print(r!.val); end );
  
+InstallValue( IO_PICKLECACHE, rec( ids := [], nrs := [], obs := [],
+                                   depth := 0 ) );
+
+InstallGlobalFunction( IO_AddToPickled,
+  function( ob )
+    local id,pos;
+    IO_PICKLECACHE.depth := IO_PICKLECACHE.depth + 1;
+    id := IO_MasterPointerNumber(ob);
+    pos := PositionSorted( IO_PICKLECACHE.ids, id );
+    if pos <= Length(IO_PICKLECACHE.ids) and IO_PICKLECACHE.ids[pos] = id then
+        return IO_PICKLECACHE.nrs[pos];
+    else
+        Add(IO_PICKLECACHE.ids,id,pos);
+        Add(IO_PICKLECACHE.nrs,Length(IO_PICKLECACHE.ids),pos);
+        return false;
+    fi;
+  end );
+
+InstallGlobalFunction( IO_FinalizePickled,
+  function( )
+    IO_PICKLECACHE.depth := IO_PICKLECACHE.depth - 1;
+    if IO_PICKLECACHE.depth = 0 then
+        # important to clear the cache:
+        IO_PICKLECACHE.ids := [];
+        IO_PICKLECACHE.nrs := [];
+    fi;
+  end );
+
+InstallGlobalFunction( IO_AddToUnpickled,
+  function( ob )
+    IO_PICKLECACHE.depth := IO_PICKLECACHE.depth + 1;
+    Add( IO_PICKLECACHE.obs, ob );
+  end );
+
+InstallGlobalFunction( IO_FinalizeUnpickled,
+  function( )
+    IO_PICKLECACHE.depth := IO_PICKLECACHE.depth - 1;
+    if IO_PICKLECACHE.depth = 0 then
+        # important to clear the cache:
+        IO_PICKLECACHE.obs := [];
+    fi;
+  end );
 
 InstallGlobalFunction( IO_WriteSmallInt,
   function( f, i )
@@ -844,8 +886,8 @@ InstallMethod( IO_Unpickle, "for a file",
     elif magic = "" then return IO_Nothing; 
     fi;
     if not(IsBound(IO_Unpicklers.(magic))) then
-        Error("No unpickler for magic value \"",magic,"\"");
-        return IO_Error();
+        Print("No unpickler for magic value \"",magic,"\"\n");
+        return IO_Error;
     fi;
     up := IO_Unpicklers.(magic);
     if IsFunction(up) then
@@ -857,6 +899,26 @@ InstallMethod( IO_Unpickle, "for a file",
 
 InstallValue( IO_Unpicklers, rec() );
 
+InstallGlobalFunction( IO_PickleByString,
+  function( f, ob, tag )
+    local s;
+    s := String(ob);
+    if IO_Write(f,tag) = fail then return IO_Error; fi;
+    if IO_WriteSmallInt(f,Length(s)) = IO_Error then return IO_Error; fi;
+    if IO_Write(f,s) = fail then return IO_Error; fi;
+    return IO_OK;
+  end );
+  
+InstallGlobalFunction( IO_UnpickleByEvalString,
+  function( f )
+    local len,s;
+    len := IO_ReadSmallInt(f);
+    if len = IO_Error then return IO_Error; fi;
+    s := IO_Read(f,len);
+    if s = fail then return IO_Error; fi;
+    return EvalString(s);
+  end );
+    
 InstallMethod( IO_Pickle, "for an integer",
   [ IsFile, IsInt ],
   function( f, i )
@@ -879,7 +941,7 @@ IO_Unpicklers.INTG :=
   end;
 
 InstallMethod( IO_Pickle, "for a string",
-  [ IsFile, IsStringRep ],
+  [ IsFile, IsStringRep and IsList ],
   function( f, s )
     if IO_Write(f,"STRI") = fail then return IO_Error; fi;
     if IO_WriteSmallInt(f, Length(s)) = IO_Error then return IO_Error; fi;
@@ -923,22 +985,223 @@ IO_Unpicklers.SPRF := SuPeRfail;
 InstallMethod( IO_Pickle, "for a permutation",
   [ IsFile, IsPerm ],
   function( f, p )
+    return IO_PickleByString( f, p, "PERM" );
+  end );
+
+IO_Unpicklers.PERM := IO_UnpickleByEvalString;
+
+InstallMethod( IO_Pickle, "for a character",
+  [ IsFile, IsChar ],
+  function(f, c)
     local s;
-    s := String(p);
-    if IO_Write(f,"PERM") = fail then return IO_Error; fi;
-    if IO_WriteSmallInt(f,Length(s)) = IO_Error then return IO_Error; fi;
+    s := "CHARx";
+    s[5] := c;
     if IO_Write(f,s) = fail then return IO_Error; fi;
     return IO_OK;
   end );
 
-IO_Unpicklers.PERM :=
+IO_Unpicklers.CHAR :=
   function( f )
-    local len,s;
-    len := IO_ReadSmallInt(f);
-    if len = IO_Error then return IO_Error; fi;
-    s := IO_Read(f,len);
-    if s = fail then return IO_Error; fi;
-    return EvalString(s);
+    local s;
+    s := IO_Read(f,1);
+    return s[1];
   end;
 
-# Now records and list, with trapping recursion
+InstallMethod( IO_Pickle, "for a finite field element",
+  [ IsFile, IsFFE ], 
+  function( f, ffe )
+    return IO_PickleByString( f, ffe, "FFEL" );
+  end );
+
+IO_Unpicklers.FFEL := IO_UnpickleByEvalString;
+
+InstallMethod( IO_Pickle, "for a cyclotomic",
+  [ IsFile, IsCyclotomic ],
+  function( f, cyc )
+    return IO_PickleByString( f, cyc, "CYCL" );
+  end );
+
+IO_Unpicklers.CYCL := IO_UnpickleByEvalString;
+
+InstallMethod( IO_Pickle, "for a list",
+  [ IsFile, IsList ],
+  function( f, l )
+    local count,i,nr;
+    nr := IO_AddToPickled(l);
+    if nr = false then   # not yet known
+        # Here we have to do something
+        if IO_Write(f,"LIST") = fail then 
+            IO_FinalizePickled();
+            return IO_Error;
+        fi;
+        if IO_WriteSmallInt(f,Length(l)) = IO_Error then
+            IO_FinalizePickled();
+            return IO_Error;
+        fi;
+        count := 0;
+        i := 1;
+        while i <= Length(l) do
+            if not(IsBound(l[i])) then
+                count := count + 1;
+            else
+                if count > 0 then
+                    if IO_Write(f,"GAPL") = fail then
+                        IO_FinalizePickled();
+                        return IO_Error;
+                    fi;
+                    if IO_WriteSmallInt(f,count) = IO_Error then
+                        IO_FinalizePickled();
+                        return IO_Error;
+                    fi;
+                    count := 0;
+                fi;
+                if IO_Pickle(f,l[i]) = IO_Error then
+                    IO_FinalizePickled();
+                    return IO_Error;
+                fi;
+            fi;
+            i := i + 1;
+        od;
+        # Note that the last entry is always bound!
+        IO_FinalizePickled();
+        return IO_OK;
+    else
+        if IO_Write(f,"SREF") = IO_Error then 
+            IO_FinalizePickled();
+            return IO_Error;
+        fi;
+        if IO_WriteSmallInt(f,nr) = IO_Error then
+            IO_FinalizePickled();
+            return IO_Error;
+        fi;
+        IO_FinalizePickled();
+        return IO_OK;
+    fi;
+  end );
+
+IO_Unpicklers.LIST := 
+  function( f )
+    local i,j,l,len,ob;
+    len := IO_ReadSmallInt(f);
+    if len = IO_Error then return IO_Error; fi;
+    l := 0*[1..len];
+    IO_AddToUnpickled(l);
+    i := 1;
+    while i <= len do
+        ob := IO_Unpickle(f);
+        if ob = IO_Error then
+            IO_FinalizeUnpickled();
+            return IO_Error;
+        fi;
+        # IO_OK or IO_Nothing cannot happen!
+        if IO_Result(ob) then
+            if ob!.val = "Gap" then   # this is a Gap
+                for j in [0..ob!.nr-1] do
+                    Unbind(l[i+j]);
+                od;
+                i := i + ob!.nr;
+            else    # this is a self-reference
+                l[i] := IO_PICKLECACHE.obs[ob!.nr];
+                i := i + 1;
+            fi;
+        else
+            l[i] := ob;
+            i := i + 1;
+        fi;
+    od;  # i is already incremented
+    IO_FinalizeUnpickled();
+    return l;
+  end;
+
+IO_Unpicklers.GAPL :=
+  function( f )
+    local ob;
+    ob := rec( val := "Gap", nr := IO_ReadSmallInt(f) );
+    if ob.nr = IO_Error then
+        return IO_Error;
+    fi;
+    return Objectify( NewType( IO_ResultsFamily, IO_Result ), ob );
+  end;
+
+IO_Unpicklers.SREF := 
+  function( f )
+    local ob;
+    ob := rec( val := "SRef", nr := IO_ReadSmallInt(f) );
+    if ob.nr = IO_Error then
+        return IO_Error;
+    fi;
+    return Objectify( NewType( IO_ResultsFamily, IO_Result ), ob );
+  end;
+
+InstallMethod( IO_Pickle, "for a record",
+  [ IsFile, IsRecord ],
+  function( f, r )
+    local n,names,nr;
+    nr := IO_AddToPickled(r);
+    if nr = false then   # not yet known
+        # Here we have to do something
+        if IO_Write(f,"RECO") = fail then
+            IO_FinalizePickled();
+            return IO_Error;
+        fi;
+        names := RecNames(r);
+        if IO_WriteSmallInt(f,Length(names)) = IO_Error then
+            IO_FinalizePickled();
+            return IO_Error;
+        fi;
+        for n in names do
+            if IO_Pickle(f,n) = IO_Error then
+                IO_FinalizePickled();
+                return IO_Error;
+            fi;
+            if IO_Pickle(f,r.(n)) = IO_Error then
+                IO_FinalizePickled();
+                return IO_Error;
+            fi;
+        od;
+        IO_FinalizePickled();
+        return IO_OK;
+    else
+        if IO_Write(f,"SREF") = IO_Error then 
+            IO_FinalizePickled();
+            return IO_Error;
+        fi;
+        if IO_WriteSmallInt(f,nr) = IO_Error then
+            IO_FinalizePickled();
+            return IO_Error;
+        fi;
+        IO_FinalizePickled();
+        return IO_OK;
+    fi;
+  end );
+
+IO_Unpicklers.RECO := 
+  function( f )
+    local i,len,name,ob,r;
+    len := IO_ReadSmallInt(f);
+    if len = IO_Error then return IO_Error; fi;
+    r := rec();
+    IO_AddToUnpickled(r);
+    for i in [1..len] do
+        name := IO_Unpickle(f);
+        if name = IO_Error or not(IsString(name)) then
+            IO_FinalizeUnpickled();
+            return IO_Error;
+        fi;
+        ob := IO_Unpickle(f);
+        if IO_Result(ob) then
+            if ob = IO_Error then
+                IO_FinalizeUnpickled();
+                return IO_Error;
+            else   # this must be a self-reference
+                r.(name) := IO_PICKLECACHE.obs[ob!.nr];
+            fi;
+        else
+            r.(name) := ob;
+        fi;
+    od;
+    IO_FinalizeUnpickled();
+    return r;
+  end;
+
+
