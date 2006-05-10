@@ -33,3 +33,42 @@ DeclareOperation( "IO_Pickle", [ IsFile, IsObject  ] );
 DeclareOperation( "IO_Unpickle", [ IsFile ] );
 BindGlobal ("IO_Unpicklers", rec() );
 
+# Here is an overview over the defined tags in this package:
+#
+# CHAR  a character
+# CYCL  a cyclotomic
+# FAIL  fail
+# FALS  false
+# FFEL  a finite field element
+# GAPL  a gap in a list (unbound entries)
+# IF2M  an immutable compressed GF2 matrix
+# IF2V  an immutable compressed GF2 vector
+# IF8M  an immutable compressed 8Bit matrix
+# IF8V  an immutable compressed 8Bit vector
+# ILIS  an immutable list
+# INTG  an integer
+# IREC  an immutable record
+# ISTR  an immutable string
+# MF2M  a mutable compressed GF2 matrix
+# MF2V  a mutable compressed GF2 vector
+# MF8M  a mutable compressed 8Bit matrix
+# MF8V  a mutable compressed 8Bit vector
+# MLIS  a mutable list
+# MREC  a mutable record
+# MSTR  a mutable string
+# PERM  a permutation
+# POLY  a Laurent polynomial (or a rational function)
+# SPRF  SuPeRfail
+# SREF  a self-reference
+# TRUE  true
+#
+# Some tags defined in other packages:
+#
+# ICVC  an immutable cvec
+# MCVC  a mutable cvec
+# ICMA  an immutable cmat
+# MCMA  a mutable cmat
+# CMOD  a module from the CHOP package
+#
+
+

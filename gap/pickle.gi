@@ -272,19 +272,30 @@ IO_Unpicklers.INTG :=
 InstallMethod( IO_Pickle, "for a string",
   [ IsFile, IsStringRep and IsList ],
   function( f, s )
-    if IO_Write(f,"STRI") = fail then return IO_Error; fi;
+    local tag;
+    if IsMutable(s) then tag := "MSTR";
+    else tag := "ISTR"; fi;
+    if IO_Write(f,tag) = fail then return IO_Error; fi;
     if IO_WriteSmallInt(f, Length(s)) = IO_Error then return IO_Error; fi;
     if IO_Write(f,s) = fail then return IO_Error; fi;
     return IO_OK;
   end );
 
-IO_Unpicklers.STRI :=
+IO_Unpicklers.MSTR :=
   function( f )
     local len,s;
     len := IO_ReadSmallInt(f);
     if len = IO_Error then return IO_Error; fi;
     s := IO_Read(f,len);
     if s = fail then return IO_Error; fi;
+    return s;
+  end;
+
+IO_Unpicklers.ISTR := 
+  function( f )
+    local s;
+    s := IO_Unpicklers.MSTR(f); if s = IO_Error then return IO_Error; fi;
+    MakeImmutable(s);
     return s;
   end;
 
@@ -355,11 +366,17 @@ IO_Unpicklers.CYCL := IO_UnpickleByEvalString;
 InstallMethod( IO_Pickle, "for a list",
   [ IsFile, IsList ],
   function( f, l )
-    local count,i,nr;
+    local count,i,nr,tag;
     nr := IO_AddToPickled(l);
     if nr = false then   # not yet known
         # Here we have to do something
-        if IO_Write(f,"LIST") = fail then 
+        if IsMutable(l) then tag := "M"; else tag := "I"; fi;
+        if IsGF2VectorRep(l) then Append(tag,"F2V");
+        elif Is8BitVectorRep(l) then Append(tag,"F8V");
+        elif IsGF2MatrixRep(l) then Append(tag,"F2M");
+        elif Is8BitMatrixRep(l) then Append(tag,"F8M");
+        else Append(tag,"LIS"); fi;
+        if IO_Write(f,tag) = fail then 
             IO_FinalizePickled();
             return IO_Error;
         fi;
@@ -408,7 +425,7 @@ InstallMethod( IO_Pickle, "for a list",
     fi;
   end );
 
-IO_Unpicklers.LIST := 
+IO_Unpicklers.MLIS := 
   function( f )
     local i,j,l,len,ob;
     len := IO_ReadSmallInt(f);
@@ -442,6 +459,82 @@ IO_Unpicklers.LIST :=
     return l;
   end;
 
+IO_Unpicklers.ILIS :=
+  function( f )
+    local l;
+    l := IO_Unpicklers.MLIS(f); if l = IO_Error then return IO_Error; fi;
+    MakeImmutable(l);
+    return l;
+  end;
+
+IO_Unpicklers.MF2V :=
+  function( f )
+    local v;
+    v := IO_Unpicklers.MLIS(f); if v = IO_Error then return IO_Error; fi;
+    ConvertToVectorRep(v,2);
+    return v;
+  end;
+
+IO_Unpicklers.MF8V :=
+  function( f )
+    local v;
+    v := IO_Unpicklers.MLIS(f); if v = IO_Error then return IO_Error; fi;
+    ConvertToVectorRep(v);
+    return v;
+  end;
+ 
+IO_Unpicklers.IF2V :=
+  function( f )
+    local v;
+    v := IO_Unpicklers.MLIS(f); if v = IO_Error then return IO_Error; fi;
+    ConvertToVectorRep(v);
+    MakeImmutable(v);
+    return v;
+  end;
+    
+IO_Unpicklers.IF8V :=
+  function( f )
+    local v;
+    v := IO_Unpicklers.MLIS(f); if v = IO_Error then return IO_Error; fi;
+    ConvertToVectorRep(v);
+    MakeImmutable(v);
+    return v;
+  end;
+ 
+IO_Unpicklers.MF2M :=
+  function( f )
+    local v;
+    v := IO_Unpicklers.MLIS(f); if v = IO_Error then return IO_Error; fi;
+    ConvertToMatrixRep(v,2);
+    return v;
+  end;
+
+IO_Unpicklers.MF8M :=
+  function( f )
+    local v;
+    v := IO_Unpicklers.MLIS(f); if v = IO_Error then return IO_Error; fi;
+    ConvertToMatrixRep(v);
+    return v;
+  end;
+ 
+IO_Unpicklers.IF2M :=
+  function( f )
+    local v;
+    v := IO_Unpicklers.MLIS(f); if v = IO_Error then return IO_Error; fi;
+    ConvertToMatrixRep(v);
+    MakeImmutable(v);
+    return v;
+  end;
+    
+IO_Unpicklers.IF8M :=
+  function( f )
+    local v;
+    v := IO_Unpicklers.MLIS(f); if v = IO_Error then return IO_Error; fi;
+    ConvertToMatrixRep(v);
+    MakeImmutable(v);
+    return v;
+  end;
+ 
 IO_Unpicklers.GAPL :=
   function( f )
     local ob;
@@ -465,11 +558,13 @@ IO_Unpicklers.SREF :=
 InstallMethod( IO_Pickle, "for a record",
   [ IsFile, IsRecord ],
   function( f, r )
-    local n,names,nr;
+    local n,names,nr,tag;
     nr := IO_AddToPickled(r);
     if nr = false then   # not yet known
         # Here we have to do something
-        if IO_Write(f,"RECO") = fail then
+        if IsMutable(r) then tag := "MREC";
+        else tag := "IREC"; fi;
+        if IO_Write(f,tag) = fail then
             IO_FinalizePickled();
             return IO_Error;
         fi;
@@ -504,7 +599,7 @@ InstallMethod( IO_Pickle, "for a record",
     fi;
   end );
 
-IO_Unpicklers.RECO := 
+IO_Unpicklers.MREC := 
   function( f )
     local i,len,name,ob,r;
     len := IO_ReadSmallInt(f);
@@ -530,6 +625,14 @@ IO_Unpicklers.RECO :=
         fi;
     od;
     IO_FinalizeUnpickled();
+    return r;
+  end;
+
+IO_Unpicklers.IREC :=
+  function( f )
+    local r;
+    r := IO_Unpicklers.MREC(f); if r = IO_Error then return IO_Error; fi;
+    MakeImmutable(r);
     return r;
   end;
 
