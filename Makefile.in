@@ -34,7 +34,7 @@ clean:
 archive: doc
 	(cd .. ; tar czvf io.tar.gz --exclude ".svn" --exclude @GAPARCH@ io)
 
-WEBPOS=/home/antares/neunhoef/webpage/Computer/Software/Gap/io
+WEBPOS=/home/antares/neunhoef/mywebpage/Computer/Software/Gap/io
 
 towww: archive
 	cp PackageInfo.g ${WEBPOS}
