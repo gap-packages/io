@@ -13,15 +13,23 @@ DeclareGlobalVariable( "IO_Error" );
 DeclareGlobalVariable( "IO_Nothing" );
 DeclareGlobalVariable( "IO_OK" );
 
+DeclareGlobalVariable( "IO_PICKLECACHE" );
+DeclareGlobalVariable( "IO_ClearPickleCache" );
+DeclareGlobalFunction( "IO_AddToPickled" );
+DeclareGlobalFunction( "IO_FinalizePickled" );
+DeclareGlobalFunction( "IO_AddToUnpickled" );
+DeclareGlobalFunction( "IO_FinalizeUnpickled" );
+
 DeclareGlobalFunction( "IO_WriteSmallInt" );
 DeclareGlobalFunction( "IO_ReadSmallInt" );
 DeclareGlobalFunction( "IO_WriteAttribute" );
 DeclareGlobalFunction( "IO_ReadAttribute" );
+DeclareGlobalFunction( "IO_PickleByString" );
+DeclareGlobalFunction( "IO_UnpickleByEvalString" );
+DeclareGlobalFunction( "IO_GenericObjectPickler" );
+DeclareGlobalFunction( "IO_GenericObjectUnpickler" );
 
 DeclareOperation( "IO_Pickle", [ IsFile, IsObject  ] );
 DeclareOperation( "IO_Unpickle", [ IsFile ] );
-DeclareGlobalVariable( "IO_Unpicklers" );
-
-
-
+BindGlobal ("IO_Unpicklers", rec() );
 

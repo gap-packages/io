@@ -6,4 +6,5 @@
 ##
 
 ReadPackage("IO","gap/io.gi");
+ReadPackage("IO","gap/pickle.gi");
 

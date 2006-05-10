@@ -9,3 +9,4 @@
 ##  
 
 ReadPackage("IO", "gap/io.gd");
+ReadPackage("IO", "gap/pickle.gd");

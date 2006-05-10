@@ -33,9 +33,3 @@ DeclareGlobalFunction( "IO_Popen2" );
 DeclareGlobalFunction( "IO_Popen3" );
 DeclareGlobalFunction( "IO_SendStringBackground" );
 
-DeclareGlobalVariable( "IO_PICKLECACHE" );
-DeclareGlobalFunction( "IO_AddToPickled" );
-DeclareGlobalFunction( "IO_FinalizePickled" );
-DeclareGlobalFunction( "IO_AddToUnpickled" );
-DeclareGlobalFunction( "IO_FinalizeUnpickled" );
-

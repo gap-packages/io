@@ -34,6 +34,14 @@ InstallMethod( ViewObj, "for an IO_Result",
 InstallValue( IO_PICKLECACHE, rec( ids := [], nrs := [], obs := [],
                                    depth := 0 ) );
 
+InstallGlobalFunction( IO_ClearPickleCache,
+  function( )
+    IO_PICKLECACHE.ids := [];
+    IO_PICKLECACHE.nrs := [];
+    IO_PICKLECACHE.obs := [];
+    IO_PICKLECACHE.depth := 0;
+  end );
+
 InstallGlobalFunction( IO_AddToPickled,
   function( ob )
     local id,pos;
@@ -121,6 +129,105 @@ InstallGlobalFunction( IO_ReadAttribute,
     return IO_OK;
   end );
 
+InstallGlobalFunction( IO_PickleByString,
+  function( f, ob, tag )
+    local s;
+    s := String(ob);
+    if IO_Write(f,tag) = fail then return IO_Error; fi;
+    if IO_WriteSmallInt(f,Length(s)) = IO_Error then return IO_Error; fi;
+    if IO_Write(f,s) = fail then return IO_Error; fi;
+    return IO_OK;
+  end );
+  
+InstallGlobalFunction( IO_UnpickleByEvalString,
+  function( f )
+    local len,s;
+    len := IO_ReadSmallInt(f);
+    if len = IO_Error then return IO_Error; fi;
+    s := IO_Read(f,len);
+    if s = fail then return IO_Error; fi;
+    return EvalString(s);
+  end );
+  
+InstallGlobalFunction( IO_GenericObjectPickler,
+  function( f, ob, atts, filts, comps )
+    local at,com,fil;
+    IO_AddToPickled(ob);
+    for at in atts do
+        if IO_WriteAttribute(f,at,ob) = IO_Error then 
+            IO_FinalizePickled();
+            return IO_Error;
+        fi;
+    od;
+    for fil in filts do
+        if IO_Pickle(f,fil(ob)) = IO_Error then 
+            IO_FinalizePickled();
+            return IO_Error; 
+        fi;
+    od;
+    for com in comps do
+        if IsBound(ob!.(com)) then
+            if IO_Pickle(f,com) = IO_Error then 
+                IO_FinalizePickled();
+                return IO_Error; 
+            fi;
+            if IO_Pickle(f,ob!.(com)) = IO_Error then 
+                IO_FinalizePickled();
+                return IO_Error; 
+            fi;
+        fi;
+    od;
+    IO_FinalizePickled();
+    if IO_Pickle(f,fail) = IO_Error then return IO_Error; fi;
+    return IO_OK;
+  end );
+
+InstallGlobalFunction( IO_GenericObjectUnpickler,
+  function( f, ob, atts, filts, comps )
+    local at,fil,val,val2;
+    IO_AddToUnpickled(ob);
+    for at in atts do
+        if IO_ReadAttribute(f,at,ob) = IO_Error then 
+            IO_FinalizeUnpickled();
+            return IO_Error; 
+        fi;
+    od;
+    for fil in filts do
+        val := IO_Unpickle(f);
+        if val = IO_Error then 
+            IO_FinalizeUnpickled();
+            return IO_Error; 
+        fi;
+        if val <> fil(ob) then
+            if val then
+                SetFilterObj(ob,fil);
+            else
+                ResetFilterObj(ob,fil);
+            fi;
+        fi;
+    od;
+    while true do
+        val := IO_Unpickle(f);
+        if val = fail then 
+            IO_FinalizeUnpickled();
+            return IO_OK;
+        fi;
+        if val = IO_Error then 
+            IO_FinalizeUnpickled();
+            return IO_Error; 
+        fi;
+        if IsString(val) then
+            val2 := IO_Unpickle(f);
+            if val2 = IO_Error then 
+                IO_FinalizeUnpickled();
+                return IO_Error; 
+            fi;
+            ob!.(val) := val2;
+        fi;
+    od;
+  end );
+
+        
 InstallMethod( IO_Unpickle, "for a file",
   [ IsFile ],
   function( f )
@@ -141,28 +248,6 @@ InstallMethod( IO_Unpickle, "for a file",
     fi;
   end );
 
-InstallValue( IO_Unpicklers, rec() );
-
-InstallGlobalFunction( IO_PickleByString,
-  function( f, ob, tag )
-    local s;
-    s := String(ob);
-    if IO_Write(f,tag) = fail then return IO_Error; fi;
-    if IO_WriteSmallInt(f,Length(s)) = IO_Error then return IO_Error; fi;
-    if IO_Write(f,s) = fail then return IO_Error; fi;
-    return IO_OK;
-  end );
-  
-InstallGlobalFunction( IO_UnpickleByEvalString,
-  function( f )
-    local len,s;
-    len := IO_ReadSmallInt(f);
-    if len = IO_Error then return IO_Error; fi;
-    s := IO_Read(f,len);
-    if s = fail then return IO_Error; fi;
-    return EvalString(s);
-  end );
-    
 InstallMethod( IO_Pickle, "for an integer",
   [ IsFile, IsInt ],
   function( f, i )
