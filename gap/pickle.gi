@@ -446,9 +446,6 @@ IO_Unpicklers.MLIS :=
                     Unbind(l[i+j]);
                 od;
                 i := i + ob!.nr;
-            else    # this is a self-reference
-                l[i] := IO_PICKLECACHE.obs[ob!.nr];
-                i := i + 1;
             fi;
         else
             l[i] := ob;
@@ -547,12 +544,13 @@ IO_Unpicklers.GAPL :=
 
 IO_Unpicklers.SREF := 
   function( f )
-    local ob;
-    ob := rec( val := "SRef", nr := IO_ReadSmallInt(f) );
-    if ob.nr = IO_Error then
+    local nr;
+    nr := IO_ReadSmallInt(f); if nr = IO_Error then return IO_Error; fi;
+    if not(IsBound(IO_PICKLECACHE.obs[nr])) then
+        Print("Found a self-reference to an unknown object!\n");
         return IO_Error;
     fi;
-    return Objectify( NewType( IO_ResultsFamily, IO_Result ), ob );
+    return IO_PICKLECACHE.obs[nr];
   end;
 
 InstallMethod( IO_Pickle, "for a record",
@@ -617,8 +615,6 @@ IO_Unpicklers.MREC :=
             if ob = IO_Error then
                 IO_FinalizeUnpickled();
                 return IO_Error;
-            else   # this must be a self-reference
-                r.(name) := IO_PICKLECACHE.obs[ob!.nr];
             fi;
         else
             r.(name) := ob;
