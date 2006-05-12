@@ -666,3 +666,27 @@ IO_Unpicklers.POLY :=
     return poly;
   end;
 
+InstallMethod( IO_Pickle, "for a straight line program",
+  [ IsFile, IsStraightLineProgram ],
+  function( f, s )
+    if IO_Write(f,"GSLP") = fail then return IO_Error; fi;
+    if IO_Pickle(f,LinesOfStraightLineProgram(s)) = IO_Error then 
+        return IO_Error;
+    fi;
+    if IO_Pickle(f,NrInputsOfStraightLineProgram(s)) = IO_Error then
+        return IO_Error;
+    fi;
+    return IO_OK;
+  end);
+
+IO_Unpicklers.GSLP :=
+  function( f )
+    local l,n,s;
+    l := IO_Unpickle(f);
+    if l = IO_Error then return IO_Error; fi;
+    n := IO_Unpickle(f);
+    if l = IO_Error then return IO_Error; fi;
+    s := StraightLineProgramNC(l,n);
+    return s;
+  end;
+
