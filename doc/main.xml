@@ -847,7 +847,11 @@ The result of this function is a new <K>File</K> object.
 A convenient way to do this for reading or writing of files on disk
 is the following function:
 <ManSection>
-<Func Name="IO_File" Arg="filename [,mode][,bufsize]"
+<Func Name="IO_File" Arg="filename [,mode]"
+      Comm="open a file for reading or writing and create a File object"/>
+<Func Name="IO_File" Arg="filename [,bufsize]"
+      Comm="open a file for reading or writing and create a File object"/>
+<Func Name="IO_File" Arg="filename,mode,bufsize"
       Comm="open a file for reading or writing and create a File object"/>
 <Description>
 The argument <A>filename</A> must be a string specifying the path name
