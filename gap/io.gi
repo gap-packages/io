@@ -101,33 +101,46 @@ InstallGlobalFunction(IO_File, function( arg )
   #   "r" : open for reading only (default)
   #   "w" : open for writing only, possibly creating/truncating
   #   "a" : open for appending
-  local fd,filename,mode;
+  local fd,filename,mode,bufsize;
   if Length(arg) = 1 then
       filename := arg[1];
       mode := "r";
+      bufsize := IO.DefaultBufSize;
   elif Length(arg) = 2 then
       filename := arg[1];
+      if IsString(arg[2]) then
+          mode := arg[2];
+          bufsize := IO.DefaultBufSize;
+      else
+          mode := "r";
+          bufsize := arg[2];
+      fi;
+  elif Length(arg) = 3 then
+      filename := arg[1];
       mode := arg[2];
+      bufsize := arg[3];
   else
-      Error("IO: Usage: IO_File( filename [,mode] ) with IsString(filename)");
+      Error("IO: Usage: IO_File( filename [,mode][,bufsize] )\n",
+            "with IsString(filename)");
   fi;
   if not(IsString(filename)) and not(IsString(mode)) then
-      Error("IO: Usage: IO_File( filename [,mode] ) with IsString(filename)");
+      Error("IO: Usage: IO_File( filename [,mode][,bufsize] )\n",
+            "with IsString(filename)");
   fi;
   if mode = "r" then
       fd := IO_open(filename,IO.O_RDONLY,0);
       if fd = fail then return fail; fi;
-      return IO_WrapFD(fd,IO.DefaultBufSize,false);
+      return IO_WrapFD(fd,bufsize,false);
   elif mode = "w" then
       fd := IO_open(filename,IO.O_CREAT+IO.O_WRONLY+IO.O_TRUNC,
                     IO.S_IRUSR+IO.S_IWUSR+IO.S_IRGRP+IO.S_IWGRP+
                     IO.S_IROTH+IO.S_IWOTH);
       if fd = fail then return fail; fi;
-      return IO_WrapFD(fd,false,IO.DefaultBufSize);
+      return IO_WrapFD(fd,false,bufsize);
   elif mode = "a" then
       fd := IO_open(filename,IO.O_APPEND+IO.O_WRONLY,0);
       if fd = fail then return fail; fi;
-      return IO_WrapFD(fd,false,IO.DefaultBufSize);
+      return IO_WrapFD(fd,false,bufsize);
   else
       Error("IO: Mode not supported!");
   fi;

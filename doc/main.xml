@@ -847,16 +847,18 @@ The result of this function is a new <K>File</K> object.
 A convenient way to do this for reading or writing of files on disk
 is the following function:
 <ManSection>
-<Func Name="IO_File" Arg="filename [,mode]"
+<Func Name="IO_File" Arg="filename [,mode][,bufsize]"
       Comm="open a file for reading or writing and create a File object"/>
 <Description>
 The argument <A>filename</A> must be a string specifying the path name
 of the file to work on. <A>mode</A> must also be a string with possible
 values <Q>r</Q>, <Q>w</Q>, or <Q>a</Q>, meaning read access, write
 access (with creating and truncating), and append access respectively.
-If <A>mode</A> is omitted, it defaults to <Q>r</Q>. Internally, the
+If <A>mode</A> is omitted, it defaults to <Q>r</Q>. <A>bufsize</A>, if given,
+must be a positive integer, otherwise it defaults to <C>IO.DefaultBufSize</C>. 
+Internally, the
 <Ref Func="IO_open"/> function is used and the result file descripter is 
-wrapped using <Ref Func="IO_WrapFD"/> with <C>IO.DefaultBufSize</C>
+wrapped using <Ref Func="IO_WrapFD"/> with <A>bufsize</A>
 as the buffer size. <P/>
 
 The result is either <K>fail</K> in case of an error or a <K>File</K> object
