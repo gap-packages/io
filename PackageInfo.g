@@ -267,7 +267,7 @@ Dependencies := rec(
 AvailabilityTest := function()
   if not "io" in SHOW_STAT() and
      Filename(DirectoriesPackagePrograms("io"), "io.so") = fail then
-    Info(InfoWarning, 1, "IO: kernel IO functions not available.");
+    #Info(InfoWarning, 1, "IO: kernel IO functions not available.");
     return fail;
   fi;
   return true;
