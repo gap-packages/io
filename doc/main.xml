@@ -800,7 +800,7 @@ Restores the original SIGCHLD handler. See <Ref Func="IO_fork"/>.
 
 </Section>
 
-<Section>
+<Section Label="bufio">
 <Heading>Higher level functions for buffered I/O</Heading>
 
 The functions in the previous sections are intended to be a possibility
@@ -1215,6 +1215,158 @@ happens to become necessary during the sending of the data in the
 forked off sending process, this might trigger doubled memory usage.
 </Description>
 </ManSection>
+
+</Section>
+
+<Section>
+    <Heading>Object serialisation (Pickling)</Heading>
+
+The idea of <Q>object serialisation</Q> is that one wants to store
+nearly arbitrary &GAP; objects to disk or transfer them over the network.
+To this end, one wants to convert them to a byte stream that is platform
+independent and can later be converted back to a copy of the same object
+in memory, be it in the same &GAP; process or another one maybe even on
+another machine. The main problem here are the vast amount of different
+types occurring in &GAP; and the possibly highly self-referential
+structure of &GAP; objects.
+
+<P/>
+The <Package>IO</Package> contains a framework to implement object
+serialisation and implementations for most of the basic data types
+in &GAP;. The framework is easily extendible to other types and takes
+complete care of self-referentiability and corresponding problems.
+It builds upon the buffered I/O functions described in Section
+<Ref Sect="bufio"/>. We start by describing the user interface.
+
+<ManSection>
+    <Oper Name="IO_Pickle" Arg="f, ob"/>
+    <Returns> <C>IO_OK</C> or <C>IO_Error</C> </Returns>
+    <Description>
+        The argument <A>f</A> must be an open, writable <K>File</K>
+        object. The object <A>ob</A> can be an arbitrary &GAP; object.
+        The operation <Q>pickles</Q> or <Q>serialises</Q> the object
+        <A>ob</A> and writes the result into the <K>File</K> object
+        <A>f</A>. If everything is OK, the unique value <C>IO_OK</C>
+        is returned and otherwise the unique value <C>IO_Error</C>.
+        The resulting byte stream can be read again using the operation
+        <Ref Oper="IO_Unpickle"/> and is platform- and architecture
+        independent. Especially the question whether a system has
+        32 bit or 64 bit wide words and the question of endianess
+        does not matter. 
+        <P/>
+        Note that not all of &GAP;'s object types are supported but it
+        is relatively easy to extend the system. This package supports
+        in particular boolean values, integers, permutations, rational
+        numbers, finite field elements, cyclotomics, strings, polynomials,
+        rational functions,
+        lists, records, compressed vectors and matrices over finite fields
+        (objects are uncompressed in the byte stream but recompressed
+        during unpickling), and straight line programs.
+        <P/>
+        Self-referential objects built from records and lists are handled
+        correctly and are restored completely with the same self-references
+        during unpickling.
+    </Description>
+</ManSection>
+
+<ManSection>
+    <Oper Name="IO_Unpickle" Arg="f"/>
+    <Returns> <C>IO_Error</C> or a &GAP; object </Returns>
+    <Description>
+        The argument <A>f</A> must be an open, readable <K>File</K>
+        object. The operation reads from <A>f</A> and <Q>unpickles</Q>
+        the next object. If an error occurs, the unique value <C>IO_Error</C>
+        is returned. If the <K>File</K>
+        object is at end of file, the value <C>IO_Nothing</C> is returned.
+        Note that these two values are not picklable, because of
+        their special meaning as return values of this operation here. 
+    </Description>
+</ManSection>
+
+<ManSection>
+    <Func Name="IO_ClearPickleCache" Arg=""/>
+    <Returns> Nothing </Returns>
+    <Description>
+        This function clears the <Q>pickle cache</Q>. This cache stores all
+        object pickled in the current recursive call to <Ref Oper="IO_Pickle"/>
+        and is necessary to handle self-references. Usually it is not
+        necessary to call this function explicitly. Only in the rare
+        case (that should not happen) that a pickling or unpickling operation
+        enters a break loop which is left by the user, the pickle
+        cache has to be cleared explicitly using this function for
+        later calls to <Ref Oper="IO_Pickle"/> and <Ref Oper="IO_Unpickle"/>
+        to work!
+    </Description>
+</ManSection>
+
+<Subsection>
+<Heading>Extending the pickling framework</Heading>
+
+The framework can be extended for other &GAP; object types as follows:
+
+<P/>
+For pickling, a method for the operation <Ref Oper="IO_Pickle"/> has
+to be installed which does the work. If the object to be pickled has
+subobjects, then the first action of the method is to call the function
+<C>IO_AddToPickled</C> with the object as argument. This will put it
+into the pickle cache and take care of self-references. Arbitrary
+subobjects can then be pickled using recursive calls to the operation
+<Ref Oper="IO_Pickle"/> handing down the same <K>File</K> object into
+the recursion. The method must either return <C>IO_Error</C> in case of
+an error or <C>IO_OK</C> if everything goes well. Before returning,
+the method must call the function <C>IO_FinalizePickled</C> without
+arguments <E>under all circumstances</E>. If this call is missing,
+global data for the pickling procedure becomes corrupt!
+
+<P/>
+Every pickling method must first write a 4 byte magic value such that
+later during unpickling of the byte stream the right unpickling
+method can be called (see below). Then it can write arbitrary data,
+however, this data should be platform- and architecture independent, and
+it must be possible to unpickle it later without <Q>lookahead</Q>.
+
+<P/>
+Pickling methods should usually not go into a break loop, because
+after leaving the user has to call <Ref Func="IO_ClearPickleCache"/>
+explicitly!
+
+<P/>
+Unpickling is implemented as follows: For every 4 byte magic value
+there must be a function bound to that value in the record
+<C>IO_Unpicklers</C>. If the unpickling operation <Ref Oper="IO_Unpickle"/>
+encounters that magic value, it calls the corresponding unpickling
+function. This function just gets one <K>File</K> object as argument.
+Since the magic value is already read, it can immediately start 
+with reading an rebuilding the serialised object in memory. The method
+has to take care to restore the object including its type completely.
+
+<P/>
+If an object type has subobjects, the unpickling function has to
+first create a skeleton of the object without its subobjects, then
+call <C>IO_AddToUnpickled</C> on this skeleton, <E>before</E> unpickling
+subobjects. If things are not done in this order, the handling of 
+self-references down in the recursion will not work! An unpickling 
+function that has called <C>IO_AddToUnpickled</C> at the beginning
+has to call <C>IO_FinalizeUnpickled</C> without arguments before
+returning <E>under all circumstances</E>! If this call is missing,
+global data for the unpickling procedure becomes corrupt!
+
+<P/>
+Of course, unpickling functions can recursively call <Ref Oper="IO_Unpickle"/>
+to unpickle subobjects. Apart from this, unpickling functions can use
+arbitrary reading functions on the <K>File</K> object. However, they
+should only read sequentially and never move the current file position
+pointer otherwise. An unpickling function should return the newly
+created object or the value <C>IO_Error</C> if an error occurred.
+They should never go into a break loop, because after leaving the user
+has to call <Ref Func="IO_ClearPickleCache"/> explicitly!
+
+<P/>
+Perhaps the best way to learn how to extend the framework is to
+study the code for the basic &GAP; objects in the file
+<F>pkg/io/gap/pickle.gi</F>.
+
+</Subsection>
 
 </Section>
 

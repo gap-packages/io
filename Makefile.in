@@ -24,7 +24,7 @@ static:
 
 doc: doc/manual.six
 
-doc/manual.six: doc/main.xml doc/io.xml default
+doc/manual.six: doc/main.xml doc/io.xml default VERSION
 	($(GAPPATH)/bin/gap.sh makedoc.g)
 
 clean:

@@ -41,6 +41,7 @@ BindGlobal ("IO_Unpicklers", rec() );
 # FALS  false
 # FFEL  a finite field element
 # GAPL  a gap in a list (unbound entries)
+# GSLP  a GAP straight line program
 # IF2M  an immutable compressed GF2 matrix
 # IF2V  an immutable compressed GF2 vector
 # IF8M  an immutable compressed 8Bit matrix
@@ -57,10 +58,14 @@ BindGlobal ("IO_Unpicklers", rec() );
 # MREC  a mutable record
 # MSTR  a mutable string
 # PERM  a permutation
-# POLY  a Laurent polynomial (or a rational function)
+# POLF  an object in the representation IsPolynomialDefaultRep
+# POLY  a Laurent polynomial (or a rational function) deprecated
+# RATF  an object in the representation IsRationalFunctionDefaultRep
 # SPRF  SuPeRfail
 # SREF  a self-reference
 # TRUE  true
+# UPOL  an object in the representation IsLaurentPolynomialDefaultRep
+# URFU  an object in the representation IsUnivariateRationalFunctionDefaultRep
 #
 # Some tags defined in other packages:
 #

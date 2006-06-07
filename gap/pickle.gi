@@ -639,18 +639,59 @@ InstallMethod( IO_Pickle, "IO_Results are forbidden",
     return IO_Error;
   end );
 
-InstallMethod( IO_Pickle, "for polynomials",
-  [ IsFile, IsRationalFunction ],
+InstallMethod( IO_Pickle, "for rational functions",
+  [ IsFile, IsPolynomialFunction and IsRationalFunctionDefaultRep ],
   function( f, pol )
-    local ext,one;
+    local num,den,one;
     one := One(CoefficientsFamily(FamilyObj(pol)));
-    ext := ExtRepPolynomialRatFun(pol);
-    if IO_Write(f,"POLY") = fail then return IO_Error; fi;
+    num := ExtRepNumeratorRatFun(pol);
+    den := ExtRepDenominatorRatFun(pol);
+    if IO_Write(f,"RATF") = fail then return IO_Error; fi;
     if IO_Pickle(f,one) = IO_Error then return IO_Error; fi;
-    if IO_Pickle(f,ext) = IO_Error then return IO_Error; fi;
+    if IO_Pickle(f,num) = IO_Error then return IO_Error; fi;
+    if IO_Pickle(f,den) = IO_Error then return IO_Error; fi;
     return IO_OK;
   end );
 
+IO_Unpicklers.RATF := 
+  function( f )
+    local num,den,one,poly;
+    one := IO_Unpickle(f);
+    if one = IO_Error then return IO_Error; fi;
+    num := IO_Unpickle(f);
+    if num = IO_Error then return IO_Error; fi;
+    den := IO_Unpickle(f);
+    if den = IO_Error then return IO_Error; fi;
+    poly := RationalFunctionByExtRepNC( 
+                   RationalFunctionsFamily(FamilyObj(one)),num,den);
+    return poly;
+  end;
+
+InstallMethod( IO_Pickle, "for rational functions",
+  [ IsFile, IsPolynomialFunction and IsPolynomialDefaultRep ],
+  function( f, pol )
+    local num,one;
+    one := One(CoefficientsFamily(FamilyObj(pol)));
+    num := ExtRepNumeratorRatFun(pol);
+    if IO_Write(f,"POLF") = fail then return IO_Error; fi;
+    if IO_Pickle(f,one) = IO_Error then return IO_Error; fi;
+    if IO_Pickle(f,num) = IO_Error then return IO_Error; fi;
+    return IO_OK;
+  end );
+
+IO_Unpicklers.POLF := 
+  function( f )
+    local num,one,poly;
+    one := IO_Unpickle(f);
+    if one = IO_Error then return IO_Error; fi;
+    num := IO_Unpickle(f);
+    if num = IO_Error then return IO_Error; fi;
+    poly := PolynomialByExtRepNC( 
+                   RationalFunctionsFamily(FamilyObj(one)),num);
+    return poly;
+  end;
+
+# This is for compatibility only and will go eventually:
 IO_Unpicklers.POLY :=
   function( f )
     local ext,one,poly;
@@ -659,6 +700,64 @@ IO_Unpicklers.POLY :=
     ext := IO_Unpickle(f);
     if ext = IO_Error then return IO_Error; fi;
     poly := PolynomialByExtRepNC( RationalFunctionsFamily(FamilyObj(one)),ext);
+    IsUnivariatePolynomial(poly);   # to make it learn
+    IsLaurentPolynomial(poly);      # to make it learn
+    return poly;
+  end;
+
+InstallMethod( IO_Pickle, "for a univariate Laurent polynomial",
+  [ IsFile, IsLaurentPolynomial and IsLaurentPolynomialDefaultRep ],
+  function( f, pol )
+  local cofs,one,ind;
+    one := One(CoefficientsFamily(FamilyObj(pol)));
+    cofs := CoefficientsOfLaurentPolynomial(pol);
+    ind := IndeterminateNumberOfLaurentPolynomial(pol);
+    if IO_Write(f,"UPOL") = fail then return IO_Error; fi;
+    if IO_Pickle(f,one) = IO_Error then return IO_Error; fi;
+    if IO_Pickle(f,cofs) = IO_Error then return IO_Error; fi;
+    if IO_Pickle(f,ind) = IO_Error then return IO_Error; fi;
+    return IO_OK;
+  end );
+
+IO_Unpicklers.UPOL :=
+  function( f )
+    local cofs,one,ind,poly;
+    one := IO_Unpickle(f);
+    if one = IO_Error then return IO_Error; fi;
+    cofs := IO_Unpickle(f);
+    if cofs = IO_Error then return IO_Error; fi;
+    ind := IO_Unpickle(f);
+    if ind = IO_Error then return IO_Error; fi;
+    poly := LaurentPolynomialByCoefficients(FamilyObj(one),cofs[1],cofs[2],ind);
+    return poly;
+  end;
+
+InstallMethod( IO_Pickle, "for a univariate rational function",
+  [ IsFile, 
+    IsUnivariateRationalFunction and IsUnivariateRationalFunctionDefaultRep ],
+  function( f, pol )
+    local cofs,one,ind;
+    one := One(CoefficientsFamily(FamilyObj(pol)));
+    cofs := CoefficientsOfUnivariateRationalFunction(pol);
+    ind := IndeterminateNumberOfUnivariateRationalFunction(pol);
+    if IO_Write(f,"URFU") = fail then return IO_Error; fi;
+    if IO_Pickle(f,one) = IO_Error then return IO_Error; fi;
+    if IO_Pickle(f,cofs) = IO_Error then return IO_Error; fi;
+    if IO_Pickle(f,ind) = IO_Error then return IO_Error; fi;
+    return IO_OK;
+  end );
+
+IO_Unpicklers.URFU :=
+  function( f )
+    local cofs,one,ind,poly;
+    one := IO_Unpickle(f);
+    if one = IO_Error then return IO_Error; fi;
+    cofs := IO_Unpickle(f);
+    if cofs = IO_Error then return IO_Error; fi;
+    ind := IO_Unpickle(f);
+    if ind = IO_Error then return IO_Error; fi;
+    poly := UnivariateRationalFunctionByCoefficients(
+               FamilyObj(one),cofs[1],cofs[2],cofs[3],ind);
     return poly;
   end;
 
