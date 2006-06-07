@@ -971,8 +971,8 @@ Obj FuncIO_gethostbyname(Obj self,Obj name)
   Obj tmp;
   Obj tmp2;
   char **p;
-  int i;
-  int len;
+  Int i;
+  Int len;
   if (!IS_STRING(name) || !IS_STRING_REP(name)) {
       SyClearErrorNo();
       return Fail;
@@ -1464,7 +1464,7 @@ Obj FuncIO_execve(Obj self,Obj path,Obj Argv,Obj Envp)
 
 Obj FuncIO_environ(Obj self)
 {
-    int i,len;
+    Int i,len;
     char **p;
     Obj tmp,tmp2;
 
