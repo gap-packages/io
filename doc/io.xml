@@ -16,7 +16,7 @@
     <Title>GAP 4 Package <Package>IO</Package></Title>
     <Subtitle>Bindings for low level C library I/O routines</Subtitle>
     <Version>
-      <#Include SYSTEM "../VERSION">
+      Version <#Include SYSTEM "../VERSION">
     </Version>
     <Author>Max Neunhöffer
 <Address>
