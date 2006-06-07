@@ -1231,10 +1231,10 @@ types occurring in &GAP; and the possibly highly self-referential
 structure of &GAP; objects.
 
 <P/>
-The <Package>IO</Package> contains a framework to implement object
+The <Package>IO</Package> package contains a framework to implement object
 serialisation and implementations for most of the basic data types
 in &GAP;. The framework is easily extendible to other types and takes
-complete care of self-referentiability and corresponding problems.
+complete care of self-references and corresponding problems.
 It builds upon the buffered I/O functions described in Section
 <Ref Sect="bufio"/>. We start by describing the user interface.
 
@@ -1314,7 +1314,8 @@ subobjects can then be pickled using recursive calls to the operation
 <Ref Oper="IO_Pickle"/> handing down the same <K>File</K> object into
 the recursion. The method must either return <C>IO_Error</C> in case of
 an error or <C>IO_OK</C> if everything goes well. Before returning,
-the method must call the function <C>IO_FinalizePickled</C> without
+a method that has called <C>IO_AddToPickled</C>
+must call the function <C>IO_FinalizePickled</C> without
 arguments <E>under all circumstances</E>. If this call is missing,
 global data for the pickling procedure becomes corrupt!
 
@@ -1337,7 +1338,7 @@ there must be a function bound to that value in the record
 encounters that magic value, it calls the corresponding unpickling
 function. This function just gets one <K>File</K> object as argument.
 Since the magic value is already read, it can immediately start 
-with reading an rebuilding the serialised object in memory. The method
+with reading and rebuilding the serialised object in memory. The method
 has to take care to restore the object including its type completely.
 
 <P/>
