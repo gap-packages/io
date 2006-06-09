@@ -238,6 +238,7 @@ InstallMethod( IO_Unpickle, "for a file",
     fi;
     if not(IsBound(IO_Unpicklers.(magic))) then
         Print("No unpickler for magic value \"",magic,"\"\n");
+        Print("Maybe you have to load a package for this to work?\n");
         return IO_Error;
     fi;
     up := IO_Unpicklers.(magic);
