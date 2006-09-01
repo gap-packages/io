@@ -49,11 +49,8 @@ after configuring GAP itself on this architecture. <P/>
 
 The package will  not  work  without this step.<P/>
 
-The <F>INSTALL</F>  in the main  package directory also explains  how to
+The <F>README</F>  in the main  package directory also explains  how to
 compile the kernel function into a static module.
-
-You  can  also  run  a test of    the installation  by  typing <C>make
-test</C>.
 
 </Section>
 

@@ -7,8 +7,8 @@
 **  
 */
 
-const char * Revision_pl_c =
-   "$Id: ediv.c,v 1.4 2002/02/05 22:23:41 chevie Exp $";
+const char * Revision_io_c =
+   "$Id: io.c$";
 
 #include "src/compiled.h"          /* GAP headers                */
 
@@ -2580,13 +2580,17 @@ static StructInitInfo module = {
  /* postRestore = */ 0
 };
 
+#ifndef IOSTATIC
 StructInitInfo * Init__Dynamic ( void )
 {
- return &module;
+  module.revision_c = Revision_io_c;
+  return &module;
 }
+#endif
 
 StructInitInfo * Init__io ( void )
 {
+  module.revision_c = Revision_io_c;
   return &module;
 }
 
