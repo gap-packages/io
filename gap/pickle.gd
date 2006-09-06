@@ -74,6 +74,7 @@ BindGlobal ("IO_Unpicklers", rec() );
 # ICMA  an immutable cmat
 # MCMA  a mutable cmat
 # CMOD  a module from the CHOP package
+# GWDG  a GAP word generator from the CHOP package
 #
 
 
