@@ -7,6 +7,7 @@
 ==========================
 
   - moved real random sources from the orb package here
+    adjust them to new library code
   - implement picklers/unpicklers for random sources
 
 
