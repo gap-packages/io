@@ -786,3 +786,58 @@ IO_Unpicklers.GSLP :=
     return s;
   end;
 
+InstallMethod( IO_Pickle, "for the global random source",
+  [ IsFile, IsRandomSource and IsGlobalRandomSource ],
+  function( f, r )
+    local s;
+    if IO_Write(f,"RSGL") = fail then return IO_Error; fi;
+    s := State(r);
+    if IO_Pickle(f,s) = IO_Error then return IO_Error; fi;
+    return IO_OK;
+  end );
+
+IO_Unpicklers.RSGL :=
+  function( f )
+    local s;
+    s := IO_Unpickle(f);
+    if s = IO_Error then return IO_Error; fi;
+    return RandomSource(IsGlobalRandomSource,s);
+  end;
+
+InstallMethod( IO_Pickle, "for a GAP random source",
+  [ IsFile, IsRandomSource and IsGAPRandomSource ],
+  function( f, r )
+    local s;
+    if IO_Write(f,"RSGA") = fail then return IO_Error; fi;
+    s := State(r);
+    if IO_Pickle(f,s) = IO_Error then return IO_Error; fi;
+    return IO_OK;
+  end );
+
+IO_Unpicklers.RSGA :=
+  function( f )
+    local s;
+    s := IO_Unpickle(f);
+    if s = IO_Error then return IO_Error; fi;
+    return RandomSource(IsGAPRandomSource,s);
+  end;
+
+InstallMethod( IO_Pickle, "for a Mersenne twister random source",
+  [ IsFile, IsRandomSource and IsMersenneTwister ],
+  function( f, r )
+    local s;
+    if IO_Write(f,"RSMT") = fail then return IO_Error; fi;
+    s := State(r);
+    if IO_Pickle(f,s) = IO_Error then return IO_Error; fi;
+    return IO_OK;
+  end );
+
+IO_Unpicklers.RSMT :=
+  function( f )
+    local s;
+    s := IO_Unpickle(f);
+    if s = IO_Error then return IO_Error; fi;
+    return RandomSource(IsMersenneTwister,s);
+  end;
+
+

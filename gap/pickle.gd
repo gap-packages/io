@@ -61,6 +61,9 @@ BindGlobal ("IO_Unpicklers", rec() );
 # POLF  an object in the representation IsPolynomialDefaultRep
 # POLY  a Laurent polynomial (or a rational function) deprecated
 # RATF  an object in the representation IsRationalFunctionDefaultRep
+# RSGL  the global random source
+# RSGA  a GAP random source
+# RSMT  a Mersenne twister random source
 # SPRF  SuPeRfail
 # SREF  a self-reference
 # TRUE  true

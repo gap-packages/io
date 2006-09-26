@@ -7,4 +7,5 @@
 
 ReadPackage("IO","gap/io.gi");
 ReadPackage("IO","gap/pickle.gi");
+ReadPackage("IO","gap/realrandom.gi");
 
