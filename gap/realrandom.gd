@@ -10,5 +10,5 @@
 ##
 #############################################################################
 
-DeclareRepresentation( "IsRealRandomSourceRep", IsRandomSource, [] );
+DeclareRepresentation( "IsRealRandomSource", IsRandomSource, [] );
 

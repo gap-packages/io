@@ -10,25 +10,44 @@
 ##
 #############################################################################
 
-InstallMethod( RandomSource, "for a real random source", [IsString], 1,
-  function( type )
-    local f,r;
-    if type <> "random" and type <> "urandom" then TryNextMethod(); fi;
-    # Return the global random source:
+InstallMethod( Init, "for a real random source", 
+  [IsRealRandomSource,IsString], 1,
+  function( r, type )
+    local f;
+    if type <> "random" and type <> "urandom" then 
+        Error("seed must be \"random\" or \"urandom\"");
+    fi;
     if type = "random" then
         f := IO_File("/dev/random",128);  # Use smaller buffer size
     else
         f := IO_File("/dev/urandom",1024);  # Use medium buffer size
     fi; 
     if f = fail then return fail; fi;
-    r := rec(file := f);
-    Objectify(RandomSourceType,r);
-    SetFilterObj(r,IsRealRandomSourceRep);
+    r!.file := f;
+    r!.type := type;
     return r;
   end );
 
+InstallMethod( State, "for a real random source",
+  [IsRealRandomSource],
+  function(r)
+    return fail;
+  end );
+
+InstallMethod( Reset, "for a real random source",
+  [IsRealRandomSource],
+  function(r)
+    return;
+  end );
+
+InstallMethod( Reset, "for a real random source and an object",
+  [IsRealRandomSource,IsObject],
+  function(r,o)
+    return;
+  end );
+
 InstallMethod( Random, "for a real random source and two integers",
-  [ IsRandomSource and IsRealRandomSourceRep, IsInt, IsInt ],
+  [ IsRealRandomSource, IsInt, IsInt ],
   function( r, f, t )
     local c,d,h,i,l,q,s;
     d := t-f;   # we need d+1 different outcomes from [0..d]
@@ -53,7 +72,7 @@ InstallMethod( Random, "for a real random source and two integers",
   end );
 
 InstallMethod( Random, "for a real random source and a list",
-  [ IsRandomSource and IsRealRandomSourceRep, IsList ],
+  [ IsRealRandomSource, IsList ],
   function( r, l )
     local nr;
     repeat
@@ -63,15 +82,30 @@ InstallMethod( Random, "for a real random source and a list",
   end );
 
 InstallMethod( ViewObj, "for a real random source",
-  [IsRandomSource and IsRealRandomSourceRep],
+  [IsRealRandomSource],
   function(rs)
     Print("<a real random source>");
   end );
 
 InstallMethod( Reset, "for a real random source",
-  [IsRandomSource and IsRealRandomSourceRep],
+  [IsRealRandomSource],
   function(rs)
     Error("Real random sources cannot be Reset by definition");
   end );
+
+InstallMethod( IO_Pickle, "for a real random source",
+  [IsFile, IsRealRandomSource],
+  function(f,rs)
+    if IO_Write(f,"RSRE") = fail then return IO_Error; fi;
+    if IO_Pickle(f,rs!.type) = IO_Error then return IO_Error; fi;
+    return IO_OK;
+  end );
+
+IO_Unpicklers.RSRE := function(f)
+  local t;
+  t := IO_Unpickle(f);
+  if t = IO_Error then return IO_Error; fi;
+  return RandomSource(IsRealRandomSource,t);
+end;
 
 
