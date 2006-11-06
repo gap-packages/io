@@ -62,7 +62,7 @@ InstallMethod( Random, "for a real random source and two integers",
                               # evenly distributed in [0..2^l-1], all values
                               # between 0 and d occur equally often
     repeat
-        s := IO_Read(r!.file,l/8); # note that l is divisible by 8
+        s := IO_ReadBlock(r!.file,l/8); # note that l is divisible by 8
         h := "";
         for c in s do Append(h,HexStringInt(INT_CHAR(c))); od;
         i := IntHexString(h);  # this is now between 0 and 2^l-1 inclusively

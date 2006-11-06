@@ -7,12 +7,6 @@
 ##  This file contains functions for pickling and unpickling.
 ##
 
-BindGlobal( "IO_ResultsFamily", NewFamily( "IO_ResultsFamily" ) );
-DeclareCategory( "IO_Result", IsComponentObjectRep );
-DeclareGlobalVariable( "IO_Error" );
-DeclareGlobalVariable( "IO_Nothing" );
-DeclareGlobalVariable( "IO_OK" );
-
 DeclareGlobalVariable( "IO_PICKLECACHE" );
 DeclareGlobalFunction( "IO_ClearPickleCache" );
 DeclareGlobalFunction( "IO_AddToPickled" );

@@ -11,16 +11,29 @@ DeclareCategory( "IsFile", IsObject );
 DeclareGlobalVariable( "FileType" );
 DeclareAttribute( "ProcessID", IsFile );
 
+BindGlobal( "IO_ResultsFamily", NewFamily( "IO_ResultsFamily" ) );
+DeclareCategory( "IO_Result", IsComponentObjectRep );
+DeclareGlobalVariable( "IO_Error" );
+DeclareGlobalVariable( "IO_Nothing" );
+DeclareGlobalVariable( "IO_OK" );
+DeclareGlobalVariable( "IO_EOF" );    # End of file marker
+
 DeclareGlobalFunction( "IO_WrapFD" );
 DeclareGlobalFunction( "IO_File" );
 DeclareGlobalFunction( "IO_Close" );
+DeclareGlobalFunction( "IO_ReadUntilEOF" );
+DeclareGlobalFunction( "IO_ReadBlock" );
 DeclareGlobalFunction( "IO_Read" );
 DeclareGlobalFunction( "IO_ReadLine" );
 DeclareGlobalFunction( "IO_ReadLines" );
+DeclareGlobalFunction( "IO_HasData" );
 DeclareGlobalFunction( "IO_Write" );
+DeclareGlobalFunction( "IO_WriteFlush" );
 DeclareGlobalFunction( "IO_WriteLine" );
 DeclareGlobalFunction( "IO_WriteLines" );
+DeclareGlobalFunction( "IO_WriteNonBlocking" );
 DeclareGlobalFunction( "IO_Flush" );
+DeclareGlobalFunction( "IO_FlushNonBlocking" );
 DeclareGlobalFunction( "IO_GetFD" );
 DeclareGlobalFunction( "IO_GetWBuf" );
 DeclareGlobalFunction( "IO_ListDir" );

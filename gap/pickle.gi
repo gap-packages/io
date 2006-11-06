@@ -11,26 +11,6 @@
 # (Un-)Pickling: 
 #################
 
-InstallValue( IO_Error,
-  Objectify( NewType( IO_ResultsFamily, IO_Result ), rec( val := "IO_Error" ))
-);
-InstallValue( IO_Nothing,
-  Objectify( NewType( IO_ResultsFamily, IO_Result ), rec( val := "IO_Nothing"))
-);
-InstallValue( IO_OK,
-  Objectify( NewType( IO_ResultsFamily, IO_Result ), rec( val := "IO_OK"))
-);
-InstallMethod( \=, "for two IO_Results",
-  [ IO_Result, IO_Result ],
-  function(a,b) return a!.val = b!.val; end );
-InstallMethod( \=, "for an IO_Result and another object",
-  [ IO_Result, IsObject ], ReturnFalse );
-InstallMethod( \=, "for another object and an IO_Result",
-  [ IsObject, IO_Result], ReturnFalse );
-InstallMethod( ViewObj, "for an IO_Result",
-  [ IO_Result ],
-  function(r) Print(r!.val); end );
- 
 InstallValue( IO_PICKLECACHE, rec( ids := [], nrs := [], obs := [],
                                    depth := 0 ) );
 
@@ -98,9 +78,9 @@ InstallGlobalFunction( IO_WriteSmallInt,
 InstallGlobalFunction( IO_ReadSmallInt,
   function( f )
     local h,l;
-    l := IO_Read(f,1);
+    l := IO_ReadBlock(f,1);
     if l = "" or l = fail then return IO_Error; fi;
-    h := IO_Read(f,INT_CHAR(l[1]));
+    h := IO_ReadBlock(f,INT_CHAR(l[1]));
     if h = fail then return IO_Error; fi;
     return IntHexString(h);
   end );
@@ -144,7 +124,7 @@ InstallGlobalFunction( IO_UnpickleByEvalString,
     local len,s;
     len := IO_ReadSmallInt(f);
     if len = IO_Error then return IO_Error; fi;
-    s := IO_Read(f,len);
+    s := IO_ReadBlock(f,len);
     if s = fail then return IO_Error; fi;
     return EvalString(s);
   end );
@@ -232,7 +212,7 @@ InstallMethod( IO_Unpickle, "for a file",
   [ IsFile ],
   function( f )
     local magic,up;
-    magic := IO_Read(f,4);
+    magic := IO_ReadBlock(f,4);
     if magic = fail then return IO_Error; 
     elif magic = "" then return IO_Nothing; 
     fi;
@@ -265,7 +245,7 @@ IO_Unpicklers.INTG :=
     local h,len;
     len := IO_ReadSmallInt(f);
     if len = IO_Error then return IO_Error; fi;
-    h := IO_Read(f,len);
+    h := IO_ReadBlock(f,len);
     if h = fail then return IO_Error; fi;
     return IntHexString(h);
   end;
@@ -287,7 +267,7 @@ IO_Unpicklers.MSTR :=
     local len,s;
     len := IO_ReadSmallInt(f);
     if len = IO_Error then return IO_Error; fi;
-    s := IO_Read(f,len);
+    s := IO_ReadBlock(f,len);
     if s = fail then return IO_Error; fi;
     return s;
   end;
@@ -344,7 +324,7 @@ InstallMethod( IO_Pickle, "for a character",
 IO_Unpicklers.CHAR :=
   function( f )
     local s;
-    s := IO_Read(f,1);
+    s := IO_ReadBlock(f,1);
     return s[1];
   end;
 
