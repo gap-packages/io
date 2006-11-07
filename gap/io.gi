@@ -235,30 +235,23 @@ InstallGlobalFunction( IO_ReadUntilEOF, function( f )
   fi;   
   # Now read on:
   if f!.fd = -1 then
-      if res = "" then return IO_EOF; fi;
       return res;
   fi;
   repeat
       bytes := IO_read(f!.fd,res,Length(res),f!.rbufsize);
       if bytes = fail then return IO_Error; fi;
   until bytes = 0;
-  if res = "" then return IO_EOF; fi;
   return res;
 end );
-
-# The buffered read functionality with blocking for a specific
-# amount of data:
-IO_LastIncompleteReadBlock := "";
 
 InstallGlobalFunction( IO_ReadBlock, function( f, len )
   # arguments: f ,len
   # f must be an object of type IsFile
   # len is the length to read
-  # Reads length bytes. Guarantees to return length bytes or IO_EOF (for EOF)
-  # or IO_Error for an error. Blocks until enough data arrives.
-  # If less then len bytes is available until EOF, then IO_EOF is returned
-  # and the remainder of the file is stored in the global variable
-  # IO_LastIncompleteReadBlock
+  # Reads length bytes. Guarantees to return length bytes or less "" 
+  # indicating EOF or IO_Error for an error. Blocks until enough data arrives.
+  # This function only returns less than length bytes, if EOF is reached
+  # before length bytes are read.
   local amount,bytes,res;
   if not(IsFile(f)) or not(IsInt(len)) then
       Error("Usage: IO_ReadBlock( f [,len] ) with IsFile(f) ",
@@ -275,13 +268,7 @@ InstallGlobalFunction( IO_ReadBlock, function( f, len )
           if bytes = fail then
               return IO_Error;
           fi;
-          if bytes = 0 then
-              if res = "" then
-                  IO_LastIncompleteReadBlock := res;
-                  return IO_EOF;
-              fi;
-              return res;
-          fi;
+          if bytes = 0 then return res; fi;   # this is EOF
       od;
       return res;
   fi;
@@ -300,31 +287,23 @@ InstallGlobalFunction( IO_ReadBlock, function( f, len )
           f!.rdata := 0;
       fi;
       if f!.fd = -1 then
-          if res = "" then
-              IO_LastIncompleteReadBlock := res;
-              return IO_EOF;
-          fi;
           return res;
       fi;
       if len - Length(res) > f!.rbufsize then   
           # In this case we read the whole thing:
           bytes := IO_read(f!.fd,res,Length(res),len - Length(res));
           if bytes = fail then 
-              IO_LastIncompleteReadBlock := res;
               return IO_Error;
           elif bytes = 0 then 
-              IO_LastIncompleteReadBlock := res;
-              return IO_EOF;
+              return res;
           fi;
       else
           # Now the buffer is empty, so refill it:
           bytes := IO_read(f!.fd,f!.rbuf,0,f!.rbufsize);
           if bytes = fail then
-              IO_LastIncompleteReadBlock := res;
               return IO_Error;
           elif bytes = 0 then
-              IO_LastIncompleteReadBlock := res;
-              return IO_EOF;
+              return res;
           fi;
           f!.rdata := bytes;
       fi;
@@ -364,9 +343,7 @@ InstallGlobalFunction( IO_ReadLine, function( f )
           fi;
           # Now read more data into buffer:
           bytes := IO_read(f!.fd,f!.rbuf,0,f!.rbufsize);
-          if bytes = fail then
-              return fail;
-          fi;
+          if bytes = fail then return IO_Error; fi;
           if bytes = 0 then   # we are at end of file
               return res;
           fi;
@@ -400,9 +377,7 @@ InstallGlobalFunction( IO_ReadLines, function (arg)
   li := [];
   while Length(li) < max do
       l := IO_ReadLine(f);
-      if l = fail then 
-          return fail;
-      fi;
+      if l = IO_Error then return IO_Error; fi;
       if Length(l) = 0 then
           return li;
       fi;
@@ -437,7 +412,6 @@ InstallGlobalFunction( IO_Read, function( f, len )
       if bytes = fail then
           return IO_Error;
       fi;
-      if bytes = 0 then return IO_EOF; fi;
       return res;
   fi;
   # read up to len bytes, using our buffer:     
@@ -456,7 +430,7 @@ InstallGlobalFunction( IO_Read, function( f, len )
           return res;
       fi;
       if f!.fd = -1 then
-          return IO_EOF;
+          return "";
       fi;
       if len - Length(res) > f!.rbufsize then   
           # In this case we read the whole thing:
@@ -464,7 +438,7 @@ InstallGlobalFunction( IO_Read, function( f, len )
           if bytes = fail then 
               return IO_Error;
           elif bytes = 0 then 
-              return IO_EOF;
+              return "";
           else
               return res;
           fi;
@@ -474,7 +448,7 @@ InstallGlobalFunction( IO_Read, function( f, len )
           if bytes = fail then
               return IO_Error;
           elif bytes = 0 then
-              return IO_EOF;
+              return "";
           fi;
           f!.rdata := bytes;
           # The next loop will do it
@@ -534,9 +508,7 @@ InstallGlobalFunction( IO_Write, function( arg )
           pos := 0;
           while pos < Length(st) do
               bytes := IO_write(f!.fd,st,pos,Length(st));
-              if bytes = fail then
-                  return IO_Error;
-              fi;
+              if bytes = fail then return IO_Error; fi;
               pos := pos + bytes;
           od;
           return Length(st);   # this indicates success
@@ -560,18 +532,14 @@ InstallGlobalFunction( IO_Write, function( arg )
               pos2 := 0;
               while pos2 < f!.wbufsize do
                   bytes := IO_write(f!.fd,f!.wbuf,pos2,f!.wbufsize-pos2);
-                  if bytes = fail then
-                      return IO_Error;
-                  fi;
+                  if bytes = fail then return IO_Error; fi;
                   pos2 := pos2 + bytes;
               od;
               f!.wdata := 0;
               # Perhaps we can write a big chunk:
               if Length(st)-pos > f!.wbufsize then
                   bytes := IO_write(f!.fd,st,pos,Length(st)-pos);
-                  if bytes = fail then
-                      return IO_Error;
-                  fi;
+                  if bytes = fail then return IO_Error; fi;
                   pos := pos + bytes;
               fi;
           od;
@@ -586,9 +554,7 @@ InstallGlobalFunction( IO_Write, function( arg )
           st := String(arg[i]);
       fi;
       bytes := IO_Write(f,st);   # delegate to above
-      if bytes = fail then
-          return IO_Error;
-      fi;
+      if bytes = IO_Error then return IO_Error; fi;
       sumbytes := sumbytes + bytes;
   od;
   return sumbytes;
@@ -600,12 +566,8 @@ InstallGlobalFunction( IO_WriteLine, function( arg )
   local res;
   Add(arg,IO.LineEndChars);
   res := CallFuncList( IO_Write, arg );
-  if res = fail then
-      return IO_Error;
-  fi;
-  if IO_Flush(arg[1]) = fail then
-      return IO_Error;
-  else
+  if res = IO_Error then return IO_Error; fi;
+  if IO_Flush(arg[1]) = IO_Error then return IO_Error; else
       return res;
   fi;
 end );
@@ -620,13 +582,11 @@ InstallGlobalFunction( IO_WriteLines, function( f, l )
   written := 0;
   for o in l do
       res := IO_Write(f, o, IO.LineEndChars);
-      if res = fail then
-          return fail;
-      fi;
+      if res = IO_Error then return IO_Error; fi;
       written := written + res;
   od;
-  if IO_Flush(f) = fail then
-      return fail;
+  if IO_Flush(f) = IO_Error then
+      return IO_Error;
   else
       return written;
   fi;
@@ -641,21 +601,18 @@ InstallGlobalFunction( IO_WriteNonBlocking,
     # than requested! The function returns the number of bytes written
     # or IO_Error in case of an error. The function can block, if the 
     # buffer is full and the file descriptor is not ready to write.
-    local bytes,pos2,st;
+    local bytes,pos2;
     if not(IsFile(f)) or not(IsString(st)) or not(IsInt(pos)) then
         Error("Usage: IO_WriteNonBlocking( f, st, pos )");
     fi;
     if f!.closed then
         Error("Tried to write on closed file.");
     fi;
-    st := arg[2];
     # Do we buffer?
     if f!.wbufsize = false then
         # Non-buffered I/O:
         bytes := IO_write(f!.fd,st,pos,Length(st)-pos); 
-        if bytes = fail then
-            return IO_Error;
-        fi;
+        if bytes = fail then return IO_Error; fi;
         return bytes;   # this indicates success
     else   # we do buffering:
         while true do   # will be left by return and run at most twice!
@@ -665,7 +622,7 @@ InstallGlobalFunction( IO_WriteNonBlocking,
                     f!.wbuf{[f!.wdata+1..f!.wdata+Length(st)-pos]} := 
                             st{[pos+1..Length(st)]};
                     f!.wdata := f!.wdata + Length(st) - pos;
-                    return Length(st);
+                    return Length(st) - pos;
                 else
                     f!.wbuf{[f!.wdata+1..f!.wbufsize]} := 
                             st{[pos+1..pos+f!.wbufsize-f!.wdata]};
@@ -678,14 +635,12 @@ InstallGlobalFunction( IO_WriteNonBlocking,
             # Write out the buffer:
             pos2 := 0;
             bytes := IO_write(f!.fd,f!.wbuf,0,f!.wbufsize);
-            if bytes = fail then
-                return IO_Error;
-            fi;
+            if bytes = fail then return IO_Error; fi;
             if bytes = f!.wbufsize then
                 f!.wdata := 0;
             else
                 f!.wbuf{[1..f!.wbufsize-bytes]} 
-                   := f!.wbuf{[bytes+1..f!.wbufsize};
+                   := f!.wbuf{[bytes+1..f!.wbufsize]};
                 f!.wdata := f!.wdata - bytes;
             fi;
             # Now there is again space in the buffer and the next loop
@@ -704,39 +659,179 @@ InstallGlobalFunction( IO_Flush, function( f )
   fi;
   while f!.wbufsize <> false and f!.wdata <> 0 do
       res := IO_write( f!.fd, f!.wbuf, 0, f!.wdata );
-      if res = fail then
-          return fail;
-      fi;
+      if res = fail then return IO_Error; fi;
       f!.wdata := f!.wdata - res;
   od;
   return true;
 end );
  
 InstallGlobalFunction( IO_FlushNonBlocking, function( f )
+  # This function is guaranteed to make some progress but also not to
+  # block if IO_ReadyForWrite or IO_Select returned f to be ready for
+  # writing. It returns true if the buffers have been flushed and false
+  # otherwise. An error is signalled by IO_Error.
+  local res;
   if not(IsFile(f)) then
-      Error("Usage: IO_Flush( f ) with IsFile(f)");
+      Error("Usage: IO_FlushNonBlocking( f ) with IsFile(f)");
   fi;
-  if f!.fd = -1 then  # Nothing to do for string Files
+  if f!.fd = -1 or    # Nothing to do for string Files
+     (f!.wbufsize <> false and f!.wdata = 0) then    # or if buffer empty
       return true;
   fi;
-  # ...
-  while f!.wbufsize <> false and f!.wdata <> 0 do
-      res := IO_write( f!.fd, f!.wbuf, 0, f!.wdata );
-      if res = fail then
-          return fail;
-      fi;
+  res := IO_write( f!.fd, f!.wbuf, 0, f!.wdata );
+  if res = fail then return IO_Error; fi;
+  if res < f!.wdata then
+      f!.wbuf{[1..f!.wdata-res]} := f!.wbuf{[res+1..f!.wdata]};
       f!.wdata := f!.wdata - res;
-  od;
-  return true;
+      return false;
+  else
+      f!.wdata := 0;
+      return true;
+  fi;
   end );
 
 InstallGlobalFunction( IO_WriteFlush,
   function(arg)
+    local bytes;
     bytes := CallFuncList(IO_Write,arg);
     if bytes = IO_Error then return IO_Error; fi;
     if IO_Flush(arg[1]) = IO_Error then return IO_Error; fi;
     return bytes;
   end );
+
+InstallGlobalFunction( IO_ReadyForWrite,
+  # Returns true or false. True means, that the next IO_WriteNonBlocking
+  # will not block, false means, that the next IO_WriteNonBlocking might
+  # block.
+  function(f)
+    local l,nr;
+    if not(IsFile(f)) then
+        Error("Usage: IO_ReadyForWrite( f ) with IsFile(f)");
+    fi;
+    if f!.closed then
+        Error("Tried to check for write on closed file.");
+    fi;
+    if f!.wbufsize <> false and f!.wdata < f!.wbufsize then
+        return true;
+    fi;
+    if f!.fd = -1 then return true; fi;
+    # Now use select:
+    l := [f!.fd];
+    nr := IO_select([],l,[],0,0);
+    if nr = 0 then return false; fi;
+    return true;
+  end );
+
+InstallGlobalFunction( IO_ReadyForFlush,
+  # Returns true or false. True means, that the next IO_FlushNonBlocking
+  # will not block, false means, that the next IO_FlushNonBlocking might
+  # block.
+  function(f)
+    local l,nr;
+    if not(IsFile(f)) then
+        Error("Usage: IO_ReadyForFlush( f ) with IsFile(f)");
+    fi;
+    if f!.closed then
+        Error("Tried to check for flush on closed file.");
+    fi;
+    if f!.wbufsize = false or f!.wdata = 0 then
+        return true;
+    fi;
+    if f!.fd = -1 then return true; fi;
+    # Now use select:
+    l := [f!.fd];
+    nr := IO_select([],l,[],0,0);
+    if nr = 0 then return false; fi;
+    return true;
+  end );
+
+  
+InstallGlobalFunction( IO_Select, function( r, w, f, e, t1, t2 )
+  # Provides select functionality for file descriptors and IsFile objects.
+  # The list f is for a test for flushability.
+  local ep,ee,i,nr,nrfinal,rp,rr,wp,ww;
+  nrfinal := 0;
+  rr := [];
+  rp := [];
+  for i in [1..Length(r)] do
+      if IsInt(r[i]) then    # A file descriptor
+          Add(rr,r[i]);
+          Add(rp,i);
+      elif IsFile(r[i]) then
+          if r[i]!.rbufsize <> false and r[i]!.rdata > 0 then
+              nrfinal := nrfinal + 1;
+          else
+              Add(rr,r[i]!.fd);
+              Add(rp,i);
+          fi;
+      else
+          r[i] := fail;
+      fi;
+  od;
+  ww := [];
+  wp := [];
+  for i in [1..Length(w)] do
+      if IsInt(w[i]) then    # A file descriptor
+          Add(ww,w[i]);
+          Add(wp,i);
+      elif IsFile(w[i]) then
+          if w[i]!.wbufsize <> false and w[i]!.wdata < w[i]!.wbufsize then
+              nrfinal := nrfinal + 1;
+          else
+              Add(ww,w[i]!.fd);
+              Add(wp,i);
+          fi;
+      else
+          w[i] := fail;
+      fi;
+  od;
+  for i in [1..Length(f)] do
+      if IsInt(f[i]) then    # A file descriptor
+          Add(ww,f[i]);
+          Add(wp,-i);
+      elif IsFile(f[i]) then
+          Add(ww,f[i]!.fd);
+          Add(wp,-i);
+      else
+          f[i] := fail;
+      fi;
+  od;
+  ee := [];
+  ep := [];
+  for i in [1..Length(e)] do
+      if IsInt(e[i]) then    # A file descriptor
+          Add(ee,e[i]);
+          Add(ep,i);
+      elif IsFile(e[i]) then
+          Add(ee,e[i]!.fd);
+          Add(ep,i);
+      else
+          e[i] := fail;
+      fi;
+  od;
+  if Length(rr) > 0 or Length(ww) > 0 or Length(ee) > 0 or 
+     t1 > 0 or t2 > 0 then
+      # Now do the select:
+      nr := IO_select(rr,ww,ee,t1,t2);
+      nrfinal := nrfinal + nr;
+      # Now look for results:
+      for i in [1..Length(rr)] do
+          if rr[i] = fail then r[rp[i]] := fail; fi;
+      od;
+      for i in [1..Length(ww)] do
+          if ww[i] = fail then
+              if wp[i] > 0 then w[wp[i]] := fail;
+                           else e[-wp[i]] := fail; fi;
+          fi;
+      od;
+      for i in [1..Length(ee)] do
+          if ee[i] = fail then e[ep[i]] := fail; fi;
+      od;
+  fi;
+  return nrfinal;
+end );
+      
+
 
 # Allow access to the file descriptor:
 InstallGlobalFunction( IO_GetFD, function(f)
