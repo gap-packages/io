@@ -809,8 +809,12 @@ InstallGlobalFunction( IO_Select, function( r, w, f, e, t1, t2 )
           e[i] := fail;
       fi;
   od;
-  if Length(rr) > 0 or Length(ww) > 0 or Length(ee) > 0 or 
-     t1 > 0 or t2 > 0 then
+  if Length(rr) > 0 or Length(ww) > 0 or Length(ee) > 0 then
+      # we have to investigate further:
+      if nrfinal > 0 then
+          t1 := 0;   # set timeout to 0 because we know we have buffers ready
+          t2 := 0;
+      fi;
       # Now do the select:
       nr := IO_select(rr,ww,ee,t1,t2);
       nrfinal := nrfinal + nr;
