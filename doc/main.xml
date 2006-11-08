@@ -809,7 +809,17 @@ in the &GAP; language and is intended to provide a good interface
 for programming in &GAP;. The basic idea is to wrap up (integer)
 file descriptors in &GAP; objects that do the buffering.<P/>
 
-The wrapped objects are in the following category:
+Note that considerable care has been taken to ensure that one can
+do I/O multiplexing with buffered I/O. That is, one always has the 
+possibility to make sure before a read or write operation, that this
+read or write operation will not block. This is crucial when one
+wants to serve more than one I/O channel from the same (single-threaded)
+&GAP; process. This design principle sometimes made it necessary
+to have more than one function for a certain operation. Those
+functions usually differ in a subtle way with respect to their
+blocking behaviour.<P/>
+
+The wrapped file objects are in the following category:
 
 <ManSection>
 <Filt Name="IsFile" Arg="o" Type="Category"/>
@@ -822,7 +832,7 @@ To create objects in this category, one uses the following function:
 <Func Name="IO_WrapFD" Arg="fd, rbufsize, wbufsize" 
       Comm="creates buffering I/O objects, called File objects"/>
 <Description>
-The argument <A>fd</A> must be a file descripter (i.e. an integer)
+The argument <A>fd</A> must be a file descriptor (i.e. an integer)
 or -1 (see below). <P/>
 
 <A>rbufsize</A> can either be <K>false</K> for
@@ -858,7 +868,7 @@ access (with creating and truncating), and append access respectively.
 If <A>mode</A> is omitted, it defaults to <Q>r</Q>. <A>bufsize</A>, if given,
 must be a positive integer, otherwise it defaults to <C>IO.DefaultBufSize</C>. 
 Internally, the
-<Ref Func="IO_open"/> function is used and the result file descripter is 
+<Ref Func="IO_open"/> function is used and the result file descriptor is 
 wrapped using <Ref Func="IO_WrapFD"/> with <A>bufsize</A>
 as the buffer size. <P/>
 
@@ -871,21 +881,27 @@ Once a <K>File</K> object is created, one can use the following
 functions on it:
 
 <ManSection>
-<Func Name="IO_Read" Arg="f [,len]"
-      Comm="buffered read from File object"/>
+<Func Name="IO_ReadUntilEOF" Arg="f"
+      Comm="buffered read until end of file"/>
 <Description>
-The function gets one or two arguments, the first of which must always
-be a <K>File</K> object <A>f</A>. It reads data either until end of file
-(without a second argument) or up to <A>len</A> bytes (with a second
-argument <A>len</A>). A string with the result is returned, if everything
-went well and <K>fail</K> otherwise. In the latter case, one can query
-the error with <Ref Func="LastSystemError" BookName="ref"/>.<P/>
+This function reads all data from the file <A>f</A> until the end of file.
+The data is returned as a &GAP; string. If the file is already at end of
+file, an empty string is returned. If an error occurs, then <K>fail</K> is
+returned.
+</Description>
+</ManSection>
 
-Note that the reading is done via the buffer of <A>f</A>, such that
-this function will be quite fast also for large amounts of data.<P/>
-
-If the file is already at the end of the file, the function returns
-a string of length 0. Note that this is not an error!
+<ManSection>
+<Func Name="IO_ReadBlock" Arg="f, len"
+      Comm="buffered read from File object, blocking"/>
+<Description>
+This function gets two arguments, the first argument <A>f</A> must be
+a <K>File</K> object and the second argument <A>len</A> must be
+a positive integer. The function tries to read <A>len</A> bytes
+and returns a string of that length. If and only if the end of file is 
+reached earlier, fewer bytes are returned. If an error occurs, <K>fail</K>
+is returned. Note that this function blocks until either <A>len</A> bytes
+are read, or the end of file is reached, or an error occurs.
 </Description>
 </ManSection>
 
@@ -897,7 +913,9 @@ This function gets exactly one argument, which must be a <K>File</K> object
 <A>f</A>. It reads one line of data, where the definition of line is
 operating system dependent. The line end character(s) are included in
 the result. The function returns a string with the line in case of
-success and <K>fail</K> in case of an error. <P/>
+success and <K>fail</K> in case of an error. In the
+latter case, one can query the error with <Ref Func="LastSystemError"
+BookName="ref"/>.<P/>
 
 Note that the reading is done via the buffer of <A>f</A>, such that
 this function will be quite fast also for large amounts of data.<P/>
@@ -905,7 +923,7 @@ this function will be quite fast also for large amounts of data.<P/>
 If the end of file is hit without a line end, the rest of the file
 is returned. If the file is already at end of file before the call,
 then a string of length 0 is returned. Note that this
-is not an error!
+is not an error but the standard end of file convention!
 </Description>
 </ManSection>
 
@@ -926,7 +944,46 @@ Note that the reading is done via the buffer of <A>f</A>, such that
 this function will be quite fast also for large amounts of data.<P/>
 
 If the file is already at the end of file, the function returns
-a list of length 0. Note that this is not an error!
+a list of length 0. Note that this is not an error but the standard end of
+file convention!
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO_HasData" Arg="f"/>
+<Description>
+This function takes one argument <A>f</A> which must be a <K>File</K>
+object. It returns <K>true</K> or <K>false</K> according to whether
+there is data to read available in the file <A>f</A>. A return value
+of <K>true</K> guarantees that the next call to <Ref Func="IO_Read"/>
+on that file will succeed without blocking and return at least one
+byte or an empty string to indicate the end of file.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO_Read" Arg="f, len"
+      Comm="buffered read from File object"/>
+<Description>
+The function gets two arguments, the first of which must 
+be a <K>File</K> object <A>f</A>. The second argument must be a positive
+integer. The function reads data
+up to <A>len</A> bytes.
+A string with the result is returned, if everything
+went well and <K>fail</K> otherwise. In the latter case, one can query
+the error with <Ref Func="LastSystemError" BookName="ref"/>.<P/>
+
+Note that the reading is done via the buffer of <A>f</A>, such that
+this function will be quite fast also for large amounts of data.<P/>
+
+If the file is already at the end of the file, the function returns
+a string of length 0. Note that this is not an error!<P/>
+
+If a previous call to <Ref Func="IO_HasData"/> or to <Ref Func="IO_Select"/>
+indicated that there is data available to read, then it is guaranteed that
+the function <Ref Func="IO_Read"/> does not block and returns at least
+one byte if the file is not yet at end of file and an empty string
+otherwise.
 </Description>
 </ManSection>
 
@@ -935,7 +992,7 @@ a list of length 0. Note that this is not an error!
       Comm="buffered write to File object"/>
 <Description>
 This function can get an arbitrary number of arguments, the first of which
-must be <K>File</K> object <A>f</A>. All the other arguments are just
+must be a <K>File</K> object <A>f</A>. All the other arguments are just
 written to <A>f</A> if they are strings. Otherwise, the <K>String</K>
 function is called on them and the result is written out to <A>f</A>.<P/>
 
@@ -945,7 +1002,11 @@ after the user explicitly calls <Ref Func="IO_Flush"/> on <A>f</A>.<P/>
 
 The result is either the number of bytes written in case of success or
 <K>fail</K> in case of an error. In the latter case the error can be
-queried with <Ref Func="LastSystemError" BookName="ref"/>.
+queried with <Ref Func="LastSystemError" BookName="ref"/>.<P/>
+
+Note that this function blocks until all data is at least written into
+the buffer and might block until data can be sent again if the buffer is
+full.
 </Description>
 </ManSection>
 
@@ -985,7 +1046,79 @@ However, it is necessary to call <Ref Func="IO_Flush"/> after calls to
 
 Remember that the functions <Ref Func="IO_WriteLine"/> and <Ref
 Func="IO_WriteLines"/> implicitly call <Ref Func="IO_Flush"/> after
-they are done.
+they are done.<P/>
+
+Note that this function might block until all data is actually written
+to the file descriptor.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO_WriteFlush" Arg="f [,things]"/>
+<Description>
+This function behaves like <Ref Func="IO_Write"/> followed by a call to
+<Ref Func="IO_Flush"/>. It returns either the number of bytes written
+or <K>fail</K> if an error occurs.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO_ReadyForWrite" Arg="f"/>
+<Description>
+This function takes one argument <A>f</A> which must be a <K>File</K>
+object. It returns <K>true</K> or <K>false</K> according to whether
+the file <A>f</A> is ready to write. A return value
+of <K>true</K> guarantees that the next call to <Ref
+Func="IO_WriteNonBlocking"/>
+on that file will succeed without blocking and accept at least one
+byte.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO_WriteNonBlocking" Arg="f, st, pos, len"/>
+<Description>
+This function takes four arguments. The first one <A>f</A> must be
+a <K>File</K> object, the second <A>st</A> a string, and the arguments
+<A>pos</A> and <A>len</A> must be integers, such that positions
+<M><A>pos</A>+1</M> until <M><A>pos</A>+<A>len</A></M> are bound in
+<A>st</A>. The function tries to write up to <A>len</A> bytes from
+<A>st</A> from position <M><A>pos</A>+1</M> to the file <A>f</A>.
+If a previous call to <Ref Func="IO_ReadyForWrite"/> or to <Ref
+Func="IO_Select"/> indicates that <A>f</A> is writable, then it is
+guaranteed that the following call to <Ref Func="IO_WriteNonBlocking"/>
+will not block and accept at least one byte of data. Note that it is not
+guaranteed that all <A>len</A> bytes are written. The function returns
+the number of bytes written or <K>fail</K> if an error occurs.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO_ReadyForFlush" Arg="f"/>
+<Description>
+This function takes one argument <A>f</A> which must be a <K>File</K>
+object. It returns <K>true</K> or <K>false</K> according to whether
+the file <A>f</A> is ready to flush. A return value
+of <K>true</K> guarantees that the next call to <Ref
+Func="IO_FlushNonBlocking"/>
+on that file will succeed without blocking and flush out at least one
+byte. Note that this does not guarantee, that this call succeeds to
+flush out the whole content of the buffer!
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO_FlushNonBlocking" Arg="f"/>
+<Description>
+This function takes one argument <A>f</A> which must be a <K>File</K>
+object. It tries to write all data in the writing buffer to the file
+descriptor. If this succeeds, the function returns <K>true</K> and
+<K>false</K> otherwise. If an error occurs, <K>fail</K> is returned.
+If a previous call to <Ref Func="IO_ReadyForFlush"/> or <Ref
+Func="IO_Select"/> indicated that <A>f</A> is flushable, then it is
+guaranteed that the following call to <Ref Func="IO_FlushNonBlocking"/>
+does not block. However, it is not guaranteed that <K>true</K> is returned
+from that call.
 </Description>
 </ManSection>
 
@@ -1004,7 +1137,7 @@ freed. In case of an error, the function returns <K>fail</K> and otherwise
 <Func Name="IO_GetFD" Arg="f"
       Comm="returns the real file descriptor as an integer"/>
 <Description>
-This function returns the real file descripter that is behind the
+This function returns the real file descriptor that is behind the
 <K>File</K> object <A>f</A>.
 </Description>
 </ManSection>
@@ -1016,9 +1149,35 @@ This function returns the real file descripter that is behind the
 This function gets one argument <A>f</A> which must be a <K>File</K> object
 and returns the writing buffer of that <K>File</K> object. This is
 necessary for <K>File</K> objects, that are not associated to a
-real file descripter but just collect everything that was written
+real file descriptor but just collect everything that was written
 in their writing buffer. Remember to use this function before closing
 the <K>File</K> object.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO_Select" Arg="r, w, f, e, t1, t2"/>
+<Description>
+This function is the corresponding function to <Ref Func="IO_select"/>
+for buffered file access. It behaves similarly to that function. The
+differences are the following: There are four lists of files <A>r</A>,
+<A>w</A>, <A>f</A>, and <A>e</A>. They all can contain either integers
+(standing for file descriptors) or <K>File</K> objects. The list <A>r</A>
+is for checking, whether files or file descriptors are ready to read, the 
+list <A>w</A> is for checking whether they are ready to write, the
+list <A>f</A> is for checking whether they are ready to flush, and
+the list <A>e</A> is for checking whether they have exceptions.<P/>
+
+For <K>File</K> objects it is always first checked, whether there is either
+data available in a reading buffer or space in a writing buffer. If so,
+they are immediately reported to be ready. For the remaining files and for
+all specified file descriptors, the function <Ref Func="IO_select"/> is
+called to get an overview about readiness. The timeout values <A>t1</A>
+and <A>t2</A> are set to zero for immediate returning if one of the
+requested buffers were ready.<P/>
+
+<Ref Func="IO_Select"/> returns the number of files or file descriptors
+that are ready to serve.
 </Description>
 </ManSection>
 
@@ -1233,7 +1392,33 @@ serialisation and implementations for most of the basic data types
 in &GAP;. The framework is easily extendible to other types and takes
 complete care of self-references and corresponding problems.
 It builds upon the buffered I/O functions described in Section
-<Ref Sect="bufio"/>. We start by describing the user interface.
+<Ref Sect="bufio"/>. We start by describing the user interface.<P/>
+
+The following static objects are used to report about success or
+failure of the (un-)pickling operations:
+
+<ManSection>
+<Var Name="IO_Error"/>
+<Description> This object is returned if an error occurs. </Description>
+</ManSection>
+
+<ManSection>
+<Var Name="IO_Nothing"/>
+<Description> This object is returned when there 
+is nothing to return, for example if an unpickler (see <Ref
+Oper="IO_Unpickle"/>) encounters the end of a file.
+</Description>
+</ManSection>
+
+<ManSection>
+<Var Name="IO_OK"/>
+<Description> This object is returned if everything went well and there is
+no other canonical value to return to indicate this.
+</Description>
+</ManSection>
+
+The only thing you can do with these special values is to compare them
+to each other and to other objects.<P/>
 
 <ManSection>
     <Oper Name="IO_Pickle" Arg="f, ob"/>

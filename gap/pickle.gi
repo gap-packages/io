@@ -81,7 +81,7 @@ InstallGlobalFunction( IO_ReadSmallInt,
     l := IO_ReadBlock(f,1);
     if l = "" or l = fail then return IO_Error; fi;
     h := IO_ReadBlock(f,INT_CHAR(l[1]));
-    if h = fail then return IO_Error; fi;
+    if h = fail or Length(h) < INT_CHAR(l[1]) then return IO_Error; fi;
     return IntHexString(h);
   end );
 
@@ -214,7 +214,7 @@ InstallMethod( IO_Unpickle, "for a file",
     local magic,up;
     magic := IO_ReadBlock(f,4);
     if magic = fail then return IO_Error; 
-    elif magic = "" then return IO_Nothing; 
+    elif Length(magic) < 4 then return IO_Nothing; 
     fi;
     if not(IsBound(IO_Unpicklers.(magic))) then
         Print("No unpickler for magic value \"",magic,"\"\n");
@@ -246,7 +246,7 @@ IO_Unpicklers.INTG :=
     len := IO_ReadSmallInt(f);
     if len = IO_Error then return IO_Error; fi;
     h := IO_ReadBlock(f,len);
-    if h = fail then return IO_Error; fi;
+    if h = fail or Length(h) < len then return IO_Error; fi;
     return IntHexString(h);
   end;
 
@@ -268,7 +268,7 @@ IO_Unpicklers.MSTR :=
     len := IO_ReadSmallInt(f);
     if len = IO_Error then return IO_Error; fi;
     s := IO_ReadBlock(f,len);
-    if s = fail then return IO_Error; fi;
+    if s = fail or Length(s) < len then return IO_Error; fi;
     return s;
   end;
 
@@ -325,6 +325,7 @@ IO_Unpicklers.CHAR :=
   function( f )
     local s;
     s := IO_ReadBlock(f,1);
+    if s = fail or Length(s) < 1 then return IO_Error; fi;
     return s[1];
   end;
 
