@@ -802,11 +802,13 @@ Restores the original SIGCHLD handler. See <Ref Func="IO_fork"/>.
 
 The functions in the previous sections are intended to be a possibility
 for direct access to the low level I/O functions in the C library. Thus,
-the calling conventions are strictly like in the original.<P/>
+the calling conventions are strictly as in the original.<P/>
 
 The functionality described in this section is implemented completely
 in the &GAP; language and is intended to provide a good interface
-for programming in &GAP;. The basic idea is to wrap up (integer)
+for programming in &GAP;. The fundamental object for I/O on the C library
+level is the file descriptor, which is just a non-negative integer
+representing an open file of the process. The basic idea is to wrap up
 file descriptors in &GAP; objects that do the buffering.<P/>
 
 Note that considerable care has been taken to ensure that one can
@@ -1041,9 +1043,11 @@ that the data is actually written out after the function has completed.
 This function gets one argument <A>f</A>, which must be a <K>File</K>
 object. It writes out all the data that is in the writing buffer. This
 is not necessary before the call to the function <Ref Func="IO_Close"/>,
-since this function calls <Ref Func="IO_Flush"/> automatically.
+since that function calls <Ref Func="IO_Flush"/> automatically.
 However, it is necessary to call <Ref Func="IO_Flush"/> after calls to
-<Ref Func="IO_Write"/> to be sure that the data is really sent out.<P/>
+<Ref Func="IO_Write"/> to be sure that the data is really sent out. The
+function returns <K>true</K> if everything goes well and <K>fail</K>
+if an error occurs.<P/>
 
 Remember that the functions <Ref Func="IO_WriteLine"/> and <Ref
 Func="IO_WriteLines"/> implicitly call <Ref Func="IO_Flush"/> after
