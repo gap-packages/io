@@ -1040,7 +1040,8 @@ that the data is actually written out after the function has completed.
 <Description>
 This function gets one argument <A>f</A>, which must be a <K>File</K>
 object. It writes out all the data that is in the writing buffer. This
-is not necessary before the call to the function <Ref Func="IO_Close"/>.
+is not necessary before the call to the function <Ref Func="IO_Close"/>,
+since this function calls <Ref Func="IO_Flush"/> automatically.
 However, it is necessary to call <Ref Func="IO_Flush"/> after calls to
 <Ref Func="IO_Write"/> to be sure that the data is really sent out.<P/>
 

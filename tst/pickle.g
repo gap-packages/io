@@ -7,6 +7,20 @@ InstallMethod( EQ, [ IsStraightLineProgram, IsStraightLineProgram ],
     return LinesOfStraightLineProgram(a) = LinesOfStraightLineProgram(b) and
            NrInputsOfStraightLineProgram(a) = NrInputsOfStraightLineProgram(b);
   end );
+InstallMethod( PrintObj,
+    "for element in Z/pZ (ModulusRep)",
+    [ IsZmodpZObj and IsModulusRep ],
+    function( x )
+    Print( "ZmodnZObj( ", x![1], ", ", Characteristic( x ), " )" );
+    end );
+InstallMethod( String,
+    "for element in Z/pZ (ModulusRep)",
+    [ IsZmodpZObj and IsModulusRep ],
+    function( x )
+      return Concatenation( "ZmodnZObj(", String(x![1]), ",",
+      String(Characteristic( x )), ")" );
+    end );
+
 
 # Build up a variety of different GAP objects in a list:
 l := [
@@ -42,12 +56,12 @@ Z(257)^0,
 Z(257^4),
 0*Z(257^4),
 Z(257^4)^0,
-#Z(65537),
-#Z(65537)^0,
-#0*Z(65537),
-#Z(65537^2),
-#Z(65537^2)^0,
-#0*Z(65537^2),
+Z(65537),
+Z(65537)^0,
+0*Z(65537),
+Z(65537^2),
+Z(65537^2)^0,
+0*Z(65537^2),
 (1,2,3,4),
 ,,,,   # a gap
 x^2+x+1,
@@ -80,7 +94,28 @@ www := ShallowCopy(vvv);
 MakeImmutable(www);
 Add(l,www);
 
-# ... compressed matrices
+# compressed matrices:
+m := [[Z(5),0*Z(5),Z(5)^2]];
+ConvertToMatrixRep(m,5);
+Add(l,m);
+n := MutableCopyMat(m);
+ConvertToMatrixRep(n,5);
+MakeImmutable(n);
+Add(l,n);
+mm := [[Z(7),0*Z(7),Z(7)^2]];
+ConvertToMatrixRep(mm,7^2);
+Add(l,mm);
+nn := MutableCopyMat(mm);
+ConvertToMatrixRep(nn,7^2);
+MakeImmutable(nn);
+Add(l,nn);
+mmm := [[Z(2),0*Z(2)]];
+ConvertToMatrixRep(mmm,2);
+Add(l,mmm);
+nnn := MutableCopyMat(mmm);
+ConvertToMatrixRep(nnn,2);
+MakeImmutable(nnn);
+Add(l,nnn);
 
 # Finally self-references:
 r := rec( l := l, x := 1 );
@@ -122,11 +157,29 @@ if not(IsGF2VectorRep(ll[vecpos+4])) then Error(18); fi;
 if not(IsMutable(ll[vecpos+4])) then Error(19); fi;
 if not(IsGF2VectorRep(ll[vecpos+5])) then Error(20); fi;
 if IsMutable(ll[vecpos+5]) then Error(21); fi;
+if not(Is8BitMatrixRep(ll[vecpos+6])) then Error(22); fi;
+if not(IsMutable(ll[vecpos+6])) or not(IsMutable(ll[vecpos+6][1])) then 
+    Error(23); 
+fi;
+if not(Is8BitMatrixRep(ll[vecpos+7])) then Error(24); fi;
+if IsMutable(ll[vecpos+7]) or IsMutable(ll[vecpos+7]) then Error(25); fi;
+if not(Is8BitMatrixRep(ll[vecpos+8])) then Error(26); fi;
+if not(IsMutable(ll[vecpos+8])) or not(IsMutable(ll[vecpos+8])) then 
+    Error(27); 
+fi;
+if not(Is8BitMatrixRep(ll[vecpos+9])) then Error(28); fi;
+#if IsMutable(ll[vecpos+9]) or IsMutable(ll[vecpos+9][1]) then Error(29); fi;
+if not(IsGF2MatrixRep(ll[vecpos+10])) then Error(30); fi;
+if not(IsMutable(ll[vecpos+10])) or not(IsMutable(ll[vecpos+10][1])) then 
+    Error(31); 
+fi;
+if not(IsGF2MatrixRep(ll[vecpos+11])) then Error(32); fi;
+#if IsMutable(ll[vecpos+11]) or IsMutable(ll[vecpos+11][1]) then Error(33); fi;
 
 ee := IO_Unpickle(f);
-if ee <> "End" then Error(22); fi;
+if ee <> "End" then Error(34); fi;
 
-if IO_Unpickle(f) <> IO_Nothing then Error(23); fi;
+if IO_Unpickle(f) <> IO_Nothing then Error(35); fi;
 
 IO_Close(f);
 
