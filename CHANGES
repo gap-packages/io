@@ -3,6 +3,18 @@
 ===========================================================================
 
 ==========================
+ Changes from 1.4 -> 1.5:
+==========================
+
+  - Big changes in the buffered I/O functionality to allow for non-blocking
+    I/O with buffers. Documented all. This changed the interface to buffered
+    I/O considerable!
+  - Test code for buffered I/O.
+  - Test code for pickling/unpickling.
+  - Some small bug fixes of bugs found during development of test code.
+
+
+==========================
  Changes from 1.3 -> 1.4:
 ==========================
 
