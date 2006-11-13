@@ -631,7 +631,7 @@ InstallGlobalFunction( IO_WriteNonBlocking,
             fi;
             # Write out the buffer:
             pos2 := 0;
-            bytes := IO_write(f!.fd,f!.wbuf,0,f!.wbufsize);
+            bytes := IO_write(f!.fd,f!.wbuf,0,Minimum(IO.PIPE_BUF,f!.wbufsize));
             if bytes = fail then return fail; fi;
             if bytes = f!.wbufsize then
                 f!.wdata := 0;
@@ -672,6 +672,7 @@ InstallGlobalFunction( IO_FlushNonBlocking, function( f )
       Error("Usage: IO_FlushNonBlocking( f ) with IsFile(f)");
   fi;
   if f!.fd = -1 or    # Nothing to do for string Files
+     f!.wbufsize = false or
      (f!.wbufsize <> false and f!.wdata = 0) then    # or if buffer empty
       return true;
   fi;
@@ -822,7 +823,7 @@ InstallGlobalFunction( IO_Select, function( r, w, f, e, t1, t2 )
       for i in [1..Length(ww)] do
           if ww[i] = fail then
               if wp[i] > 0 then w[wp[i]] := fail;
-                           else e[-wp[i]] := fail; fi;
+                           else f[-wp[i]] := fail; fi;
           fi;
       od;
       for i in [1..Length(ee)] do

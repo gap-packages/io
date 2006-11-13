@@ -2548,7 +2548,10 @@ static Int InitLibrary ( StructInitInfo *module )
 #ifdef MSG_DONTWAIT 
     AssPRec(tmp, RNamName("MSG_DONTWAIT"), INTOBJ_INT((Int) MSG_DONTWAIT));
 #endif
-            
+#ifdef PIPE_BUF
+    AssPRec(tmp, RNamName("PIPE_BUF"), INTOBJ_INT((Int) PIPE_BUF));
+#endif
+
 
     gvar = GVarName("IO");
     MakeReadWriteGVar( gvar);
