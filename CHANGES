@@ -13,6 +13,7 @@
   - Functionality to pipe a string through an external command
     using I/O multiplexing
   - New client side HTTP protocol implementation
+  - Use chapters in documentation
 
 
 ==========================
