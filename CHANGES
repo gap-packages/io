@@ -3,6 +3,19 @@
 ===========================================================================
 
 ==========================
+ Changes from 1.5 -> 1.6:
+==========================
+
+  - New binding IO_fcntl with corresponding constants in IO
+    (this is necessary for switching a file descriptor to O_NONBLOCK)
+  - In IO_WriteNonBlocking only try to send PIPE_BUF bytes instead
+    of full buffer to avoid blocking (is this the solution?)
+  - Functionality to pipe a string through an external command
+    using I/O multiplexing
+  - New client side HTTP protocol implementation
+
+
+==========================
  Changes from 1.4 -> 1.5:
 ==========================
 

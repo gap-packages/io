@@ -78,6 +78,7 @@ The following functions from the C library are made available as
 <C>exit</C>
 <C>fchmod</C>, 
 <C>fchown</C>, 
+<C>fcntl</C>,
 <C>fork</C>,
 <C>fstat</C>, 
 <C>gethostbyname</C>, 
@@ -193,6 +194,9 @@ The <C>select</C> function works as the function <C>UNIXSelect</C> in the
 &GAP; library.<P/>
 </Subsection>
 
+As of now, the file locking mechanisms of <C>fcntl</C> using 
+<C>struct flock</C> are not yet implemented on the &GAP; level.
+
 <ManSection>
 <Func Name="IO_accept" Arg="fd, addr"
       Comm="Accepts an incoming network connection"/>
@@ -267,7 +271,7 @@ have one <C>DIR</C> struct in the C part.
 <Description>
 Connects to a remote socket.
 For details see <Q><C>man 2 connect</C></Q>. The argument
-<A>my&uscore;addr</A> can be made with <Ref Func="IO_make_sockaddr_in"/>
+<A>serv&uscore;addr</A> can be made with <Ref Func="IO_make_sockaddr_in"/>
 and contains its length such that no third argument is necessary.
 </Description> 
 </ManSection>
@@ -360,7 +364,16 @@ Changes owner and/or group of an opened file.
 For details see <Q><C>man 2 fchown</C></Q>.
 </Description> 
 </ManSection>
- 
+
+<ManSection>
+<Func Name="IO_fcntl" Arg="fd, cmd, arg"
+      Comm="file control"/>
+<Description>
+    Does various things to control the behaviour of a file descriptor.
+    For details see <Q><C>man 2 fcntl</C></Q>.
+</Description>
+</ManSection>
+
 <ManSection>
 <Func Name="IO_fork" Arg=""
       Comm="Forks off a child process, which is an identical copy."/>
@@ -664,6 +677,9 @@ no 5th argument is necessary.
 <Description>
 Creates a socket, an endpoint for communication.
 For details see <Q><C>man 2 socket</C></Q>.
+There is one little special: On systems that have <C>getprotobyname</C>
+you can pass a string as third argument <A>protocol</A> which is automatically
+looked up by <C>getprotobyname</C>.
 </Description> 
 </ManSection>
  
@@ -868,7 +884,8 @@ of the file to work on. <A>mode</A> must also be a string with possible
 values <Q>r</Q>, <Q>w</Q>, or <Q>a</Q>, meaning read access, write
 access (with creating and truncating), and append access respectively.
 If <A>mode</A> is omitted, it defaults to <Q>r</Q>. <A>bufsize</A>, if given,
-must be a positive integer, otherwise it defaults to <C>IO.DefaultBufSize</C>. 
+must be a positive integer or <C>false</C>, otherwise it defaults to 
+<C>IO.DefaultBufSize</C>. 
 Internally, the
 <Ref Func="IO_open"/> function is used and the result file descriptor is 
 wrapped using <Ref Func="IO_WrapFD"/> with <A>bufsize</A>

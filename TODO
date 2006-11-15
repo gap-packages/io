@@ -1,1 +1,5 @@
 Document real random sources.
+Document pipe through 
+Build in HTTPRequest, maybe cleanup
+support routines for this?
+Document HTTPRequest

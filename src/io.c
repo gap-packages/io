@@ -1520,6 +1520,24 @@ Obj FuncIO_MasterPointerNumber(Obj self, Obj o)
     }
 }
 
+#ifdef HAVE_FCNTL_H
+Obj FuncIO_fcntl(Obj self, Obj fd, Obj cmd, Obj arg)
+{
+    Int ret;
+    if (!IS_INTOBJ(fd) || !IS_INTOBJ(cmd) || !IS_INTOBJ(arg)) {
+        SyClearErrorNo();
+        return Fail;
+    }
+    ret = fcntl(INT_INTOBJ(fd),INT_INTOBJ(cmd),INT_INTOBJ(arg));
+    if (ret == -1)
+        return Fail;
+    else
+        return INTOBJ_INT(ret);
+}
+#endif
+
+    
+        
 /*F * * * * * * * * * * * * * initialize package * * * * * * * * * * * * * * */
 
 /******************************************************************************
@@ -1841,6 +1859,12 @@ static StructGVarFunc GVarFuncs [] = {
     FuncIO_MasterPointerNumber,
     "io.c:IO_MasterPointerNumber" },
 
+#ifdef HAVE_FCNTL_H
+  { "IO_fcntl", 3, "fd, cmd, arg",
+    FuncIO_fcntl,
+    "io.c:IO_fcntl" },
+#endif
+
   { 0 }
 
 };
@@ -2137,6 +2161,9 @@ static Int InitLibrary ( StructInitInfo *module )
 #endif
 #ifdef ECHILD 
     AssPRec(tmp, RNamName("ECHILD"), INTOBJ_INT((Int) ECHILD));
+#endif
+#ifdef EWOULDBLOCK 
+    AssPRec(tmp, RNamName("EWOULDBLOCK"), INTOBJ_INT((Int) EWOULDBLOCK));
 #endif
 #ifdef HOST_NOT_FOUND
     AssPRec(tmp, RNamName("HOST_NOT_FOUND"), INTOBJ_INT((Int) HOST_NOT_FOUND));
@@ -2551,7 +2578,51 @@ static Int InitLibrary ( StructInitInfo *module )
 #ifdef PIPE_BUF
     AssPRec(tmp, RNamName("PIPE_BUF"), INTOBJ_INT((Int) PIPE_BUF));
 #endif
-
+#ifdef F_DUPFD
+    AssPRec(tmp, RNamName("F_DUPFD"), INTOBJ_INT((Int) F_DUPFD));
+#endif
+#ifdef F_GETFD
+    AssPRec(tmp, RNamName("F_GETFD"), INTOBJ_INT((Int) F_GETFD));
+#endif
+#ifdef F_SETFD
+    AssPRec(tmp, RNamName("F_SETFD"), INTOBJ_INT((Int) F_SETFD));
+#endif
+#ifdef FD_CLOEXEC
+    AssPRec(tmp, RNamName("FD_CLOEXEC"), INTOBJ_INT((Int) FD_CLOEXEC));
+#endif
+#ifdef F_GETFL
+    AssPRec(tmp, RNamName("F_GETFL"), INTOBJ_INT((Int) F_GETFL));
+#endif
+#ifdef F_SETFL
+    AssPRec(tmp, RNamName("F_SETFL"), INTOBJ_INT((Int) F_SETFL));
+#endif
+#ifdef F_GETOWN
+    AssPRec(tmp, RNamName("F_GETOWN"), INTOBJ_INT((Int) F_GETOWN));
+#endif
+#ifdef F_SETOWN
+    AssPRec(tmp, RNamName("F_SETOWN"), INTOBJ_INT((Int) F_SETOWN));
+#endif
+#ifdef F_GETSIG
+    AssPRec(tmp, RNamName("F_GETSIG"), INTOBJ_INT((Int) F_GETSIG));
+#endif
+#ifdef F_SETSIG
+    AssPRec(tmp, RNamName("F_SETSIG"), INTOBJ_INT((Int) F_SETSIG));
+#endif
+#ifdef F_GETLEASE
+    AssPRec(tmp, RNamName("F_GETLEASE"), INTOBJ_INT((Int) F_GETLEASE));
+#endif
+#ifdef F_SETLEASE
+    AssPRec(tmp, RNamName("F_SETLEASE"), INTOBJ_INT((Int) F_SETLEASE));
+#endif
+#ifdef F_RDLCK
+    AssPRec(tmp, RNamName("F_RDLCK"), INTOBJ_INT((Int) F_RDLCK));
+#endif
+#ifdef F_WRLCK
+    AssPRec(tmp, RNamName("F_WRLCK"), INTOBJ_INT((Int) F_WRLCK));
+#endif
+#ifdef F_UNLCK
+    AssPRec(tmp, RNamName("F_UNLCK"), INTOBJ_INT((Int) F_UNLCK));
+#endif
 
     gvar = GVarName("IO");
     MakeReadWriteGVar( gvar);

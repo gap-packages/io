@@ -11,3 +11,4 @@
 ReadPackage("IO", "gap/io.gd");
 ReadPackage("IO", "gap/pickle.gd");
 ReadPackage("IO", "gap/realrandom.gd");
+ReadPackage("IO", "gap/http.gd");
