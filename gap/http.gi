@@ -35,7 +35,7 @@ InstallGlobalFunction( OpenHTTPConnection,
     IO_fcntl(s,IO.F_GETFL,IO.O_NONBLOCK);
 
     return rec( sock := IO_WrapFD(s,false,false), 
-                errormsg := fail,
+                errormsg := "",
                 host := lookup,
                 closed := false );
   end );
