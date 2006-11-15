@@ -1217,7 +1217,7 @@ and <A>t2</A> are set to zero for immediate returning if one of the
 requested buffers were ready.<P/>
 
 <Ref Func="IO_Select"/> returns the number of files or file descriptors
-that are ready to serve.
+that are ready to serve or <K>fail</K> if an error occurs.
 </Description>
 </ManSection>
 
@@ -1410,6 +1410,38 @@ total main memory used by both processes, because the operating system
 kernel will use <Q>copy on write</Q>. However, if a garbage collection
 happens to become necessary during the sending of the data in the
 forked off sending process, this might trigger doubled memory usage.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO_PipeThrough" Arg="cmd, args, input"/>
+<Returns> a string or <K>fail</K> </Returns>
+<Description>
+Starts the process with the executable stored at the file name
+<A>cmd</A> (must be a string) with arguments in the argument list
+<A>args</A> (a list of strings). The standard input and output of the started
+process are connected via pipes to the calling process. The content of 
+the string <A>input</A> is written to the standard input of the called
+process and its standard output is read and returned as a string.<P/>
+All the necessary I/O multiplexing and non-blocking I/O
+to avoid deadlocks is done in this function.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO_PipeThroughWithError" Arg="cmd, args, input"/>
+<Returns> a string or <K>fail</K> </Returns>
+<Description>
+Starts the process with the executable stored at the file name
+<A>cmd</A> (must be a string) with arguments in the argument list
+<A>args</A> (a list of strings). The standard input, output and error
+of the started
+process are connected via pipes to the calling process. The content of 
+the string <A>input</A> is written to the standard input of the called
+process and its standard output and error are read and returned as a 
+record with components <K>out</K> and <K>err</K>, which are strings.<P/>
+All the necessary I/O multiplexing and non-blocking I/O
+to avoid deadlocks is done in this function.
 </Description>
 </ManSection>
 

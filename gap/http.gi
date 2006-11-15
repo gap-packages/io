@@ -48,7 +48,7 @@ InstallGlobalFunction( HTTPRequest,
     # body either false or a string
     # target either false or the name of a file where the body is stored
     local ParseHeader,bodyread,byt,chunk,contentlength,haveseenheader,
-          inpos,k,msg,nr,out,outeof,r,responseheader,ret,w;
+          inpos,k,msg,nr,out,outeof,r,responseheader,ret,w,SetError;
 
     if conn.sock = fail or conn.closed = true then
         Error("Trying to work with closed connection");
@@ -152,6 +152,22 @@ InstallGlobalFunction( HTTPRequest,
                 body := fail,
                 closed := false );
 
+    # The following function is used to report on errors:
+    SetError := function(msg)
+      # Changes the variable ret outside!
+      ret.status := msg;
+      ret.statuscode := 0;
+      if haveseenheader then 
+          ret.header := responseheader; 
+      fi;
+      if IsString(out) then 
+          ret.body := out; 
+      else
+          IO_Close(out);
+          ret.body := target;
+      fi;
+    end;
+
     inpos := 0;
     outeof := false;
     repeat
@@ -166,22 +182,17 @@ InstallGlobalFunction( HTTPRequest,
             w := [];
         fi;
         nr := IO_Select(r,w,[],[],fail,fail);
+        if nr < 0 then   # an error!
+            SetError("Error in select, connection broken?");
+            return ret;
+        fi;
+
         # First writing:
         if Length(w) > 0 and w[1] <> fail then
             byt := IO_WriteNonBlocking(conn.sock,msg,inpos,
                         Minimum(Length(msg)-inpos,65536));
             if byt = fail then   # an error occured, probably connection broken
-                ret.status := "Connection broken";
-                ret.statuscode := 0;
-                if haveseenheader then 
-                    ret.header := responseheader; 
-                fi;
-                if IsString(out) then 
-                    ret.body := out; 
-                else
-                    IO_Close(out);
-                    ret.body := target;
-                fi;
+                SetError("Connection broken");
                 return ret;
             fi;
             inpos := inpos + byt;
@@ -204,7 +215,11 @@ InstallGlobalFunction( HTTPRequest,
                         Print("HTTP Warning: no content length!\n");
                         contentlength := infinity;
                     else
-                        contentlength := Int(responseheader.Content\-Length);
+                        if method <> "HEAD" then
+                            contentlength:=Int(responseheader.Content\-Length);
+                        else
+                            contentlength := 0;
+                        fi;
                     fi;
                     chunk := out{[r..Length(out)]};
 
@@ -233,17 +248,7 @@ InstallGlobalFunction( HTTPRequest,
   
     if outeof and not(haveseenheader) then
         # Obviously, the connection broke:
-        ret.status := "Connection broken";
-        ret.statuscode := 0;
-        if haveseenheader then
-            ret.header := responseheader; 
-        fi;
-        if IsString(out) then 
-            ret.body := out; 
-        else
-            IO_Close(out);
-            ret.body := target;
-        fi;
+        SetError("Connection broken");
         return ret;
     fi;
 

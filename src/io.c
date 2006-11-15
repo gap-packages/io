@@ -1317,8 +1317,10 @@ Obj FuncIO_select(Obj self, Obj inlist, Obj outlist, Obj exclist,
         }
       }
     }
+    return INTOBJ_INT(n);
+  } else {
+    return Fail;
   }
-  return INTOBJ_INT(n);
 }
 #endif
 
