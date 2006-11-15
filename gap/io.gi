@@ -1134,3 +1134,147 @@ InstallGlobalFunction( IO_SendStringBackground, function(f,st)
   return true;
 end );
 
+InstallGlobalFunction( IO_PipeThroughWithError,
+function(cmd,args,input)
+  local byt,chunk,err,erreof,f,inpflushed,inpos,nr,out,outeof,r,s,w;
+
+  # Start the coprocess:
+  s := IO_Popen3(cmd,args);
+  if s = fail then return fail; fi;
+  s.stdin!.rbuf := false;    # do not do buffering
+  s.stdout!.wbuf := false;
+  s.stderr!.wbuf := false;
+  # Switch the one we write to to non-blocking mode, just to be sure!
+  IO_fcntl(s.stdin!.fd,IO.F_GETFL,IO.O_NONBLOCK);
+
+  # Here we just do I/O multiplexing, sending away input (if non-empty)
+  # and receiving stdout and stderr.
+  # Note that the flushing part is superfluous since we switched off
+  # the buffers, but still, like this, the code would also work with
+  # buffering.
+  inpos := 0;
+  inpflushed := (input = "");
+  outeof := false;
+  erreof := false;
+  # Here we collect stderr and stdout:
+  err := "";
+  out := "";
+  repeat
+      if not(outeof) then
+          r := [s.stdout];
+      else
+          r := [];
+      fi;
+      if not(erreof) then
+          Add(r,s.stderr);
+      fi;
+      if inpos < Length(input) then
+          w := [s.stdin];
+          f := [];
+      else
+          w := [];
+          if not(inpflushed) then 
+              f := [s.stdin]; 
+          else
+              f := [];
+          fi;
+      fi;
+      nr := IO_Select(r,w,f,[],fail,fail);
+      # First writing:
+      if Length(w) > 0 and w[1] <> fail then
+          byt := IO_WriteNonBlocking(s.stdin,input,inpos,
+                      Minimum(Length(input)-inpos,IO.PIPE_BUF));
+          inpos := inpos + byt;
+      fi;
+      # Now perhaps flushing:
+      if Length(f) > 0 and f[1] <> fail then
+          if IO_FlushNonBlocking(s.stdin) = true then
+              inpflushed := true;
+              IO_Close(s.stdin);
+          fi;
+      fi;
+      # Now reading:
+      if not(outeof) and r[1] <> fail then
+          chunk := IO_Read(s.stdout,1000000);
+          if chunk = "" then outeof := true; fi;
+          Append(out,chunk);
+      fi;
+      if not(erreof) and r[Length(r)] <> fail then
+          chunk := IO_Read(s.stderr,1000000);
+          if chunk = "" then erreof := true; fi;
+          Append(err,chunk);
+      fi;
+  until outeof and erreof;
+  if not(inpflushed) then IO_Close(s.stdin); fi;
+  IO_Close(s.stdout);
+  IO_Close(s.stderr);
+  return rec( out := out, err := err );
+end);
+
+InstallGlobalFunction( IO_PipeThrough,
+function(cmd,args,input)
+  local byt,chunk,erreof,f,inpflushed,inpos,nr,out,outeof,r,s,w;
+
+  # Start the coprocess:
+  s := IO_Popen2(cmd,args);
+  if s = fail then return fail; fi;
+  s.stdin!.rbuf := false;    # do not do buffering
+  s.stdout!.wbuf := false;
+  # Switch the one we write to to non-blocking mode, just to be sure!
+  IO_fcntl(s.stdin!.fd,IO.F_GETFL,IO.O_NONBLOCK);
+
+  # Here we just do I/O multiplexing, sending away input (if non-empty)
+  # and receiving stdout and stderr.
+  # Note that the flushing part is superfluous since we switched off
+  # the buffers, but still, like this, the code would also work with
+  # buffering.
+  inpos := 0;
+  inpflushed := (input = "");
+  outeof := false;
+  erreof := false;
+  # Here we collect stdout:
+  out := "";
+  repeat
+      if not(outeof) then
+          r := [s.stdout];
+      else
+          r := [];
+      fi;
+      if inpos < Length(input) then
+          w := [s.stdin];
+          f := [];
+      else
+          w := [];
+          if not(inpflushed) then 
+              f := [s.stdin]; 
+          else
+              f := [];
+          fi;
+      fi;
+      nr := IO_Select(r,w,f,[],fail,fail);
+      # First writing:
+      if Length(w) > 0 and w[1] <> fail then
+          byt := IO_WriteNonBlocking(s.stdin,input,inpos,
+                      Minimum(Length(input)-inpos,IO.PIPE_BUF));
+          inpos := inpos + byt;
+      fi;
+      # Now perhaps flushing:
+      if Length(f) > 0 and f[1] <> fail then
+          if IO_FlushNonBlocking(s.stdin) = true then
+              inpflushed := true;
+              IO_Close(s.stdin);
+          fi;
+      fi;
+      # Now reading:
+      if not(outeof) and r[1] <> fail then
+          chunk := IO_Read(s.stdout,1000000);
+          if chunk = "" then outeof := true; fi;
+          Append(out,chunk);
+      fi;
+  until outeof;
+  if not(inpflushed) then IO_Close(s.stdin); fi;
+  IO_Close(s.stdout);
+  return out;
+end);
+
+

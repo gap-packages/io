@@ -48,4 +48,6 @@ DeclareGlobalFunction( "IO_Popen" );
 DeclareGlobalFunction( "IO_Popen2" );
 DeclareGlobalFunction( "IO_Popen3" );
 DeclareGlobalFunction( "IO_SendStringBackground" );
+DeclareGlobalFunction( "IO_PipeThroughWithError" );
+DeclareGlobalFunction( "IO_PipeThrough" );
 
