@@ -9,6 +9,7 @@
 ##  side of the HTTP protocol.
 ##
 
+DeclareGlobalVariable( "HTTPTimeoutForSelect" );
 DeclareGlobalFunction( "OpenHTTPConnection" );
 DeclareGlobalFunction( "HTTPRequest" );
 DeclareGlobalFunction( "CloseHTTPConnection" );

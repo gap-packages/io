@@ -9,6 +9,11 @@
 ##  HTTP protocol.
 ##
 
+# The following is given as argument to IO_Select for the timeout
+# values in a HTTP request.
+
+InstallValue( HTTPTimeoutForSelect, [fail,fail] );
+
 InstallGlobalFunction( OpenHTTPConnection,
   function(server,port)
     local lookup,res,s;
@@ -181,9 +186,14 @@ InstallGlobalFunction( HTTPRequest,
         else
             w := [];
         fi;
-        nr := IO_Select(r,w,[],[],fail,fail);
-        if nr < 0 then   # an error!
+        nr := IO_Select(r,w,[],[],HTTPTimeoutForSelect[1],
+                                  HTTPTimeoutForSelect[2]);
+        if nr = fail then   # an error!
             SetError("Error in select, connection broken?");
+            return ret;
+        fi;
+        if nr = 0 then      # a timeout
+            SetError("Connection timed out");
             return ret;
         fi;
 
@@ -191,7 +201,9 @@ InstallGlobalFunction( HTTPRequest,
         if Length(w) > 0 and w[1] <> fail then
             byt := IO_WriteNonBlocking(conn.sock,msg,inpos,
                         Minimum(Length(msg)-inpos,65536));
-            if byt = fail then   # an error occured, probably connection broken
+            if byt = fail and 
+               LastSystemError().number <> IO.EWOULDBLOCK then   
+                # an error occured, probably connection broken
                 SetError("Connection broken");
                 return ret;
             fi;

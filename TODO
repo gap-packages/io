@@ -1,3 +1,1 @@
-Document real random sources.
-Document pipe through 
-support routines for this? (query strings, MIME?)
+support routines for http requests? (query strings, MIME?)

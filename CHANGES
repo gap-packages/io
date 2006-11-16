@@ -14,6 +14,8 @@
     using I/O multiplexing
   - New client side HTTP protocol implementation
   - Use chapters in documentation
+  - New functions IO_PipeThrough and IO_PipeThroughWithError to pipe
+    a string through a process.
 
 
 ==========================

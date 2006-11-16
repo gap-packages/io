@@ -773,29 +773,11 @@ all functions above having an address argument.
 </ManSection>
  
 <ManSection>
-<Func Name="IO_MakeEnvList" Arg="r"
-      Comm="Makes an envp list for execve."/>
-<Description>
-Returns a list of strings for usage with <Ref Func="IO_execve"/> made from the 
-components of the record <A>r</A> in the form <Q>key=value</Q>.
-</Description> 
-</ManSection>
- 
-<ManSection>
 <Func Name="IO_environ" Arg=""
       Comm="Returns environment as list of strings."/>
 <Description>
 For details see <Q><C>man environ</C></Q>. Returns the current environment
 as a list of strings of the form <Q>key=value</Q>.
-</Description> 
-</ManSection>
- 
-<ManSection>
-<Func Name="IO_Environment" Arg=""
-      Comm="Returns environment as record."/>
-<Description>
-For details see <Q><C>man environ</C></Q>. Returns the current environment
-as a &GAP; record.
 </Description> 
 </ManSection>
  
@@ -1643,7 +1625,7 @@ study the code for the basic &GAP; objects in the file
     <Heading>Really random sources</Heading>
 
     This section describes so called <Q>real random sources</Q>. It is an
-    extensionn to the library mechanism of random source objects that uses
+    extension to the library mechanism of random source objects that uses
     the devices <F>/dev/random</F> and <F>/dev/urandom</F> available
     on <F>Linux</F> systems (and maybe on other operating systems) providing
     random numbers that are impossible to predict. The idea is that such
@@ -1749,7 +1731,32 @@ the HTTP protocol can perform a much bigger variety of tasks.
     or not the function has detected, that the connection has been
     closed by the server. Note that by default, the connection will
     stay open, at least for a certain time after the end of the
-    request.
+    request.<P/>
+    See the description of the global variable <Ref
+    Var="HTTPTimeoutForSelect"/> for rules how timeouts are done in
+    this function.
+    <P/> Note that if the <A>method</A> is <K>HEAD</K>, then no body
+    is expected (none will be sent anyway) and the function returns
+    immediately with empty body. Of course, the <K>Content-Length</K>
+    value in the header is as if it the request would be done with the
+    <K>GET</K> method.
+</Description>
+</ManSection>
+
+<ManSection>
+<Var Name="HTTPTimeoutForSelect"/>
+<Description>
+This global variable holds a list of length two. By default, both entries
+are <K>fail</K> indicating that <Ref Func="HTTPRequest"/> should never
+timeout and wait forever for an answer. Actually, the two values in
+this variable are given to the <Ref Func="IO_Select"/> function call
+during I/O multiplexing. That is, the first number is in seconds and
+the second in milliseconds. Together they lead to a timeout for the
+HTTP request. If a timeout occurs, an error condition is triggered
+which returns a record with status code <M>0</M> and status being
+the timeout error message.<P/>
+You can change the timeout by accessing the two entries of this
+write protected list variable directly.
 </Description>
 </ManSection>
 

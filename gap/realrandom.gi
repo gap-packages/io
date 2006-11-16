@@ -87,12 +87,6 @@ InstallMethod( ViewObj, "for a real random source",
     Print("<a real random source>");
   end );
 
-InstallMethod( Reset, "for a real random source",
-  [IsRealRandomSource],
-  function(rs)
-    Error("Real random sources cannot be Reset by definition");
-  end );
-
 InstallMethod( IO_Pickle, "for a real random source",
   [IsFile, IsRealRandomSource],
   function(f,rs)
