@@ -1266,7 +1266,6 @@ function(cmd,args,input)
   IO_Close(s.stdout);
   IO_Close(s.stderr);
   IO_WaitPid(ProcessID(s.stdin),true);
-  IO_RestoreSIGCHLDHandler();
   return rec( out := out, err := err );
 end);
 
@@ -1337,7 +1336,6 @@ function(cmd,args,input)
   until outeof;
   IO_Close(s.stdout);
   IO_WaitPid(ProcessID(s.stdin),true);
-  IO_RestoreSIGCHLDHandler();
   return out;
 end);
 

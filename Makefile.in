@@ -32,7 +32,7 @@ clean:
 	(cd doc ; ./clean)
 
 archive: doc
-	(cd .. ; tar czvf io.tar.gz --exclude ".svn" --exclude @GAPARCH@ io)
+	(cd .. ; tar czvf io-`cat VERSION`.tar.gz --exclude ".svn" --exclude @GAPARCH@ io)
 
 WEBPOS=/home/antares/neunhoef/mywebpage/Computer/Software/Gap/io
 
@@ -44,4 +44,5 @@ towww: archive
 	cp PackageInfo.g ${WEBPOS}
 	cp README ${WEBPOS}/README.io
 	cp doc/manual.pdf ${WEBPOS}/io.pdf
-	cp ../io.tar.gz ${WEBPOS}
+	cp ../io-`cat VERSION`.tar.gz ${WEBPOS}
+	echo Now please adjust the archive link in ${WEBPOS}/io.mixer !

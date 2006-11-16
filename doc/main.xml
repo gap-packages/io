@@ -1294,8 +1294,8 @@ In case of an error, <K>fail</K> is returned. <P/>
 
 The process will usually die, when the pipe is closed, but can also
 do so without that. It lies in the
-responsability of the caller to <Ref Func="IO_WaitPid"/> for it, 
-if our SIGCHLD handler has been activated (see <Ref
+responsability of the caller to <Ref Func="IO_WaitPid"/> for it. 
+Note that <Ref Func="IO_Popen"/> activates our SIGCHLD handler (see <Ref
 Func="IO_InstallSIGCHLDHandler"/>). <P/>
 
 In either case the <C>File</C> object will have the attribute
@@ -1319,8 +1319,8 @@ the same as the one of the calling &GAP; process. <P/>
 Returns <K>fail</K> if an error occurred. <P/>
 
 The process will usually die, when one of the pipes is closed. It
-lies in the responsability of the caller to <Ref Func="IO_WaitPid"/> for it, 
-if our SIGCHLD handler has been activated (see <Ref
+lies in the responsability of the caller to <Ref Func="IO_WaitPid"/> for it. 
+Note that <Ref Func="IO_Popen2"/> activates our SIGCHLD handler (see <Ref
 Func="IO_InstallSIGCHLDHandler"/>). <P/>
 
 Both <C>File</C> objects will have the attribute <Q><K>ProcessID</K></Q>
@@ -1347,8 +1347,8 @@ from <Q><C>stdout</C></Q> and <Q><C>stderr</C></Q> in the calling
 Returns <K>fail</K> if an error occurred. <P/>
 
 The process will usually die, when one of the pipes is closed. It
-lies in the responsability of the caller to <Ref Func="IO_WaitPid"/> for it, 
-if our SIGCHLD handler has been activated (see <Ref
+lies in the responsability of the caller to <Ref Func="IO_WaitPid"/> for it. 
+Note that <Ref Func="IO_Popen2"/> activates our SIGCHLD handler (see <Ref
 Func="IO_InstallSIGCHLDHandler"/>). <P/>
 
 All three <C>File</C> objects will have the attribute <Q><K>ProcessID</K></Q>
@@ -1407,6 +1407,11 @@ the string <A>input</A> is written to the standard input of the called
 process and its standard output is read and returned as a string.<P/>
 All the necessary I/O multiplexing and non-blocking I/O
 to avoid deadlocks is done in this function.
+<P/>
+This function properly does <Ref Func="IO_WaitPid"/> to wait for
+the termination of the child process but does not restore the
+original &GAP; SIGCHLD signal handler 
+(see <Ref Func="IO_InstallSIGCHLDHandler"/>).
 </Description>
 </ManSection>
 
@@ -1424,6 +1429,11 @@ process and its standard output and error are read and returned as a
 record with components <K>out</K> and <K>err</K>, which are strings.<P/>
 All the necessary I/O multiplexing and non-blocking I/O
 to avoid deadlocks is done in this function.
+<P/>
+This function properly does <Ref Func="IO_WaitPid"/> to wait for
+the termination of the child process but does not restore the
+original &GAP; SIGCHLD signal handler 
+(see <Ref Func="IO_InstallSIGCHLDHandler"/>).
 </Description>
 </ManSection>
 
