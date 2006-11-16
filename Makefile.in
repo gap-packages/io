@@ -32,7 +32,7 @@ clean:
 	(cd doc ; ./clean)
 
 archive: doc
-	(cd .. ; tar czvf io-`cat VERSION`.tar.gz --exclude ".svn" --exclude @GAPARCH@ io)
+	(cd .. ; tar czvf io-`cat io/VERSION`.tar.gz --exclude ".svn" --exclude @GAPARCH@ io)
 
 WEBPOS=/home/antares/neunhoef/mywebpage/Computer/Software/Gap/io
 

@@ -4,14 +4,13 @@ Document !.wbufsize and !rbufsize ???
 
 Before submitting still to do:
 
-version number into archive name
 read manual once completely
 Add a warning to the documentation about architecture dependence
 Test on windows
 Improve installation instructions, in particular for windows
+  -> installation in different directory!
 Improve README file
 Preface properly.
 More examples, better manual chapter.
 Sort out stack checking business on modern gcc
-better control of buffer size (and unbuffered) in Popen*
 Frank's comments to doc

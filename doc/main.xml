@@ -113,14 +113,13 @@ The following functions from the C library are made available as
 <C>symlink</C>, 
 <C>telldir</C>, 
 <C>unlink</C>, 
-<C>write</C>
-. <P/>
+<C>write</C>. <P/>
 
 Use the <C>man</C> command in your shell to get information about these
 functions.<P/>
 
-For each of these functions there is a corresponding &GAP; function in
-the global record <C>IO</C> bound to its name. Apart from minor differences
+For each of these functions there is a corresponding &GAP; global function 
+with the prefix <C>IO_</C> before its name. Apart from minor differences
 (see below) they take exactly the same arguments as their C
 counterparts. Strings must be specified as &GAP; strings and integers
 as &GAP; immediate integers. Return values are in general the same as
@@ -154,7 +153,7 @@ The <C>write</C> function is similar, it also takes four arguments:
 <A>offset</A> is an offset within this string (zero based), and 
 <A>count</A> is the number of bytes to write, starting from position
 <M><A>offset</A>+1</M> in the string <A>st</A>. The number of bytes
-written is returned, or an <C>fail</C> in case of an error. <P/>
+written is returned, or a <C>fail</C> in case of an error. <P/>
 
 The <C>opendir</C> function only returns <C>true</C> or <C>fail</C>. <P/>
 
@@ -802,7 +801,7 @@ Restores the original SIGCHLD handler. See <Ref Func="IO_fork"/>.
 </Chapter>
 
 <Chapter Label="bufio">
-<Heading>Higher level functions for buffered I/O</Heading>
+<Heading>High level functions for buffered I/O</Heading>
 
 The functions in the previous sections are intended to be a possibility
 for direct access to the low level I/O functions in the C library. Thus,
