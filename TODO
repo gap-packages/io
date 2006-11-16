@@ -14,3 +14,5 @@ Improve README file
 Preface properly.
 More examples, better manual chapter.
 Sort out stack checking business on modern gcc
+better control of buffer size (and unbuffered) in Popen*
+Frank's comments to doc

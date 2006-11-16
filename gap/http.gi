@@ -37,7 +37,7 @@ InstallGlobalFunction( OpenHTTPConnection,
                                     LastSystemError().message) );
     fi;
     # Switch the socket to non-blocking mode, just to be sure!
-    IO_fcntl(s,IO.F_GETFL,IO.O_NONBLOCK);
+    IO_fcntl(s,IO.F_SETFL,IO.O_NONBLOCK);
 
     return rec( sock := IO_WrapFD(s,false,false), 
                 errormsg := "",

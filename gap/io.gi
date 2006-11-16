@@ -608,9 +608,7 @@ InstallGlobalFunction( IO_WriteNonBlocking,
     # Do we buffer?
     if f!.wbufsize = false then
         # Non-buffered I/O:
-        bytes := IO_write(f!.fd,st,pos,len);
-        if bytes = fail then return fail; fi;
-        return bytes;   # this indicates success
+        return IO_write(f!.fd,st,pos,len);
     else   # we do buffering:
         while true do   # will be left by return and run at most twice!
             # First fill the buffer:
@@ -938,7 +936,7 @@ InstallGlobalFunction( IO_CloseAllFDs, function(exceptions)
   return;
 end );
 
-InstallGlobalFunction( IO_Popen, function(path,argv,mode)
+InstallGlobalFunction( IO_Popen, function(arg)
   # mode can be "w" or "r". In the first case, the standard input of the
   # new process will be a pipe, the writing end is returned as a File object.
   # In the second case, the standard output of the new process will be a
@@ -950,7 +948,19 @@ InstallGlobalFunction( IO_Popen, function(path,argv,mode)
   # responsability of the caller to WaitPid for it, if our SIGCHLD handler
   # has been activated.
   # The File object will have the Attribute "ProcessID" set to the process ID.
-  local fil,pid,pipe;
+  local path,argv,mode,bufsize,fil,pid,pipe;
+  if Length(arg) < 3 then
+      Print("Usage: IO_Popen(path,arg,mode,[bufsize])\n");
+      return;
+  fi;
+  path := arg[1];
+  argv := arg[2];
+  mode := arg[3];
+  if Length(arg) > 3 then
+      bufsize := arg[4];
+  else
+      bufsize := IO.DefaultBufSize;
+  fi;
   if not(IsExecutableFile(path)) then
       Error("Popen: <path> must refer to an executable file.");
   fi;
@@ -973,7 +983,7 @@ InstallGlobalFunction( IO_Popen, function(path,argv,mode)
       fi;
       # Now the parent:
       IO_close(pipe.towrite);
-      fil := IO_WrapFD(pipe.toread,IO.DefaultBufSize,false);
+      fil := IO_WrapFD(pipe.toread,bufsize,false);
       SetProcessID(fil,pid);
       return fil;
   elif mode = "w" then
@@ -995,7 +1005,7 @@ InstallGlobalFunction( IO_Popen, function(path,argv,mode)
       fi;
       # Now the parent:
       IO_close(pipe.toread);
-      fil := IO_WrapFD(pipe.towrite,false,IO.DefaultBufSize);
+      fil := IO_WrapFD(pipe.towrite,false,bufsize);
       SetProcessID(fil,pid);
       return fil;
   else
@@ -1003,7 +1013,7 @@ InstallGlobalFunction( IO_Popen, function(path,argv,mode)
   fi;
 end );
 
-InstallGlobalFunction( IO_Popen2, function(path,argv)
+InstallGlobalFunction( IO_Popen2, function(arg)
   # A new child process is started. The standard in and out of it are
   # pipes. The writing end of the input pipe and the reading end of the
   # output pipe are returned as File objects bound to two components
@@ -1014,9 +1024,22 @@ InstallGlobalFunction( IO_Popen2, function(path,argv)
   # The process will usually die, when one of the pipes is closed. It
   # lies in the responsability of the caller to WaitPid for it, if our
   # SIGCHLD handler has been activated.
-  local pid,pipe,pipe2,stdin,stdout;
+  local path,argv,rbufsize,wbufsize,pid,pipe,pipe2,stdin,stdout;
+  if Length(arg) < 2 then
+      Print("Usage: IO_Popen2(path,argv,[rbufsize,wbufsize])\n");
+      return;
+  fi;
+  path := arg[1];
+  argv := arg[2];
+  if Length(arg) > 3 then
+      rbufsize := arg[3];
+      wbufsize := arg[4];
+  else
+      rbufsize := IO.DefaultBufSize;
+      wbufsize := IO.DefaultBufsize;
+  fi;
   if not(IsExecutableFile(path)) then
-      Error("Popen: <path> must refer to an executable file.");
+      Error("Popen2: <path> must refer to an executable file.");
   fi;
   pipe := IO_pipe(); if pipe = fail then return fail; fi;
   pipe2 := IO_pipe(); 
@@ -1047,23 +1070,39 @@ InstallGlobalFunction( IO_Popen2, function(path,argv)
   # Now the parent:
   IO_close(pipe.toread);
   IO_close(pipe2.towrite);
-  stdin := IO_WrapFD(pipe.towrite,false,IO.DefaultBufSize);
-  stdout := IO_WrapFD(pipe2.toread,IO.DefaultBufSize,false);
+  stdin := IO_WrapFD(pipe.towrite,false,wbufsize);
+  stdout := IO_WrapFD(pipe2.toread,rbufsize,false);
   SetProcessID(stdin,pid);
   SetProcessID(stdout,pid);
   return rec(stdin := stdin, stdout := stdout, pid := pid);
 end );
 
-InstallGlobalFunction( IO_Popen3, function(path,argv)
+InstallGlobalFunction( IO_Popen3, function(arg)
   # A new child process is started. The standard in and out and error are
   # pipes. All three "other" ends of the pipes are returned as File
   # objectes bound to the three components "stdin", "stdout", and "stderr"
   # of the returned record. This means, you have to *write* to "stdin"
   # and read from "stdout" and "stderr".
   # Returns fail if an error occurred.
-  local pid,pipe,pipe2,pipe3,stderr,stdin,stdout;
+  local path,argv,rbufsize,wbufsize,ebufsize,pid,pipe,pipe2,pipe3,
+        stderr,stdin,stdout;
+  if Length(arg) < 2 then
+      Print("Usage: IO_Popen3(path,argv,[rbufsize,wbufsize,ebufsize])\n");
+      return;
+  fi;
+  path := arg[1];
+  argv := arg[2];
+  if Length(arg) > 4 then
+      rbufsize := arg[3];
+      wbufsize := arg[4];
+      ebufsize := arg[5];
+  else
+      rbufsize := IO.DefaultBufSize;
+      wbufsize := IO.DefaultBufsize;
+      ebufsize := IO.DefaultBufsize;
+  fi;
   if not(IsExecutableFile(path)) then
-      Error("Popen: <path> must refer to an executable file.");
+      Error("Popen3: <path> must refer to an executable file.");
   fi;
   pipe := IO_pipe(); if pipe = fail then return fail; fi;
   pipe2 := IO_pipe(); 
@@ -1107,9 +1146,9 @@ InstallGlobalFunction( IO_Popen3, function(path,argv)
   IO_close(pipe.toread);
   IO_close(pipe2.towrite);
   IO_close(pipe3.towrite);
-  stdin := IO_WrapFD(pipe.towrite,false,IO.DefaultBufSize);
-  stdout := IO_WrapFD(pipe2.toread,IO.DefaultBufSize,false);
-  stderr := IO_WrapFD(pipe3.toread,IO.DefaultBufSize,false);
+  stdin := IO_WrapFD(pipe.towrite,false,wbufsize);
+  stdout := IO_WrapFD(pipe2.toread,rbufsize,false);
+  stderr := IO_WrapFD(pipe3.toread,ebufsize,false);
   SetProcessID(stdin,pid);
   SetProcessID(stdout,pid);
   SetProcessID(stderr,pid);
@@ -1143,13 +1182,10 @@ function(cmd,args,input)
   local byt,chunk,err,erreof,inpos,nr,out,outeof,r,s,w;
 
   # Start the coprocess:
-  s := IO_Popen3(cmd,args);
+  s := IO_Popen3(cmd,args,false,false,false);
   if s = fail then return fail; fi;
-  s.stdin!.wbufsize := false;    # do not do buffering
-  s.stdout!.rbufsize := false;
-  s.stderr!.rbufsize := false;
   # Switch the one we write to to non-blocking mode, just to be sure!
-  IO_fcntl(s.stdin!.fd,IO.F_GETFL,IO.O_NONBLOCK);
+  IO_fcntl(s.stdin!.fd,IO.F_SETFL,IO.O_NONBLOCK);
 
   # Here we just do I/O multiplexing, sending away input (if non-empty)
   # and receiving stdout and stderr.
@@ -1190,9 +1226,10 @@ function(cmd,args,input)
                   IO_Close(s.stderr);
                   return fail;
               fi;
+          else
+              inpos := inpos + byt;
+              if inpos = Length(input) then IO_Close(s.stdin); fi;
           fi;
-          inpos := inpos + byt;
-          if inpos = Length(input) then IO_Close(s.stdin); fi;
       fi;
       # Now reading:
       if not(outeof) and r[1] <> fail then
@@ -1232,12 +1269,10 @@ function(cmd,args,input)
   local byt,chunk,inpos,nr,out,outeof,r,s,w;
 
   # Start the coprocess:
-  s := IO_Popen2(cmd,args);
+  s := IO_Popen2(cmd,args,false,false);
   if s = fail then return fail; fi;
-  s.stdin!.wbufsize := false;    # do not do buffering
-  s.stdout!.rbufsize := false;
   # Switch the one we write to to non-blocking mode, just to be sure!
-  IO_fcntl(s.stdin!.fd,IO.F_GETFL,IO.O_NONBLOCK);
+  IO_fcntl(s.stdin!.fd,IO.F_SETFL,IO.O_NONBLOCK);
 
   # Here we just do I/O multiplexing, sending away input (if non-empty)
   # and receiving stdout and stderr.
@@ -1274,9 +1309,10 @@ function(cmd,args,input)
                   IO_Close(s.stdout);
                   return fail;
               fi;
+          else
+              inpos := inpos + byt;
+              if inpos = Length(input) then IO_Close(s.stdin); fi;
           fi;
-          inpos := inpos + byt;
-          if inpos = Length(input) then IO_Close(s.stdin); fi;
       fi;
       # Now reading:
       if not(outeof) and r[1] <> fail then
