@@ -14,12 +14,12 @@ bindir:
 
 bin/@GAPARCH@/io.so: src/io.c
 	cp $(GAPPATH)/bin/@GAPARCH@/config.h bin/@GAPARCH@
-	$(GAPPATH)/bin/@GAPARCH@/gac -d -p "-fno-stack-protector" -o bin/@GAPARCH@/io.so src/io.c
+	$(GAPPATH)/bin/@GAPARCH@/gac -d -o bin/@GAPARCH@/io.so src/io.c
 
 # make a statically linked GAP including the io module
 static:
 	(cd $(GAPPATH)/bin/@GAPARCH@; \
-	./gac -o gap-static -p "-DIOSTATIC -fno-stack-protector" -P "-static" \
+	./gac -o gap-static -p "-DIOSTATIC" -P "-static" \
 	../../pkg/io/src/io.c)
 
 doc: doc/manual.six
