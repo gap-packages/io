@@ -265,8 +265,8 @@ Dependencies := rec(
 ##  done automatically and need not be included in this function.
 #AvailabilityTest := ReturnTrue,
 AvailabilityTest := function()
-  if not "io" in SHOW_STAT() and
-     Filename(DirectoriesPackagePrograms("io"), "io.so") = fail then
+  if (not("io" in SHOW_STAT())) and
+     (Filename(DirectoriesPackagePrograms("io"), "io.so") = fail) then
     #Info(InfoWarning, 1, "IO: kernel IO functions not available.");
     return fail;
   fi;
@@ -281,13 +281,13 @@ end,
 ##  in this file. If you are not happy with it, you can provide a string
 ##  here that is used as a banner. GAP decides when the banner is shown and
 ##  when it is not shown. *optional* (note the ~-syntax in this example)
-BannerString := Concatenation( 
-  "---------------------------------------------------------------------\n",
-  "Loading  IO ", ~.Version, "\n",
-  "by ", ~.Persons[1].FirstNames, " ", ~.Persons[1].LastName,
-        " (", ~.Persons[1].WWWHome, ")\n",
-  "For help, type: ?IO package \n",
-  "---------------------------------------------------------------------\n" ),
+#BannerString := Concatenation( 
+#  "---------------------------------------------------------------------\n",
+#  "Loading  IO ", ~.Version, "\n",
+#  "by ", ~.Persons[1].FirstNames, " ", ~.Persons[1].LastName,
+#        " (", ~.Persons[1].WWWHome, ")\n",
+#  "For help, type: ?IO package \n",
+#  "---------------------------------------------------------------------\n" ),
 
 ##  Suggest here if the package should be *automatically loaded* when GAP is 
 ##  started.  This should usually be 'false'. Say 'true' only if your package 
