@@ -13,3 +13,4 @@ Improve installation instructions, in particular for windows
 Improve README file
 Preface properly.
 More examples, better manual chapter.
+Sort out stack checking business on modern gcc
