@@ -6,7 +6,6 @@ Before submitting still to do:
 
 version number into archive name
 read manual once completely
-check return values on the C level (are they always fail for error?)
 Add a warning to the documentation about architecture dependence
 Test on windows
 Improve installation instructions, in particular for windows

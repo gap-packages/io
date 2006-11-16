@@ -1409,7 +1409,7 @@ Obj FuncIO_execvp(Obj self,Obj file,Obj Argv)
     i = execvp((char *) CHARS_STRING(file),argv);
     if (i == -1) {
         SySetErrorNo();
-        return INTOBJ_INT(i);
+        return Fail;
     }
     /* This will never happen: */
     return Fail;
@@ -1458,7 +1458,7 @@ Obj FuncIO_execve(Obj self,Obj path,Obj Argv,Obj Envp)
     i = execve((char *) CHARS_STRING(path),argv,envp);
     if (i == -1) {
         SySetErrorNo();
-        return INTOBJ_INT(i);
+        return Fail;
     }
     /* This will never happen: */
     return Fail;
@@ -1531,9 +1531,10 @@ Obj FuncIO_fcntl(Obj self, Obj fd, Obj cmd, Obj arg)
         return Fail;
     }
     ret = fcntl(INT_INTOBJ(fd),INT_INTOBJ(cmd),INT_INTOBJ(arg));
-    if (ret == -1)
+    if (ret == -1) {
+        SySetErrorNo();
         return Fail;
-    else
+    } else
         return INTOBJ_INT(ret);
 }
 #endif

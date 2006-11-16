@@ -964,6 +964,7 @@ InstallGlobalFunction( IO_Popen, function(arg)
   if not(IsExecutableFile(path)) then
       Error("Popen: <path> must refer to an executable file.");
   fi;
+  IO_InstallSIGCHLDHandler();   # to be able to use IO_WaidPID
   if mode = "r" then
       pipe := IO_pipe(); if pipe = fail then return fail; fi;
       pid := IO_fork(); 
@@ -1041,6 +1042,7 @@ InstallGlobalFunction( IO_Popen2, function(arg)
   if not(IsExecutableFile(path)) then
       Error("Popen2: <path> must refer to an executable file.");
   fi;
+  IO_InstallSIGCHLDHandler();   # to be able to use IO_WaidPID
   pipe := IO_pipe(); if pipe = fail then return fail; fi;
   pipe2 := IO_pipe(); 
   if pipe2 = fail then
@@ -1104,6 +1106,7 @@ InstallGlobalFunction( IO_Popen3, function(arg)
   if not(IsExecutableFile(path)) then
       Error("Popen3: <path> must refer to an executable file.");
   fi;
+  IO_InstallSIGCHLDHandler();   # to be able to use IO_WaidPID
   pipe := IO_pipe(); if pipe = fail then return fail; fi;
   pipe2 := IO_pipe(); 
   if pipe2 = fail then
@@ -1195,6 +1198,7 @@ function(cmd,args,input)
   # Here we collect stderr and stdout:
   err := "";
   out := "";
+  if Length(input) = 0 then IO_Close(s.stdin); fi;
   repeat
       if not(outeof) then
           r := [s.stdout];
@@ -1261,6 +1265,8 @@ function(cmd,args,input)
   until outeof and erreof;
   IO_Close(s.stdout);
   IO_Close(s.stderr);
+  IO_WaitPid(ProcessID(s.stdin),true);
+  IO_RestoreSIGCHLDHandler();
   return rec( out := out, err := err );
 end);
 
@@ -1283,6 +1289,7 @@ function(cmd,args,input)
   outeof := false;
   # Here we collect stdout:
   out := "";
+  if Length(input) = 0 then IO_Close(s.stdin); fi;
   repeat
       if not(outeof) then
           r := [s.stdout];
@@ -1329,6 +1336,8 @@ function(cmd,args,input)
       fi;
   until outeof;
   IO_Close(s.stdout);
+  IO_WaitPid(ProcessID(s.stdin),true);
+  IO_RestoreSIGCHLDHandler();
   return out;
 end);
 
