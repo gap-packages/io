@@ -47,4 +47,4 @@ towww: archive
 	cp ../io-`cat VERSION`.tar.gz ${WEBPOS}
 	@echo
 	@echo Now please adjust the archive link in 
-	@echo "    " ${WEBPOS}/io.mixer !
+	@echo "    " ${WEBPOS}.mixer !
