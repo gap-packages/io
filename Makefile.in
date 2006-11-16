@@ -34,7 +34,7 @@ clean:
 archive: doc
 	(cd .. ; tar czvf io-`cat io/VERSION`.tar.gz --exclude ".svn" --exclude @GAPARCH@ io)
 
-WEBPOS=/home/antares/neunhoef/mywebpage/Computer/Software/Gap/io
+WEBPOS=/users/neunhoef/mywebpage/Computer/Software/Gap/io
 
 towww: archive
 	echo '<?xml version="1.0" encoding="ISO-8859-1"?>' >${WEBPOS}.version
@@ -45,4 +45,6 @@ towww: archive
 	cp README ${WEBPOS}/README.io
 	cp doc/manual.pdf ${WEBPOS}/io.pdf
 	cp ../io-`cat VERSION`.tar.gz ${WEBPOS}
-	echo Now please adjust the archive link in ${WEBPOS}/io.mixer !
+	@echo
+	@echo Now please adjust the archive link in 
+	@echo "    " ${WEBPOS}/io.mixer !
