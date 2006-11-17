@@ -101,7 +101,7 @@ InstallGlobalFunction( HTTPRequest,
           fi;
           pos2 := PositionSublist(line,": ");
           if pos2 <> fail then
-              responseheader.(line{[1..pos2-1]}) :=
+              responseheader.(LowercaseString(line{[1..pos2-1]})) :=
                                       line{[pos2+2..Length(line)]};
           fi;
           pos := lineend;
@@ -223,12 +223,12 @@ InstallGlobalFunction( HTTPRequest,
                 responseheader := rec();
                 r := ParseHeader(out);
                 if r <> fail then   # then it is a position number!
-                    if not(IsBound(responseheader.Content\-Length)) then
+                    if not(IsBound(responseheader.content\-length)) then
                         Print("HTTP Warning: no content length!\n");
                         contentlength := infinity;
                     else
                         if method <> "HEAD" then
-                            contentlength:=Int(responseheader.Content\-Length);
+                            contentlength:=Int(responseheader.content\-length);
                         else
                             contentlength := 0;
                         fi;
