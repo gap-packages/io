@@ -40,6 +40,18 @@ const char * Revision_io_c =
 #include <cygwin/in.h>
 #endif
 
+/* The following seems to be necessary to run under modern gcc compilers
+ * which have the ssp stack checking enabled. Hopefully this does not
+ * hurt in future or other versions... */
+#ifdef __GNUC__
+#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 1))
+extern void __stack_chk_fail();
+void __stack_chk_fail_local (void)
+{
+  __stack_chk_fail ();
+}
+#endif
+#endif
 
 
 /* Functions that are done:
@@ -2625,6 +2637,12 @@ static Int InitLibrary ( StructInitInfo *module )
 #endif
 #ifdef F_UNLCK
     AssPRec(tmp, RNamName("F_UNLCK"), INTOBJ_INT((Int) F_UNLCK));
+#endif
+#ifdef __GNUC__
+    AssPRec(tmp, RNamName("__GNUC__"), INTOBJ_INT((Int) __GNUC__));
+#endif
+#ifdef __GNUC_MINOR__
+    AssPRec(tmp, RNamName("__GNUC_MINOR__"), INTOBJ_INT((Int) __GNUC_MINOR__));
 #endif
 
     gvar = GVarName("IO");
