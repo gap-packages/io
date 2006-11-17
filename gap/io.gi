@@ -812,11 +812,16 @@ InstallGlobalFunction( IO_Select, function( r, w, f, e, t1, t2 )
           t2 := 0;
       fi;
       # Now do the select:
-      nr := IO_select(rr,ww,ee,t1,t2);
-      if nr = fail then
-          # An error, bits and timeout are undefined
-          return fail;
-      fi;
+      repeat
+          nr := IO_select(rr,ww,ee,t1,t2);
+          if nr = fail and LastSystemError().number <> IO.EINTR then
+              # An error, bits and timeout are undefined
+              # LastSystemError is set
+              return fail;
+          fi;
+          # Otherwise we have an interrupted system call and want to
+          # restart the same system call afterwards.
+      until IsInt(nr);
       nrfinal := nrfinal + nr;
       # Now look for results:
       for i in [1..Length(rr)] do
