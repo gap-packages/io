@@ -1202,7 +1202,7 @@ function(cmd,args,input)
   erreof := false;
   # Here we collect stderr and stdout:
   err := "";
-  out := "";
+  out := [];
   if Length(input) = 0 then IO_Close(s.stdin); fi;
   repeat
       if not(outeof) then
@@ -1242,7 +1242,7 @@ function(cmd,args,input)
       fi;
       # Now reading:
       if not(outeof) and r[1] <> fail then
-          chunk := IO_Read(s.stdout,1000000);
+          chunk := IO_Read(s.stdout,4096);
           if chunk = "" then 
               outeof := true; 
           elif chunk = fail then
@@ -1251,11 +1251,11 @@ function(cmd,args,input)
               IO_Close(s.stderr);
               return fail;
           else
-              Append(out,chunk);
+              Add(out,chunk);
           fi;
       fi;
       if not(erreof) and r[Length(r)] <> fail then
-          chunk := IO_Read(s.stderr,1000000);
+          chunk := IO_Read(s.stderr,4096);
           if chunk = "" then 
               erreof := true; 
           elif chunk = fail then
@@ -1271,7 +1271,7 @@ function(cmd,args,input)
   IO_Close(s.stdout);
   IO_Close(s.stderr);
   IO_WaitPid(ProcessID(s.stdin),true);
-  return rec( out := out, err := err );
+  return rec( out := Concatenation(out), err := err );
 end);
 
 InstallGlobalFunction( IO_PipeThrough,
@@ -1292,7 +1292,7 @@ function(cmd,args,input)
   inpos := 0;
   outeof := false;
   # Here we collect stdout:
-  out := "";
+  out := [];
   if Length(input) = 0 then IO_Close(s.stdin); fi;
   repeat
       if not(outeof) then
@@ -1327,7 +1327,7 @@ function(cmd,args,input)
       fi;
       # Now reading:
       if not(outeof) and r[1] <> fail then
-          chunk := IO_Read(s.stdout,1000000);
+          chunk := IO_Read(s.stdout,4096);
           if chunk = "" then 
               outeof := true;
           elif chunk = fail then
@@ -1335,13 +1335,13 @@ function(cmd,args,input)
               IO_Close(s.stdout);
               return fail;
           else
-              Append(out,chunk);
+              Add(out,chunk);
           fi;
       fi;
   until outeof;
   IO_Close(s.stdout);
   IO_WaitPid(ProcessID(s.stdin),true);
-  return out;
+  return Concatenation(out);
 end);
 
 
