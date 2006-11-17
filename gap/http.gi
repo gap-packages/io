@@ -165,8 +165,12 @@ InstallGlobalFunction( HTTPRequest,
       if haveseenheader then 
           ret.header := responseheader; 
       fi;
-      if IsString(out) then 
-          ret.body := out; 
+      if IsList(out) then 
+          if IsStringRep(out) then
+              ret.body := out; 
+          else
+              ret.body := Concatenation(out);
+          fi;
       else
           IO_Close(out);
           ret.body := target;
@@ -211,7 +215,7 @@ InstallGlobalFunction( HTTPRequest,
         fi;
         # Now reading:
         if not(outeof) and r[1] <> fail then
-            chunk := IO_Read(conn.sock,65536);
+            chunk := IO_Read(conn.sock,4096);
             if chunk = "" or chunk = fail then 
                 outeof := true; 
                 break;
@@ -241,15 +245,15 @@ InstallGlobalFunction( HTTPRequest,
                         IO_Write(out,chunk);
                         bodyread := Length(chunk);
                     else
-                        out := chunk;
+                        out := [chunk];
                         bodyread := Length(chunk);
                     fi;
                     haveseenheader := true;
                 fi;
             else
                 # We are only reading the body until done:
-                if IsString(out) then
-                    Append(out,chunk);
+                if IsList(out) then
+                    Add(out,chunk);
                 else
                     IO_Write(out,chunk);
                 fi;
@@ -270,8 +274,8 @@ InstallGlobalFunction( HTTPRequest,
 
     ret.closed := outeof;
     ret.header := responseheader;
-    if IsString(out) then
-        ret.body := out;
+    if IsList(out) then
+        ret.body := Concatenation(out);
     else
         IO_Close(out);
         ret.body := target;
