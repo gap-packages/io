@@ -219,6 +219,8 @@ Obj FuncIO_WaitPid(Obj self,Obj pid,Obj wait)
       lastats = pos;
   }
   statsfull = 0;
+  /* Reinstantiate our handler: */
+  signal(SIGCHLD,IO_SIGCHLDHandler);
   return tmp;
 } 
 #endif 
