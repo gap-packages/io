@@ -30,11 +30,10 @@ f := IO_File("tmpfile","w");
 pos := 1;
 while pos <= Length(st) do
     if IO_ReadyForWrite(f) then
-        bytes := IO_WriteNonBlocking(f,
-                      st{[pos..Minimum(Length(st),pos+1000)]},0);
-        pos := pos + bytes;
+       bytes := IO_WriteNonBlocking(f,st,pos-1,Minimum(Length(st)-pos+1,1000));
+       pos := pos + bytes;
     else
-        Print(".\c");
+       Print(".\c");
     fi;
 od;
 IO_Close(f);
@@ -65,8 +64,8 @@ sender := function()
   pos := 1;
   while pos <= Length(st) do
       if IO_ReadyForWrite(f) then
-          bytes := IO_WriteNonBlocking(f,
-                        st{[pos..Minimum(Length(st),pos+100000)]},0);
+          bytes := IO_WriteNonBlocking(f,st,pos-1,Minimum(Length(st)-pos+1,
+                                                          100000));
           pos := pos + bytes;
       #else
       #    Print("Cannot write\n");
@@ -81,8 +80,8 @@ selectsender := function()
   pos := 1;
   while pos <= Length(st) do
       if IO_Select([],[f],[],[],fail,fail) = 1 then
-          bytes := IO_WriteNonBlocking(f,
-                        st{[pos..Minimum(Length(st),pos+10000)]},0);
+          bytes := IO_WriteNonBlocking(f,st,pos-1,Minimum(Length(st)-pos+1,
+                                                          10000));
           pos := pos + bytes;
           Print("Wrote ",bytes,"\n");
       #else

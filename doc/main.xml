@@ -119,7 +119,7 @@ Use the <C>man</C> command in your shell to get information about these
 functions.<P/>
 
 For each of these functions there is a corresponding &GAP; global function 
-with the prefix <C>IO_</C> before its name. Apart from minor differences
+with the prefix <C>IO&uscore;</C> before its name. Apart from minor differences
 (see below) they take exactly the same arguments as their C
 counterparts. Strings must be specified as &GAP; strings and integers
 as &GAP; immediate integers. Return values are in general the same as

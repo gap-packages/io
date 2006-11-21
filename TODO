@@ -4,6 +4,7 @@ Document !.wbufsize and !rbufsize ???
 
 Before submitting still to do:
 
+Debug buffered test file
 read manual once completely
 Add a warning to the documentation about architecture dependence
 Test on windows
