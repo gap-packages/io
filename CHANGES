@@ -12,6 +12,8 @@
   - Loop around IO_select calls to ignore EINTR error
   - Sort out __stack_chk_fail_local gcc 4.1 problem
   - case insensitivity in header field names in HTTP protocol
+  - fix bug that crashed GAP when starting another process or terminating
+    GAP after calling Popen*
 
 
 ==========================
