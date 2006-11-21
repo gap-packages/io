@@ -9,7 +9,7 @@ od;
 
 # Now we write this to a file called "tmpfile":
 f := IO_File("tmpfile","w");   # we use standard buffer size
-if IO_Write(f,st) = IO_Error then Error("write error ",1); fi;
+if IO_Write(f,st) = fail then Error("write error ",1); fi;
 IO_Close(f);
 
 # Now read the same file again in different ways:
@@ -17,7 +17,7 @@ f := IO_File("tmpfile");
 s := "";
 repeat
     block := IO_ReadBlock(f,1000);
-    if block = IO_Error then Error("read error ",2); fi;
+    if block = fail then Error("read error ",2); fi;
     Append(s,block);
 until block = "";
 IO_Close(f);
