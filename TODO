@@ -1,7 +1,3 @@
-support routines for http requests? (query strings, MIME?)
-Maybe a function to change buffer size later on?
-Document !.wbufsize and !rbufsize ???
-
 Before submitting still to do:
 
 read manual once completely
@@ -13,3 +9,9 @@ Improve README file
 Preface properly.
 More examples, better manual chapter.
 More tests
+
+(far) future:
+
+support routines for http requests? (query strings, MIME?)
+Maybe a function to change buffer size later on?
+

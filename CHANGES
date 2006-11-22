@@ -14,6 +14,7 @@
   - case insensitivity in header field names in HTTP protocol
   - fix bug that crashed GAP when starting another process or terminating
     GAP after calling Popen*
+  - Added http protocol test.
 
 
 ==========================
