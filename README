@@ -37,9 +37,12 @@ The package  will not work without  this  step.
 
 If you installed the package in another 'pkg' directory than the standard
 'pkg' directory in your GAP 4 installation, then you have to add the path
-to the directory containing your 'pkg' directory to the list of directories
-given in your GAP startup script with the '-l' command line option.
-Otherwise the package is not found by GAP 4.
+to the directory containing your 'pkg' directory to GAP's list of directories.
+This can be done by starting GAP with the '-l' command line option
+followed by the name of the directory and a semicolon. Then your directory
+is prepended to the list of directories searched. Otherwise the package 
+is not found by GAP. Of course, you can add this option to your GAP
+startup script.
 
 ----------------------------------------------------------------------------
 

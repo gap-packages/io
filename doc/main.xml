@@ -85,6 +85,16 @@ to the directory containing your <Q><F>pkg</F></Q> directory to the list of dire
 given in your &GAP; startup script with the <Q><F>-l</F></Q> command line option.
 Otherwise the package is not found by &GAP; 4.<P/>
 
+If you installed the package in another <Q><F>pkg</F></Q> directory than
+the standard <Q><F>pkg</F></Q> directory in your &GAP; 4 installation,
+then you have to add the path to the directory containing your 'pkg'
+directory to &GAP;'s list of directories. This can be done by starting
+&GAP; with the <Q><F>-l</F></Q> command line option followed by the name
+of the directory and a semicolon. Then your directory is prepended to
+the list of directories searched. Otherwise the package is not found by
+&GAP;. Of course, you can add this option to your &GAP; startup script.
+
+
 <Section>
 <Heading>Static linking</Heading>
 
