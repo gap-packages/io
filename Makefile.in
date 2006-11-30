@@ -28,11 +28,11 @@ doc/manual.six: doc/main.xml doc/io.xml default VERSION
 	($(GAPPATH)/bin/gap.sh makedoc.g)
 
 clean:
-	rm -rf bin/@GAPARCH@ Makefile
+	rm -rf bin/* Makefile
 	(cd doc ; ./clean)
 
 archive: doc
-	(cd .. ; tar czvf io-`cat io/VERSION`.tar.gz --exclude ".svn" --exclude @GAPARCH@ io)
+	(cd .. ; tar czvf io-`cat io/VERSION`.tar.gz --exclude ".svn" --exclude bin io)
 
 WEBPOS=/users/neunhoef/mywebpage/Computer/Software/Gap/io
 

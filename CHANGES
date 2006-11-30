@@ -20,7 +20,7 @@
   - take care of PIPE_BUF variable (might not exist on platform!)
   - Improved installation instructions in the manual and the README file.
   - Add proper preface to the manual
-  - Released revision 215 as 2.0
+  - Released revision 216 as 2.0
 
 
 ==========================
