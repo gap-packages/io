@@ -47,6 +47,11 @@ if ARCH_IS_MAC() then
 elif ARCH_IS_WINDOWS() then
     IO.LineEndChars := "\r\n";
 fi;
+if IsBound(IO.PIPE_BUF) then
+    IO.NonBlockWriteAmount := IO.PIPE_BUF;
+else
+    IO.NonBlockWriteAmount := 4096;
+fi;
 
 InstallValue( IO_Error,
   Objectify( NewType( IO_ResultsFamily, IO_Result ), rec( val := "IO_Error" ))
@@ -629,7 +634,8 @@ InstallGlobalFunction( IO_WriteNonBlocking,
             fi;
             # Write out the buffer:
             pos2 := 0;
-            bytes := IO_write(f!.fd,f!.wbuf,0,Minimum(IO.PIPE_BUF,f!.wbufsize));
+            bytes := IO_write(f!.fd,f!.wbuf,0,Minimum(IO.NonBlockWriteAmount,
+                                                      f!.wbufsize));
             if bytes = fail then return fail; fi;
             if bytes = f!.wbufsize then
                 f!.wdata := 0;

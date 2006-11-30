@@ -15,6 +15,12 @@
   - fix bug that crashed GAP when starting another process or terminating
     GAP after calling Popen*
   - Added http protocol test.
+  - Add tst/platform.g to have a check of "standard things"
+  - include more headers with #include
+  - take care of PIPE_BUF variable (might not exist on platform!)
+  - Improved installation instructions in the manual and the README file.
+  - Add proper preface to the manual
+  - Released revision 213 as 2.0
 
 
 ==========================

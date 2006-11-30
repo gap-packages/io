@@ -10,6 +10,9 @@
 const char * Revision_io_c =
    "$Id: io.c$";
 
+/* Try to use as much of the GNU C library as possible: */
+#define _GNU_SOURCE
+
 #include "src/compiled.h"          /* GAP headers                */
 
 #include <stdlib.h>
@@ -35,7 +38,14 @@ const char * Revision_io_c =
 #ifdef HAVE_SYS_WAIT_H
 #include <sys/wait.h>
 #endif
-
+/* We should test for existence of netinet/in.h and netinet/tcp.h, but
+ * this would require a change in the GAP configure script, which is
+ * tedious. */
+#ifdef HAVE_GETPROTOBYNAME
+#include <netinet/in.h>
+#include <netinet/ip.h>
+#include <netinet/tcp.h>
+#endif
 #if SYS_IS_CYGWIN32
 #include <cygwin/in.h>
 #endif

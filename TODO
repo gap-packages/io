@@ -1,14 +1,20 @@
 Before submitting still to do:
 
 read manual once completely
-Add a warning to the documentation about architecture dependence
-Test on windows
-Improve installation instructions, in particular for windows
-  -> installation in different directory!
-Improve README file
-Preface properly.
+check examples, some more?
+note released revision in CHANGES
+
+future:
+
 More examples, better manual chapter.
-More tests
+add some checks to GAP's autoconf configure script to test for more
+headers, for example:
+  netinet/in.h
+  netinet/ip.h
+  netinet/tcp.h
+possibly some Linux-specific things:
+  linux/in.h ???
+More tests?
 
 (far) future:
 
