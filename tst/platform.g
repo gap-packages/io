@@ -70,7 +70,8 @@ StdComponentsIO := Set(
   "S_IXOTH", "S_IXUSR", "TCP_CORK", "TCP_DEFER_ACCEPT", "TCP_INFO", 
   "TCP_KEEPCNT", "TCP_KEEPIDLE", "TCP_KEEPINTVL", "TCP_LINGER2", 
   "TCP_MAXSEG", "TCP_NODELAY", "TCP_QUICKACK", "TCP_SYNCNT", 
-  "TCP_WINDOW_CLAMP", "TRY_AGAIN", "__GNUC_MINOR__", "__GNUC__" ]);
+  "TCP_WINDOW_CLAMP", "TRY_AGAIN", "__GNUC_MINOR__", "__GNUC__",
+  "NonBlockWriteAmount" ]);
 # Note missing but possible (includes missing because of autoconf:
 #   "ENOBUGS", "ICMP_FILTER", "IP_MTU"
 GlobalVarsIO := 
