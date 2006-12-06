@@ -244,7 +244,7 @@ InstallGlobalFunction( IO_ReadUntilEOF, function( f )
       return res;
   fi;
   repeat
-      bytes := IO_read(f!.fd,res,Length(res),f!.rbufsize);
+      bytes := IO_read(f!.fd,res,Length(res),IO.NonBlockWriteAmount);
       if bytes = fail then return fail; fi;
   until bytes = 0;
   return res;
@@ -947,6 +947,30 @@ InstallGlobalFunction( IO_CloseAllFDs, function(exceptions)
   return;
 end );
 
+InstallGlobalFunction( IO_ForkExecWithFDs,
+function(path,argv,stdinfd,stdoutfd,stderrfd)
+  # This is an internal function. Does the usual fork/exec combination
+  # with dup2ing the three given file descriptors to standard input,
+  # standard output and standard error of the child process respectively.
+  # It installs our signal handler
+  local pid;
+  IO_InstallSIGCHLDHandler();   # to be able to use IO_WaidPID
+  pid := IO_fork(); 
+  if pid < 0 then return fail; fi;
+  if pid = 0 then   # the child
+      # First close all files
+      IO_CloseAllFDs([stdinfd,stdoutfd,stderrfd]);
+      if stdinfd <> 0 then IO_dup2(stdinfd,0); IO_close(stdinfd); fi;
+      if stdoutfd <> 1 then IO_dup2(stdoutfd,1); IO_close(stdoutfd); fi;
+      if stderrfd <> 2 then IO_dup2(stderrfd,2); IO_close(stderrfd); fi;
+      IO_execv(path,argv);
+      # The following should not happen:
+      IO_exit(-1);
+  fi;
+  # Now the parent:
+  return pid;
+end );
+
 InstallGlobalFunction( IO_Popen, function(arg)
   # mode can be "w" or "r". In the first case, the standard input of the
   # new process will be a pipe, the writing end is returned as a File object.
@@ -978,20 +1002,11 @@ InstallGlobalFunction( IO_Popen, function(arg)
   IO_InstallSIGCHLDHandler();   # to be able to use IO_WaidPID
   if mode = "r" then
       pipe := IO_pipe(); if pipe = fail then return fail; fi;
-      pid := IO_fork(); 
-      if pid < 0 then 
+      pid := IO_ForkExecWithFDs(path,argv,0,pipe.towrite,2);
+      if pid = fail then 
         IO_close(pipe.toread);
         IO_close(pipe.towrite);
         return fail; 
-      fi;
-      if pid = 0 then   # the child
-          # First close all files
-          IO_CloseAllFDs([0,2,pipe.towrite]);
-          IO_dup2(pipe.towrite,1);
-          IO_close(pipe.towrite);
-          IO_execv(path,argv);
-          # The following should not happen:
-          IO_exit(-1);
       fi;
       # Now the parent:
       IO_close(pipe.towrite);
@@ -1000,20 +1015,11 @@ InstallGlobalFunction( IO_Popen, function(arg)
       return fil;
   elif mode = "w" then
       pipe := IO_pipe(); if pipe = fail then return fail; fi;
-      pid := IO_fork(); 
-      if pid < 0 then 
+      pid := IO_ForkExecWithFDs(path,argv,pipe.toread,1,2);
+      if pid = fail then 
         IO_close(pipe.toread);
         IO_close(pipe.towrite);
         return fail; 
-      fi;
-      if pid = 0 then   # the child
-          # First close all files
-          IO_CloseAllFDs([1,2,pipe.toread]);
-          IO_dup2(pipe.toread,0);
-          IO_close(pipe.toread);
-          IO_execv(path,argv);
-          # The following should not happen:
-          IO_exit(-1);
       fi;
       # Now the parent:
       IO_close(pipe.toread);
@@ -1061,24 +1067,13 @@ InstallGlobalFunction( IO_Popen2, function(arg)
     IO_close(pipe.towrite);
     return fail;
   fi;
-  pid := IO_fork(); 
-  if pid < 0 then 
+  pid := IO_ForkExecWithFDs(path,argv,pipe.toread,pipe2.towrite,2);
+  if pid = fail then 
     IO_close(pipe.toread);
     IO_close(pipe.towrite);
     IO_close(pipe2.toread);
     IO_close(pipe2.towrite);
     return fail; 
-  fi;
-  if pid = 0 then   # the child
-      # First close all files
-      IO_CloseAllFDs([2,pipe.toread,pipe2.towrite]);
-      IO_dup2(pipe.toread,0);
-      IO_close(pipe.toread);
-      IO_dup2(pipe2.towrite,1);
-      IO_close(pipe2.towrite);
-      IO_execv(path,argv);
-      # The following should not happen:
-      IO_exit(-1);
   fi;
   # Now the parent:
   IO_close(pipe.toread);
@@ -1133,8 +1128,8 @@ InstallGlobalFunction( IO_Popen3, function(arg)
     IO_close(pipe2.towrite);
     return fail;
   fi;
-  pid := IO_fork(); 
-  if pid < 0 then 
+  pid := IO_ForkExecWithFDs(path,argv,pipe.toread,pipe2.towrite,pipe3.towrite);
+  if pid = fail then 
     IO_close(pipe.toread);
     IO_close(pipe.towrite);
     IO_close(pipe2.toread);
@@ -1142,19 +1137,6 @@ InstallGlobalFunction( IO_Popen3, function(arg)
     IO_close(pipe3.toread);
     IO_close(pipe3.towrite);
     return fail; 
-  fi;
-  if pid = 0 then   # the child
-      # First close all files
-      IO_CloseAllFDs([pipe.toread,pipe2.towrite,pipe3.towrite]);
-      IO_dup2(pipe.toread,0);
-      IO_close(pipe.toread);
-      IO_dup2(pipe2.towrite,1);
-      IO_close(pipe2.towrite);
-      IO_dup2(pipe3.towrite,2);
-      IO_close(pipe3.towrite);
-      IO_execv(path,argv);
-      # The following should not happen:
-      IO_exit(-1);
   fi;
   # Now the parent:
   IO_close(pipe.toread);
@@ -1168,6 +1150,128 @@ InstallGlobalFunction( IO_Popen3, function(arg)
   SetProcessID(stderr,pid);
   return rec(stdin := stdin, stdout := stdout, stderr := stderr, pid := pid);
 end );
+
+InstallGlobalFunction( IO_StartPipeline,
+function( progs, infd, outfd, switcherror )
+  # progs is a list of pairs, the first entry being a path to an executable,
+  # the second an argument list, infd is an open file descriptor for
+  # reading, outfd is an open file descriptor for writing, both can be
+  # replaced by "open" in which case a new pipe will be opened. switcherror
+  # is a boolean indicating whether standard error channels are also
+  # switched to the output channel. This function starts up all processes
+  # and connects them with pipes. The input of the first is switched to
+  # infd and the output of the last to outfd.
+  # Returns a record with the following components: "pids" is a list of 
+  # pids if everything worked. For each process where
+  # some error occurred the corresponding pid is replaced by fail.
+  # "stdin" is equal to infd (or the new file descriptor if infd was "open"),
+  # "stdout" is euqal to outfd (or the new file descriptor if outfd was 
+  # "open").
+
+  local a,b,c,i,inpipe,j,outpipe,pids,pipe,pipes,r;
+
+  if not(ForAll(progs,x->IsExecutableFile(x[1]))) then
+      Error("IO_StartPipeline: <paths> must refer to a executable files.");
+      return fail;
+  fi;
+
+  if infd = "open" then
+      inpipe := IO_pipe(); if inpipe = fail then return fail; fi;
+      infd := inpipe.toread;
+  else
+      inpipe := false;
+  fi;
+  if outfd = "open" then
+      outpipe := IO_pipe(); 
+      if outpipe = fail then 
+          IO_close(inpipe.towrite);
+          IO_close(inpipe.toread);
+          return fail; 
+      fi;
+      outfd := outpipe.towrite;
+  else
+      outpipe := false;
+  fi;
+
+  pipes := [];
+  for i in [1..Length(progs)-1] do
+      pipe := IO_pipe();
+      if pipe = fail then
+          for j in [1..Length(pipes)] do
+              IO_close(pipes[j].toread);
+              IO_close(pipes[j].towrite);
+          od;
+          IO_close(inpipe.toread);
+          IO_close(inpipe.towrite);
+          IO_close(outpipe.toread);
+          IO_close(outpipe.towrite);
+          return fail;
+      fi;
+      Add(pipes,pipe);
+  od;
+
+  IO_InstallSIGCHLDHandler();   # to be able to use IO_WaidPID
+
+  pids := 0*[1..Length(progs)];
+  for i in [1..Length(progs)] do
+      if i = 1 then
+          a := infd;
+      else
+          a := pipes[i-1].toread;
+      fi;
+      if i = Length(progs) then
+          b := outfd;
+      else
+          b := pipes[i].towrite;
+      fi;
+      if switcherror then
+          c := b;
+      else
+          c := 2;
+      fi;
+      pids[i] := IO_ForkExecWithFDs(progs[i][1],progs[i][2],a,b,c);
+  od;
+
+  # Now close all pipes in the parent:
+  for i in [1..Length(pipes)] do
+      IO_close(pipes[i].toread);
+      IO_close(pipes[i].towrite);
+  od;
+
+  r := rec( pids := pids );
+  if inpipe <> false then
+      IO_close(inpipe.toread);
+      r.stdin := inpipe.towrite;
+  else
+      r.stdin := false;
+  fi;
+  if outpipe <> false then
+      IO_close(outpipe.towrite);
+      r.stdout := outpipe.toread;
+  else
+      r.stdout := false;
+  fi;
+
+  return r;
+end );
+
+InstallGlobalFunction( IO_StringFilterFile,
+function( progs, filename )
+  local f,fd,i,r,s;
+  fd := IO_open(filename,0,IO.O_RDONLY);
+  r := IO_StartPipeline(progs, fd, "open", false);
+  if r = fail or fail in r.pids then
+      IO_close(fd);
+      return fail;
+  fi;
+  f := IO_WrapFD(r.stdout,false,false);
+  s := IO_ReadUntilEOF(f);
+  IO_Close(f);
+  for i in r.pids do IO_WaitPid(i,true); od;
+  return s;
+end );
+
+# TODO: IO_FileFilterString
 
 InstallGlobalFunction( IO_SendStringBackground, function(f,st)
   # The whole string st is send to the File object f but in the background.

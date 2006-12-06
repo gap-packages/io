@@ -1428,7 +1428,7 @@ the <Q><K>pid</K></Q> component of the returned record.
 A new child process is started. The standard input, standard output, and
 standard error of it 
 are pipes. The writing end of the input pipe, the reading end of the
-output pipe and the reading end of the error pie 
+output pipe and the reading end of the error pipe 
 are returned as <K>File</K> objects bound to two components
 <Q><C>stdin</C></Q>, <Q><C>stdout</C></Q>, and <Q><C>stderr</C></Q> 
 (resp.) of the returned record. 
@@ -1440,7 +1440,7 @@ Returns <K>fail</K> if an error occurred. <P/>
 
 The process will usually die, when one of the pipes is closed. It
 lies in the responsability of the caller to <Ref Func="IO_WaitPid"/> for it. 
-Note that <Ref Func="IO_Popen2"/> activates our SIGCHLD handler (see <Ref
+Note that <Ref Func="IO_Popen3"/> activates our SIGCHLD handler (see <Ref
 Func="IO_InstallSIGCHLDHandler"/>). <P/>
 
 All three <C>File</C> objects will have the attribute <Q><K>ProcessID</K></Q>
@@ -1509,7 +1509,7 @@ original &GAP; SIGCHLD signal handler
 
 <ManSection>
 <Func Name="IO_PipeThroughWithError" Arg="cmd, args, input"/>
-<Returns> a string or <K>fail</K> </Returns>
+<Returns> a record or <K>fail</K> </Returns>
 <Description>
 Starts the process with the executable stored at the file name
 <A>cmd</A> (must be a string) with arguments in the argument list
@@ -1526,6 +1526,11 @@ This function properly does <Ref Func="IO_WaitPid"/> to wait for
 the termination of the child process but does not restore the
 original &GAP; SIGCHLD signal handler 
 (see <Ref Func="IO_InstallSIGCHLDHandler"/>).
+<P/>
+The functions returns either <K>fail</K> if an error occurred, or otherwise
+a record with components <K>out</K> and <K>err</K> which are bound
+to strings containing the full standard output and standard error
+of the called process.
 </Description>
 </ManSection>
 
