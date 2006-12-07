@@ -122,7 +122,7 @@ IO.DefaultBufSize := 65536;
 
 # A convenience function for files on disk:
 InstallGlobalFunction(IO_File, function( arg )
-  # arguments: filename [,mode]
+  # arguments: filename [,mode][,bufsize]
   # filename is a string and mode can be:
   #   "r" : open for reading only (default)
   #   "w" : open for writing only, possibly creating/truncating
@@ -193,7 +193,7 @@ InstallMethod( ViewObj, "for IsFile objects", [IsFile],
 # Now a convenience function for closing:
 InstallGlobalFunction( IO_Close, function( f )
   # f must be an object of type IsFile
-  local ret;
+  local i,pid,ret;
   if not(IsFile(f)) then
       Error("Usage: IO_Close( f ) with IsFile(f) and f open");
   fi;
@@ -213,6 +213,14 @@ InstallGlobalFunction( IO_Close, function( f )
   f!.wbuf := fail;
   if f!.fd <> -1 then
       if IO_close(f!.fd) = fail then ret := fail; fi;
+  fi;
+  if HasProcessID(f) and IsBound(f!.dowaitpid) then
+      pid := ProcessID(f);
+      if IsInt(pid) then pid := [pid]; fi;
+      f!.results := [];
+      for i in [1..Length(pid)] do
+          f!.results[i] := IO_WaitPid(pid[i],true);
+      od;
   fi;
   return ret;
 end );
@@ -1014,7 +1022,7 @@ InstallGlobalFunction( IO_Popen, function(arg)
       bufsize := IO.DefaultBufSize;
   fi;
   path := IO_FindExecutable(path);
-  if path <> fail then
+  if path = fail then
       Error("Popen: <path> must refer to an executable file.");
   fi;
   IO_InstallSIGCHLDHandler();   # to be able to use IO_WaidPID
@@ -1030,6 +1038,7 @@ InstallGlobalFunction( IO_Popen, function(arg)
       IO_close(pipe.towrite);
       fil := IO_WrapFD(pipe.toread,bufsize,false);
       SetProcessID(fil,pid);
+      fil!.dowaitpid := true;
       return fil;
   elif mode = "w" then
       pipe := IO_pipe(); if pipe = fail then return fail; fi;
@@ -1043,6 +1052,7 @@ InstallGlobalFunction( IO_Popen, function(arg)
       IO_close(pipe.toread);
       fil := IO_WrapFD(pipe.towrite,false,bufsize);
       SetProcessID(fil,pid);
+      fil!.dowaitpid := true;
       return fil;
   else
       Error("mode must be \"r\" or \"w\".");
@@ -1075,7 +1085,7 @@ InstallGlobalFunction( IO_Popen2, function(arg)
       wbufsize := IO.DefaultBufsize;
   fi;
   path := IO_FindExecutable(path);
-  if path <> fail then
+  if path = fail then
       Error("Popen2: <path> must refer to an executable file.");
   fi;
   IO_InstallSIGCHLDHandler();   # to be able to use IO_WaidPID
@@ -1101,6 +1111,8 @@ InstallGlobalFunction( IO_Popen2, function(arg)
   stdout := IO_WrapFD(pipe2.toread,rbufsize,false);
   SetProcessID(stdin,pid);
   SetProcessID(stdout,pid);
+  # We only set the dowaitpid flag for the standard output!
+  stdout!.dowaitpid := true;
   return rec(stdin := stdin, stdout := stdout, pid := pid);
 end );
 
@@ -1129,7 +1141,7 @@ InstallGlobalFunction( IO_Popen3, function(arg)
       ebufsize := IO.DefaultBufsize;
   fi;
   path := IO_FindExecutable(path);
-  if path <> fail then
+  if path = fail then
       Error("Popen3: <path> must refer to an executable file.");
   fi;
   IO_InstallSIGCHLDHandler();   # to be able to use IO_WaidPID
@@ -1168,6 +1180,8 @@ InstallGlobalFunction( IO_Popen3, function(arg)
   SetProcessID(stdin,pid);
   SetProcessID(stdout,pid);
   SetProcessID(stderr,pid);
+  # We only set the dowaitpid flag for the standard output!
+  stdout!.dowaitpid := true;
   return rec(stdin := stdin, stdout := stdout, stderr := stderr, pid := pid);
 end );
 
@@ -1266,12 +1280,14 @@ function( progs, infd, outfd, switcherror )
       IO_close(inpipe.toread);
       r.stdin := inpipe.towrite;
   else
+      IO_close(infd);
       r.stdin := false;
   fi;
   if outpipe <> false then
       IO_close(outpipe.towrite);
       r.stdout := outpipe.toread;
   else
+      IO_close(outfd);
       r.stdout := false;
   fi;
 
@@ -1314,9 +1330,13 @@ function( arg )
   fi;
       
   if append then
-      fd := IO_open(filename,IO.O_WRONLY + IO.O_APPEND,6*64+4*8+4);
+      fd := IO_open(filename,IO.O_WRONLY + IO.O_APPEND,
+                    IO.S_IRUSR+IO.S_IWUSR+IO.S_IRGRP+IO.S_IWGRP+
+                    IO.S_IROTH+IO.S_IWOTH);
   else
-      fd := IO_open(filename,IO.O_WRONLY + IO.O_TRUNC + IO.O_CREAT,6*64+4*8+4);
+      fd := IO_open(filename,IO.O_WRONLY + IO.O_TRUNC + IO.O_CREAT,
+                    IO.S_IRUSR+IO.S_IWUSR+IO.S_IRGRP+IO.S_IWGRP+
+                    IO.S_IROTH+IO.S_IWOTH);
   fi;
   if fd = fail then return fail; fi;
   r := IO_StartPipeline(progs, "open", fd, false);
@@ -1332,6 +1352,76 @@ function( arg )
       return fail;
   fi;
   return true;
+end );
+
+InstallGlobalFunction( IO_FilteredFile,
+function(arg)
+  # arguments: progs, filename [,mode][,bufsize]
+  # mode and bufsize as in IO_File, progs as for StartPipeline
+  local bufsize,f,fd,filename,mode,progs,r;
+  if Length(arg) = 2 then
+      progs := arg[1];
+      filename := arg[2];
+      mode := "r";
+      bufsize := IO.DefaultBufSize;
+  elif Length(arg) = 3 then
+      progs := arg[1];
+      filename := arg[2];
+      if IsString(arg[3]) then
+          mode := arg[3];
+          bufsize := IO.DefaultBufSize;
+      else
+          mode := "r";
+          bufsize := arg[3];
+      fi;
+  elif Length(arg) = 4 then
+      progs := arg[1];
+      filename := arg[2];
+      mode := arg[3];
+      bufsize := arg[4];
+  else
+      Error("IO: Usage: IO_FilteredFile( progs,filename [,mode][,bufsize] )\n",
+            "with IsString(filename)");
+  fi;
+  if not(IsString(filename)) and not(IsString(mode)) then
+      Error("IO: Usage: IO_FilteredFile( progs, filename [,mode][,bufsize] )\n",
+            "with IsString(filename)");
+  fi;
+  if Length(progs) = 0 then
+      return IO_File(filename,mode,bufsize);
+  fi;
+  if mode = "r" then
+      fd := IO_open(filename,IO.O_RDONLY,0);
+      if fd = fail then return fail; fi;
+      r := IO_StartPipeline(progs,fd,"open",false);
+      if r = fail or fail in r.pids then
+          IO_close(fd);
+          return fail;
+      fi;
+      f := IO_WrapFD(r.stdout,bufsize,false);
+      SetProcessID(f,r.pids);
+      f!.dowaitpid := true;
+  else
+      if mode = "w" then
+          fd := IO_open(filename,IO.O_CREAT+IO.O_WRONLY+IO.O_TRUNC,
+                        IO.S_IRUSR+IO.S_IWUSR+IO.S_IRGRP+IO.S_IWGRP+
+                        IO.S_IROTH+IO.S_IWOTH);
+      else
+          fd := IO_open(filename,IO.O_WRONLY + IO.O_APPEND,
+                        IO.S_IRUSR+IO.S_IWUSR+IO.S_IRGRP+IO.S_IWGRP+
+                        IO.S_IROTH+IO.S_IWOTH);
+      fi;
+      if fd = fail then return fail; fi;
+      r := IO_StartPipeline(progs, "open", fd, false);
+      if r = fail or fail in r.pids then
+          IO_close(fd);
+          return fail;
+      fi;
+      f := IO_WrapFD(r.stdin,false,bufsize);
+      SetProcessID(f,r.pids);
+      f!.dowaitpid := true;
+  fi;
+  return f;
 end );
 
 InstallGlobalFunction( IO_SendStringBackground, function(f,st)

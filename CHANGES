@@ -25,7 +25,7 @@
   - IO_StartPipeline
   - IO_StringFilterFile, IO_FileFilterString
   - paths to executables do PATH lookups using IO_FindExecutable
-  - Released revision 216 as 2.0
+  - Released revision 223 as 2.0
 
 
 ==========================

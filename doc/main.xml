@@ -1406,8 +1406,10 @@ of the child process will be the same than the calling &GAP; process. <P/>
 In case of an error, <K>fail</K> is returned. <P/>
 
 The process will usually die, when the pipe is closed, but can also
-do so without that. It lies in the
-responsability of the caller to <Ref Func="IO_WaitPid"/> for it. 
+do so without that. The <C>File</C> object remembers the process ID
+of the started process and the <Ref Func="IO_Close"/> function then
+calls <Ref Func="IO_WaitPid"/> for it to acquire information about
+the terminated process. <P/>
 Note that <Ref Func="IO_Popen"/> activates our SIGCHLD handler (see <Ref
 Func="IO_InstallSIGCHLDHandler"/>). <P/>
 
@@ -1435,8 +1437,11 @@ the same as the one of the calling &GAP; process. <P/>
 
 Returns <K>fail</K> if an error occurred. <P/>
 
-The process will usually die, when one of the pipes is closed. It
-lies in the responsability of the caller to <Ref Func="IO_WaitPid"/> for it. 
+The process will usually die, when one of the pipes is closed. The <C>File</C>
+objects remember the process ID of the called process and the function
+call to <Ref Func="IO_Close"/> for the <C>stdout</C> object will call
+<Ref Func="IO_WaitPid"/> for it to acquire information about the
+terminated process. <P/>
 Note that <Ref Func="IO_Popen2"/> activates our SIGCHLD handler (see <Ref
 Func="IO_InstallSIGCHLDHandler"/>). <P/>
 
@@ -1466,8 +1471,11 @@ from <Q><C>stdout</C></Q> and <Q><C>stderr</C></Q> in the calling
 
 Returns <K>fail</K> if an error occurred. <P/>
 
-The process will usually die, when one of the pipes is closed. It
-lies in the responsability of the caller to <Ref Func="IO_WaitPid"/> for it. 
+The process will usually die, when one of the pipes is closed. All three
+<C>File</C> objects will remember the process ID of the newly created
+process and the call to the <Ref Func="IO_Close"/> function for the
+<C>stdout</C> object will call <Ref Func="IO_WaitPid"/> for it to acquire
+information about the terminated child process. <P/>
 Note that <Ref Func="IO_Popen3"/> activates our SIGCHLD handler (see <Ref
 Func="IO_InstallSIGCHLDHandler"/>). <P/>
 
@@ -1537,6 +1545,28 @@ termination.
     value <A>append</A> is given and equal to <K>true</K>, then the
     data will be appended to the already existing file.
     If something goes wrong, <K>fail</K> is returned.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO_FilteredFile" Arg="progs, filename [,mode][,bufsize]"/>
+<Returns> a <K>File</K> object or <K>fail</K> </Returns>
+<Description>
+This function is similar to <Ref Func="IO_File"/> and behaves nearly
+identically. The only difference is that a filtering pipeline is switched
+between the file and the <K>File</K> object such that all things read
+or written respectively are filtered through this pipeline of processes.
+<P/>
+The <K>File</K> object remembers the started processes and upon the
+final call to <Ref Func="IO_Close"/> automatically uses the
+<Ref Func="IO_WaitPid"/> function to acquire information from the
+terminated processes in the pipeline after their termination. This means
+that you do not have to call <Ref Func="IO_WaitPid"/> any more after
+the call to <Ref Func="IO_Close"/>.<P/>
+Note that <Ref Func="IO_Popen"/> activates our SIGCHLD handler (see <Ref
+    Func="IO_InstallSIGCHLDHandler"/>).<P/>
+The <C>File</C> object will have the attribute
+<Q><K>ProcessID</K></Q> set to the list of process IDs of the child processes.
 </Description>
 </ManSection>
 
