@@ -1259,6 +1259,7 @@ InstallGlobalFunction( IO_StringFilterFile,
 function( progs, filename )
   local f,fd,i,r,s;
   fd := IO_open(filename,0,IO.O_RDONLY);
+  if fd = fail then return fail; fi;
   r := IO_StartPipeline(progs, fd, "open", false);
   if r = fail or fail in r.pids then
       IO_close(fd);
@@ -1271,7 +1272,44 @@ function( progs, filename )
   return s;
 end );
 
-# TODO: IO_FileFilterString
+InstallGlobalFunction( IO_FileFilterString,
+function( arg )
+  local append,f,fd,filename,i,le,progs,r,st;
+
+  # Check arguments:
+  if Length(arg) < 3 or Length(arg) > 4 then
+      Error("Usage: IO_FileFilterString( filename, progs, st [,append]");
+      return fail;
+  fi;
+  filename := arg[1];
+  progs := arg[2];
+  st := arg[3];
+  if Length(arg) > 3 then
+      append := arg[4];
+  else
+      append := false;
+  fi;
+      
+  if append then
+      fd := IO_open(filename,IO.O_WRONLY + IO.O_APPEND,6*64+4*8+4);
+  else
+      fd := IO_open(filename,IO.O_WRONLY + IO.O_TRUNC + IO.O_CREAT,6*64+4*8+4);
+  fi;
+  if fd = fail then return fail; fi;
+  r := IO_StartPipeline(progs, "open", fd, false);
+  if r = fail or fail in r.pids then
+      IO_close(fd);
+      return fail;
+  fi;
+  f := IO_WrapFD(r.stdin,false,false);
+  le := IO_Write(f,st);
+  IO_Close(f);
+  for i in r.pids do IO_WaitPid(i,true); od;
+  if le = fail or le < Length(st) then
+      return fail;
+  fi;
+  return true;
+end );
 
 InstallGlobalFunction( IO_SendStringBackground, function(f,st)
   # The whole string st is send to the File object f but in the background.

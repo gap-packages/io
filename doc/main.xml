@@ -1450,6 +1450,68 @@ the <Q><K>pid</K></Q> component of the returned record.
 </ManSection>
 
 <ManSection>
+<Func Name="IO_StartPipeline" Arg="progs, infd, outfd, switcherror"/>
+<Returns> a record or <K>fail</K> </Returns>
+<Description>
+    The argument <A>progs</A> is a list of pairs, the first entry being a 
+    path to an executable, the second an argument list, the argument
+    <A>infd</A> is an open file descriptor for
+    reading, <A>outfd</A> is an open file descriptor for writing, both can be
+    replaced by the string <Q><K>open</K></Q> in which case a new pipe will 
+    be opened. The argument <A>switcherror</A>
+is a boolean indicating whether standard error channels are also
+switched to the output channel. <P/>
+This function starts up all processes
+and connects them with pipes. The input of the first is switched to
+<A>infd</A> and the output of the last to <A>outfd</A>.
+<P/>
+Returns a record with the following components: <K>pids</K> is a list of 
+process ids if everything worked. For each process for which
+some error occurred the corresponding pid is replaced by <K>fail</K>.
+The <K>stdin</K> component is equal to <K>false</K>, or to the file descriptor
+of the writing end of the newly created pipe which is connected to the
+standard input of the new process if <A>infd</A> was <Q><K>open</K></Q>.
+The <K>stdout</K> component is equal to <K>false</K> or to the file
+descriptor of the reading end of the newly created pipe which is connected
+to the standard output of the new process if <A>outfd</A> was 
+<Q><K>open</K></Q>.
+<P/>
+Note that the SIGCHLD handler of the <Package>IO</Package> is installed
+by this function (see <Ref Func="IO_InstallSIGCHLDHandler"/>) and that it 
+lies in the responsibility of the caller to use <Ref Func="IO_WaitPid"/>
+to ask for the status information of all child processes after their
+termination.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO_StringFilterFile" Arg="progs, filename"/>
+<Returns> a string or <K>fail</K> </Returns>
+<Description>
+    Reads the file with the name <A>filename</A>, however, a pipeline
+    is created by the processes described by <A>progs</A> (see <Ref
+        Func="IO_StartPipeline"/>) to filter the content of the file
+    through the pipeline. The result is put into a &GAP; string and
+    returned. If something goes wrong, <K>fail</K> is returned.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO_StringFilterFile" Arg="filename, progs, st [,append]"/>
+<Returns> a string or <K>fail</K> </Returns>
+<Description>
+    Writes the content of the string <A>st</A> to the file with the name 
+    <A>filename</A>, however, a pipeline
+    is created by the processes described by <A>progs</A> (see <Ref
+        Func="IO_StartPipeline"/>) to filter the content of the string
+    through the pipeline. The result is put into the file. If the boolean
+    value <A>append</A> is given and equal to <K>true</K>, then the
+    data will be appended to the already existing file.
+    If something goes wrong, <K>fail</K> is returned.
+</Description>
+</ManSection>
+
+<ManSection>
 <Func Name="IO_SendStringBackground" Arg="f, st"
       Comm="Sends away the string st to f in the background"/>
 <Description>

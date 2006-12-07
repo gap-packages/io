@@ -50,6 +50,7 @@ DeclareGlobalFunction( "IO_Popen2" );
 DeclareGlobalFunction( "IO_Popen3" );
 DeclareGlobalFunction( "IO_StartPipeline" );
 DeclareGlobalFunction( "IO_StringFilterFile" );
+DeclareGlobalFunction( "IO_FileFilterString" );
 DeclareGlobalFunction( "IO_SendStringBackground" );
 DeclareGlobalFunction( "IO_PipeThroughWithError" );
 DeclareGlobalFunction( "IO_PipeThrough" );
