@@ -25,7 +25,9 @@ StdGlobalVarsIO := Set(
   "IO_read", "IO_readdir", "IO_readlink", "IO_recv", "IO_recvfrom", 
   "IO_rename", "IO_rewinddir", "IO_rmdir", "IO_seekdir", "IO_select", 
   "IO_send", "IO_sendto", "IO_setsockopt", "IO_socket", "IO_stat", 
-  "IO_symlink", "IO_telldir", "IO_unlink", "IO_write" ] );
+  "IO_symlink", "IO_telldir", "IO_unlink", "IO_write",
+  "IO_FileFilterString", "IO_FilteredFile", "IO_FindExecutable", 
+  "IO_ForkExecWithFDs", "IO_StartPipeline", "IO_StringFilterFile"] );
 StdComponentsIO := Set(
 [ "AF_APPLETALK", "AF_ASH", "AF_ATMPVC", "AF_ATMSVC", "AF_AX25", 
   "AF_BLUETOOTH", "AF_BRIDGE", "AF_DECnet", "AF_ECONET", "AF_FILE", 
