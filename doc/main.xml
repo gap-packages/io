@@ -1354,6 +1354,23 @@ argument.
     <Heading>Inter process communication</Heading>
 
 <ManSection>
+<Func Name="IO_FindExecutable" Arg="path"/>
+<Returns> <K>fail</K> or the path to an executable </Returns>
+<Description>
+If the path name <A>path</A> contains a slash, this function simply
+checks whether the string <A>path</A> refers to an executable file. If so, 
+<A>path</A> is returned as is. Otherwise, <K>fail</K> is returned.
+If the path name <A>path</A> does not contain a slash, all directories
+in the environment variable <F>PATH</F> are searched for an executable
+with name <A>path</A>. If so, the full path to that executable is 
+returned, otherwise <K>fail</K>.<P/>
+
+This function is used whenever one of the following functions gets an
+argument that should refer to an executable.
+</Description>
+</ManSection>
+
+<ManSection>
 <Func Name="IO_CloseAllFDs" Arg="exceptions"
       Comm="Closes all file descriptors except those listed in exceptions"/>
 <Description>
@@ -1367,7 +1384,11 @@ must be a list of integers.
 <Func Name="IO_Popen" Arg="path, argv, mode"
       Comm="Starts a child process with either stdout or stdin being a pipe"/>
 <Description>
-Starts a child process with either stdout or stdin being a pipe. The 
+The argument <A>path</A> must refer to an executable file in the sense
+of <Ref Func="IO_FindExecutable"/>. <P/>
+
+Starts a child process using the executable in <A>path</A>
+with either stdout or stdin being a pipe. The 
 argument <A>mode</A> must be either the string <Q><C>r</C></Q> or the
 string <Q><C>w</C></Q>. <P/>
 
@@ -1399,7 +1420,11 @@ In either case the <C>File</C> object will have the attribute
 <Func Name="IO_Popen2" Arg="path, argv"
       Comm="Starts a child process with stdin and stdout being a pipe"/>
 <Description>
-A new child process is started. The standard input and standard output of it 
+The argument <A>path</A> must refer to an executable file in the sense
+of <Ref Func="IO_FindExecutable"/>. <P/>
+
+A new child process is started using the executable in <A>path</A>
+The standard input and standard output of it 
 are pipes. The writing end of the input pipe and the reading end of the
 output pipe are returned as <K>File</K> objects bound to two components
 <Q><C>stdin</C></Q> and <Q><C>stdout</C></Q> (resp.) of the returned record. 
@@ -1425,8 +1450,11 @@ the <Q><K>pid</K></Q> component of the returned record.
 <Func Name="IO_Popen3" Arg="path, argv"
    Comm="Starts a child process with stdin, stdout, and stderr being a pipe"/>
 <Description>
-A new child process is started. The standard input, standard output, and
-standard error of it 
+The argument <A>path</A> must refer to an executable file in the sense
+of <Ref Func="IO_FindExecutable"/>. <P/>
+
+A new child process is started using the executable in <A>path</A>
+The standard input, standard output, and standard error of it 
 are pipes. The writing end of the input pipe, the reading end of the
 output pipe and the reading end of the error pipe 
 are returned as <K>File</K> objects bound to two components
@@ -1454,7 +1482,8 @@ the <Q><K>pid</K></Q> component of the returned record.
 <Returns> a record or <K>fail</K> </Returns>
 <Description>
     The argument <A>progs</A> is a list of pairs, the first entry being a 
-    path to an executable, the second an argument list, the argument
+    path to an executable (in the sense of <Ref Func="IO_FindExecutable"/>), 
+    the second an argument list, the argument
     <A>infd</A> is an open file descriptor for
     reading, <A>outfd</A> is an open file descriptor for writing, both can be
     replaced by the string <Q><K>open</K></Q> in which case a new pipe will 
@@ -1553,8 +1582,9 @@ forked off sending process, this might trigger doubled memory usage.
 <Func Name="IO_PipeThrough" Arg="cmd, args, input"/>
 <Returns> a string or <K>fail</K> </Returns>
 <Description>
-Starts the process with the executable stored at the file name
-<A>cmd</A> (must be a string) with arguments in the argument list
+Starts the process with the executable given by the file name
+<A>cmd</A> (in the sense of <Ref Func="IO_FindExecutable"/>) with 
+arguments in the argument list
 <A>args</A> (a list of strings). The standard input and output of the started
 process are connected via pipes to the calling process. The content of 
 the string <A>input</A> is written to the standard input of the called
@@ -1573,8 +1603,9 @@ original &GAP; SIGCHLD signal handler
 <Func Name="IO_PipeThroughWithError" Arg="cmd, args, input"/>
 <Returns> a record or <K>fail</K> </Returns>
 <Description>
-Starts the process with the executable stored at the file name
-<A>cmd</A> (must be a string) with arguments in the argument list
+Starts the process with the executable given by the file name
+<A>cmd</A> (in the sense of <Ref Func="IO_FindExecutable"/>) 
+with arguments in the argument list
 <A>args</A> (a list of strings). The standard input, output and error
 of the started
 process are connected via pipes to the calling process. The content of 
@@ -1961,14 +1992,96 @@ write protected list variable directly.
 <Chapter>
 <Heading>Examples of usage</Heading>
 
-See the <F>example</F> directory of the package for some examples of
-usage. You find there a small server using the TCP/IP protocol and
+For larger examples see the <F>example</F> directory of the package. 
+You find there a small server using the TCP/IP protocol and
 a corresponding client and another small server using the UDP protocol
 and a corresponding client. <P/>
 
 Further, there is an example for the
 usage of <K>File</K> objects, that read from or write to strings.<P/>
 
-Finally, there is an example starting up a child process and piping
+Another example there shows starting up a child process and piping
 a few megabytes through it using <Ref Func="IO_Popen2"/>.
+
+<P/>
+In the following, we present a few explicit, interactive short examples 
+for the usage of the functions in this package.
+
+<Section>
+<Heading>Writing and reading a file</Heading>
+
+The following sequence of commands opens a file with name <F>guck</F> and
+writes some things to it:
+
+<Log>
+gap> f := IO_File("guck","w");
+&lt;file fd=3 wbufsize=65536 wdata=0>
+gap> IO_Write(f,"Hello world\n");
+12
+gap> IO_WriteLine(f,"Hello world2!");
+14
+gap> IO_Write(f,12345);
+5
+gap> IO_Flush(f);
+true
+gap> IO_Close(f);
+true
+</Log>
+
+There is nothing special about this, the numbers are numbers of bytes
+written. Note that only after the <Ref Func="IO_Flush"/> command the
+data is actually written to disk. Before that, it resides in the
+write buffer of the file. Note further, that the <Ref Func="IO_Flush"/>
+call here would not have been necessary, since the <Ref Func="IO_Close"/>
+call flushes the buffer anyway.<P/>
+
+The file can again be read with the following sequence of commands:
+
+<Log>
+gap> f := IO_File("guck","r");
+&lt;file fd=3 rbufsize=65536 rpos=1 rdata=0>
+gap> IO_Read(f,10);
+"Hello worl"
+gap> IO_ReadLine(f);
+"d\n"
+gap> IO_ReadLine(f);
+"Hello world2!\n"
+gap> IO_ReadLine(f);
+"12345"
+gap> IO_ReadLine(f);
+""
+gap> IO_Close(f);
+true
+</Log>
+
+Note here that reading line-wise can only be done efficiently by using
+buffered I/O. You can mix calls to <Ref Func="IO_Read"/> and to
+<Ref Func="IO_ReadLine"/>. The end of file is indicated by an empty
+string returned by one of the read functions.
+</Section>
+
+<Section>
+<Heading>Using filtering programs to read and write files</Heading>
+
+If you want to write a big amount of data to file you might want to compress
+it on the fly without using much disk space. This can be achieved with
+the following command:
+
+<Log>
+gap> s := "";; for i in [1..10000] do Append(s,String(i)); od;;
+gap> Length(s);
+38894
+gap> IO_FileFilterString("guck.gz",[["gzip",["-9c"]]],s);
+true
+gap> sgz := StringFile("guck.gz");;
+gap> Length(sgz);
+18541
+gap> ss := IO_StringFilterFile([["gzip",["-dc"]]],"guck.gz");;
+gap> s=ss;
+true
+</Log>
+
+This sequence of commands needs that the program <F>gzip</F> is installed
+on your system.
+</Section>
 </Chapter>

@@ -904,6 +904,23 @@ InstallGlobalFunction( IO_MakeIPAddressPort, function(ip,port)
 end );
 
 
+InstallGlobalFunction( IO_FindExecutable,
+function(path)
+  if '/' in path then
+      if not(IsExecutableFile(path)) then
+          return fail;
+      else
+          return path;
+      fi;
+  else
+      path := Filename(DirectoriesSystemPrograms(),path);
+      if path = fail then return fail; fi;
+      if not(IsExecutableFile(path)) then return fail; fi;
+      return path;
+  fi;
+end );
+
+
 #############################################################################
 # Two helper functions to access and change the environment:                #
 #############################################################################
@@ -996,7 +1013,8 @@ InstallGlobalFunction( IO_Popen, function(arg)
   else
       bufsize := IO.DefaultBufSize;
   fi;
-  if not(IsExecutableFile(path)) then
+  path := IO_FindExecutable(path);
+  if path <> fail then
       Error("Popen: <path> must refer to an executable file.");
   fi;
   IO_InstallSIGCHLDHandler();   # to be able to use IO_WaidPID
@@ -1056,7 +1074,8 @@ InstallGlobalFunction( IO_Popen2, function(arg)
       rbufsize := IO.DefaultBufSize;
       wbufsize := IO.DefaultBufsize;
   fi;
-  if not(IsExecutableFile(path)) then
+  path := IO_FindExecutable(path);
+  if path <> fail then
       Error("Popen2: <path> must refer to an executable file.");
   fi;
   IO_InstallSIGCHLDHandler();   # to be able to use IO_WaidPID
@@ -1109,7 +1128,8 @@ InstallGlobalFunction( IO_Popen3, function(arg)
       wbufsize := IO.DefaultBufsize;
       ebufsize := IO.DefaultBufsize;
   fi;
-  if not(IsExecutableFile(path)) then
+  path := IO_FindExecutable(path);
+  if path <> fail then
       Error("Popen3: <path> must refer to an executable file.");
   fi;
   IO_InstallSIGCHLDHandler();   # to be able to use IO_WaidPID
@@ -1170,10 +1190,13 @@ function( progs, infd, outfd, switcherror )
 
   local a,b,c,i,inpipe,j,outpipe,pids,pipe,pipes,r;
 
-  if not(ForAll(progs,x->IsExecutableFile(x[1]))) then
-      Error("IO_StartPipeline: <paths> must refer to a executable files.");
-      return fail;
-  fi;
+  for i in [1..Length(progs)] do
+      progs[i][1] := IO_FindExecutable(progs[i][1]);
+      if progs[i][1] = fail then
+          Error("IO_StartPipeline: <paths> must refer to a executable files.");
+          return fail;
+      fi;
+  od;
 
   if infd = "open" then
       inpipe := IO_pipe(); if inpipe = fail then return fail; fi;

@@ -20,11 +20,12 @@
   - take care of PIPE_BUF variable (might not exist on platform!)
   - Improved installation instructions in the manual and the README file.
   - Add proper preface to the manual
-  - Released revision 216 as 2.0
   - Fix documentation of Popen*
   - Clean up code for Popen, create IO_ForkExecWithFDs
   - IO_StartPipeline
   - IO_StringFilterFile, IO_FileFilterString
+  - paths to executables do PATH lookups using IO_FindExecutable
+  - Released revision 216 as 2.0
 
 
 ==========================

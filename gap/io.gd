@@ -41,6 +41,7 @@ DeclareGlobalFunction( "IO_GetFD" );
 DeclareGlobalFunction( "IO_GetWBuf" );
 DeclareGlobalFunction( "IO_ListDir" );
 DeclareGlobalFunction( "IO_MakeIPAddressPort" );
+DeclareGlobalFunction( "IO_FindExecutable" );
 DeclareGlobalFunction( "IO_Environment" );
 DeclareGlobalFunction( "IO_MakeEnvList" );
 DeclareGlobalFunction( "IO_CloseAllFDs" );
