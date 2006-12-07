@@ -25,7 +25,9 @@
   - IO_StartPipeline
   - IO_StringFilterFile, IO_FileFilterString
   - paths to executables do PATH lookups using IO_FindExecutable
-  - Released revision 223 as 2.0
+  - IO_FilteredFile to create a File object which filteres through a pipeline.
+  - Let IO_Close automatically call IO_WaitPid under certain circumstances.
+  - Released revision 224 as 2.0
 
 
 ==========================

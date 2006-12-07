@@ -1004,9 +1004,7 @@ InstallGlobalFunction( IO_Popen, function(arg)
   # The other (standard out or in resp.) is identical to the one of the
   # calling GAP process.
   # Returns fail if an error occurred.
-  # The process will usually die, when the pipe is closed. It lies in the
-  # responsability of the caller to WaitPid for it, if our SIGCHLD handler
-  # has been activated.
+  # The process will usually die, when the pipe is closed.
   # The File object will have the Attribute "ProcessID" set to the process ID.
   local path,argv,mode,bufsize,fil,pid,pipe;
   if Length(arg) < 3 then
@@ -1067,9 +1065,7 @@ InstallGlobalFunction( IO_Popen2, function(arg)
   # *write* to "stdin" and read from "stdout". The stderr will be the same
   # as the one of the calling GAP process.
   # Returns fail if an error occurred.
-  # The process will usually die, when one of the pipes is closed. It
-  # lies in the responsability of the caller to WaitPid for it, if our
-  # SIGCHLD handler has been activated.
+  # The process will usually die, when one of the pipes is closed.
   local path,argv,rbufsize,wbufsize,pid,pipe,pipe2,stdin,stdout;
   if Length(arg) < 2 then
       Print("Usage: IO_Popen2(path,argv,[rbufsize,wbufsize])\n");
@@ -1531,7 +1527,6 @@ function(cmd,args,input)
   until outeof and erreof;
   IO_Close(s.stdout);
   IO_Close(s.stderr);
-  IO_WaitPid(ProcessID(s.stdin),true);
   return rec( out := Concatenation(out), err := err );
 end);
 
@@ -1601,7 +1596,6 @@ function(cmd,args,input)
       fi;
   until outeof;
   IO_Close(s.stdout);
-  IO_WaitPid(ProcessID(s.stdin),true);
   return Concatenation(out);
 end);
 
