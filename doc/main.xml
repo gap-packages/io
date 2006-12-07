@@ -1779,7 +1779,7 @@ to each other and to other objects.<P/>
 
 </Section>
 
-<Section>
+<Section Label="ExtPickFrame">
 <Heading>Extending the pickling framework</Heading>
 
 The framework can be extended for other &GAP; object types as follows:
@@ -2035,7 +2035,9 @@ a few megabytes through it using <Ref Func="IO_Popen2"/>.
 
 <P/>
 In the following, we present a few explicit, interactive short examples 
-for the usage of the functions in this package.
+for the usage of the functions in this package. Note that you have to
+load the <Package>IO</Package> with the command <C>LoadPackage("IO");</C>
+before trying these examples.
 
 <Section>
 <Heading>Writing and reading a file</Heading>
@@ -2113,5 +2115,108 @@ true
 
 This sequence of commands needs that the program <F>gzip</F> is installed
 on your system.
+</Section>
+
+<Section>
+<Heading>Using filters when reading or writing files sequentially</Heading>
+
+If you want to process bigger amounts of data you might not want to
+store all of it in a single &GAP; string. In that case you might want
+to access a file on disk sequentially through a filter:
+
+<Log>
+gap> f := IO_FilteredFile([["gzip",["-9c"]]],"guck.gz","w");
+&lt;file fd=5 wbufsize=65536 wdata=0>
+gap> IO_Write(f,"Hello world!\n");
+13
+gap> IO_Write(f,Elements(SymmetricGroup(5)),"\n");
+1359
+gap> IO_Close(f);
+true
+gap> f := IO_FilteredFile([["gzip",["-dc"]]],"guck.gz","r");
+&lt;file fd=4 rbufsize=65536 rpos=1 rdata=0>
+gap> IO_ReadLine(f);
+"Hello world!\n"
+        := IO_ReadLine(f);; Length(s);
+1359
+gap> IO_Read(f,10);                  
+""
+gap> IO_Close(f);
+true
+</Log>
+</Section>
+
+<Section>
+<Heading>Accessing a web page</Heading>
+
+The <Package>IO</Package> has an HTTP client implementation. Using this
+you can access web pages and other web downloads from within &GAP;. Here
+is an example:
+
+<Log>
+gap> r := SingleHTTPRequest("www.math.rwth-aachen.de",80,"GET",
+>              "/~Max.Neunhoeffer/index.html",rec(),false,false);;
+gap> RecFields(r);
+[ "protoversion", "statuscode", "status", "header", "body", "closed" ]
+gap> r.status;
+"OK"
+gap> r.statuscode;
+200
+gap> r.header;
+rec( date := "Thu, 07 Dec 2006 22:08:22 GMT", 
+  server := "Apache/2.0.55 (Ubuntu)", 
+  last-modified := "Thu, 16 Nov 2006 00:21:44 GMT", 
+  etag := "\"2179cf-11a5-3c77f600\"", accept-ranges := "bytes", 
+  content-length := "4517", content-type := "text/html; charset=ISO-8859-1" )
+gap> Length(r.body);
+4517
+</Log>
+
+Of course, the time stamps and exact sizes of the answer may differ
+when you do this.
+</Section>
+
+<Section>
+<Heading>(Un-)Pickling</Heading>
+
+Assume you have some &GAP; objects you want to archive to disk grouped
+together. Then you might do the following:
+
+<Log>
+gap> r := rec( a := 1, b := "Max", c := [1,2,3] );
+rec( a := 1, b := "Max", c := [ 1, 2, 3 ] )
+gap> r.c[4] := r;
+rec( a := 1, b := "Max", c := [ 1, 2, 3, ~ ] )
+gap> f := IO_File("guck","w");
+&lt;file fd=3 wbufsize=65536 wdata=0>
+gap> IO_Pickle(f,r);
+IO_OK
+gap> IO_Pickle(f,[(1,2,3,4),(3,4)]);
+IO_OK
+gap> IO_Close(f);
+true
+</Log>
+
+Then, to read it in again, just do:
+
+<Log>
+gap> f := IO_File("guck");
+&lt;file fd=3 rbufsize=65536 rpos=1 rdata=0>
+gap> IO_Unpickle(f);
+rec( a := 1, b := "Max", c := [ 1, 2, 3, ~ ] )
+gap> IO_Unpickle(f);
+[ (1,2,3,4), (3,4) ]
+gap> IO_Unpickle(f);
+IO_Nothing
+gap> IO_Close(f);
+true
+</Log>
+
+Note that this works for a certain amount of builtin objects. If you want
+to archive your own objects or more sophisticated objects you have to
+use extend the functionality as explained in Section 
+<Ref Sect="ExtPickFrame"/>. However, it works for lists and records and
+they may be arbitrarily self-referential.
+
 </Section>
 </Chapter>
