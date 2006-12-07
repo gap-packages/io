@@ -1078,7 +1078,7 @@ InstallGlobalFunction( IO_Popen2, function(arg)
       wbufsize := arg[4];
   else
       rbufsize := IO.DefaultBufSize;
-      wbufsize := IO.DefaultBufsize;
+      wbufsize := IO.DefaultBufSize;
   fi;
   path := IO_FindExecutable(path);
   if path = fail then
@@ -1133,8 +1133,8 @@ InstallGlobalFunction( IO_Popen3, function(arg)
       ebufsize := arg[5];
   else
       rbufsize := IO.DefaultBufSize;
-      wbufsize := IO.DefaultBufsize;
-      ebufsize := IO.DefaultBufsize;
+      wbufsize := IO.DefaultBufSize;
+      ebufsize := IO.DefaultBufSize;
   fi;
   path := IO_FindExecutable(path);
   if path = fail then
