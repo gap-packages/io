@@ -31,7 +31,7 @@ Version := "2.0",
 
 ##  Release date of the current version in dd/mm/yyyy format.
 # 
-Date := "30/11/2006",
+Date := "07/12/2006",
 
 ##  URL of the archive(s) of the current package release, but *without*
 ##  the format extension(s), like '.zoo', which are given next.
@@ -42,7 +42,7 @@ Date := "30/11/2006",
 ##  example/init.g, ...    or  example-1.3/init.g, ...  )
 # 
 ArchiveURL := 
-     "http://www.math.rwth-aachen.de/~Max.Neunhoeffer/Computer/Software/Gap/io/io",
+     "http://www.math.rwth-aachen.de/~Max.Neunhoeffer/Computer/Software/Gap/io/io-2.0",
 
 ##  All provided formats as list of file extensions, separated by white
 ##  space or commas.
@@ -215,8 +215,6 @@ PackageDoc := rec(
   # use same as in GAP            
   BookName  := "IO",
   # format/extension can be one of .zoo, .tar.gz, .tar.bz2, -win.zip
-  Archive := 
-      "http://www.math.rwth-aachen.de/~Max.Neunhoeffer/Computer/Software/io/io.tar.gz",
   ArchiveURLSubset := ["doc", "htm"],
   HTMLStart := "htm/chapters.htm",
   PDFFile   := "doc/manual.pdf",

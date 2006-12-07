@@ -1,12 +1,9 @@
 Before submitting still to do:
 
 read manual once completely
-check examples, some more?
-note released revision in CHANGES
 
 future:
 
-More examples, better manual chapter.
 add some checks to GAP's autoconf configure script to test for more
 headers, for example:
   netinet/in.h
