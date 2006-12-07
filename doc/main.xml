@@ -2137,7 +2137,7 @@ gap> f := IO_FilteredFile([["gzip",["-dc"]]],"guck.gz","r");
 &lt;file fd=4 rbufsize=65536 rpos=1 rdata=0>
 gap> IO_ReadLine(f);
 "Hello world!\n"
-        := IO_ReadLine(f);; Length(s);
+gap> s := IO_ReadLine(f);; Length(s);
 1359
 gap> IO_Read(f,10);                  
 ""
