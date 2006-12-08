@@ -13,7 +13,7 @@ This is the main chapter of the documentation.
 <Index><Package>IO</Package></Index>
 
 The purpose of this package is to allow efficient and flexible input/output
-operation from &GAP;. This is achieved by providing bindings to the
+operations from &GAP;. This is achieved by providing bindings to the
 low-level I/O functions in the C-library. On top of this an implementation
 of buffered I/O in the &GAP; language is provided. Further, a framework
 for serialisation of arbitrary &GAP; objects is implemented.
@@ -79,15 +79,10 @@ configuring &GAP; itself on this architecture.<P/>
 
 The package  will not work without  this  step.<P/>
 
-If you installed the package in another <Q><F>pkg</F></Q> directory than the standard
-<Q><F>pkg</F></Q> directory in your &GAP; 4 installation, then you have to add the path
-to the directory containing your <Q><F>pkg</F></Q> directory to the list of directories
-given in your &GAP; startup script with the <Q><F>-l</F></Q> command line option.
-Otherwise the package is not found by &GAP; 4.<P/>
-
 If you installed the package in another <Q><F>pkg</F></Q> directory than
 the standard <Q><F>pkg</F></Q> directory in your &GAP; 4 installation,
-then you have to add the path to the directory containing your 'pkg'
+then you have to add the path to the directory containing your
+<Q><F>pkg</F></Q>
 directory to &GAP;'s list of directories. This can be done by starting
 &GAP; with the <Q><F>-l</F></Q> command line option followed by the name
 of the directory and a semicolon. Then your directory is prepended to
@@ -134,7 +129,7 @@ somewhere on the command line.
 <Heading>Recompiling the documentation</Heading>
 
 Recompiling the documentation is possible by the command <Q><F>gap
-makedoc.</F></Q>
+makedoc.g</F></Q>
 in the <F>io</F> directory. But this should not be necessary.
 
 </Section>
@@ -293,9 +288,16 @@ As of now, the file locking mechanisms of <C>fcntl</C> using
 <Section>
     <Heading>The low-level functions in detail</Heading>
 
+Nearly all of this functions return an integer result in the C library.
+On the &GAP; level this is either returned as a non-negative integer
+in case of success or as <K>fail</K> in case of an error (where on the
+C level <M>-1</M> would be returned). If the integer can only be <M>0</M>
+for <Q>no error</Q> this is changed to <K>true</K> on the &GAP; level.
+
 <ManSection>
 <Func Name="IO_accept" Arg="fd, addr"
       Comm="Accepts an incoming network connection"/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
 Accepts an incoming network connection.
 For details see <Q><C>man 2 accept</C></Q>. The argument <A>addr</A> can be
@@ -307,6 +309,7 @@ that no third argument is necessary.
 <ManSection>
 <Func Name="IO_bind" Arg="fd, my_addr"
       Comm="Binds a local address to a socket."/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
 Binds a local address to a socket.
 For details see <Q><C>man 2 bind</C></Q>. The argument
@@ -318,6 +321,7 @@ and contains its length such that no third argument is necessary.
 <ManSection>
 <Func Name="IO_chdir" Arg="path"
       Comm="Changes the current working directory."/>
+<Returns> <K>true</K> or <K>fail</K> </Returns>
 <Description>
 Changes the current working directory.
 For details see <Q><C>man 2 chdir</C></Q>.
@@ -327,6 +331,7 @@ For details see <Q><C>man 2 chdir</C></Q>.
 <ManSection>
 <Func Name="IO_chmod" Arg="pathname, mode"
       Comm="Changes the mode of a file."/>
+<Returns> <K>true</K> or <K>fail</K> </Returns>
 <Description>
 Changes the mode of a file.
 For details see <Q><C>man 2 chmod</C></Q>.
@@ -336,6 +341,7 @@ For details see <Q><C>man 2 chmod</C></Q>.
 <ManSection>
 <Func Name="IO_chown" Arg="path, owner, group"
       Comm="Sets owner and/or group of file."/>
+<Returns> <K>true</K> or <K>fail</K> </Returns>
 <Description>
 Sets owner and/or group of file.
 For details see <Q><C>man 2 chown</C></Q>.
@@ -345,6 +351,7 @@ For details see <Q><C>man 2 chown</C></Q>.
 <ManSection>
 <Func Name="IO_close" Arg="fd"
       Comm="Closes a file descriptor."/>
+<Returns> <K>true</K> or <K>fail</K> </Returns>
 <Description>
 Closes a file descriptor.
 For details see <Q><C>man 2 close</C></Q>.
@@ -354,6 +361,7 @@ For details see <Q><C>man 2 close</C></Q>.
 <ManSection>
 <Func Name="IO_closedir" Arg=""
       Comm="Closes a directory."/>
+<Returns> <K>true</K> or <K>fail</K> </Returns>
 <Description>
 Closes a directory.
 For details see <Q><C>man 3 closedir</C></Q>. Has no arguments, because we only
@@ -364,6 +372,7 @@ have one <C>DIR</C> struct in the C part.
 <ManSection>
 <Func Name="IO_connect" Arg="fd, serv_addr"
       Comm="Connects to a remote socket."/>
+<Returns> <K>true</K> or <K>fail</K> </Returns>
 <Description>
 Connects to a remote socket.
 For details see <Q><C>man 2 connect</C></Q>. The argument
@@ -375,6 +384,7 @@ and contains its length such that no third argument is necessary.
 <ManSection>
 <Func Name="IO_creat" Arg="pathname, mode"
       Comm="Creates a new file."/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
 Creates a new file. For details see <Q><C>man 2 creat</C></Q>.
 </Description> 
@@ -383,6 +393,7 @@ Creates a new file. For details see <Q><C>man 2 creat</C></Q>.
 <ManSection>
 <Func Name="IO_dup" Arg="oldfd"
       Comm="Duplicates a file descriptor."/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
 Duplicates a file descriptor. 
 For details see <Q><C>man 2 dup</C></Q>.
@@ -392,6 +403,7 @@ For details see <Q><C>man 2 dup</C></Q>.
 <ManSection>
 <Func Name="IO_dup2" Arg="oldfd, newfd"
       Comm="Duplicates a file descriptor to a new one."/>
+<Returns> <K>true</K> or <K>fail</K> </Returns>
 <Description>
 Duplicates a file descriptor to a new one.
 For details see <Q><C>man 2 dup2</C></Q>.
@@ -401,6 +413,7 @@ For details see <Q><C>man 2 dup2</C></Q>.
 <ManSection>
 <Func Name="IO_execv" Arg="path, argv"
       Comm="Replaces the process with another process."/>
+<Returns> <K>fail</K> or does not return </Returns>
 <Description>
 Replaces the process with another process.
 For details see <Q><C>man 3 execv</C></Q>. The argument <A>argv</A> is a list
@@ -412,6 +425,7 @@ in this list.
 <ManSection>
 <Func Name="IO_execve" Arg="path, argv, envp"
       Comm="Replaces the process with another process."/>
+<Returns> <K>fail</K> or does not return </Returns>
 <Description>
 Replaces the process with another process.
 For details see <Q><C>man 3 execve</C></Q>. The arguments <A>argv</A> and
@@ -425,6 +439,7 @@ Func="IO_Environment"/> and modified later.
 <ManSection>
 <Func Name="IO_execvp" Arg="path, argv"
       Comm="Replaces the process with another process."/>
+<Returns> <K>fail</K> or does not return </Returns>
 <Description>
 Replaces the process with another process.
 For details see <Q><C>man 3 execvp</C></Q>. The argument <A>argv</A> is a list
@@ -446,6 +461,7 @@ be an integer. Does not return.
 <ManSection>
 <Func Name="IO_fchmod" Arg="fd, mode"
       Comm="Changes mode of an opened file."/>
+<Returns> <K>true</K> or <K>fail</K> </Returns>
 <Description>
 Changes mode of an opened file.
 For details see <Q><C>man 2 fchmod</C></Q>.
@@ -455,6 +471,7 @@ For details see <Q><C>man 2 fchmod</C></Q>.
 <ManSection>
 <Func Name="IO_fchown" Arg="fd, owner, group"
       Comm="Changes owner and/or group of an opened file."/>
+<Returns> <K>true</K> or <K>fail</K> </Returns>
 <Description>
 Changes owner and/or group of an opened file.
 For details see <Q><C>man 2 fchown</C></Q>.
@@ -464,6 +481,7 @@ For details see <Q><C>man 2 fchown</C></Q>.
 <ManSection>
 <Func Name="IO_fcntl" Arg="fd, cmd, arg"
       Comm="file control"/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
     Does various things to control the behaviour of a file descriptor.
     For details see <Q><C>man 2 fcntl</C></Q>.
@@ -473,6 +491,7 @@ For details see <Q><C>man 2 fchown</C></Q>.
 <ManSection>
 <Func Name="IO_fork" Arg=""
       Comm="Forks off a child process, which is an identical copy."/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
 Forks off a child process, which is an identical copy.
 For details see <Q><C>man 2 fork</C></Q>. Note that if you want to use the
@@ -490,6 +509,7 @@ Func="IO_RestoreSIGCHLDHandler"/>.
 <ManSection>
 <Func Name="IO_fstat" Arg="fd"
       Comm="Returns the file meta data for an opened file."/>
+<Returns> a record or <K>fail</K> </Returns>
 <Description>
 Returns the file meta data for an opened file.
 For details see <Q><C>man 2 fstat</C></Q>. A &GAP; record is returned with
@@ -500,6 +520,7 @@ the same entries than a <C>struct stat</C>.
 <ManSection>
 <Func Name="IO_gethostbyname" Arg="name"
       Comm="Return host information by name."/>
+<Returns> a record or <K>fail</K> </Returns>
 <Description>
 Return host information by name.
 For details see <Q><C>man 3 gethostbyname</C></Q>. A &GAP; record is returned
@@ -510,6 +531,7 @@ with all the relevant information about the host.
 <ManSection>
 <Func Name="IO_getsockopt" Arg="fd, level, optname, optval"
       Comm="Get a socket option."/>
+<Returns> <K>true</K> or <K>false</K> </Returns>
 <Description>
 Get a socket option. For details see <Q><C>man 2 getsockopt</C></Q>.
 Note that the argument <A>optval</A> carries its length around, such that
@@ -520,6 +542,7 @@ no 5th argument is necessary.
 <ManSection>
 <Func Name="IO_lchown" Arg="path, owner, group"
       Comm="Changes owner and/or group of a file not following links."/>
+<Returns> <K>true</K> or <K>false</K> </Returns>
 <Description>
 Changes owner and/or group of a file not following links.
 For details see <Q><C>man 2 lchown</C></Q>.
@@ -529,6 +552,7 @@ For details see <Q><C>man 2 lchown</C></Q>.
 <ManSection>
 <Func Name="IO_link" Arg="oldpath, newpath"
       Comm="Create a hard link."/>
+<Returns> <K>true</K> or <K>false</K> </Returns>
 <Description>
 Create a hard link.
 For details see <Q><C>man 2 link</C></Q>.
@@ -538,6 +562,7 @@ For details see <Q><C>man 2 link</C></Q>.
 <ManSection>
 <Func Name="IO_listen" Arg="fd, backlog"
       Comm="Switch a socket to listening."/>
+<Returns> <K>true</K> or <K>false</K> </Returns>
 <Description>
 Switch a socket to listening.
 For details see <Q><C>man 2 listen</C></Q>.
@@ -547,8 +572,9 @@ For details see <Q><C>man 2 listen</C></Q>.
 <ManSection>
 <Func Name="IO_lseek" Arg="fd, offset, whence"
       Comm="Seeks with in an open file."/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
-Seeks with in an open file.
+Seeks within an open file.
 For details see <Q><C>man 2 lseek</C></Q>.
 </Description> 
 </ManSection>
@@ -556,6 +582,7 @@ For details see <Q><C>man 2 lseek</C></Q>.
 <ManSection>
 <Func Name="IO_lstat" Arg="name"
       Comm="Returns the file meta data for a file not following links."/>
+<Returns> a record or <K>fail</K> </Returns>
 <Description>
 Returns the file meta data for a file not following links.
 For details see <Q><C>man 2 lstat</C></Q>. A &GAP; record is returned with
@@ -566,6 +593,7 @@ the same entries than a <C>struct stat</C>.
 <ManSection>
 <Func Name="IO_mkdir" Arg="pathname, mode"
       Comm="Creates a directory."/>
+<Returns> <K>true</K> or <K>false</K> </Returns>
 <Description>
 Creates a directory.
 For details see <Q><C>man 2 mkdir</C></Q>.
@@ -575,8 +603,9 @@ For details see <Q><C>man 2 mkdir</C></Q>.
 <ManSection>
 <Func Name="IO_mkfifo" Arg="pathname, mode"
       Comm="Makes a FIFO special file (a named pipe)."/>
+<Returns> <K>true</K> or <K>false</K> </Returns>
 <Description>
-Makes a FIFO special file (a named pipe).
+Creates a FIFO special file (a named pipe).
 For details see <Q><C>man 3 mkfifo</C></Q>.
 </Description> 
 </ManSection>
@@ -584,6 +613,7 @@ For details see <Q><C>man 3 mkfifo</C></Q>.
 <ManSection>
 <Func Name="IO_mknod" Arg="pathname, mode, dev"
       Comm="Create a special or ordinary file."/>
+<Returns> <K>true</K> or <K>false</K> </Returns>
 <Description>
 Create a special or ordinary file.
 For details see <Q><C>man 2 mknod</C></Q>.
@@ -593,6 +623,7 @@ For details see <Q><C>man 2 mknod</C></Q>.
 <ManSection>
 <Func Name="IO_open" Arg="pathname, flags, mode"
       Comm="Open and possibly create a file or device."/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
 Open and possibly create a file or device.
 For details see <Q><C>man 2 open</C></Q>. Only the variant with 3 arguments
@@ -603,6 +634,7 @@ can be used.
 <ManSection>
 <Func Name="IO_opendir" Arg="name"
       Comm="Opens a directory."/>
+<Returns> <K>true</K> or <K>false</K> </Returns>
 <Description>
 Opens a directory.
 For details see <Q><C>man 3 opendir</C></Q>. Note that only <K>true</K> is
@@ -615,49 +647,59 @@ time.
 <ManSection>
 <Func Name="IO_pipe" Arg=""
       Comm="Create a pair of file descriptors with a pipe between them."/>
+<Returns> a record or <K>fail</K> </Returns>
 <Description>
 Create a pair of file descriptors with a pipe between them.
 For details see <Q><C>man 2 pipe</C></Q>. Note that no arguments are needed. The
 result is either <K>fail</K> in case of an error or a record with two
 components <C>toread</C> and <C>towrite</C> bound to the two
-filedescriptors for reading and writing repectively.
+filedescriptors for reading and writing respectively.
 </Description>
 </ManSection>
 
 <ManSection>
 <Func Name="IO_read" Arg="fd, st, offset, count"
       Comm="Reads from file descriptor."/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
 Reads from file descriptor.
 For details see <Q><C>man 2 read</C></Q>. Note that there is one more argument
 <A>offset</A> to specify at which position in the string <A>st</A> the
 read data should be stored. Note that <A>offset</A> zero means at the
-beginning of the string, which is position 1 in &GAP;.
+beginning of the string, which is position 1 in &GAP;. The number of bytes
+read or <K>fail</K> in case of an error is returned.
 </Description> 
 </ManSection>
  
 <ManSection>
 <Func Name="IO_readdir" Arg=""
       Comm="Reads from a directory."/>
+<Returns> a string or <K>fail</K> or <K>false</K> </Returns>
 <Description>
 Reads from a directory.
 For details see <Q><C>man 2 readdir</C></Q>. Note that no argument is required
-as we have only one <C>DIR</C> struct on the C level.
+as we have only one <C>DIR</C> struct on the C level. If the directory
+is read completely <K>false</K> is returned, and otherwise a string. An
+error is indicated by <K>fail</K>.
 </Description> 
 </ManSection>
  
 <ManSection>
 <Func Name="IO_readlink" Arg="path, buf, bufsize"
       Comm="Reads the value of a symbolic link."/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
 Reads the value of a symbolic link.
-For details see <Q><C>man 2 readlink</C></Q>.
+For details see <Q><C>man 2 readlink</C></Q>. <A>buf</A> is modified.
+The new length of <A>buf</A> is returned or <K>fail</K> in case of
+an error.
 </Description> 
 </ManSection>
  
 <ManSection>
 <Func Name="IO_recv" Arg="fd, st, offset, len, flags"
       Comm="Receives data from a socket."/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
 Receives data from a socket.
 For details see <Q><C>man 2 recv</C></Q>. Note the additional argument
@@ -669,6 +711,7 @@ function.
 <ManSection>
 <Func Name="IO_recvfrom" Arg="fd, st, offset, len, flags, addr"
       Comm="Receives data from a socket with given address."/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
 Receives data from a socket with given address.
 For details see <Q><C>man 2 recvfrom</C></Q>. Note the additional argument 
