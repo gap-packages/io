@@ -1,7 +1,3 @@
-Before submitting still to do:
-
-read manual once completely
-
 future:
 
 add some checks to GAP's autoconf configure script to test for more
@@ -12,9 +8,10 @@ headers, for example:
 possibly some Linux-specific things:
   linux/in.h ???
 More tests?
+More examples?
 
 (far) future:
 
 support routines for http requests? (query strings, MIME?)
 Maybe a function to change buffer size later on?
-
+Unicode?
