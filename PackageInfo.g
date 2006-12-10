@@ -31,7 +31,7 @@ Version := "2.0",
 
 ##  Release date of the current version in dd/mm/yyyy format.
 # 
-Date := "07/12/2006",
+Date := "10/12/2006",
 
 ##  URL of the archive(s) of the current package release, but *without*
 ##  the format extension(s), like '.zoo', which are given next.
@@ -116,7 +116,7 @@ BinaryFiles := ["doc/manual.dvi", "doc/manual.pdf"],
 ##  
 Persons := [
   rec( 
-    LastName      := "Neunhoeffer",
+    LastName      := "Neunhöffer",
     FirstNames    := "Max",
     IsAuthor      := true,
     IsMaintainer  := true,
@@ -141,7 +141,7 @@ Persons := [
 ##    "other"         for all other packages
 ##
 # Status := "accepted",
-Status := "dev",
+Status := "deposited",
 
 ##  You must provide the next two entries if and only if the status is 
 ##  "accepted" because is was successfully refereed:
@@ -223,7 +223,7 @@ PackageDoc := rec(
   # a longer title of the book, this together with the book name should
   # fit on a single text line (appears with the '?books' command in GAP)
   # LongTitle := "Elementary Divisors of Integer Matrices",
-  LongTitle := "Bindings to low level IO in the C library",
+  LongTitle := "Bindings to low level I/O in the C library",
   # Should this help book be autoloaded when GAP starts up? This should
   # usually be 'true', otherwise say 'false'. 
   Autoload  := true
@@ -275,18 +275,6 @@ end,
 ##  shall be read immediately before the package is loaded.
 #PreloadFile := "...",
 
-##  The LoadPackage mechanism can produce a default banner from the info
-##  in this file. If you are not happy with it, you can provide a string
-##  here that is used as a banner. GAP decides when the banner is shown and
-##  when it is not shown. *optional* (note the ~-syntax in this example)
-#BannerString := Concatenation( 
-#  "---------------------------------------------------------------------\n",
-#  "Loading  IO ", ~.Version, "\n",
-#  "by ", ~.Persons[1].FirstNames, " ", ~.Persons[1].LastName,
-#        " (", ~.Persons[1].WWWHome, ")\n",
-#  "For help, type: ?IO package \n",
-#  "---------------------------------------------------------------------\n" ),
-
 ##  Suggest here if the package should be *automatically loaded* when GAP is 
 ##  started.  This should usually be 'false'. Say 'true' only if your package 
 ##  provides some improvements of the GAP library which are likely to enhance 
@@ -299,7 +287,9 @@ Autoload := false,
 
 ##  *Optional*: Here you can list some keyword related to the topic 
 ##  of the package.
-Keywords := []
+Keywords := ["input", "output", "I/O", "C-library", "network", "http",
+ "object serialisation", "unpredictable random numbers", "TCP/IP",
+ "inter process communication"]
 
 ));
 
