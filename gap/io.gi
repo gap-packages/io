@@ -411,7 +411,7 @@ InstallGlobalFunction( IO_Read, function( f, len )
   # intended to behave very similar to IO_read except for the buffering.
   local amount,bytes,res;
   if not(IsFile(f)) or not(IsInt(len)) then
-      Error("Usage: IO_ReadBlock( f [,len] ) with IsFile(f) ",
+      Error("Usage: IO_Read( f ,len ) with IsFile(f) ",
             "and IsInt(len)");
   fi;
   if f!.closed then

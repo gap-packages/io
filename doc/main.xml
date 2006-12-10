@@ -208,7 +208,8 @@ for the C counterparts. However, an error condition is indicated by the
 value <C>fail</C> instead of -1, and if the result can only be success
 or failure, <C>true</C> indicates success. <P/>
 
-All errors are reported via the <C>LastSystemError</C> function.<P/>
+All errors are reported via the <Ref Func="LastSystemError"
+BookName="ref"/> function.<P/>
 
 In the C library a lot of integers are defined as macros in header files.
 All the necessary values for the above functions are bound to their name
@@ -735,16 +736,19 @@ For details see <Q><C>man 2 rename</C></Q>.
 <ManSection>
 <Func Name="IO_rewinddir" Arg=""
       Comm="Rewinds a directory."/>
+<Returns> <K>true</K> or <K>fail</K> </Returns>
 <Description>
 Rewinds a directory.
 For details see <Q><C>man 2 rewinddir</C></Q>. Note that no argument is required
-as we have only one <C>DIR</C> struct on the C level.
+as we have only one <C>DIR</C> struct on the C level. Returns <K>fail</K>
+only, if no prior <Ref Func="IO_opendir"/> command has been called.
 </Description> 
 </ManSection>
  
 <ManSection>
 <Func Name="IO_rmdir" Arg="name"
       Comm="Removes an empty directory."/>
+<Returns> <K>true</K> or <K>fail</K> </Returns>
 <Description>
 Removes an empty directory.
 For details see <Q><C>man 2 rmdir</C></Q>.
@@ -754,16 +758,18 @@ For details see <Q><C>man 2 rmdir</C></Q>.
 <ManSection>
 <Func Name="IO_seekdir" Arg="offset"
       Comm="Sets the position of the next readdir call."/>
+<Returns> <K>true</K> or <K>fail</K> </Returns>
 <Description>
 Sets the position of the next readdir call.
-For details see <Q><C>man 3 seekdir</C></Q>. Note that no second argument is required
-as we have only one <C>DIR</C> struct on the C level.
+For details see <Q><C>man 3 seekdir</C></Q>. Note that no second argument is 
+required as we have only one <C>DIR</C> struct on the C level.
 </Description> 
 </ManSection>
  
 <ManSection>
 <Func Name="IO_select" Arg="inlist, outlist, exclist, timeoutsec, timeoutusec"
       Comm="Used for I/O multiplexing."/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
 Used for I/O multiplexing.
 For details see <Q><C>man 2 select</C></Q>. <A>inlist</A>, <A>outlist</A> and
@@ -776,6 +782,7 @@ corresponding file descriptor is not yet ready, it is replaced by
 <ManSection>
 <Func Name="IO_send" Arg="fd, st, offset, len, flags"
       Comm="Sends data to a socket."/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
 Sends data to a socket.
 For details see <Q><C>man 2 send</C></Q>. Note that the additional argument
@@ -788,6 +795,7 @@ start of the string, which is position 1 in &GAP;.
 <ManSection>
 <Func Name="IO_sendto" Arg="fd, st, offset, len, flags, addr"
       Comm="Sends data to a socket."/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
 Sends data to a socket.
 For details see <Q><C>man 2 sendto</C></Q>. Note that the additional argument
@@ -803,6 +811,7 @@ that no 7th argument is necessary.
 <ManSection>
 <Func Name="IO_setsockopt" Arg="fd, level, optname, optval"
       Comm="Sets a socket option."/>
+<Returns> <K>true</K> or <K>fail</K> </Returns>
 <Description>
 Sets a socket option.
 For details see <Q><C>man 2 setsockopt</C></Q>. Note that the argument
@@ -814,6 +823,7 @@ no 5th argument is necessary.
 <ManSection>
 <Func Name="IO_socket" Arg="domain, type, protocol"
       Comm="Creates a socket, an endpoint for communication."/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
 Creates a socket, an endpoint for communication.
 For details see <Q><C>man 2 socket</C></Q>.
@@ -826,6 +836,7 @@ looked up by <C>getprotobyname</C>.
 <ManSection>
 <Func Name="IO_stat" Arg="pathname"
       Comm="Returns the file metadata for the file pathname."/>
+<Returns> a record or <K>fail</K> </Returns>
 <Description>
 Returns the file metadata for the file <A>pathname</A>.
 For details see <Q><C>man 2 stat</C></Q>. A &GAP; record is returned with
@@ -836,6 +847,7 @@ the same entries than a <C>struct stat</C>.
 <ManSection>
 <Func Name="IO_symlink" Arg="oldpath, newpath"
       Comm="Creates a symbolic link."/>
+<Returns> <K>true</K> or <K>fail</K> </Returns>
 <Description>
 Creates a symbolic link.
 For details see <Q><C>man 2 symlink</C></Q>.
@@ -845,6 +857,7 @@ For details see <Q><C>man 2 symlink</C></Q>.
 <ManSection>
 <Func Name="IO_telldir" Arg=""
       Comm="Return current location in directory."/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
 Return current location in directory.
 For details see <Q><C>man 3 telldir</C></Q>. Note that no second argument is
@@ -855,6 +868,7 @@ required as we have only one <C>DIR</C> struct on the C level.
 <ManSection>
 <Func Name="IO_unlink" Arg="pathname"
       Comm="Delete a name and possibly the file it refers to."/>
+<Returns> <K>true</K> or <K>fail</K> </Returns>
 <Description>
 Delete a name and possibly the file it refers to.
 For details see <Q><C>man 2 unlink</C></Q>.
@@ -864,6 +878,7 @@ For details see <Q><C>man 2 unlink</C></Q>.
 <ManSection>
 <Func Name="IO_WaitPid" Arg="pid, wait"
       Comm="Waits for the termination of a child process."/>
+<Returns> a record or <K>fail</K> </Returns>
 <Description>
 Waits for the termination of a child process.
 For details see <Q><C>man 2 waitpid</C></Q>. Returns a &GAP; record
@@ -879,6 +894,7 @@ call returns immediately. See <Ref Func="IO_fork"/>.
 <ManSection>
 <Func Name="IO_write" Arg="fd, st, offset, count"
       Comm="Writes to a file descriptor."/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
 Writes to a file descriptor.
 For details see <Q><C>man 2 write</C></Q>. Note that the additional argument
@@ -899,6 +915,7 @@ but are there to provide convenience to use other functions:
 <ManSection>
 <Func Name="IO_make_sockaddr_in" Arg="ip, port"
       Comm="Makes a struct sockaddr_in from IP address and port."/>
+<Returns> a string or <K>fail</K> </Returns>
 <Description>
     Makes a struct <C>sockaddr&uscore;in</C> from IP address and port.
 The IP address must be given as a string of length four, containing the
@@ -911,6 +928,7 @@ all functions above having an address argument.
 <ManSection>
 <Func Name="IO_environ" Arg=""
       Comm="Returns environment as list of strings."/>
+<Returns> a list of strings </Returns>
 <Description>
 For details see <Q><C>man environ</C></Q>. Returns the current environment
 as a list of strings of the form <Q>key=value</Q>.
@@ -920,8 +938,13 @@ as a list of strings of the form <Q>key=value</Q>.
 <ManSection>
 <Func Name="IO_InstallSIGCHLDHandler" Arg=""
       Comm="Installs our SIGCHLD handler."/>
+<Returns> <K>true</K> or <K>false</K> </Returns>
 <Description>
-Installs our SIGCHLD handler. See <Ref Func="IO_fork"/>.
+Installs our SIGCHLD handler. This functions works as an idempotent. That
+is, calling it twice does exactly the same as calling it once. It returns
+<K>true</K> when it is called for the first time since then a pointer to
+the old signal handler is stored in a global variable.
+See <Ref Func="IO_fork"/>.
 </Description> 
 </ManSection>
  
@@ -929,7 +952,11 @@ Installs our SIGCHLD handler. See <Ref Func="IO_fork"/>.
 <Func Name="IO_RestoreSIGCHLDHandler" Arg=""
       Comm="Restores the original SIGCHLD handler."/>
 <Description>
-Restores the original SIGCHLD handler. See <Ref Func="IO_fork"/>.
+Restores the original SIGCHLD handler. This function works as an
+idempotent.
+That is, calling it twice does exactly the same as calling it once. It
+returns <K>true</K> when it is called for the first time after calling
+<Ref Func="IO_InstallSIGCHLDHandler"/>. See <Ref Func="IO_fork"/>.
 </Description> 
 </ManSection>
 
@@ -961,14 +988,21 @@ to have more than one function for a certain operation. Those
 functions usually differ in a subtle way with respect to their
 blocking behaviour.<P/>
 
+One remark applies again to nearly all functions presented here: If an
+error is indicated by the returned value <K>fail</K> one can use the
+library function <Ref Func="LastSystemError" BookName="ref"/> to find
+out more about the cause of the error. This fact is not mentioned with
+every single function.
+
 <Section>
-    <Heading>Types and the creation of <K>File</K> objects</Heading>
+    <Heading>Types and the creation of <C>File</C> objects</Heading>
 
 The wrapped file objects are in the following category:
 
 <ManSection>
 <Filt Name="IsFile" Arg="o" Type="Category"/>
-<Description> The category of <K>File</K> objects. </Description>
+<Returns> <K>true</K> or <K>false</K> </Returns>
+<Description> The category of <C>File</C> objects. </Description>
 </ManSection>
 
 To create objects in this category, one uses the following function:
@@ -976,6 +1010,7 @@ To create objects in this category, one uses the following function:
 <ManSection>
 <Func Name="IO_WrapFD" Arg="fd, rbufsize, wbufsize" 
       Comm="creates buffering I/O objects, called File objects"/>
+<Returns> a <C>File</C> object </Returns>
 <Description>
 The argument <A>fd</A> must be a file descriptor (i.e. an integer)
 or -1 (see below). <P/>
@@ -983,16 +1018,16 @@ or -1 (see below). <P/>
 <A>rbufsize</A> can either be <K>false</K> for
 unbuffered reading or an integer buffer size or a string. If it is
 an integer, a read buffer of that size is used. If it is a string,
-then <A>fd</A> must be -1 and a <K>File</K> object that reads from that string
+then <A>fd</A> must be -1 and a <C>File</C> object that reads from that string
 is created.<P/>
 
 <A>wbufsize</A> can either be <K>false</K> for
 unbuffered writing or an integer buffer size or a string. If it is
 an integer, a write buffer of that size is used. If it is a string,
-then <A>fd</A> must be -1 and a <K>File</K> object that appends to that string
+then <A>fd</A> must be -1 and a <C>File</C> object that appends to that string
 is created.<P/>
 
-The result of this function is a new <K>File</K> object.
+The result of this function is a new <C>File</C> object.
 </Description>
 </ManSection>
 
@@ -1005,6 +1040,7 @@ is the following function:
       Comm="open a file for reading or writing and create a File object"/>
 <Func Name="IO_File" Arg="filename,mode,bufsize"
       Comm="open a file for reading or writing and create a File object"/>
+<Returns> a <C>File</C> object or <K>fail</K> </Returns>
 <Description>
 The argument <A>filename</A> must be a string specifying the path name
 of the file to work on. <A>mode</A> must also be a string with possible
@@ -1018,48 +1054,62 @@ Internally, the
 wrapped using <Ref Func="IO_WrapFD"/> with <A>bufsize</A>
 as the buffer size. <P/>
 
-The result is either <K>fail</K> in case of an error or a <K>File</K> object
+The result is either <K>fail</K> in case of an error or a <C>File</C> object
 in case of success.
 </Description>
 </ManSection>
+
+Note that there is a similar function <Ref Func="IO_FilteredFile"/> which 
+also creates a <C>File</C> object but with additional functionality with
+respect to a pipeline for filtering. It is described in its section
+in Section <Ref Sect="ipc"/>. There is some more low-level functionality
+to acquire open file descriptors. These can be wrapped into <C>File</C>
+objects using <Ref Func="IO_WrapFD"/>.
 
 </Section>
 <Section>
     <Heading>Reading and writing</Heading>
 
-Once a <K>File</K> object is created, one can use the following
+Once a <C>File</C> object is created, one can use the following
 functions on it:
 
 <ManSection>
 <Func Name="IO_ReadUntilEOF" Arg="f"
       Comm="buffered read until end of file"/>
+<Returns> a string or <K>fail</K> </Returns>
 <Description>
 This function reads all data from the file <A>f</A> until the end of file.
 The data is returned as a &GAP; string. If the file is already at end of
 file, an empty string is returned. If an error occurs, then <K>fail</K> is
-returned.
+returned. Note that you still have to call <Ref Func="IO_Close"/> on the
+<C>File</C> object to properly close the file later.
 </Description>
 </ManSection>
 
 <ManSection>
 <Func Name="IO_ReadBlock" Arg="f, len"
       Comm="buffered read from File object, blocking"/>
+<Returns> a string or <K>fail</K> </Returns>
 <Description>
 This function gets two arguments, the first argument <A>f</A> must be
-a <K>File</K> object and the second argument <A>len</A> must be
+a <C>File</C> object and the second argument <A>len</A> must be
 a positive integer. The function tries to read <A>len</A> bytes
 and returns a string of that length. If and only if the end of file is 
 reached earlier, fewer bytes are returned. If an error occurs, <K>fail</K>
 is returned. Note that this function blocks until either <A>len</A> bytes
-are read, or the end of file is reached, or an error occurs.
+are read, or the end of file is reached, or an error occurs. For the case
+of pipes or internet connections it is possible that currently no more
+data is available, however, by definition the end of file is only reached 
+after the connection has been closed by the other side!
 </Description>
 </ManSection>
 
 <ManSection>
 <Func Name="IO_ReadLine" Arg="f"
       Comm="buffered read from File object, one line"/>
+<Returns> a string or <K>fail</K> </Returns>
 <Description>
-This function gets exactly one argument, which must be a <K>File</K> object
+This function gets exactly one argument, which must be a <C>File</C> object
 <A>f</A>. It reads one line of data, where the definition of line is
 operating system dependent. The line end character(s) are included in
 the result. The function returns a string with the line in case of
@@ -1080,9 +1130,10 @@ is not an error but the standard end of file convention!
 <ManSection>
 <Func Name="IO_ReadLines" Arg="f [,max]"
       Comm="buffered read from File object, many lines"/>
+<Returns> a list of strings or <K>fail</K> </Returns>
 <Description>
 This function gets one or two arguments, the first of which must always
-be a <K>File</K> object <A>f</A>. It reads lines of data (where the
+be a <C>File</C> object <A>f</A>. It reads lines of data (where the
 definition of line is operating system dependent) either until
 end of file (without a second argument) or up to <A>max</A> lines
 (with a second argument <A>max</A>. A list of strings with the result is
@@ -1101,8 +1152,9 @@ file convention!
 
 <ManSection>
 <Func Name="IO_HasData" Arg="f"/>
+<Returns> <K>true</K> or <K>false</K> </Returns>
 <Description>
-This function takes one argument <A>f</A> which must be a <K>File</K>
+This function takes one argument <A>f</A> which must be a <C>File</C>
 object. It returns <K>true</K> or <K>false</K> according to whether
 there is data to read available in the file <A>f</A>. A return value
 of <K>true</K> guarantees that the next call to <Ref Func="IO_Read"/>
@@ -1114,9 +1166,10 @@ byte or an empty string to indicate the end of file.
 <ManSection>
 <Func Name="IO_Read" Arg="f, len"
       Comm="buffered read from File object"/>
+<Returns> a string or <K>fail</K> </Returns>
 <Description>
 The function gets two arguments, the first of which must 
-be a <K>File</K> object <A>f</A>. The second argument must be a positive
+be a <C>File</C> object <A>f</A>. The second argument must be a positive
 integer. The function reads data
 up to <A>len</A> bytes.
 A string with the result is returned, if everything
@@ -1140,9 +1193,10 @@ otherwise.
 <ManSection>
 <Func Name="IO_Write" Arg="f [,things ... ]"
       Comm="buffered write to File object"/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
 This function can get an arbitrary number of arguments, the first of which
-must be a <K>File</K> object <A>f</A>. All the other arguments are just
+must be a <C>File</C> object <A>f</A>. All the other arguments are just
 written to <A>f</A> if they are strings. Otherwise, the <K>String</K>
 function is called on them and the result is written out to <A>f</A>.<P/>
 
@@ -1163,6 +1217,7 @@ full.
 <ManSection>
 <Func Name="IO_WriteLine" Arg="f, line"
       Comm="buffered write to File object, one line"/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
 Behaves like <Ref Func="IO_Write"/> but works on a single string
 <A>line</A> and sends an (operating system dependent) end of line
@@ -1175,6 +1230,7 @@ written out after the function has completed.
 <ManSection>
 <Func Name="IO_WriteLines" Arg="f, list"
       Comm="buffered write to File object, many lines"/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
 Behaves like <Ref Func="IO_Write"/> but works on a list of strings
 <A>list</A> and sends an (operating system dependent) end of line
@@ -1187,9 +1243,10 @@ that the data is actually written out after the function has completed.
 <ManSection>
 <Func Name="IO_Flush" Arg="f"
       Comm="writes stuff in the buffer to the file"/>
+<Returns> <K>true</K> or <K>fail</K> </Returns>
 <Description>
-This function gets one argument <A>f</A>, which must be a <K>File</K>
-object. It writes out all the data that is in the writing buffer. This
+This function gets one argument <A>f</A>, which must be a <C>File</C>
+object. It writes out all the data that is in the write buffer. This
 is not necessary before the call to the function <Ref Func="IO_Close"/>,
 since that function calls <Ref Func="IO_Flush"/> automatically.
 However, it is necessary to call <Ref Func="IO_Flush"/> after calls to
@@ -1208,6 +1265,7 @@ to the file descriptor.
 
 <ManSection>
 <Func Name="IO_WriteFlush" Arg="f [,things]"/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
 This function behaves like <Ref Func="IO_Write"/> followed by a call to
 <Ref Func="IO_Flush"/>. It returns either the number of bytes written
@@ -1217,8 +1275,9 @@ or <K>fail</K> if an error occurs.
 
 <ManSection>
 <Func Name="IO_ReadyForWrite" Arg="f"/>
+<Returns> <K>true</K> or <K>false</K> </Returns>
 <Description>
-This function takes one argument <A>f</A> which must be a <K>File</K>
+This function takes one argument <A>f</A> which must be a <C>File</C>
 object. It returns <K>true</K> or <K>false</K> according to whether
 the file <A>f</A> is ready to write. A return value
 of <K>true</K> guarantees that the next call to <Ref
@@ -1230,9 +1289,10 @@ byte.
 
 <ManSection>
 <Func Name="IO_WriteNonBlocking" Arg="f, st, pos, len"/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
 This function takes four arguments. The first one <A>f</A> must be
-a <K>File</K> object, the second <A>st</A> a string, and the arguments
+a <C>File</C> object, the second <A>st</A> a string, and the arguments
 <A>pos</A> and <A>len</A> must be integers, such that positions
 <M><A>pos</A>+1</M> until <M><A>pos</A>+<A>len</A></M> are bound in
 <A>st</A>. The function tries to write up to <A>len</A> bytes from
@@ -1248,8 +1308,9 @@ the number of bytes written or <K>fail</K> if an error occurs.
 
 <ManSection>
 <Func Name="IO_ReadyForFlush" Arg="f"/>
+<Returns> <K>true</K> or <K>false</K> </Returns>
 <Description>
-This function takes one argument <A>f</A> which must be a <K>File</K>
+This function takes one argument <A>f</A> which must be a <C>File</C>
 object. It returns <K>true</K> or <K>false</K> according to whether
 the file <A>f</A> is ready to flush. A return value
 of <K>true</K> guarantees that the next call to <Ref
@@ -1262,8 +1323,9 @@ flush out the whole content of the buffer!
 
 <ManSection>
 <Func Name="IO_FlushNonBlocking" Arg="f"/>
+<Returns> <K>true</K>, <K>false</K>, or <K>fail</K> </Returns>
 <Description>
-This function takes one argument <A>f</A> which must be a <K>File</K>
+This function takes one argument <A>f</A> which must be a <C>File</C>
 object. It tries to write all data in the writing buffer to the file
 descriptor. If this succeeds, the function returns <K>true</K> and
 <K>false</K> otherwise. If an error occurs, <K>fail</K> is returned.
@@ -1278,11 +1340,13 @@ from that call.
 <ManSection>
 <Func Name="IO_Close" Arg="f"
       Comm="closes file and file descriptor"/>
+<Returns> <K>true</K> or <K>fail</K> </Returns>
 <Description>
-This function closes the <K>File</K> object <A>f</A> after writing all data
+This function closes the <C>File</C> object <A>f</A> after writing all data
 in the write buffer out and closing the file descriptor. All buffers are
 freed. In case of an error, the function returns <K>fail</K> and otherwise
-<K>true</K>.
+<K>true</K>. Note that for pipes to other processes this function collects
+data about the terminated processes using <Ref Func="IO_WaitPid"/>.
 </Description>
 </ManSection>
 
@@ -1294,41 +1358,46 @@ freed. In case of an error, the function returns <K>fail</K> and otherwise
 <ManSection>
 <Func Name="IO_GetFD" Arg="f"
       Comm="returns the real file descriptor as an integer"/>
+<Returns> an integer </Returns>
 <Description>
 This function returns the real file descriptor that is behind the
-<K>File</K> object <A>f</A>.
+<C>File</C> object <A>f</A>.
 </Description>
 </ManSection>
 
 <ManSection>
 <Func Name="IO_GetWBuf" Arg="f"
       Comm="returns the writing buffer as a string"/>
+<Returns> a string or <K>false</K> </Returns>
 <Description>
-This function gets one argument <A>f</A> which must be a <K>File</K> object
-and returns the writing buffer of that <K>File</K> object. This is
-necessary for <K>File</K> objects, that are not associated to a
+This function gets one argument <A>f</A> which must be a <C>File</C> object
+and returns the writing buffer of that <C>File</C> object. This is
+necessary for <C>File</C> objects, that are not associated to a
 real file descriptor but just collect everything that was written
 in their writing buffer. Remember to use this function before closing
-the <K>File</K> object.
+the <C>File</C> object.
 </Description>
 </ManSection>
 
 <ManSection>
 <Func Name="IO_Select" Arg="r, w, f, e, t1, t2"/>
+<Returns> an integer or <K>fail</K> </Returns>
 <Description>
 This function is the corresponding function to <Ref Func="IO_select"/>
 for buffered file access. It behaves similarly to that function. The
 differences are the following: There are four lists of files <A>r</A>,
 <A>w</A>, <A>f</A>, and <A>e</A>. They all can contain either integers
-(standing for file descriptors) or <K>File</K> objects. The list <A>r</A>
+(standing for file descriptors) or <C>File</C> objects. The list <A>r</A>
 is for checking, whether files or file descriptors are ready to read, the 
 list <A>w</A> is for checking whether they are ready to write, the
 list <A>f</A> is for checking whether they are ready to flush, and
 the list <A>e</A> is for checking whether they have exceptions.<P/>
 
-For <K>File</K> objects it is always first checked, whether there is either
+For <C>File</C> objects it is always first checked, whether there is either
 data available in a reading buffer or space in a writing buffer. If so,
-they are immediately reported to be ready. For the remaining files and for
+they are immediately reported to be ready (this feature makes the
+list of <C>File</C> objects to test for flushability necessary). 
+For the remaining files and for
 all specified file descriptors, the function <Ref Func="IO_select"/> is
 called to get an overview about readiness. The timeout values <A>t1</A>
 and <A>t2</A> are set to zero for immediate returning if one of the
@@ -1344,6 +1413,7 @@ The following function is a convenience function for directory access:
 <ManSection>
 <Func Name="IO_ListDir" Arg="pathname"
       Comm="returns a list of file names in the directory pathname"/>
+<Returns> a list of strings or <K>fail</K> </Returns>
 <Description>
 This function gets a string containing a path name as single argument
 and returns a list of strings that are the names of the files in that
@@ -1360,6 +1430,7 @@ needing such address pairs.
 <ManSection>
 <Func Name="IO_MakeIPAddressPort" Arg="ipstring, portnr"
       Comm="creates an IP address port number pair for usage with connect"/>
+<Returns> a string </Returns>
 <Description>
 This function gets a string <A>ipstring</A> containing an IP address
 in dot notation, i.e. four numbers in the range from 0 to 255 separated
@@ -1373,6 +1444,7 @@ are needed.
 <ManSection>
 <Func Name="IO_Environment" Arg=""
       Comm="returns a record describing the environment"/>
+<Returns> a record or <K>fail</K> </Returns>
 <Description>
 Takes no arguments, uses <Ref Func="IO_environ"/> to get the environment
 and returns a record in which the component names are the names of the
@@ -1386,6 +1458,7 @@ third argument.
 <ManSection>
 <Func Name="IO_MakeEnvList" Arg="r"
       Comm="takes an environment record and returns a list for execve"/>
+<Returns> a list of strings </Returns>
 <Description>
 Takes a record as returned by <Ref Func="IO_Environment"/> and turns it
 into a list of strings as needed by <Ref Func="IO_execve"/> as third
@@ -1394,7 +1467,7 @@ argument.
 </ManSection>
 </Section>
 
-<Section>
+<Section Label="ipc">
     <Heading>Inter process communication</Heading>
 
 <ManSection>
@@ -1417,6 +1490,7 @@ argument that should refer to an executable.
 <ManSection>
 <Func Name="IO_CloseAllFDs" Arg="exceptions"
       Comm="Closes all file descriptors except those listed in exceptions"/>
+<Returns> nothing </Returns>
 <Description>
 Closes all file descriptors except those listed in <A>exceptions</A>, which
 must be a list of integers.
@@ -1427,6 +1501,7 @@ must be a list of integers.
 <ManSection>
 <Func Name="IO_Popen" Arg="path, argv, mode"
       Comm="Starts a child process with either stdout or stdin being a pipe"/>
+<Returns> a <C>File</C> object or <K>fail</K> </Returns>
 <Description>
 The argument <A>path</A> must refer to an executable file in the sense
 of <Ref Func="IO_FindExecutable"/>. <P/>
@@ -1465,6 +1540,7 @@ In either case the <C>File</C> object will have the attribute
 <ManSection>
 <Func Name="IO_Popen2" Arg="path, argv"
       Comm="Starts a child process with stdin and stdout being a pipe"/>
+<Returns> a record or <K>fail</K> </Returns>
 <Description>
 The argument <A>path</A> must refer to an executable file in the sense
 of <Ref Func="IO_FindExecutable"/>. <P/>
@@ -1472,7 +1548,7 @@ of <Ref Func="IO_FindExecutable"/>. <P/>
 A new child process is started using the executable in <A>path</A>
 The standard input and standard output of it 
 are pipes. The writing end of the input pipe and the reading end of the
-output pipe are returned as <K>File</K> objects bound to two components
+output pipe are returned as <C>File</C> objects bound to two components
 <Q><C>stdin</C></Q> and <Q><C>stdout</C></Q> (resp.) of the returned record. 
 This means, you have to <E>write</E> to <Q><C>stdin</C></Q> and <E>read</E> 
 from <Q><C>stdout</C></Q> in the calling &GAP; process. 
@@ -1498,6 +1574,7 @@ the <Q><K>pid</K></Q> component of the returned record.
 <ManSection>
 <Func Name="IO_Popen3" Arg="path, argv"
    Comm="Starts a child process with stdin, stdout, and stderr being a pipe"/>
+<Returns> a record or <K>fail</K> </Returns>
 <Description>
 The argument <A>path</A> must refer to an executable file in the sense
 of <Ref Func="IO_FindExecutable"/>. <P/>
@@ -1506,7 +1583,7 @@ A new child process is started using the executable in <A>path</A>
 The standard input, standard output, and standard error of it 
 are pipes. The writing end of the input pipe, the reading end of the
 output pipe and the reading end of the error pipe 
-are returned as <K>File</K> objects bound to two components
+are returned as <C>File</C> objects bound to two components
 <Q><C>stdin</C></Q>, <Q><C>stdout</C></Q>, and <Q><C>stderr</C></Q> 
 (resp.) of the returned record. 
 This means, you have to <E>write</E> to <Q><C>stdin</C></Q> and <E>read</E> 
@@ -1541,7 +1618,7 @@ the <Q><K>pid</K></Q> component of the returned record.
     replaced by the string <Q><K>open</K></Q> in which case a new pipe will 
     be opened. The argument <A>switcherror</A>
 is a boolean indicating whether standard error channels are also
-switched to the output channel. <P/>
+switched to the corresponding output channels. <P/>
 This function starts up all processes
 and connects them with pipes. The input of the first is switched to
 <A>infd</A> and the output of the last to <A>outfd</A>.
@@ -1551,13 +1628,14 @@ process ids if everything worked. For each process for which
 some error occurred the corresponding pid is replaced by <K>fail</K>.
 The <K>stdin</K> component is equal to <K>false</K>, or to the file descriptor
 of the writing end of the newly created pipe which is connected to the
-standard input of the new process if <A>infd</A> was <Q><K>open</K></Q>.
+standard input of the first of the new processes if 
+<A>infd</A> was <Q><K>open</K></Q>.
 The <K>stdout</K> component is equal to <K>false</K> or to the file
 descriptor of the reading end of the newly created pipe which is connected
-to the standard output of the new process if <A>outfd</A> was 
+to the standard output of the last of the new processes if <A>outfd</A> was 
 <Q><K>open</K></Q>.
 <P/>
-Note that the SIGCHLD handler of the <Package>IO</Package> is installed
+Note that the SIGCHLD handler of the <Package>IO</Package> package is installed
 by this function (see <Ref Func="IO_InstallSIGCHLDHandler"/>) and that it 
 lies in the responsibility of the caller to use <Ref Func="IO_WaitPid"/>
 to ask for the status information of all child processes after their
@@ -1594,20 +1672,20 @@ termination.
 
 <ManSection>
 <Func Name="IO_FilteredFile" Arg="progs, filename [,mode][,bufsize]"/>
-<Returns> a <K>File</K> object or <K>fail</K> </Returns>
+<Returns> a <C>File</C> object or <K>fail</K> </Returns>
 <Description>
 This function is similar to <Ref Func="IO_File"/> and behaves nearly
 identically. The only difference is that a filtering pipeline is switched
-between the file and the <K>File</K> object such that all things read
+between the file and the <C>File</C> object such that all things read
 or written respectively are filtered through this pipeline of processes.
 <P/>
-The <K>File</K> object remembers the started processes and upon the
+The <C>File</C> object remembers the started processes and upon the
 final call to <Ref Func="IO_Close"/> automatically uses the
 <Ref Func="IO_WaitPid"/> function to acquire information from the
 terminated processes in the pipeline after their termination. This means
 that you do not have to call <Ref Func="IO_WaitPid"/> any more after
 the call to <Ref Func="IO_Close"/>.<P/>
-Note that <Ref Func="IO_Popen"/> activates our SIGCHLD handler (see <Ref
+Note that <Ref Func="IO_FilteredFile"/> activates our SIGCHLD handler (see <Ref
     Func="IO_InstallSIGCHLDHandler"/>).<P/>
 The <C>File</C> object will have the attribute
 <Q><K>ProcessID</K></Q> set to the list of process IDs of the child processes.
@@ -1619,11 +1697,11 @@ The <C>File</C> object will have the attribute
       Comm="Sends away the string st to f in the background"/>
 <Description>
 This functions uses <Ref Func="IO_Write"/> to write the whole string
-<A>st</A> to the <K>File</K> object <A>f</A>. However, this is done
+<A>st</A> to the <C>File</C> object <A>f</A>. However, this is done
 by forking off a child process identical to the calling &GAP; process
 that does the sending. The calling &GAP; process returns immediately, even 
 before anything has been sent away with the result <K>true</K>. 
-The forked off sender process terminates itself immediately, after it
+The forked off sender process terminates itself immediately after it
 has sent all data away.<P/>
 
 The reason for having this function available is the following: If one 
@@ -1751,22 +1829,22 @@ no other canonical value to return to indicate this.
 </Description>
 </ManSection>
 
+The only thing you can do with these special values is to compare them
+to each other and to other objects.<P/>
+
 </Section>
 
 <Section>
     <Heading>Pickling and unpickling</Heading>
 
-The only thing you can do with these special values is to compare them
-to each other and to other objects.<P/>
-
 <ManSection>
     <Oper Name="IO_Pickle" Arg="f, ob"/>
     <Returns> <C>IO&uscore;OK</C> or <C>IO&uscore;Error</C> </Returns>
     <Description>
-        The argument <A>f</A> must be an open, writable <K>File</K>
+        The argument <A>f</A> must be an open, writable <C>File</C>
         object. The object <A>ob</A> can be an arbitrary &GAP; object.
         The operation <Q>pickles</Q> or <Q>serialises</Q> the object
-        <A>ob</A> and writes the result into the <K>File</K> object
+        <A>ob</A> and writes the result into the <C>File</C> object
         <A>f</A>. If everything is OK, the unique value <C>IO&uscore;OK</C>
         is returned and otherwise the unique value <C>IO&uscore;Error</C>.
         The resulting byte stream can be read again using the operation
@@ -1794,11 +1872,11 @@ to each other and to other objects.<P/>
     <Oper Name="IO_Unpickle" Arg="f"/>
     <Returns> <C>IO&uscore;Error</C> or a &GAP; object </Returns>
     <Description>
-        The argument <A>f</A> must be an open, readable <K>File</K>
+        The argument <A>f</A> must be an open, readable <C>File</C>
         object. The operation reads from <A>f</A> and <Q>unpickles</Q>
         the next object. If an error occurs, the unique value 
         <C>IO&uscore;Error</C>
-        is returned. If the <K>File</K>
+        is returned. If the <C>File</C>
         object is at end of file, the value <C>IO&uscore;Nothing</C> is returned.
         Note that these two values are not picklable, because of
         their special meaning as return values of this operation here. 
@@ -1835,7 +1913,7 @@ subobjects, then the first action of the method is to call the function
 <C>IO&uscore;AddToPickled</C> with the object as argument. This will put it
 into the pickle cache and take care of self-references. Arbitrary
 subobjects can then be pickled using recursive calls to the operation
-<Ref Oper="IO_Pickle"/> handing down the same <K>File</K> object into
+<Ref Oper="IO_Pickle"/> handing down the same <C>File</C> object into
 the recursion. The method must either return <C>IO&uscore;Error</C> in case of
 an error or <C>IO&uscore;OK</C> if everything goes well. Before returning,
 a method that has called <C>IO&uscore;AddToPickled</C>
@@ -1860,7 +1938,7 @@ Unpickling is implemented as follows: For every 4 byte magic value
 there must be a function bound to that value in the record
 <C>IO&uscore;Unpicklers</C>. If the unpickling operation <Ref Oper="IO_Unpickle"/>
 encounters that magic value, it calls the corresponding unpickling
-function. This function just gets one <K>File</K> object as argument.
+function. This function just gets one <C>File</C> object as argument.
 Since the magic value is already read, it can immediately start 
 with reading and rebuilding the serialised object in memory. The method
 has to take care to restore the object including its type completely.
@@ -1879,7 +1957,7 @@ global data for the unpickling procedure becomes corrupt!
 <P/>
 Of course, unpickling functions can recursively call <Ref Oper="IO_Unpickle"/>
 to unpickle subobjects. Apart from this, unpickling functions can use
-arbitrary reading functions on the <K>File</K> object. However, they
+arbitrary reading functions on the <C>File</C> object. However, they
 should only read sequentially and never move the current file position
 pointer otherwise. An unpickling function should return the newly
 created object or the value <C>IO&uscore;Error</C> if an error occurred.
@@ -1932,7 +2010,7 @@ study the code for the basic &GAP; objects in the file
 <Chapter>
     <Heading>A client side implementation of the HTTP protocol</Heading>
 
-The <Package>IO</Package> contains an implementation of the client side
+The <Package>IO</Package> package contains an implementation of the client side
 of the HTTP protocol. The basic purpose of this is of course to be
 able to download data from web servers from the &GAP; language. However,
 the HTTP protocol can perform a much bigger variety of tasks.
@@ -1951,7 +2029,7 @@ the HTTP protocol can perform a much bigger variety of tasks.
     The function opens a TCP/IP connection to the server and returns
     a record <K>conn</K> with the following components: 
     <K>conn.sock</K> is <K>fail</K> if an error occurs and otherwise
-    a <K>File</K> object linked to the file descriptor of the
+    a <C>File</C> object linked to the file descriptor of the
     socket. In case of an error, the component <K>conn.errormsg</K>
     contains an error message, it is otherwise empty. If everything
     went well then the component <K>conn.host</K> is the result from
@@ -2072,7 +2150,7 @@ a corresponding client and another small server using the UDP protocol
 and a corresponding client. <P/>
 
 Further, there is an example for the
-usage of <K>File</K> objects, that read from or write to strings.<P/>
+usage of <C>File</C> objects, that read from or write to strings.<P/>
 
 Another example there shows starting up a child process and piping
 a few megabytes through it using <Ref Func="IO_Popen2"/>.
@@ -2080,7 +2158,8 @@ a few megabytes through it using <Ref Func="IO_Popen2"/>.
 <P/>
 In the following, we present a few explicit, interactive short examples 
 for the usage of the functions in this package. Note that you have to
-load the <Package>IO</Package> with the command <C>LoadPackage("IO");</C>
+load the <Package>IO</Package> package with the command 
+<C>LoadPackage("IO");</C>
 before trying these examples.
 
 <Section>
@@ -2193,7 +2272,7 @@ true
 <Section>
 <Heading>Accessing a web page</Heading>
 
-The <Package>IO</Package> has an HTTP client implementation. Using this
+The <Package>IO</Package> package has an HTTP client implementation. Using this
 you can access web pages and other web downloads from within &GAP;. Here
 is an example:
 
