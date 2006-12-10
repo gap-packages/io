@@ -725,6 +725,7 @@ that no 7th argument is necessary.
 <ManSection>
 <Func Name="IO_rename" Arg="oldpath, newpath"
       Comm="Renames a file or moves it."/>
+<Returns> <K>true</K> or <K>false</K> </Returns>
 <Description>
 Renames a file or moves it.
 For details see <Q><C>man 2 rename</C></Q>.
