@@ -215,8 +215,8 @@ PackageDoc := rec(
   # use same as in GAP            
   BookName  := "IO",
   # format/extension can be one of .zoo, .tar.gz, .tar.bz2, -win.zip
-  ArchiveURLSubset := ["doc", "htm"],
-  HTMLStart := "htm/chapters.htm",
+  ArchiveURLSubset := ["doc"],
+  HTMLStart := "doc/chap0.html",
   PDFFile   := "doc/manual.pdf",
   # the path to the .six file used by GAP's help system
   SixFile   := "doc/manual.six",
