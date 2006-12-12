@@ -163,9 +163,9 @@ Status := "deposited",
 ##  and updating of the package in the GAP distribution.
 #
 README_URL := 
-  "http://www.math.rwth-aachen.de/~Max.Neunhoeffer/Computer/Software/io/README.io",
+  "http://www.math.rwth-aachen.de/~Max.Neunhoeffer/Computer/Software/Gap/io/README.io",
 PackageInfoURL := 
-  "http://www.math.rwth-aachen.de/~Max.Neunhoeffer/Computer/Software/io/PackageInfo.g",
+  "http://www.math.rwth-aachen.de/~Max.Neunhoeffer/Computer/Software/Gap/io/PackageInfo.g",
 
 ##  Here you  must provide a short abstract explaining the package content 
 ##  in HTML format (used on the package overview Web page) and an URL 
@@ -182,7 +182,7 @@ AbstractHTML :=
    provides bindings for <span class=\"pkgname\">GAP</span> to the lower \
    levels of Input/Output functionality in the C library.",
 
-PackageWWWHome := "http://www.math.rwth-aachen.de/Computer/Software/Gap/io.html",
+PackageWWWHome := "http://www.math.rwth-aachen.de/~Max.Neunhoeffer/Computer/Software/Gap/io.html",
                
 ##  Here is the information on the help books of the package, used for
 ##  loading into GAP's online help and maybe for an online copy of the 
