@@ -158,7 +158,7 @@ The following functions from the C library are made available as
 <C>execv</C>,
 <C>execve</C>,
 <C>execvp</C>,
-<C>exit</C>
+<C>exit</C>,
 <C>fchmod</C>, 
 <C>fchown</C>, 
 <C>fcntl</C>,
