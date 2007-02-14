@@ -2,6 +2,11 @@
  This file describes changes in the IO package beginning from version 1.2:
 ===========================================================================
 
+==========================
+ Changes from 2.0 -> 2.1:
+==========================
+
+  - Fixed bug with IO_stat, that time stamps are usually >= 2^28.
 
 ==========================
  Changes from 1.6 -> 2.0:

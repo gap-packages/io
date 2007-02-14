@@ -619,6 +619,34 @@ Obj FuncIO_rmdir(Obj self,Obj path)
 }
 #endif
 
+#ifndef ADDR_INT
+#define ADDR_INT(op)    ((TypDigit*)ADDR_OBJ(op))
+#endif
+
+static Obj MyObjInt_Int(Int i)
+{
+    Obj n;
+    Int bound = 1L << NR_SMALL_INT_BITS;
+    if (i >= bound) {
+        /* We have to make a big integer */
+        n = NewBag(T_INTPOS,4*sizeof(TypDigit));
+        ADDR_INT(n)[0] = (TypDigit) (i & ((Int) INTBASE - 1L));
+        ADDR_INT(n)[1] = (TypDigit) (i >> NR_DIGIT_BITS);
+        ADDR_INT(n)[2] = 0;
+        ADDR_INT(n)[3] = 0;
+        return n;
+    } else if (-i > bound) {
+        n = NewBag(T_INTNEG,4*sizeof(TypDigit));
+        ADDR_INT(n)[0] = (TypDigit) ((-i) & ((Int) INTBASE - 1L));
+        ADDR_INT(n)[1] = (TypDigit) ((-i) >> NR_DIGIT_BITS);
+        ADDR_INT(n)[2] = 0;
+        ADDR_INT(n)[3] = 0;
+        return n;
+    } else {
+        return INTOBJ_INT(i);
+    }
+}
+
 #ifdef HAVE_STAT
 static struct stat ourstatbuf;
 Obj FuncIO_stat(Obj self,Obj filename)
@@ -635,19 +663,19 @@ Obj FuncIO_stat(Obj self,Obj filename)
         return Fail;
       }
       rec = NEW_PREC(0);
-      AssPRec(rec,RNamName("dev"),INTOBJ_INT((Int) ourstatbuf.st_dev));
-      AssPRec(rec,RNamName("ino"),INTOBJ_INT((Int) ourstatbuf.st_ino));
-      AssPRec(rec,RNamName("mode"),INTOBJ_INT((Int) ourstatbuf.st_mode));
-      AssPRec(rec,RNamName("nlink"),INTOBJ_INT((Int) ourstatbuf.st_nlink));
-      AssPRec(rec,RNamName("uid"),INTOBJ_INT((Int) ourstatbuf.st_uid));
-      AssPRec(rec,RNamName("gid"),INTOBJ_INT((Int) ourstatbuf.st_gid));
-      AssPRec(rec,RNamName("rdev"),INTOBJ_INT((Int) ourstatbuf.st_rdev));
-      AssPRec(rec,RNamName("size"),INTOBJ_INT((Int) ourstatbuf.st_size));
-      AssPRec(rec,RNamName("blksize"),INTOBJ_INT((Int)ourstatbuf.st_blksize));
-      AssPRec(rec,RNamName("blocks"),INTOBJ_INT((Int) ourstatbuf.st_blocks));
-      AssPRec(rec,RNamName("atime"),INTOBJ_INT((Int) ourstatbuf.st_atime));
-      AssPRec(rec,RNamName("mtime"),INTOBJ_INT((Int) ourstatbuf.st_mtime));
-      AssPRec(rec,RNamName("ctime"),INTOBJ_INT((Int) ourstatbuf.st_ctime));
+      AssPRec(rec,RNamName("dev"),MyObjInt_Int((Int) ourstatbuf.st_dev));
+      AssPRec(rec,RNamName("ino"),MyObjInt_Int((Int) ourstatbuf.st_ino));
+      AssPRec(rec,RNamName("mode"),MyObjInt_Int((Int) ourstatbuf.st_mode));
+      AssPRec(rec,RNamName("nlink"),MyObjInt_Int((Int) ourstatbuf.st_nlink));
+      AssPRec(rec,RNamName("uid"),MyObjInt_Int((Int) ourstatbuf.st_uid));
+      AssPRec(rec,RNamName("gid"),MyObjInt_Int((Int) ourstatbuf.st_gid));
+      AssPRec(rec,RNamName("rdev"),MyObjInt_Int((Int) ourstatbuf.st_rdev));
+      AssPRec(rec,RNamName("size"),MyObjInt_Int((Int) ourstatbuf.st_size));
+      AssPRec(rec,RNamName("blksize"),MyObjInt_Int((Int)ourstatbuf.st_blksize));
+      AssPRec(rec,RNamName("blocks"),MyObjInt_Int((Int) ourstatbuf.st_blocks));
+      AssPRec(rec,RNamName("atime"),MyObjInt_Int((Int) ourstatbuf.st_atime));
+      AssPRec(rec,RNamName("mtime"),MyObjInt_Int((Int) ourstatbuf.st_mtime));
+      AssPRec(rec,RNamName("ctime"),MyObjInt_Int((Int) ourstatbuf.st_ctime));
       return rec;
   }
 }
@@ -669,19 +697,19 @@ Obj FuncIO_fstat(Obj self,Obj fd)
         return Fail;
       }
       rec = NEW_PREC(0);
-      AssPRec(rec,RNamName("dev"),INTOBJ_INT((Int) ourfstatbuf.st_dev));
-      AssPRec(rec,RNamName("ino"),INTOBJ_INT((Int) ourfstatbuf.st_ino));
-      AssPRec(rec,RNamName("mode"),INTOBJ_INT((Int) ourfstatbuf.st_mode));
-      AssPRec(rec,RNamName("nlink"),INTOBJ_INT((Int) ourfstatbuf.st_nlink));
-      AssPRec(rec,RNamName("uid"),INTOBJ_INT((Int) ourfstatbuf.st_uid));
-      AssPRec(rec,RNamName("gid"),INTOBJ_INT((Int) ourfstatbuf.st_gid));
-      AssPRec(rec,RNamName("rdev"),INTOBJ_INT((Int) ourfstatbuf.st_rdev));
-      AssPRec(rec,RNamName("size"),INTOBJ_INT((Int) ourfstatbuf.st_size));
-      AssPRec(rec,RNamName("blksize"),INTOBJ_INT((Int)ourfstatbuf.st_blksize));
-      AssPRec(rec,RNamName("blocks"),INTOBJ_INT((Int) ourfstatbuf.st_blocks));
-      AssPRec(rec,RNamName("atime"),INTOBJ_INT((Int) ourfstatbuf.st_atime));
-      AssPRec(rec,RNamName("mtime"),INTOBJ_INT((Int) ourfstatbuf.st_mtime));
-      AssPRec(rec,RNamName("ctime"),INTOBJ_INT((Int) ourfstatbuf.st_ctime));
+      AssPRec(rec,RNamName("dev"),MyObjInt_Int((Int) ourfstatbuf.st_dev));
+      AssPRec(rec,RNamName("ino"),MyObjInt_Int((Int) ourfstatbuf.st_ino));
+      AssPRec(rec,RNamName("mode"),MyObjInt_Int((Int) ourfstatbuf.st_mode));
+      AssPRec(rec,RNamName("nlink"),MyObjInt_Int((Int) ourfstatbuf.st_nlink));
+      AssPRec(rec,RNamName("uid"),MyObjInt_Int((Int) ourfstatbuf.st_uid));
+      AssPRec(rec,RNamName("gid"),MyObjInt_Int((Int) ourfstatbuf.st_gid));
+      AssPRec(rec,RNamName("rdev"),MyObjInt_Int((Int) ourfstatbuf.st_rdev));
+      AssPRec(rec,RNamName("size"),MyObjInt_Int((Int) ourfstatbuf.st_size));
+      AssPRec(rec,RNamName("blksize"),MyObjInt_Int((Int)ourfstatbuf.st_blksize));
+      AssPRec(rec,RNamName("blocks"),MyObjInt_Int((Int) ourfstatbuf.st_blocks));
+      AssPRec(rec,RNamName("atime"),MyObjInt_Int((Int) ourfstatbuf.st_atime));
+      AssPRec(rec,RNamName("mtime"),MyObjInt_Int((Int) ourfstatbuf.st_mtime));
+      AssPRec(rec,RNamName("ctime"),MyObjInt_Int((Int) ourfstatbuf.st_ctime));
       return rec;
   }
 }
@@ -703,19 +731,19 @@ Obj FuncIO_lstat(Obj self,Obj filename)
         return Fail;
       }
       rec = NEW_PREC(0);
-      AssPRec(rec,RNamName("dev"),INTOBJ_INT((Int) ourlstatbuf.st_dev));
-      AssPRec(rec,RNamName("ino"),INTOBJ_INT((Int) ourlstatbuf.st_ino));
-      AssPRec(rec,RNamName("mode"),INTOBJ_INT((Int) ourlstatbuf.st_mode));
-      AssPRec(rec,RNamName("nlink"),INTOBJ_INT((Int) ourlstatbuf.st_nlink));
-      AssPRec(rec,RNamName("uid"),INTOBJ_INT((Int) ourlstatbuf.st_uid));
-      AssPRec(rec,RNamName("gid"),INTOBJ_INT((Int) ourlstatbuf.st_gid));
-      AssPRec(rec,RNamName("rdev"),INTOBJ_INT((Int) ourlstatbuf.st_rdev));
-      AssPRec(rec,RNamName("size"),INTOBJ_INT((Int) ourlstatbuf.st_size));
-      AssPRec(rec,RNamName("blksize"),INTOBJ_INT((Int)ourlstatbuf.st_blksize));
-      AssPRec(rec,RNamName("blocks"),INTOBJ_INT((Int) ourlstatbuf.st_blocks));
-      AssPRec(rec,RNamName("atime"),INTOBJ_INT((Int) ourlstatbuf.st_atime));
-      AssPRec(rec,RNamName("mtime"),INTOBJ_INT((Int) ourlstatbuf.st_mtime));
-      AssPRec(rec,RNamName("ctime"),INTOBJ_INT((Int) ourlstatbuf.st_ctime));
+      AssPRec(rec,RNamName("dev"),MyObjInt_Int((Int) ourlstatbuf.st_dev));
+      AssPRec(rec,RNamName("ino"),MyObjInt_Int((Int) ourlstatbuf.st_ino));
+      AssPRec(rec,RNamName("mode"),MyObjInt_Int((Int) ourlstatbuf.st_mode));
+      AssPRec(rec,RNamName("nlink"),MyObjInt_Int((Int) ourlstatbuf.st_nlink));
+      AssPRec(rec,RNamName("uid"),MyObjInt_Int((Int) ourlstatbuf.st_uid));
+      AssPRec(rec,RNamName("gid"),MyObjInt_Int((Int) ourlstatbuf.st_gid));
+      AssPRec(rec,RNamName("rdev"),MyObjInt_Int((Int) ourlstatbuf.st_rdev));
+      AssPRec(rec,RNamName("size"),MyObjInt_Int((Int) ourlstatbuf.st_size));
+      AssPRec(rec,RNamName("blksize"),MyObjInt_Int((Int)ourlstatbuf.st_blksize));
+      AssPRec(rec,RNamName("blocks"),MyObjInt_Int((Int) ourlstatbuf.st_blocks));
+      AssPRec(rec,RNamName("atime"),MyObjInt_Int((Int) ourlstatbuf.st_atime));
+      AssPRec(rec,RNamName("mtime"),MyObjInt_Int((Int) ourlstatbuf.st_mtime));
+      AssPRec(rec,RNamName("ctime"),MyObjInt_Int((Int) ourlstatbuf.st_ctime));
       return rec;
   }
 }
