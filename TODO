@@ -1,5 +1,9 @@
 future:
 
+pickling: code in anderen Paketen nachladen, wenn diese bereits
+geladen sind, wenn I/O geladen wird. Dadurch: Pakete koennen Pickler
+zur Verfuegung stellen.
+
 access to utime/utimes?
 
 add some checks to GAP's autoconf configure script to test for more
