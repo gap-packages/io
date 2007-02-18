@@ -12,6 +12,16 @@ ReadPackage("IO","gap/pickle.gi");
 ReadPackage("IO","gap/realrandom.gi");
 ReadPackage("IO","gap/http.gi");
 
+# We now create the possibility that other packages can provide pickling
+# and unpickling handlers.
+
+if IsBound(IO_PkgThingsToRead) then
+    for p in IO_PkgThingsToRead do
+        ReadPackage(p[1],p[2]);
+    od;
+    Unbind(IO_PkgThingsToRead);
+fi;
+
 ##
 ##  This program is free software; you can redistribute it and/or modify
 ##  it under the terms of the GNU General Public License as published by

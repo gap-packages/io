@@ -823,6 +823,61 @@ IO_Unpicklers.RSMT :=
     return RandomSource(IsMersenneTwister,s);
   end;
 
+InstallMethod( IO_Pickle, "for an operation",
+  [ IsFile, IsOperation and IsFunction ],
+  function(f,o)
+    if IO_Write(f,"OPER") = fail then return IO_Error; fi;
+    if IO_Pickle(f,NAME_FUNC(o)) = IO_Error then return IO_Error; fi;
+    return IO_OK;
+  end );
+
+IO_FuncToUnpickle := fail;
+IO_Unpicklers.OPER :=
+  function( f )
+    local i,s;
+    s := IO_Unpickle(f); if s = IO_Error then return IO_Error; fi;
+    s := Concatenation( "IO_FuncToUnpickle := ",s,";" );
+    i := InputTextString(s);
+    Read(i);
+    if not(IsBound(IO_FuncToUnpickle)) then return IO_Error; fi;
+    s := IO_FuncToUnpickle;
+    Unbind(IO_FuncToUnpickle);
+    return s;
+  end;
+
+InstallMethod( IO_Pickle, "for a function",
+  [ IsFile, IsFunction ],
+  function( f, fu )
+    local o,s;
+    s := NAME_FUNC(fu);
+    if not(IsBoundGlobal(s)) or not(IsIdenticalObj(ValueGlobal(s),fu)) or
+       not(IsReadOnlyGlobal(s)) then
+        s := "";
+        o := OutputTextString(s,true);
+        PrintTo(o,fu);
+        CloseStream(o);
+        if PositionSublist(s,"<<compiled code>>") <> fail then
+            return IO_Error;
+        fi;
+    fi;
+    if IO_Write(f,"FUNC") = fail then return IO_Error; fi;
+    if IO_Pickle(f,s) = IO_Error then return IO_Error; fi;
+    return IO_OK;
+  end );
+
+IO_Unpicklers.FUNC :=
+  function( f )
+    local i,s;
+    s := IO_Unpickle(f); if s = IO_Error then return IO_Error; fi;
+    s := Concatenation( "IO_FuncToUnpickle := ",s,";" );
+    i := InputTextString(s);
+    Read(i);
+    if not(IsBound(IO_FuncToUnpickle)) then return IO_Error; fi;
+    s := IO_FuncToUnpickle;
+    Unbind(IO_FuncToUnpickle);
+    return s;
+  end;
+Unbind(IO_FuncToUnpickle);
 
 ##
 ##  This program is free software; you can redistribute it and/or modify
