@@ -10,6 +10,10 @@
   - Add framework for other packages to install picklers and unpicklers
     even if they are loaded before the IO package.
   - Pickling/Unpickling of functions and operations (methods still a problem)
+  - Leave out last argument of IO_GenericObjectUnpickler because it
+    was never needed, return either IO_Error or unpickled object. This
+    changes the semantics!
+  - Pickling/Unpickling of WeakPointerObjects
 
 
 ==========================

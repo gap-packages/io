@@ -39,6 +39,18 @@ InstallGlobalFunction( IO_AddToPickled,
     fi;
   end );
 
+InstallGlobalFunction( IO_IsAlreadyPickled,
+  function( ob )
+    local id,pos;
+    id := IO_MasterPointerNumber(ob);
+    pos := PositionSorted( IO_PICKLECACHE.ids, id );
+    if pos <= Length(IO_PICKLECACHE.ids) and IO_PICKLECACHE.ids[pos] = id then
+        return IO_PICKLECACHE.nrs[pos];
+    else
+        return false;
+    fi;
+  end );
+
 InstallGlobalFunction( IO_FinalizePickled,
   function( )
     IO_PICKLECACHE.depth := IO_PICKLECACHE.depth - 1;
@@ -132,40 +144,57 @@ InstallGlobalFunction( IO_UnpickleByEvalString,
   end );
   
 InstallGlobalFunction( IO_GenericObjectPickler,
-  function( f, ob, atts, filts, comps )
-    local at,com,fil;
-    IO_AddToPickled(ob);
-    for at in atts do
-        if IO_WriteAttribute(f,at,ob) = IO_Error then 
+  function( f, tag, prepickle, ob, atts, filts, comps )
+    local at,com,fil,nr,o;
+    nr := IO_AddToPickled(ob);
+    if nr = false then    # not yet known
+        if IO_Write(f,tag) = fail then return IO_Error; fi;
+        for o in prepickle do
+            if IO_Pickle(f,o) = IO_Error then return IO_Error; fi;
+        od;
+        for at in atts do
+            if IO_WriteAttribute(f,at,ob) = IO_Error then 
+                IO_FinalizePickled();
+                return IO_Error;
+            fi;
+        od;
+        for fil in filts do
+            if IO_Pickle(f,fil(ob)) = IO_Error then 
+                IO_FinalizePickled();
+                return IO_Error; 
+            fi;
+        od;
+        for com in comps do
+            if IsBound(ob!.(com)) then
+                if IO_Pickle(f,com) = IO_Error then 
+                    IO_FinalizePickled();
+                    return IO_Error; 
+                fi;
+                if IO_Pickle(f,ob!.(com)) = IO_Error then 
+                    IO_FinalizePickled();
+                    return IO_Error; 
+                fi;
+            fi;
+        od;
+        IO_FinalizePickled();
+        if IO_Pickle(f,fail) = IO_Error then return IO_Error; fi;
+        return IO_OK;
+    else   # this object was already pickled once!
+        if IO_Write(f,"SREF") = IO_Error then 
             IO_FinalizePickled();
             return IO_Error;
         fi;
-    od;
-    for fil in filts do
-        if IO_Pickle(f,fil(ob)) = IO_Error then 
+        if IO_WriteSmallInt(f,nr) = IO_Error then
             IO_FinalizePickled();
-            return IO_Error; 
+            return IO_Error;
         fi;
-    od;
-    for com in comps do
-        if IsBound(ob!.(com)) then
-            if IO_Pickle(f,com) = IO_Error then 
-                IO_FinalizePickled();
-                return IO_Error; 
-            fi;
-            if IO_Pickle(f,ob!.(com)) = IO_Error then 
-                IO_FinalizePickled();
-                return IO_Error; 
-            fi;
-        fi;
-    od;
-    IO_FinalizePickled();
-    if IO_Pickle(f,fail) = IO_Error then return IO_Error; fi;
-    return IO_OK;
+        IO_FinalizePickled();
+        return IO_OK;
+    fi;
   end );
 
 InstallGlobalFunction( IO_GenericObjectUnpickler,
-  function( f, ob, atts, filts, comps )
+  function( f, ob, atts, filts )
     local at,fil,val,val2;
     IO_AddToUnpickled(ob);
     for at in atts do
@@ -192,7 +221,7 @@ InstallGlobalFunction( IO_GenericObjectUnpickler,
         val := IO_Unpickle(f);
         if val = fail then 
             IO_FinalizeUnpickled();
-            return IO_OK;
+            return ob;
         fi;
         if val = IO_Error then 
             IO_FinalizeUnpickled();
@@ -850,13 +879,13 @@ InstallMethod( IO_Pickle, "for a function",
   function( f, fu )
     local o,s;
     s := NAME_FUNC(fu);
-    if not(IsBoundGlobal(s)) or not(IsIdenticalObj(ValueGlobal(s),fu)) or
-       not(IsReadOnlyGlobal(s)) then
+    if not(IsBoundGlobal(s)) or not(IsIdenticalObj(ValueGlobal(s),fu)) then
         s := "";
         o := OutputTextString(s,true);
         PrintTo(o,fu);
         CloseStream(o);
         if PositionSublist(s,"<<compiled code>>") <> fail then
+            Print("#Error: Cannot pickle compiled function.\n");
             return IO_Error;
         fi;
     fi;
@@ -878,6 +907,91 @@ IO_Unpicklers.FUNC :=
     return s;
   end;
 Unbind(IO_FuncToUnpickle);
+
+InstallMethod( IO_Pickle, "for a weak pointer object",
+  [ IsFile, IsWeakPointerObject and IsList ],
+  function( f, l )
+    local count,i,nr;
+    nr := IO_AddToPickled(l);
+    if nr = false then   # not yet known
+        # Here we have to do something
+        if IO_Write(f,"WPOB") = fail then
+            IO_FinalizePickled();
+            return IO_Error;
+        fi;
+        if IO_WriteSmallInt(f,Length(l)) = IO_Error then
+            IO_FinalizePickled();
+            return IO_Error;
+        fi;
+        count := 0;
+        i := 1;
+        while i <= Length(l) do
+            if not(IsBound(l[i])) then
+                count := count + 1;
+            else
+                if count > 0 then
+                    if IO_Write(f,"GAPL") = fail then
+                        IO_FinalizePickled();
+                        return IO_Error;
+                    fi;
+                    if IO_WriteSmallInt(f,count) = IO_Error then
+                        IO_FinalizePickled();
+                        return IO_Error;
+                    fi;
+                    count := 0;
+                fi;
+                if IO_Pickle(f,l[i]) = IO_Error then
+                    IO_FinalizePickled();
+                    return IO_Error;
+                fi;
+            fi;
+            i := i + 1;
+        od;
+        # Note that the last entry is always bound!
+        IO_FinalizePickled();
+        return IO_OK;
+    else
+        if IO_Write(f,"SREF") = IO_Error then 
+            IO_FinalizePickled();
+            return IO_Error;
+        fi;
+        if IO_WriteSmallInt(f,nr) = IO_Error then
+            IO_FinalizePickled();
+            return IO_Error;
+        fi;
+        IO_FinalizePickled();
+        return IO_OK;
+    fi;
+  end );
+
+IO_Unpicklers.WPOB := 
+  function( f )
+    local i,l,len,ob;
+    len := IO_ReadSmallInt(f);
+    if len = IO_Error then return IO_Error; fi;
+    l := WeakPointerObj( [] );
+    SetElmWPObj(l,len,0);
+    IO_AddToUnpickled(l);
+    i := 1;
+    while i <= len do
+        ob := IO_Unpickle(f);
+        if ob = IO_Error then
+            IO_FinalizeUnpickled();
+            return IO_Error;
+        fi;
+        # IO_OK or IO_Nothing cannot happen!
+        if IO_Result(ob) then
+            if ob!.val = "Gap" then   # this is a Gap
+                i := i + ob!.nr;
+            fi;
+        else
+            SetElmWPObj(l,i,ob);
+            i := i + 1;
+        fi;
+    od;  # i is already incremented
+    IO_FinalizeUnpickled();
+    return l;
+  end;
 
 ##
 ##  This program is free software; you can redistribute it and/or modify

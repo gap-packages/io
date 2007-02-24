@@ -12,6 +12,7 @@
 DeclareGlobalVariable( "IO_PICKLECACHE" );
 DeclareGlobalFunction( "IO_ClearPickleCache" );
 DeclareGlobalFunction( "IO_AddToPickled" );
+DeclareGlobalFunction( "IO_IsAlreadyPickled" );
 DeclareGlobalFunction( "IO_FinalizePickled" );
 DeclareGlobalFunction( "IO_AddToUnpickled" );
 DeclareGlobalFunction( "IO_FinalizeUnpickled" );
