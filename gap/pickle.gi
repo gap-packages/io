@@ -970,7 +970,9 @@ IO_Unpicklers.WPOB :=
     len := IO_ReadSmallInt(f);
     if len = IO_Error then return IO_Error; fi;
     l := WeakPointerObj( [] );
-    SetElmWPObj(l,len,0);
+    if len > 0 then
+        SetElmWPObj(l,len,0);
+    fi;
     IO_AddToUnpickled(l);
     i := 1;
     while i <= len do
