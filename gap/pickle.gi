@@ -993,6 +993,78 @@ IO_Unpicklers.WPOB :=
     return l;
   end;
 
+InstallMethod( IO_Pickle, "for a permutation group",
+  [ IsFile, IsPermGroup ],
+  function( f, g )
+    if IO_Write(f,"PRMG") = fail then return IO_Error; fi;
+    if IO_Pickle(f,GeneratorsOfGroup(g)) = IO_Error then return IO_Error; fi;
+    if HasSize(g) then
+        if IO_Pickle(f,Size(g)) = IO_Error then return IO_Error; fi;
+    else
+        if IO_Pickle(f,fail) = IO_Error then return IO_Error; fi;
+    fi;
+    if HasStabChainImmutable(g) then
+        if IO_Pickle(f,BaseStabChain(StabChainImmutable(g))) = IO_Error then
+            return IO_Error;
+        fi;
+    elif HasStabChainMutable(g) then
+        if IO_Pickle(f,BaseStabChain(StabChainMutable(g))) = IO_Error then
+            return IO_Error;
+        fi;
+    else
+        if IO_Pickle(f,fail) = IO_Error then return IO_Error; fi;
+    fi;
+    return IO_OK;
+  end );
+
+IO_Unpicklers.PRMG := 
+  function(f)
+    local base,g,gens,size;
+    gens := IO_Unpickle(f); if gens = IO_Error then return IO_Error; fi;
+    g := GroupWithGenerators(gens);
+    size := IO_Unpickle(f); if size = IO_Error then return IO_Error; fi;
+    if size <> fail then SetSize(g,size); fi;
+    base := IO_Unpickle(f); if base = IO_Error then return IO_Error; fi;
+    if base <> fail then
+        StabChain(g,rec(knownBase := base));
+    fi;
+    return g;
+  end;
+
+InstallMethod( IO_Pickle, "for a matrix group",
+  [ IsFile, IsMatrixGroup ],
+  function( f, g )
+    return IO_GenericObjectPickler(f,"MATG",[GeneratorsOfGroup(g)],g,
+               [Name,Size,DimensionOfMatrixGroup,FieldOfMatrixGroup],[],[]);
+  end );
+
+IO_Unpicklers.MATG := 
+  function(f)
+    local g,gens;
+    gens := IO_Unpickle(f); if gens = IO_Error then return IO_Error; fi;
+    g := GroupWithGenerators(gens);
+    return
+    IO_GenericObjectUnpickler(f,g,
+                 [Name,Size,DimensionOfMatrixGroup,FieldOfMatrixGroup],[]);
+    return g;
+  end;
+
+InstallMethod( IO_Pickle, "for a finite field",
+  [ IsFile, IsField and IsFinite ],
+  function(f,F)
+    return IO_GenericObjectPickler(f,"FFIE",
+              [Characteristic(F),DegreeOverPrimeField(F)],F,[],[],[]);
+  end );
+
+IO_Unpicklers.FFIE :=
+  function(f)
+    local d,p;
+    p := IO_Unpickle(f); if p = IO_Error then return IO_Error; fi;
+    d := IO_Unpickle(f); if d = IO_Error then return IO_Error; fi;
+    if IO_Unpickle(f) <> fail then return IO_Error; fi;
+    return GF(p,d);
+  end;
+
 ##
 ##  This program is free software; you can redistribute it and/or modify
 ##  it under the terms of the GNU General Public License as published by

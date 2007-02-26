@@ -14,6 +14,10 @@
     was never needed, return either IO_Error or unpickled object. This
     changes the semantics!
   - Pickling/Unpickling of WeakPointerObjects
+  - Pickling/Unpickling of permutation groups (including Size and base of 
+    StabChain)
+  - Pickling/Unpickling of matrix groups (only generators and Size)
+  - Pickling/Unpickling of finite fields
 
 
 ==========================
