@@ -21,7 +21,7 @@
   - Set Host component of HTTP request header by default of the name
     of the server argument in SingleHTTPRequest.
   - Alexander Konovalov's CheckForUpdates function.
-  - Released revision xxx as 2.1
+  - Released revision 285 as 2.1
 
 
 ==========================

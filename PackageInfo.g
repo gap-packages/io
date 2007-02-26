@@ -31,7 +31,7 @@ Version := "2.1",
 
 ##  Release date of the current version in dd/mm/yyyy format.
 # 
-Date := "10/12/2006",
+Date := "26/02/2007",
 
 ##  URL of the archive(s) of the current package release, but *without*
 ##  the format extension(s), like '.zoo', which are given next.
