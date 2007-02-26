@@ -2138,6 +2138,27 @@ write protected list variable directly.
 </Description>
 </ManSection>
 
+The previous function allows for a very simple implementation of a
+function that checks, whether your current &GAP; installation is
+up to date:
+
+<ManSection>
+<Func Name="CheckForUpdates" Arg=""/>
+<Returns> nothing </Returns>
+<Description>
+    This function accesses a web page in St. Andrews and runs some
+    &GAP; code from there. This code knows all the currently released
+    versions of &GAP; and its packages. It prints out a summary and
+    possibly suggests upgrades. If you do not want to executed
+    code downloaded from the internet, then do not call this function.
+    <P/>
+    More concretely, the page accessed is
+    <URL>http://www.gap-system.org/Download/upgrade.html</URL> and the
+    code executed is a single call to the function <C>SuggestUpgrades</C> 
+    function in the &GAP; library.
+</Description>
+</ManSection>
+
 </Section>
 
 </Chapter>
