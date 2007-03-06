@@ -146,12 +146,17 @@ InstallGlobalFunction( IO_UnpickleByEvalString,
 InstallGlobalFunction( IO_GenericObjectPickler,
   function( f, tag, prepickle, ob, atts, filts, comps )
     local at,com,fil,nr,o;
-    nr := IO_AddToPickled(ob);
+    nr := IO_IsAlreadyPickled(ob);
     if nr = false then    # not yet known
         if IO_Write(f,tag) = fail then return IO_Error; fi;
         for o in prepickle do
             if IO_Pickle(f,o) = IO_Error then return IO_Error; fi;
         od;
+        nr := IO_AddToPickled(ob);
+        if nr <> false then
+            Error("prepickle objects had references to object - panic!");
+            return IO_Error;
+        fi;
         for at in atts do
             if IO_WriteAttribute(f,at,ob) = IO_Error then 
                 IO_FinalizePickled();
