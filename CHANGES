@@ -7,6 +7,7 @@
 ==========================
 
   - Fixed a serious bug with the generic object pickler.
+  - Released version 293 as 2.2
 
 
 ==========================
@@ -28,7 +29,7 @@
   - Set Host component of HTTP request header by default of the name
     of the server argument in SingleHTTPRequest.
   - Alexander Konovalov's CheckForUpdates function.
-  - Released revision 285 as 2.1
+  - Released revision 289 as 2.1
 
 
 ==========================
