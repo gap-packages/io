@@ -53,6 +53,9 @@ InstallGlobalFunction( IO_IsAlreadyPickled,
 
 InstallGlobalFunction( IO_FinalizePickled,
   function( )
+    if IO_PICKLECACHE.depth <= 0 then
+        Error("pickling depth has gone below zero!");
+    fi;
     IO_PICKLECACHE.depth := IO_PICKLECACHE.depth - 1;
     if IO_PICKLECACHE.depth = 0 then
         # important to clear the cache:
@@ -69,6 +72,9 @@ InstallGlobalFunction( IO_AddToUnpickled,
 
 InstallGlobalFunction( IO_FinalizeUnpickled,
   function( )
+    if IO_PICKLECACHE.depth <= 0 then
+        Error("pickling depth has gone below zero!");
+    fi;
     IO_PICKLECACHE.depth := IO_PICKLECACHE.depth - 1;
     if IO_PICKLECACHE.depth = 0 then
         # important to clear the cache:
@@ -186,14 +192,11 @@ InstallGlobalFunction( IO_GenericObjectPickler,
         return IO_OK;
     else   # this object was already pickled once!
         if IO_Write(f,"SREF") = IO_Error then 
-            IO_FinalizePickled();
             return IO_Error;
         fi;
         if IO_WriteSmallInt(f,nr) = IO_Error then
-            IO_FinalizePickled();
             return IO_Error;
         fi;
-        IO_FinalizePickled();
         return IO_OK;
     fi;
   end );
