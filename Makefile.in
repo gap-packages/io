@@ -39,7 +39,7 @@ clean:
 archive: doc
 	(cd .. ; tar czvf io-`cat io/VERSION`.tar.gz --exclude ".svn" --exclude bin --exclude test io)
 
-WEBPOS=/users/neunhoef/mywebpage/Computer/Software/Gap/io
+WEBPOS=/scratch/neunhoef/mywebpage.pub/Computer/Software/Gap/io
 
 towww: archive
 	echo '<?xml version="1.0" encoding="ISO-8859-1"?>' >${WEBPOS}.version
