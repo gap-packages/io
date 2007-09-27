@@ -21,30 +21,35 @@ const char * Revision_io_c =
 #include <sys/socket.h>
 #include <sys/time.h>
 #include <errno.h>
-#ifdef HAVE_SYS_STAT_H
+#if HAVE_SYS_STAT_H
 #include <sys/stat.h>
 #endif
-#ifdef HAVE_FCNTL_H
+#if HAVE_FCNTL_H
 #include <fcntl.h>
 #endif
-#ifdef HAVE_UNISTD_H
+#if HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-#ifdef HAVE_DIRENT_H
+#if HAVE_DIRENT_H
 #include <dirent.h>
 #endif
-#ifdef HAVE_GETPROTOBYNAME
+#if HAVE_GETPROTOBYNAME
 #include <netdb.h>
 #endif
-#ifdef HAVE_SYS_WAIT_H
+#if HAVE_SYS_WAIT_H
 #include <sys/wait.h>
+#endif
+#if HAVE_SIGNAL_H
+#ifndef SYS_SIGNAL_H
+#include <signal.h>
+#endif
 #endif
 /* We should test for existence of netinet/in.h and netinet/tcp.h, but
  * this would require a change in the GAP configure script, which is
  * tedious. */
-#ifdef HAVE_GETPROTOBYNAME
+#if HAVE_GETPROTOBYNAME
 #include <netinet/in.h>
-#include <netinet/ip.h>
+/* #include <netinet/ip.h> */
 #include <netinet/tcp.h>
 #endif
 #if SYS_IS_CYGWIN32
@@ -1593,6 +1598,30 @@ Obj FuncIO_fcntl(Obj self, Obj fd, Obj cmd, Obj arg)
 }
 #endif
 
+Obj FuncIO_getpid(Obj self)
+{
+    return INTOBJ_INT(getpid());
+}
+
+Obj FuncIO_getppid(Obj self)
+{
+    return INTOBJ_INT(getppid());
+}
+
+Obj FuncIO_kill(Obj self, Obj pid, Obj sig)
+{
+    Int ret;
+    if (!IS_INTOBJ(pid) || !IS_INTOBJ(sig)) {
+        SyClearErrorNo();
+        return Fail;
+    }
+    ret = kill((pid_t) INT_INTOBJ(pid),(int) INT_INTOBJ(sig));
+    if (ret == -1) {
+        SySetErrorNo();
+        return Fail;
+    } else
+        return True;
+}
     
         
 /*F * * * * * * * * * * * * * initialize package * * * * * * * * * * * * * * */
@@ -1921,6 +1950,18 @@ static StructGVarFunc GVarFuncs [] = {
     FuncIO_fcntl,
     "io.c:IO_fcntl" },
 #endif
+
+  { "IO_getpid", 0, "",
+    FuncIO_getpid,
+    "io.c:IO_getpid" },
+
+  { "IO_getppid", 0, "",
+    FuncIO_getppid,
+    "io.c:IO_getppid" },
+
+  { "IO_kill", 2, "pid, sig",
+    FuncIO_kill,
+    "io.c:IO_kill" },
 
   { 0 }
 
@@ -2685,6 +2726,120 @@ static Int InitLibrary ( StructInitInfo *module )
 #endif
 #ifdef __GNUC_MINOR__
     AssPRec(tmp, RNamName("__GNUC_MINOR__"), INTOBJ_INT((Int) __GNUC_MINOR__));
+#endif
+#ifdef SIGHUP
+    AssPRec(tmp, RNamName("SIGHUP"), INTOBJ_INT((Int) SIGHUP));
+#endif
+#ifdef SIGINT
+    AssPRec(tmp, RNamName("SIGINT"), INTOBJ_INT((Int) SIGINT));
+#endif
+#ifdef SIGQUIT
+    AssPRec(tmp, RNamName("SIGQUIT"), INTOBJ_INT((Int) SIGQUIT));
+#endif
+#ifdef SIGILL
+    AssPRec(tmp, RNamName("SIGILL"), INTOBJ_INT((Int) SIGILL));
+#endif
+#ifdef SIGABRT
+    AssPRec(tmp, RNamName("SIGABRT"), INTOBJ_INT((Int) SIGABRT));
+#endif
+#ifdef SIGFPE
+    AssPRec(tmp, RNamName("SIGFPE"), INTOBJ_INT((Int) SIGFPE));
+#endif
+#ifdef SIGKILL
+    AssPRec(tmp, RNamName("SIGKILL"), INTOBJ_INT((Int) SIGKILL));
+#endif
+#ifdef SIGSEGV
+    AssPRec(tmp, RNamName("SIGSEGV"), INTOBJ_INT((Int) SIGSEGV));
+#endif
+#ifdef SIGPIPE
+    AssPRec(tmp, RNamName("SIGPIPE"), INTOBJ_INT((Int) SIGPIPE));
+#endif
+#ifdef SIGALRM
+    AssPRec(tmp, RNamName("SIGALRM"), INTOBJ_INT((Int) SIGALRM));
+#endif
+#ifdef SIGTERM
+    AssPRec(tmp, RNamName("SIGTERM"), INTOBJ_INT((Int) SIGTERM));
+#endif
+#ifdef SIGUSR1
+    AssPRec(tmp, RNamName("SIGUSR1"), INTOBJ_INT((Int) SIGUSR1));
+#endif
+#ifdef SIGUSR2
+    AssPRec(tmp, RNamName("SIGUSR2"), INTOBJ_INT((Int) SIGUSR2));
+#endif
+#ifdef SIGCHLD
+    AssPRec(tmp, RNamName("SIGCHLD"), INTOBJ_INT((Int) SIGCHLD));
+#endif
+#ifdef SIGCONT
+    AssPRec(tmp, RNamName("SIGCONT"), INTOBJ_INT((Int) SIGCONT));
+#endif
+#ifdef SIGSTOP
+    AssPRec(tmp, RNamName("SIGSTOP"), INTOBJ_INT((Int) SIGSTOP));
+#endif
+#ifdef SIGTSTP
+    AssPRec(tmp, RNamName("SIGTSTP"), INTOBJ_INT((Int) SIGTSTP));
+#endif
+#ifdef SIGTTIN
+    AssPRec(tmp, RNamName("SIGTTIN"), INTOBJ_INT((Int) SIGTTIN));
+#endif
+#ifdef SIGTTOU
+    AssPRec(tmp, RNamName("SIGTTOU"), INTOBJ_INT((Int) SIGTTOU));
+#endif
+#ifdef SIGBUS
+    AssPRec(tmp, RNamName("SIGBUS"), INTOBJ_INT((Int) SIGBUS));
+#endif
+#ifdef SIGPOLL
+    AssPRec(tmp, RNamName("SIGPOLL"), INTOBJ_INT((Int) SIGPOLL));
+#endif
+#ifdef SIGPROF
+    AssPRec(tmp, RNamName("SIGPROF"), INTOBJ_INT((Int) SIGPROF));
+#endif
+#ifdef SIGSYS
+    AssPRec(tmp, RNamName("SIGSYS"), INTOBJ_INT((Int) SIGSYS));
+#endif
+#ifdef SIGTRAP
+    AssPRec(tmp, RNamName("SIGTRAP"), INTOBJ_INT((Int) SIGTRAP));
+#endif
+#ifdef SIGURG
+    AssPRec(tmp, RNamName("SIGURG"), INTOBJ_INT((Int) SIGURG));
+#endif
+#ifdef SIGVTALRM
+    AssPRec(tmp, RNamName("SIGVTALRM"), INTOBJ_INT((Int) SIGVTALRM));
+#endif
+#ifdef SIGXCPU
+    AssPRec(tmp, RNamName("SIGXCPU"), INTOBJ_INT((Int) SIGXCPU));
+#endif
+#ifdef SIGXFSZ
+    AssPRec(tmp, RNamName("SIGXFSZ"), INTOBJ_INT((Int) SIGXFSZ));
+#endif
+#ifdef SIGIOT
+    AssPRec(tmp, RNamName("SIGIOT"), INTOBJ_INT((Int) SIGIOT));
+#endif
+#ifdef SIGEMT
+    AssPRec(tmp, RNamName("SIGEMT"), INTOBJ_INT((Int) SIGEMT));
+#endif
+#ifdef SIGSTKFLT
+    AssPRec(tmp, RNamName("SIGSTKFLT"), INTOBJ_INT((Int) SIGSTKFLT));
+#endif
+#ifdef SIGIO
+    AssPRec(tmp, RNamName("SIGIO"), INTOBJ_INT((Int) SIGIO));
+#endif
+#ifdef SIGCLD
+    AssPRec(tmp, RNamName("SIGCLD"), INTOBJ_INT((Int) SIGCLD));
+#endif
+#ifdef SIGPWR
+    AssPRec(tmp, RNamName("SIGPWR"), INTOBJ_INT((Int) SIGPWR));
+#endif
+#ifdef SIGINFO
+    AssPRec(tmp, RNamName("SIGINFO"), INTOBJ_INT((Int) SIGINFO));
+#endif
+#ifdef SIGLOST
+    AssPRec(tmp, RNamName("SIGLOST"), INTOBJ_INT((Int) SIGLOST));
+#endif
+#ifdef SIGWINCH
+    AssPRec(tmp, RNamName("SIGWINCH"), INTOBJ_INT((Int) SIGWINCH));
+#endif
+#ifdef SIGUNUSED
+    AssPRec(tmp, RNamName("SIGUNUSED"), INTOBJ_INT((Int) SIGUNUSED));
 #endif
 
     gvar = GVarName("IO");

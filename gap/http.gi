@@ -46,6 +46,40 @@ InstallGlobalFunction( OpenHTTPConnection,
                 closed := false );
   end );
 
+InstallGlobalFunction( FixChunkedBody,
+  function( st )
+    # This parses a chunked body and returns the final result resulting
+    # from putting together the chunks. Follows rfc2616, section 3.6.1.
+    # If anything goes wrong, the original is returned.
+    local chunklen,head,p,pos,q,res;
+    pos := 0;
+    res := [];
+    while true do   # will return eventually 
+        p := PositionSublist(st,"\r\n",pos);
+        if p = fail then
+            break;
+        fi;
+        head := st{[pos+1..p]};
+        pos := p+1;
+        q := 1;
+        while q <= Length(head) and head[q] in "0123456789ABCDEFabcdef" do
+            q := q + 1;
+        od;
+        chunklen := IntHexString(head{[1..q-1]});
+        if chunklen = 0 then    # this was the last chunk
+            break;
+        else
+            Add(res,st{[pos+1..pos+chunklen]});
+            pos := pos + chunklen + 2;    # eat up CR and LF
+        fi;
+    od;
+    if Length(res) > 0 then 
+        return Concatenation(res);
+    else
+        return st;
+    fi;
+  end );
+
   
 InstallGlobalFunction( HTTPRequest,
   function(conn,method,uri,header,body,target)
@@ -54,7 +88,8 @@ InstallGlobalFunction( HTTPRequest,
     # body either false or a string
     # target either false or the name of a file where the body is stored
     local ParseHeader,bodyread,byt,chunk,contentlength,haveseenheader,
-          inpos,k,msg,nr,out,outeof,r,responseheader,ret,w,SetError;
+          inpos,k,msg,nr,out,outeof,r,responseheader,ret,w,SetError,
+          chunked;
 
     if conn.sock = fail or conn.closed = true then
         Error("Trying to work with closed connection");
@@ -180,6 +215,7 @@ InstallGlobalFunction( HTTPRequest,
 
     inpos := 0;
     outeof := false;
+    chunked := false;
     repeat
         if not(outeof) then
             r := [conn.sock];
@@ -228,7 +264,13 @@ InstallGlobalFunction( HTTPRequest,
                 responseheader := rec();
                 r := ParseHeader(out);
                 if r <> fail then   # then it is a position number!
-                    if not(IsBound(responseheader.content\-length)) then
+                    if IsBound(responseheader.transfer\-encoding) and
+                       responseheader.transfer\-encoding = "chunked" then
+                        chunked := true;
+                        contentlength := infinity;
+                        # This now only works if the server closes the
+                        # connection after sending the body!
+                    elif not(IsBound(responseheader.content\-length)) then
                         Print("HTTP Warning: no content length!\n");
                         contentlength := infinity;
                     else
@@ -280,6 +322,16 @@ InstallGlobalFunction( HTTPRequest,
     else
         IO_Close(out);
         ret.body := target;
+    fi;
+
+    if chunked then
+        # Now we have to fix everything since it came in chunks.
+        if target = false then    # things are still in memory
+            ret.body := FixChunkedBody(ret.body);
+        else    # oops, already in a file!
+            # This is a dirty hack:
+            FileString(target,FixChunkedBody(StringFile(target)));
+        fi;
     fi;
     return ret;
   end );

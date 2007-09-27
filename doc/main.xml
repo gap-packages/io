@@ -30,7 +30,7 @@ with   <C>LoadPackage("IO");</C>   before  its   functions   become
 available.<P/>
 
 Please,            send             me            an            e-mail
-(<Email>max.neunhoeffer@math.rwth-aachen.de</Email>)  if  you  have  any
+(<Email>neunhoef@mcs.st-and.ac.uk</Email>)  if  you  have  any
 questions,  remarks, suggestions,  etc. concerning  this package.
 Also, I would like to hear about applications of this package.<P/>
 
@@ -165,7 +165,10 @@ The following functions from the C library are made available as
 <C>fork</C>,
 <C>fstat</C>, 
 <C>gethostbyname</C>, 
+<C>getpid</C>,
+<C>getppid</C>,
 <C>getsockopt</C>, 
+<C>kill</C>,
 <C>lchown</C>,
 <C>link</C>, 
 <C>listen</C>,
@@ -531,6 +534,24 @@ with all the relevant information about the host.
 </ManSection>
  
 <ManSection>
+<Func Name="IO_getpid" Arg="" Comm="Get process ID."/>
+<Returns> an integer </Returns>
+<Description>
+    Returns the process ID of the current process as an integer. For
+    details see <Q><C>man 2 getpid</C></Q>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO_getppid" Arg="" Comm="Get parent process ID."/>
+<Returns> an integer </Returns>
+<Description>
+    Returns the process ID of the parent of the current process as an 
+    integer. For details see <Q><C>man 2 getppid</C></Q>.
+</Description>
+</ManSection>
+
+<ManSection>
 <Func Name="IO_getsockopt" Arg="fd, level, optname, optval"
       Comm="Get a socket option."/>
 <Returns> <K>true</K> or <K>false</K> </Returns>
@@ -541,6 +562,17 @@ no 5th argument is necessary.
 </Description> 
 </ManSection>
  
+<ManSection>
+<Func Name="IO_kill" Arg="pid, sig" Comm="Send signal."/>
+<Returns> <K>true</K> or <K>fail</K> </Returns>
+<Description>
+    Sends the signal <A>sig</A> to the process with process ID
+    <A>pid</A>. For details see <Q><C>man 2 kill</C></Q>.
+    The signal numbers available can be found in the global
+    <C>IO</C> record with names like <C>SIGTERM</C>.
+</Description>
+</ManSection>
+
 <ManSection>
 <Func Name="IO_lchown" Arg="path, owner, group"
       Comm="Changes owner and/or group of a file not following links."/>
@@ -1036,11 +1068,14 @@ A convenient way to do this for reading or writing of files on disk
 is the following function:
 <ManSection>
 <Func Name="IO_File" Arg="filename [,mode]"
-      Comm="open a file for reading or writing and create a File object"/>
+      Comm="open a file for reading or writing and create a File object"
+      Label="mode" />
 <Func Name="IO_File" Arg="filename [,bufsize]"
-      Comm="open a file for reading or writing and create a File object"/>
+      Comm="open a file for reading or writing and create a File object"
+      Label="bufsize" />
 <Func Name="IO_File" Arg="filename,mode,bufsize"
-      Comm="open a file for reading or writing and create a File object"/>
+      Comm="open a file for reading or writing and create a File object"
+      Label="mode and bufsize" />
 <Returns> a <C>File</C> object or <K>fail</K> </Returns>
 <Description>
 The argument <A>filename</A> must be a string specifying the path name
@@ -1657,7 +1692,8 @@ termination.
 </ManSection>
 
 <ManSection>
-<Func Name="IO_StringFilterFile" Arg="filename, progs, st [,append]"/>
+    <Func Name="IO_StringFilterFile" Arg="filename, progs, st [,append]"
+          Label="append" />
 <Returns> a string or <K>fail</K> </Returns>
 <Description>
     Writes the content of the string <A>st</A> to the file with the name 
@@ -1675,7 +1711,8 @@ termination.
 <Func Name="IO_FilteredFile" Arg="progs, filename [,mode][,bufsize]"/>
 <Returns> a <C>File</C> object or <K>fail</K> </Returns>
 <Description>
-This function is similar to <Ref Func="IO_File"/> and behaves nearly
+    This function is similar to <Ref Func="IO_File" Label="mode"/> 
+    and behaves nearly
 identically. The only difference is that a filtering pipeline is switched
 between the file and the <C>File</C> object such that all things read
 or written respectively are filtered through this pipeline of processes.
@@ -2371,7 +2408,7 @@ they may be arbitrarily self-referential.
 
   This package is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; version 2 of the License.<P/>
+  the Free Software Foundation; version 2 or greater of the License.<P/>
 
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of

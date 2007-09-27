@@ -27,7 +27,9 @@ StdGlobalVarsIO := Set(
   "IO_send", "IO_sendto", "IO_setsockopt", "IO_socket", "IO_stat", 
   "IO_symlink", "IO_telldir", "IO_unlink", "IO_write",
   "IO_FileFilterString", "IO_FilteredFile", "IO_FindExecutable", 
-  "IO_ForkExecWithFDs", "IO_StartPipeline", "IO_StringFilterFile"] );
+  "IO_ForkExecWithFDs", "IO_StartPipeline", "IO_StringFilterFile",
+  "IO_FuncToUnpickle", "IO_IsAlreadyPickled", "IO_PackageIsLoaded", 
+  "IO_PkgThingsToRead", "IO_getpid", "IO_getppid", "IO_kill" ] );
 StdComponentsIO := Set(
 [ "AF_APPLETALK", "AF_ASH", "AF_ATMPVC", "AF_ATMSVC", "AF_AX25", 
   "AF_BLUETOOTH", "AF_BRIDGE", "AF_DECnet", "AF_ECONET", "AF_FILE", 
@@ -73,7 +75,13 @@ StdComponentsIO := Set(
   "TCP_KEEPCNT", "TCP_KEEPIDLE", "TCP_KEEPINTVL", "TCP_LINGER2", 
   "TCP_MAXSEG", "TCP_NODELAY", "TCP_QUICKACK", "TCP_SYNCNT", 
   "TCP_WINDOW_CLAMP", "TRY_AGAIN", "__GNUC_MINOR__", "__GNUC__",
-  "NonBlockWriteAmount" ]);
+  "NonBlockWriteAmount", "SIGABRT", "SIGALRM", "SIGBUS", "SIGCHLD", 
+  "SIGCLD", "SIGCONT", "SIGFPE", 
+  "SIGHUP", "SIGILL", "SIGINT", "SIGIO", "SIGIOT", "SIGKILL", "SIGPIPE", 
+  "SIGPOLL", "SIGPROF", "SIGPWR", "SIGQUIT", "SIGSEGV", "SIGSTKFLT", 
+  "SIGSTOP", "SIGSYS", "SIGTERM", "SIGTRAP", "SIGTSTP", "SIGTTIN", "SIGTTOU", 
+  "SIGUNUSED", "SIGURG", "SIGUSR1", "SIGUSR2", "SIGVTALRM", "SIGWINCH", 
+  "SIGXCPU", "SIGXFSZ"]);
 # Note missing but possible (includes missing because of autoconf:
 #   "ENOBUGS", "ICMP_FILTER", "IP_MTU"
 GlobalVarsIO := 

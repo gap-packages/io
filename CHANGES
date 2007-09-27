@@ -7,6 +7,12 @@
 ==========================
 
   - Require GAP >= 4.4.9 in PackageInfo.g
+  - Change addresses to St Andrews.
+  - Add understanding of chunked transfer encoding.
+  - Make IO compile on FreeBSD.
+  - Added IO_getpid, IO_getppid, IO_kill.
+  - Released revision xxx as 2.3
+
 
 ==========================
  Changes from 2.1 -> 2.2:

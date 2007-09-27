@@ -21,16 +21,23 @@
     </Version>
     <Author>Max Neunhöffer
 <Address>
-Lehrstuhl D für Mathematik
-RWTH Aachen
-Templergraben 64
-52062 Aachen
-Germany
+School of Mathematics and Statistics
+Mathematical Institute
+North Haugh
+St Andrews, Fife KY16 9SS
+Scotland, UK
 </Address>
-    <Email>max.neunhoeffer@math.rwth-aachen.de</Email>
-    <Homepage>http://www.math.rwth-aachen.de/&tilde;Max.Neunhoeffer</Homepage>
+    <Email>neunhoef@mcs.st-and.ac.uk</Email>
+    <Homepage>http://www-groups.mcs.st-and.ac.uk/&tilde;neunhoef</Homepage>
     </Author>
-    <Date>April 2007</Date>
+    <Date>September 2007</Date>
+
+<Copyright>
+    &copyright; 2005-2007 by Max Neunhöffer<P/>
+
+  This package may be distributed under the terms and conditions of the
+  GNU Public License Version 2 or later.
+</Copyright>
 </TitlePage>
 
 <!--  TableOfContents  . . . . . .  generate a table of contents   -->

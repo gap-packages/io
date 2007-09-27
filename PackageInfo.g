@@ -27,11 +27,11 @@ Subtitle := "Bindings for low level C library IO",
 ##  See '?Extending: Version Numbers' in GAP help for an explanation
 ##  of valid version numbers. For an automatic package distribution update
 ##  you must provide a new version number even after small changes.
-Version := "2.2",
+Version := "2.3",
 
 ##  Release date of the current version in dd/mm/yyyy format.
 # 
-Date := "02/04/2007",
+Date := "27/09/2007",
 
 ##  URL of the archive(s) of the current package release, but *without*
 ##  the format extension(s), like '.zoo', which are given next.
@@ -42,7 +42,7 @@ Date := "02/04/2007",
 ##  example/init.g, ...    or  example-1.3/init.g, ...  )
 # 
 ArchiveURL := 
-     "http://www.math.rwth-aachen.de/~Max.Neunhoeffer/Computer/Software/Gap/io/io-2.2",
+     "http://www-groups.mcs.st-and.ac.uk/~neunhoef/Computer/Software/Gap/io/io-2.3",
 
 ##  All provided formats as list of file extensions, separated by white
 ##  space or commas.
@@ -116,20 +116,20 @@ BinaryFiles := ["doc/manual.dvi", "doc/manual.pdf"],
 ##  
 Persons := [
   rec( 
-    LastName      := "Neunhöffer",
+    LastName      := "Neunhoeffer",
     FirstNames    := "Max",
     IsAuthor      := true,
     IsMaintainer  := true,
-    Email         := "max.neunhoeffer@math.rwth-aachen.de",
-    WWWHome       := "http://www.math.rwth-aachen.de/~Max.Neunhoeffer/",
+    Email         := "neunhoef@mcs.st-and.ac.uk",
+    WWWHome       := "http://www-groups.mcs.st-and.ac.uk/~neunhoef/",
     PostalAddress := Concatenation( [
-                       "Lehrstuhl D für Mathematik\n",
-                       "RWTH Aachen\n",
-                       "Templergraben 64\n",
-                       "52056 Aachen\n",
-                       "Germany" ] ),
-    Place         := "Aachen",
-    Institution   := "RWTH Aachen"
+                       "School of Mathematics and Statistics\n",
+                       "Mathematical Institute\n",
+                       "North Haugh\n",
+                       "St Andrews, Fife KY16 9SS\n",
+                       "Scotland, UK" ] ),
+    Place         := "St Andrews",
+    Institution   := "University of St Andrews"
   ),
 ],
 
@@ -163,9 +163,9 @@ Status := "deposited",
 ##  and updating of the package in the GAP distribution.
 #
 README_URL := 
-  "http://www.math.rwth-aachen.de/~Max.Neunhoeffer/Computer/Software/Gap/io/README.io",
+  "http://www-groups.mcs.st-and.ac.uk/~neunhoef/Computer/Software/Gap/io/README.io",
 PackageInfoURL := 
-  "http://www.math.rwth-aachen.de/~Max.Neunhoeffer/Computer/Software/Gap/io/PackageInfo.g",
+  "http://www-groups.mcs.st-and.ac.uk/~neunhoef/Computer/Software/Gap/io/PackageInfo.g",
 
 ##  Here you  must provide a short abstract explaining the package content 
 ##  in HTML format (used on the package overview Web page) and an URL 
@@ -182,7 +182,7 @@ AbstractHTML :=
    provides bindings for <span class=\"pkgname\">GAP</span> to the lower \
    levels of Input/Output functionality in the C library.",
 
-PackageWWWHome := "http://www.math.rwth-aachen.de/~Max.Neunhoeffer/Computer/Software/Gap/io.html",
+PackageWWWHome := "http://www-groups.mcs.st-and.ac.uk/~neunhoef/Computer/Software/Gap/io.html",
                
 ##  Here is the information on the help books of the package, used for
 ##  loading into GAP's online help and maybe for an online copy of the 
@@ -239,7 +239,7 @@ Dependencies := rec(
   # list of pairs [package name, (least) version],  package name is case
   # insensitive, least version denoted with '>=' prepended to version string.
   # without these, the package will not load
-  NeededOtherPackages := [["GAPDoc", ">= 0.99"]],
+  NeededOtherPackages := [["GAPDoc", ">= 1.0"]],
   # without these the package will issue a warning while loading
   # SuggestedOtherPackages := [],
   SuggestedOtherPackages := [],
