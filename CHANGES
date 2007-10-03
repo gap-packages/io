@@ -12,7 +12,7 @@
   - Make IO compile on FreeBSD.
   - Added IO_getpid, IO_getppid, IO_kill.
   - Change license to GPL V2 or later.
-  - Released revision 317 as 2.3
+  - Released revision 328 as 2.3
 
 
 ==========================
