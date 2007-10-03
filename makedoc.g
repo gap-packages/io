@@ -6,7 +6,7 @@
 ##  This file is free software, see license information at the end.
 ##  
 
-RequirePackage("GAPDoc");
+LoadPackage("GAPDoc");
 
 MakeGAPDocDoc("doc", "io", [], "IO");
 

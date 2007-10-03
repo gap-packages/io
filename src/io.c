@@ -9,7 +9,7 @@
 */
 
 const char * Revision_io_c =
-   "$Id: io.c$";
+   "io.c, V2.3";
 
 /* Try to use as much of the GNU C library as possible: */
 #define _GNU_SOURCE

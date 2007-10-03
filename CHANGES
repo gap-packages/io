@@ -11,7 +11,8 @@
   - Add understanding of chunked transfer encoding.
   - Make IO compile on FreeBSD.
   - Added IO_getpid, IO_getppid, IO_kill.
-  - Released revision xxx as 2.3
+  - Change license to GPL V2 or later.
+  - Released revision 317 as 2.3
 
 
 ==========================
