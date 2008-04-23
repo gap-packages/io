@@ -3,6 +3,13 @@
 ===========================================================================
 
 ==========================
+ Changes from 2.3 -> 2.4:
+==========================
+
+  - Added ignoring of SIGPIPE for architectures where standard
+    behaviour is to terminate the process.
+
+==========================
  Changes from 2.2 -> 2.3:
 ==========================
 

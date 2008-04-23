@@ -143,6 +143,7 @@ Obj FuncIO_InstallSIGCHLDHandler( Obj self )
   /* Do not install ourselves twice: */
   if (oldhandler == 0) {
       oldhandler = signal(SIGCHLD, IO_SIGCHLDHandler);
+      signal(SIGPIPE,SIG_IGN);
       return True;
   } else
       return False;
@@ -155,6 +156,7 @@ Obj FuncIO_RestoreSIGCHLDHandler( Obj self )
   else {
       signal(SIGCHLD,oldhandler);
       oldhandler = 0;
+      signal(SIGPIPE,SIG_DFL);
       return True;
   }
 }
