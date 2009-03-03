@@ -1,3 +1,10 @@
+HTTP/1.1-Konformitaet -> Alexander Konovalovs Tests mit Online int seq site
+chunked transfer
+
+Seek fuer File s?
+
+Fix "platform.g" test with latest additions.
+
 future:
  fix permissions in checked out files
 
@@ -7,13 +14,6 @@ Ausgabe der Testdateien aussagekraeftiger
 
 ??? access to utime/utimes?
 
-add some checks to GAP's autoconf configure script to test for more
-headers, for example:
-  netinet/in.h
-  netinet/ip.h
-  netinet/tcp.h
-possibly some Linux-specific things:
-  linux/in.h ???
 More tests?
 More examples?
 

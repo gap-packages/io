@@ -168,10 +168,13 @@ The following functions from the C library are made available as
 <C>getpid</C>,
 <C>getppid</C>,
 <C>getsockopt</C>, 
+<C>gettimeofday</C>,
+<C>gmtime</C>,
 <C>kill</C>,
 <C>lchown</C>,
 <C>link</C>, 
 <C>listen</C>,
+<C>localtime</C>,
 <C>lseek</C>, 
 <C>lstat</C>,
 <C>mkdir</C>, 
@@ -563,6 +566,30 @@ no 5th argument is necessary.
 </ManSection>
  
 <ManSection>
+<Func Name="IO_gettimeofday" Arg=""
+      Comm="Get the current time."/>
+<Returns> A record with components <C>tv_sec</C> and <C>tv_usec</C> </Returns>
+<Description>
+This returns the time elapsed since 1.1.1970, 0:00 GMT. The component
+<C>tv_sec</C> contains the number of full seconds and the number
+<C>tv_usec</C> the additional microseconds.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO_gmtime" Arg="seconds"
+      Comm="Computes broken down time."/>
+<Returns> A record </Returns>
+<Description>
+The argument is the number of seconds that have elapsed since
+1.1.1970, 0:00 GMT. The result is a record with the current Greenwich
+mean time
+broken down into date and time as in the C-library function
+<C>gmtime</C>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
 <Func Name="IO_kill" Arg="pid, sig" Comm="Send signal."/>
 <Returns> <K>true</K> or <K>fail</K> </Returns>
 <Description>
@@ -600,6 +627,18 @@ For details see <Q><C>man 2 link</C></Q>.
 <Description>
 Switch a socket to listening.
 For details see <Q><C>man 2 listen</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
+<Func Name="IO_localtime" Arg="seconds"
+      Comm="Computes broken down time."/>
+<Returns> A record </Returns>
+<Description>
+The argument is the number of seconds that have elapsed since
+1.1.1970, 0:00 GMT. The result is a record with the current local time
+broken down into date and time as in the C-library function
+<C>localtime</C>.
 </Description> 
 </ManSection>
  
