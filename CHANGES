@@ -8,6 +8,9 @@
 
   - Added ignoring of SIGPIPE for architectures where standard
     behaviour is to terminate the process.
+  - Completely new configure process with our own autoconf scripts
+  - gettimeofday new
+  - gmtime and localtime new
 
 ==========================
  Changes from 2.2 -> 2.3:

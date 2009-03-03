@@ -17,9 +17,18 @@ const char * Revision_io_c =
 #include "src/compiled.h"          /* GAP headers                */
 #include "ioconfig.h"    /* our own autoconf results */
 #include <stdlib.h>
+#ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
+#endif
+#ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
+#endif
+#ifdef HAVE_TIME_H
+#include <time.h>
+#endif
 #include <errno.h>
 #ifdef HAVE_SYS_STAT_H
 #include <sys/stat.h>
@@ -1628,6 +1637,65 @@ Obj FuncIO_kill(Obj self, Obj pid, Obj sig)
         return True;
 }
     
+#ifdef HAVE_GETTIMEOFDAY
+Obj FuncIO_gettimeofday( Obj self )
+{
+   Obj tmp;
+   struct timeval tv;
+   gettimeofday(&tv, NULL);
+   tmp = NEW_PREC(0);
+   AssPRec(tmp, RNamName("tv_sec"), ObjInt_Int( tv.tv_sec ));
+   AssPRec(tmp, RNamName("tv_usec"), ObjInt_Int( tv.tv_usec ));
+   return tmp;
+}
+#endif
+
+#ifdef HAVE_GMTIME
+Obj FuncIO_gmtime( Obj self, Obj time )
+{
+    Obj tmp;
+    time_t t;
+    struct tm *s;
+    if (!IS_INTOBJ(time)) return Fail;
+    t = INT_INTOBJ(time);
+    s = gmtime(&t);
+    tmp = NEW_PREC(0);
+    AssPRec(tmp, RNamName("tm_sec"), INTOBJ_INT(s->tm_sec));
+    AssPRec(tmp, RNamName("tm_min"), INTOBJ_INT(s->tm_min));
+    AssPRec(tmp, RNamName("tm_hour"), INTOBJ_INT(s->tm_hour));
+    AssPRec(tmp, RNamName("tm_mday"), INTOBJ_INT(s->tm_mday));
+    AssPRec(tmp, RNamName("tm_mon"), INTOBJ_INT(s->tm_mon));
+    AssPRec(tmp, RNamName("tm_year"), INTOBJ_INT(s->tm_year));
+    AssPRec(tmp, RNamName("tm_wday"), INTOBJ_INT(s->tm_wday));
+    AssPRec(tmp, RNamName("tm_yday"), INTOBJ_INT(s->tm_yday));
+    AssPRec(tmp, RNamName("tm_isdst"), INTOBJ_INT(s->tm_isdst));
+    return tmp;
+}
+#endif
+
+#ifdef HAVE_LOCALTIME
+Obj FuncIO_localtime( Obj self, Obj time )
+{
+    Obj tmp;
+    time_t t;
+    struct tm *s;
+    if (!IS_INTOBJ(time)) return Fail;
+    t = INT_INTOBJ(time);
+    s = localtime(&t);
+    tmp = NEW_PREC(0);
+    AssPRec(tmp, RNamName("tm_sec"), INTOBJ_INT(s->tm_sec));
+    AssPRec(tmp, RNamName("tm_min"), INTOBJ_INT(s->tm_min));
+    AssPRec(tmp, RNamName("tm_hour"), INTOBJ_INT(s->tm_hour));
+    AssPRec(tmp, RNamName("tm_mday"), INTOBJ_INT(s->tm_mday));
+    AssPRec(tmp, RNamName("tm_mon"), INTOBJ_INT(s->tm_mon));
+    AssPRec(tmp, RNamName("tm_year"), INTOBJ_INT(s->tm_year));
+    AssPRec(tmp, RNamName("tm_wday"), INTOBJ_INT(s->tm_wday));
+    AssPRec(tmp, RNamName("tm_yday"), INTOBJ_INT(s->tm_yday));
+    AssPRec(tmp, RNamName("tm_isdst"), INTOBJ_INT(s->tm_isdst));
+    return tmp;
+}
+#endif
+
         
 /*F * * * * * * * * * * * * * initialize package * * * * * * * * * * * * * * */
 
@@ -1967,6 +2035,24 @@ static StructGVarFunc GVarFuncs [] = {
   { "IO_kill", 2, "pid, sig",
     FuncIO_kill,
     "io.c:IO_kill" },
+
+#ifdef HAVE_GETTIMEOFDAY
+  { "IO_gettimeofday", 0, "",
+    FuncIO_gettimeofday,
+    "io.c:IO_gettimeofday" },
+#endif
+
+#ifdef HAVE_GMTIME
+  { "IO_gmtime", 1, "seconds",
+    FuncIO_gmtime,
+    "io.c:IO_gmtime" },
+#endif
+
+#ifdef HAVE_LOCALTIME
+  { "IO_localtime", 1, "seconds",
+    FuncIO_localtime,
+    "io.c:IO_localtime" },
+#endif
 
   { 0 }
 

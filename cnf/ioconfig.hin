@@ -58,6 +58,12 @@
 /* Define to 1 if you have the `getsockopt' function. */
 #undef HAVE_GETSOCKOPT
 
+/* Define to 1 if you have the `gettimeofday' function. */
+#undef HAVE_GETTIMEOFDAY
+
+/* Define to 1 if you have the `gmtime' function. */
+#undef HAVE_GMTIME
+
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
@@ -69,6 +75,9 @@
 
 /* Define to 1 if you have the `listen' function. */
 #undef HAVE_LISTEN
+
+/* Define to 1 if you have the `localtime' function. */
+#undef HAVE_LOCALTIME
 
 /* Define to 1 if you have the `lstat' function. */
 #undef HAVE_LSTAT
@@ -216,6 +225,9 @@
 /* Define to 1 if you have the `telldir' function. */
 #undef HAVE_TELLDIR
 
+/* Define to 1 if you have the <time.h> header file. */
+#undef HAVE_TIME_H
+
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
@@ -267,9 +279,6 @@
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
-
-/* System architecture */
-#undef SYS_ARCH
 
 /* are we on CYGWIN? */
 #undef SYS_IS_CYGWIN32
