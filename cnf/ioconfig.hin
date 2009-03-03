@@ -52,6 +52,12 @@
 /* Define to 1 if you have the `gethostbyname' function. */
 #undef HAVE_GETHOSTBYNAME
 
+/* Define to 1 if you have the `getpid' function. */
+#undef HAVE_GETPID
+
+/* Define to 1 if you have the `getppid' function. */
+#undef HAVE_GETPPID
+
 /* Define to 1 if you have the `getprotobyname' function. */
 #undef HAVE_GETPROTOBYNAME
 

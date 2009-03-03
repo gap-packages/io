@@ -1612,15 +1612,19 @@ Obj FuncIO_fcntl(Obj self, Obj fd, Obj cmd, Obj arg)
 }
 #endif
 
+#ifdef HAVE_GETPID
 Obj FuncIO_getpid(Obj self)
 {
     return INTOBJ_INT(getpid());
 }
+#endif
 
+#ifdef HAVE_GETPPID
 Obj FuncIO_getppid(Obj self)
 {
     return INTOBJ_INT(getppid());
 }
+#endif
 
 Obj FuncIO_kill(Obj self, Obj pid, Obj sig)
 {
@@ -2032,13 +2036,17 @@ static StructGVarFunc GVarFuncs [] = {
     "io.c:IO_fcntl" },
 #endif
 
+#ifdef HAVE_GETPID
   { "IO_getpid", 0, "",
     FuncIO_getpid,
     "io.c:IO_getpid" },
+#endif
 
+#ifdef HAVE_GETPPID
   { "IO_getppid", 0, "",
     FuncIO_getppid,
     "io.c:IO_getppid" },
+#endif
 
   { "IO_kill", 2, "pid, sig",
     FuncIO_kill,
