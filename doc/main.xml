@@ -1692,7 +1692,7 @@ termination.
 </ManSection>
 
 <ManSection>
-    <Func Name="IO_StringFilterFile" Arg="filename, progs, st [,append]"
+    <Func Name="IO_FileFilterString" Arg="filename, progs, st [,append]"
           Label="append" />
 <Returns> a string or <K>fail</K> </Returns>
 <Description>
