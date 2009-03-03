@@ -1626,6 +1626,7 @@ Obj FuncIO_getppid(Obj self)
 }
 #endif
 
+#ifdef HAVE_KILL
 Obj FuncIO_kill(Obj self, Obj pid, Obj sig)
 {
     Int ret;
@@ -1640,6 +1641,7 @@ Obj FuncIO_kill(Obj self, Obj pid, Obj sig)
     } else
         return True;
 }
+#endif
     
 #ifdef HAVE_GETTIMEOFDAY
 Obj FuncIO_gettimeofday( Obj self )
@@ -2048,9 +2050,11 @@ static StructGVarFunc GVarFuncs [] = {
     "io.c:IO_getppid" },
 #endif
 
+#ifdef HAVE_KILL
   { "IO_kill", 2, "pid, sig",
     FuncIO_kill,
     "io.c:IO_kill" },
+#endif
 
 #ifdef HAVE_GETTIMEOFDAY
   { "IO_gettimeofday", 0, "",
