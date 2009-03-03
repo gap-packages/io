@@ -15,31 +15,32 @@ const char * Revision_io_c =
 #define _GNU_SOURCE
 
 #include "src/compiled.h"          /* GAP headers                */
-
+#include "ioconfig.h"    /* our own autoconf results */
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/time.h>
 #include <errno.h>
-#if HAVE_SYS_STAT_H
+#ifdef HAVE_SYS_STAT_H
 #include <sys/stat.h>
 #endif
-#if HAVE_FCNTL_H
+#ifdef HAVE_FCNTL_H
 #include <fcntl.h>
 #endif
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-#if HAVE_DIRENT_H
+#ifdef HAVE_DIRENT_H
 #include <dirent.h>
 #endif
-#if HAVE_GETPROTOBYNAME
+#ifdef HAVE_NETDB_H
 #include <netdb.h>
 #endif
-#if HAVE_SYS_WAIT_H
+#ifdef HAVE_SYS_WAIT_H
 #include <sys/wait.h>
 #endif
-#if HAVE_SIGNAL_H
+#ifdef HAVE_SIGNAL_H
+/* Maybe the GAP kernel headers have already included it: */
 #ifndef SYS_SIGNAL_H
 #include <signal.h>
 #endif
@@ -47,9 +48,11 @@ const char * Revision_io_c =
 /* We should test for existence of netinet/in.h and netinet/tcp.h, but
  * this would require a change in the GAP configure script, which is
  * tedious. */
-#if HAVE_GETPROTOBYNAME
+#ifdef HAVE_NETINET_IN_H
 #include <netinet/in.h>
 /* #include <netinet/ip.h> */
+#endif
+#ifdef HAVE_NETINET_TCP_H
 #include <netinet/tcp.h>
 #endif
 #if SYS_IS_CYGWIN32
@@ -1275,7 +1278,7 @@ Obj FuncIO_setsockopt(Obj self,Obj fd,Obj level,Obj optname, Obj optval)
 }
 #endif
 
-#if HAVE_SELECT
+#ifdef HAVE_SELECT
 Obj FuncIO_select(Obj self, Obj inlist, Obj outlist, Obj exclist, 
                   Obj timeoutsec, Obj timeoutusec)
 {
