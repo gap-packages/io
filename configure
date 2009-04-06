@@ -17,9 +17,9 @@ export GAPARCH
 if test ! -d bin; then mkdir bin; fi
 if test ! -d bin/$GAParch; then 
     mkdir bin/$GAParch;
-    cp cnf/configure bin/$GAParch
-    cp cnf/ioconfig.hin bin/$GAParch
 fi
+cp cnf/configure bin/$GAParch
+cp cnf/ioconfig.hin bin/$GAParch
 cd bin/$GAPARCH
 ./configure --config-cache
 #rm -f Makefile
