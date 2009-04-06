@@ -1,12 +1,14 @@
+future:
+ fix permissions in checked out files
+
 HTTP/1.1-Konformitaet -> Alexander Konovalovs Tests mit Online int seq site
 chunked transfer
+
+Web-Proxy???
 
 Seek fuer File s?
 
 Fix "platform.g" test with latest additions.
-
-future:
- fix permissions in checked out files
 
 Runtimes() zaehlt children nicht mit???
 

@@ -642,6 +642,7 @@ Obj FuncIO_rmdir(Obj self,Obj path)
 #define ADDR_INT(op)    ((TypDigit*)ADDR_OBJ(op))
 #endif
 
+#ifndef USE_GMP
 static Obj MyObjInt_Int(Int i)
 {
     Obj n;
@@ -665,6 +666,9 @@ static Obj MyObjInt_Int(Int i)
         return INTOBJ_INT(i);
     }
 }
+#else
+#define MyObjInt_Int(i) ObjInt_Int(i)
+#endif
 
 #ifdef HAVE_STAT
 static struct stat ourstatbuf;
@@ -1650,8 +1654,8 @@ Obj FuncIO_gettimeofday( Obj self )
    struct timeval tv;
    gettimeofday(&tv, NULL);
    tmp = NEW_PREC(0);
-   AssPRec(tmp, RNamName("tv_sec"), ObjInt_Int( tv.tv_sec ));
-   AssPRec(tmp, RNamName("tv_usec"), ObjInt_Int( tv.tv_usec ));
+   AssPRec(tmp, RNamName("tv_sec"), MyObjInt_Int( tv.tv_sec ));
+   AssPRec(tmp, RNamName("tv_usec"), MyObjInt_Int( tv.tv_usec ));
    return tmp;
 }
 #endif

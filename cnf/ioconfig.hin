@@ -4,7 +4,7 @@
 #undef CLOSEDIR_VOID
 
 /* long alignment */
-#undef C_LONG_ALIGN
+#undef C_LONG_ALIGN_IO
 
 /* Define to 1 if you have the `accept' function. */
 #undef HAVE_ACCEPT

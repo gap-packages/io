@@ -3008,7 +3008,7 @@ fi
 echo "${ECHO_T}$gp_cv_c_long_align" >&6; }
 
 cat >>confdefs.h <<_ACEOF
-#define C_LONG_ALIGN $gp_cv_c_long_align
+#define C_LONG_ALIGN_IO $gp_cv_c_long_align
 _ACEOF
 
 

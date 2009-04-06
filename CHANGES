@@ -12,6 +12,8 @@
   - gettimeofday new
   - gmtime and localtime new
   - Check for getpid and getppid and kill
+  - Load dynamic module earlier (in init.g at the beginning)
+
 
 ==========================
  Changes from 2.2 -> 2.3:

@@ -3,7 +3,7 @@ dnl ##
 dnl ## check what unaligned access is still save
 dnl ##
 
-AC_DEFUN(GP_C_LONG_ALIGN,
+AC_DEFUN(GP_C_LONG_ALIGN_IO,
 [AC_CACHE_CHECK(unaligned access, gp_cv_c_long_align,
 [
 case "$host" in
@@ -36,7 +36,7 @@ esac
  rm -f core core.* *.core
 esac
 ] )
-AC_DEFINE_UNQUOTED( C_LONG_ALIGN, $gp_cv_c_long_align, long alignment )
+AC_DEFINE_UNQUOTED( C_LONG_ALIGN_IO, $gp_cv_c_long_align, long alignment )
 ] )
 
 
