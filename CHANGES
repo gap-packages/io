@@ -13,7 +13,7 @@
   - IO_gmtime and IO_localtime new
   - Check for IO_getpid and IO_getppid and IO_kill
   - Load dynamic module earlier (in init.g at the beginning)
-  - Release revision 336 as 3.0: 8.4.2009
+  - Release revision 337 as 3.0: 8.4.2009
 
 
 ==========================

@@ -95,9 +95,10 @@ the list of directories searched. Otherwise the package is not found by
 <Heading>Static linking</Heading>
 
 This might be interesting for M&dollar; Windows users, as
-dynamic loading of binary modules does not work there.<P/>
-
+dynamic loading of binary modules does not always work there.
 You can also create a new statically linked <Q><F>gap</F></Q> binary as follows:
+<P/>
+
 Go into the main &GAP; directory and then into <F>bin/BINDIR</F>. Here
 <F>BINDIR</F> means the directory containing the <Q><F>gap</F></Q> 
 executable after
@@ -105,24 +106,36 @@ compiling <Q><F>gap</F></Q>. This directory also contains the &GAP; compiler scr
 <Q><F>gac</F></Q>. Assuming IO in the standard location you can then say
 
 <Verb>
-   ./gac -o gap-static -p "-DIOSTATIC" -P "-static" ../../pkg/io/src/io.c
+    ./gac -o gap-static -p "-DIOSTATIC -I../../pkg/io/bin/BINDIR" \
+        -P "-static" ../../pkg/io/src/io.c
 </Verb>
 
-Then copy your <Q><F>gap</F></Q> start script to, say, <Q><F>gapbig</F></Q> and change the
+Then copy your <Q><F>gap</F></Q> start script to, say, <Q><F>gaps</F></Q> and change the
 references to the &GAP; binary to <Q><F>gap-static</F></Q>.<P/>
+
+Note that you have to replace <F>BINDIR</F> by the name containing the 
+<Q><F>gap</F></Q>
+executable after compiling GAP as above. If you have installed the
+package in a different place than the standard, you have to replace
+<Q><F>../..</F></Q> in the above command by the path to the directory containing
+the <Q><F>pkg</F></Q> directory into which you installed
+<Package>IO</Package>.
 
 If you want to install more than one package with a C-part like this
 package, you can still create a statically linked &GAP; executable by
 combining all the compile and link options and all the .c files as
 in the ./gac command above. For the IO package, you have to add
 <Verb>
-  -DIOSTATIC
+    -DIOSTATIC -I../../pkg/io/bin/BINDIR
 </Verb>
 to the string of the -p option and the file
 <Verb>
   ../../pkg/io/src/io.c
 </Verb>
-somewhere on the command line.
+somewhere on the command line. As above, <Q><F>../..</F></Q> and 
+<Q><F>BINDIR</F></Q> have to be replaced if you installed in a
+non-standard location.
+
 
 </Section>
 

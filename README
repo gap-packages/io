@@ -3,8 +3,8 @@
       README file for the `IO' GAP4 package (Max Neunhoeffer)
      =========================================================
         
-To get the newest version of this GAP 4 package download one of the
-archive files
+To get the newest version of this GAP 4 package download the
+archive file
     io-x.x.tar.gz
     io-x.x.zoo
     io-x.x.tar.bz2
@@ -47,27 +47,34 @@ startup script.
 ----------------------------------------------------------------------------
 
 STATIC LINKING: This might be interesting for M$ Windows users, as
-dynamic loading of binary modules does not work there.
+dynamic loading of binary modules does not always work there.
+You can create a new statically linked 'gap' binary as follows:
 
-You can also create a new statically linked 'gap' binary as follows:
 Go into the main GAP directory and then into 'bin/BINDIR'. Here
 BINDIR means the directory containing the 'gap' executable after
-compiling 'gap'. This directory also contains the GAP compiler script
+compiling GAP. This directory also contains the GAP compiler script
 'gac'. Assuming IO in the standard location you can then say
 
-   ./gac -o gap-static -p "-DIOSTATIC" -P "-static" ../../pkg/io/src/io.c
+   ./gac -o gap-static -p "-DIOSTATIC -I../../pkg/io/bin/BINDIR" -P "-static" ../../pkg/io/src/io.c
 
-Then copy your `gap' start script to, say, `gapbig' and change the
+Note that you have to replace BINDIR by the name containing the 'gap'
+executable after compiling GAP as above. If you have installed the
+package in a different place than the standard, you have to replace
+'../..' in the above command by the path to the directory containing
+the 'pkg' directory into which you installed IO.
+
+Then copy your `gap' start script to, say, `gaps' and change the
 references to the GAP binary to `gap-static'.
 
 If you want to install more than one package with a C-part like this
 package, you can still create a statically linked GAP executable by
 combining all the compile and link options and all the .c files as
 in the ./gac command above. For the IO package, you have to add
-  -DIOSTATIC
+  -DIOSTATIC -I../../pkg/io/bin/BINDIR
 to the string of the -p option and the file
   ../../pkg/io/src/io.c
-somewhere on the command line.
+somewhere on the command line. As above, '../..' and 'BINDIR' have
+to be replaced if you installed in a non-standard location.
 
 ----------------------------------------------------------------------------
 
@@ -78,4 +85,4 @@ E-mail me if there are any questions, remarks, suggestions. Also, I
 would like to hear about applications of this package.
 
 
-Max Neunhoeffer, e-mail: max.neunhoeffer@math.rwth-aachen.de 
+Max Neunhoeffer, e-mail: neunhoef@mcs.st-and.ac.uk
