@@ -3,16 +3,17 @@
 ===========================================================================
 
 ==========================
- Changes from 2.3 -> 2.4:
+ Changes from 2.3 -> 3.0:
 ==========================
 
   - Added ignoring of SIGPIPE for architectures where standard
     behaviour is to terminate the process.
   - Completely new configure process with our own autoconf scripts
-  - gettimeofday new
-  - gmtime and localtime new
-  - Check for getpid and getppid and kill
+  - IO_gettimeofday new
+  - IO_gmtime and IO_localtime new
+  - Check for IO_getpid and IO_getppid and IO_kill
   - Load dynamic module earlier (in init.g at the beginning)
+  - Release revision 336 as 3.0: 8.4.2009
 
 
 ==========================
@@ -25,7 +26,7 @@
   - Make IO compile on FreeBSD.
   - Added IO_getpid, IO_getppid, IO_kill.
   - Change license to GPL V2 or later.
-  - Released revision 328 as 2.3
+  - Released revision 328 as 2.3: 3.10.2007
 
 
 ==========================
@@ -33,7 +34,7 @@
 ==========================
 
   - Fixed a serious bug with the generic object pickler.
-  - Released version 296 as 2.2
+  - Released version 296 as 2.2: 2.4.2007
 
 
 ==========================
@@ -55,7 +56,7 @@
   - Set Host component of HTTP request header by default of the name
     of the server argument in SingleHTTPRequest.
   - Alexander Konovalov's CheckForUpdates function.
-  - Released revision 289 as 2.1
+  - Released revision 289 as 2.1: 26.2.2007
 
 
 ==========================
@@ -82,7 +83,7 @@
   - paths to executables do PATH lookups using IO_FindExecutable
   - IO_FilteredFile to create a File object which filteres through a pipeline.
   - Let IO_Close automatically call IO_WaitPid under certain circumstances.
-  - Released revision 238 as 2.0
+  - Released revision 238 as 2.0: 12.12.2006
 
 
 ==========================
@@ -99,6 +100,7 @@
   - Use chapters in documentation
   - New functions IO_PipeThrough and IO_PipeThroughWithError to pipe
     a string through a process.
+  - Released version 1.6: 16.11.2006
 
 
 ==========================
