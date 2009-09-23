@@ -2086,8 +2086,8 @@ study the code for the basic &GAP; objects in the file
     <F>random</F> or the string <F>urandom</F>. A real
     random source object is created that draws its random numbers from
     the kernel devices <F>/dev/random</F> and <F>/dev/urandom</F>
-    respectively. Whereas <F>/dev/random</F> always provides random
-    numbers of not guaranteed <Q>quality</Q>, the device <F>/dev/urandom</F>
+    respectively. Whereas <F>/dev/urandom</F> always provides random
+    numbers of not guaranteed <Q>quality</Q>, the device <F>/dev/random</F>
     measures its entropy and produces guaranteed unpredictable numbers.
     However, it might block until enough <Q>random</Q> events (like
     mouse movements) have been accumulated.
