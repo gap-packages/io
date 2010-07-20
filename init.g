@@ -27,6 +27,7 @@ ReadPackage("IO", "gap/io.gd");
 ReadPackage("IO", "gap/pickle.gd");
 ReadPackage("IO", "gap/realrandom.gd");
 ReadPackage("IO", "gap/http.gd");
+ReadPackage("IO", "gap/background.gd");
 
 ##
 ##  This program is free software; you can redistribute it and/or modify

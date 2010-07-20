@@ -285,6 +285,7 @@ InstallGlobalFunction( IO_ReadBlock, function( f, len )
           Append(res,f!.rbuf{[f!.rpos..f!.rpos+f!.rdata-1]});
           f!.rpos := 1;
           f!.rdata := 0;
+          if Length(res) = len then return res; fi;
       fi;
       if f!.fd = -1 then
           return res;

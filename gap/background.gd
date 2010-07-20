@@ -16,7 +16,8 @@ BindGlobal("BackgroundJobsFamily", NewFamily("BackgroundJobsFamily"));
 DeclareCategory("IsBackgroundJob", 
                 IsComponentObjectRep and IsAttributeStoringRep);
 DeclareRepresentation("IsBackgroundJobByFork", IsBackgroundJob,
-  ["pid", "towrite", "toread", "result"]);
+  ["pid", "childtoparent", "parenttochild", "result",
+   "idle", "terminated"]);
 
 BindGlobal("BGJobByForkType", 
            NewType(BackgroundJobsFamily, IsBackgroundJobByFork));
@@ -26,7 +27,7 @@ BindGlobal("BGJobByForkType",
 
 DeclareOperation("BackgroundJobByFork", [IsFunction, IsList]);
 DeclareOperation("BackgroundJobByFork", [IsFunction, IsList, IsRecord]);
-DeclareGlobalVariable("BackGroundJobByForkOptions");
+DeclareGlobalVariable("BackgroundJobByForkOptions");
 DeclareGlobalFunction("BackgroundJobByForkChild");
 
 
@@ -35,10 +36,9 @@ DeclareGlobalFunction("BackgroundJobByForkChild");
 DeclareOperation("IsIdle", [IsBackgroundJob]);
 DeclareOperation("HasTerminated", [IsBackgroundJob]);
 DeclareOperation("WaitUntilIdle", [IsBackgroundJob]);
-DeclareOperation("WaitUntilTerminated", [IsBackgroundJob]);
 DeclareOperation("Kill", [IsBackgroundJob]);
 DeclareOperation("GetResult", [IsBackgroundJob]);
-DeclareOperation("SendArguments", [IsBackgroundJob, IsList]);
+DeclareOperation("SendArguments", [IsBackgroundJob, IsObject]);
 
 
 # Parallel skeletons:
