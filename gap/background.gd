@@ -17,11 +17,16 @@ DeclareCategory("IsBackgroundJob",
                 IsComponentObjectRep and IsAttributeStoringRep);
 DeclareRepresentation("IsBackgroundJobByFork", IsBackgroundJob,
   ["pid", "childtoparent", "parenttochild", "result",
-   "idle", "terminated"]);
+   "terminated"]);
 
 BindGlobal("BGJobByForkType", 
            NewType(BackgroundJobsFamily, IsBackgroundJobByFork));
 
+
+# Some helpers for times:
+
+DeclareGlobalFunction("DifferenceTimes");
+DeclareGlobalFunction("CompareTimes");
 
 # The constructor:
 
@@ -43,7 +48,10 @@ DeclareOperation("SendArguments", [IsBackgroundJob, IsObject]);
 
 # Parallel skeletons:
 
-DeclareOperation( "ParMapReduceByFork",
+DeclareGlobalFunction("ParMapReduceWorker");
+DeclareGlobalVariable("ParMapReduceByForkOptions");
+
+DeclareOperation("ParMapReduceByFork",
   [IsList, IsFunction, IsFunction, IsRecord]);
 # Arguments are:
 #   list to work on
@@ -51,22 +59,26 @@ DeclareOperation( "ParMapReduceByFork",
 #   reduce function (taking two arguments)
 #   options record
 
-DeclareOperation( "ParTakeFirstResultByFork",
-  [IsList, IsList, IsRecord]);
+DeclareGlobalVariable("ParTakeFirstResultByForkOptions");
+
+DeclareOperation("ParTakeFirstResultByFork", [IsList, IsList]);
+DeclareOperation("ParTakeFirstResultByFork", [IsList, IsList, IsRecord]);
 # Arguments are:
 #   list of job functions
 #   list of argument lists
 #   options record
 
-DeclareOperation( "ParDoByFork",
-  [IsList, IsList, IsRecord]);
+DeclareGlobalVariable("ParDoByForkOptions");
+
+DeclareOperation( "ParDoByFork", [IsList, IsList]);
+DeclareOperation( "ParDoByFork", [IsList, IsList, IsRecord]);
 # Arguments are:
 #   list of job functions
 #   list of argument lists
 #   options record
 
-DeclareOperation( "ParMakeWorkersByFork",
-  [IsList, IsList, IsRecord]);
+DeclareOperation( "ParMakeWorkersByFork", [IsList, IsList]);
+DeclareOperation( "ParMakeWorkersByFork", [IsList, IsList, IsRecord]);
 # Arguments are:
 #   list of worker functions
 #   list of initial argument lists

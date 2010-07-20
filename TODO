@@ -1,5 +1,17 @@
+Copyright and License issues
+
+MakeGAPDocDoc
+
+ReadFromWeb
+
+Wall clock time
+
+Background jobs
+
 HTTP/1.1-Konformitaet -> Alexander Konovalovs Tests mit Online int seq site
 chunked transfer
+
+getcwd --> update GAPInfo.CurrentDirectory
 
 Compiling on Snow-Leopard -> email Alex K Sep 10 2009
 
