@@ -9,6 +9,9 @@
 ##  This file contains functions mid level IO providing buffering and
 ##  easier access from the GAP level. 
 ##
+DeclareInfoClass("InfoIO");
+SetInfoLevel(InfoIO, 1);
+
 DeclareCategory( "IsFile", IsObject );
 DeclareGlobalVariable( "FileType" );
 DeclareAttribute( "ProcessID", IsFile );
