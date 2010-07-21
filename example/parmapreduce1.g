@@ -6,7 +6,7 @@ start := IO_gettimeofday();;
 a := Sum(l,Factorial);
 Print("Non-parallel: ",DifferenceTimes(IO_gettimeofday(),start),"\n");
 
-for i in [2..16] do
+for i in [2..8] do
     GASMAN("collect");
     start := IO_gettimeofday();;
     b := ParMapReduceByFork(l,Factorial,\+,rec(NumberJobs := i));
