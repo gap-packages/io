@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE Book SYSTEM "gapdoc.dtd">
 
@@ -19,7 +19,7 @@
     <Version>
       Version <#Include SYSTEM "../VERSION">
     </Version>
-    <Author>Max Neunhöffer
+    <Author>Max NeunhÃ¶ffer
 <Address>
 School of Mathematics and Statistics
 Mathematical Institute
@@ -34,7 +34,7 @@ Scotland, UK
     <Date>April 2009</Date>
 
 <Copyright>
-    &copyright; 2005-2009 by Max Neunhöffer<P/>
+    &copyright; 2005-2009 by Max NeunhÃ¶ffer<P/>
 
   This package may be distributed under the terms and conditions of the
   GNU Public License Version 2 or later.
