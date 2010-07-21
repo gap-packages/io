@@ -30,7 +30,7 @@ InstallGlobalFunction(CompareTimes,
   end);
 
 InstallMethod(BackgroundJobByFork, "for a function and a list",
-  [IsFunction, IsList],
+  [IsFunction, IsObject],
   function(fun, args)
     return BackgroundJobByFork(fun, args, rec());
   end );
@@ -42,7 +42,7 @@ InstallValue(BackgroundJobByForkOptions,
   ));
 
 InstallMethod(BackgroundJobByFork, "for a function, a list and a record",
-  [IsFunction, IsList, IsRecord],
+  [IsFunction, IsObject, IsRecord],
   function(fun, args, opt)
     local j, n;
     IO_InstallSIGCHLDHandler();
@@ -97,7 +97,7 @@ InstallMethod(BackgroundJobByFork, "for a function, a list and a record",
     fi;
     j.terminated := false;
     j.result := false;
-    j.idle := false;
+    j.idle := args = fail;
     Objectify(BGJobByForkType, j);
     return j;
   end );
@@ -106,9 +106,11 @@ InstallGlobalFunction(BackgroundJobByForkChild,
   function(j, fun, args)
     local ret;
     while true do   # will be left by break
-        ret := CallFuncList(fun, args);
-        IO_Pickle(j.childtoparent, ret);
-        IO_Flush(j.childtoparent);
+        if args <> fail then   # the case to make an as yet idle worker
+            ret := CallFuncList(fun, args);
+            IO_Pickle(j.childtoparent, ret);
+            IO_Flush(j.childtoparent);
+        fi;
         if j.parenttochild = false then break; fi;
         args := IO_Unpickle(j.parenttochild);
         if not(IsList(args)) then break; fi;
@@ -133,6 +135,9 @@ InstallMethod(IsIdle, "for a background job by fork",
             j!.terminated := true;
             j!.idle := fail;
             IO_Close(j!.childtoparent);
+            if j!.parenttochild <> false then
+                IO_Close(j!.parenttochild);
+            fi;
             IO_WaitPid(j!.pid,true);
             return fail;
         fi;
@@ -165,10 +170,18 @@ InstallMethod(WaitUntilIdle, "for a background job by fork",
         j!.terminated := true;
         j!.idle := fail;
         IO_Close(j!.childtoparent);
+        if j!.parenttochild <> false then
+            IO_Close(j!.parenttochild);
+        fi;
         IO_WaitPid(j!.pid,true);
         return fail;
     fi;
     j!.idle := true;
+    if j!.parenttochild = false then
+        IO_Close(j!.childtoparent);
+        IO_WaitPid(j!.pid,true);
+        j!.terminated := true;
+    fi;
     return j!.result;
   end);
  
@@ -177,6 +190,10 @@ InstallMethod(Kill, "for a background job by fork",
   function(j)
     if j!.terminated then return; fi;
     IO_kill(j!.pid,IO.SIGTERM);
+    IO_Close(j!.childtoparent);
+    if j!.parenttochild <> false then
+        IO_Close(j!.parenttochild);
+    fi;
     IO_WaitPid(j!.pid,true);
     j!.idle := fail;
     j!.terminated := true;
@@ -198,13 +215,13 @@ InstallMethod(ViewObj, "for a background job by fork",
     fi;
   end);
 
-InstallMethod(GetResult, "for a background job by fork",
+InstallMethod(Pickup, "for a background job by fork",
   [IsBackgroundJobByFork],
   function(j)
     return WaitUntilIdle(j);
   end);
 
-InstallMethod(SendArguments, "for a background job by fork and an object",
+InstallMethod(Submit, "for a background job by fork and an object",
   [IsBackgroundJobByFork, IsObject],
   function(j,o)
     local idle,res;
@@ -427,6 +444,179 @@ InstallMethod(ParMapReduceByFork, "for a list, two functions and a record",
     return res2;
   end);
 
+InstallValue(ParListByForkOptions,
+  rec( TimeOut := rec(tv_sec := false, tv_usec := false),
+  ));
+
+InstallGlobalFunction(ParListWorker,
+  function(l, what, map)
+    local res,i;
+    res := EmptyPlist(Length(what));
+    for i in what do res[Length(res)+1] := map(l[i]); od;
+    return res;
+  end);
+
+InstallMethod(ParListByFork, "for a list, two functions and a record",
+  [IsList, IsFunction, IsRecord],
+  function(l, map, opt)
+    local args,i,jobs,m,n,res,where;
+    for n in RecNames(ParListByForkOptions) do
+        if not(IsBound(opt.(n))) then 
+            opt.(n) := ParListByForkOptions.(n); 
+        fi;
+    od;
+    if not(IsBound(opt.NumberJobs)) then
+        Error("Need component NumberJobs in options record");
+        return fail;
+    fi;
+    if Length(l) = 0 then
+        return [];
+    fi;
+    n := opt.NumberJobs;
+    if n = 1 then return List(l,map); fi;
+    if Length(l) < n then n := Length(l); fi;
+    m := QuoInt(Length(l),n);  # is at least 1 by now
+    jobs := ListWithIdenticalEntries(n, ParListWorker);
+    args := EmptyPlist(n);
+    where := 0;
+    for i in [1..n-1] do
+        args[i] := [l,[where+1..where+m],map];
+        where := where+m;
+    od;
+    args[n] := [l,[where+1..Length(l)],map];
+    res := ParDoByFork(jobs,args,opt);  # hand down timeout
+    return Concatenation(res);
+  end);
+
+
+InstallValue(ParWorkerFarmByForkOptions,
+  rec( 
+  ));
+
+InstallMethod(ParWorkerFarmByFork, "for a function and a record",
+  [IsFunction, IsRecord],
+  function(worker, opt)
+    local f,i,j,n;
+    for n in RecNames(ParWorkerFarmByForkOptions) do
+        if not(IsBound(opt.(n))) then 
+            opt.(n) := ParWorkerFarmByForkOptions.(n); 
+        fi;
+    od;
+    if not(IsBound(opt.NumberJobs)) then
+        Error("Need component NumberJobs in options record");
+        return fail;
+    fi;
+    n := opt.NumberJobs;
+    f := rec( jobs := EmptyPlist(n), inqueue := [], outqueue := [],
+              whodoeswhat := EmptyPlist(n) );
+    # Now create the background jobs:
+    for i in [1..n] do
+        f.jobs[i] := BackgroundJobByFork(worker,fail,rec());
+        if f.jobs[i] = fail then
+            for j in [1..i-1] do
+                Kill(f.jobs[i]);
+            od;
+            Info(InfoIO, 1, "Could not start all background jobs.");
+            return fail;
+        fi;
+    od;
+    return Objectify(WorkerFarmByForkType, f);
+  end);
+
+InstallMethod(Kill, "for a worker farm by fork",
+  [IsWorkerFarmByFork],
+  function(f)
+    local i;
+    for i in [1..Length(f!.jobs)] do
+        Kill(f!.jobs[i]);
+    od;
+    f!.jobs := [];
+  end);
+
+InstallMethod(ViewObj, "for a worker farm by fork",
+  [IsWorkerFarmByFork],
+  function(f)
+    Print("<worker farm by fork with ",Length(f!.jobs)," workers");
+    if Length(f!.jobs) = 0 then
+        Print(" already terminated>");
+    else
+        if IsIdle(f) then
+            Print(" currently idle>");
+        else
+            Print(" busy>");
+        fi;
+    fi;
+  end);
+
+InstallMethod(Submit, "for a worker farm by fork",
+  [IsWorkerFarmByFork, IsList],
+  function(f,args)
+    Add(f!.inqueue,args);
+    DoQueues(f);
+  end);
+
+InstallMethod(Pickup, "for a worker farm by fork",
+  [IsWorkerFarmByFork],
+  function(f)
+    local res;
+    DoQueues(f);
+    res := f!.outqueue;
+    f!.outqueue := [];
+    return res;
+  end);
+
+InstallMethod(IsIdle, "for a worker farm by fork",
+  [IsWorkerFarmByFork],
+  function(f)
+    DoQueues(f);
+    return Length(f!.whodoeswhat) = 0;
+  end);
+
+InstallMethod(DoQueues, "for a worker farm by fork",
+  [IsWorkerFarmByFork],
+  function(f)
+    local args,i,k,n,pipes,res;
+    if Length(f!.jobs) = 0 then
+        Error("worker farm is already terminated");
+        return;
+    fi;
+    n := Length(f!.jobs);
+    # First send arguments to jobs which are known to be idle:
+    if Length(f!.inqueue) > 0 then
+        for i in [1..n] do
+            if not(IsBound(f!.whodoeswhat[i])) then
+                Info(InfoIO, 3, "Submitting arglist to worker #", i);
+                args := Remove(f!.inqueue,1);
+                Submit(f!.jobs[i],args);
+                f!.whodoeswhat[i] := args;
+            fi;
+            if Length(f!.inqueue) = 0 then break; fi;
+        od;
+    fi;
+    # Now check all jobs, see whether they have become idle, get the
+    # results and possibly submit another task. We limit the selection
+    # by a non-blocking select call (note that jobs known to be idle
+    # do not show up here!):
+    repeat
+        pipes := List(f!.jobs,x->IO_GetFD(x!.childtoparent));
+        k := IO_select(pipes,[],[],0,0);
+        for i in [1..Length(f!.jobs)] do
+            if pipes[i] <> fail then
+                # Must have finished since we last looked:
+                Info(InfoIO, 3, "Getting result from worker #", i);
+                res := Pickup(f!.jobs[i]);
+                Add(f!.outqueue,[f!.whodoeswhat[i],res]);
+                Unbind(f!.whodoeswhat[i]);
+                if Length(f!.inqueue) > 0 then
+                    Info(InfoIO, 3, "Submitting arglist to worker #", i);
+                    args := Remove(f!.inqueue,1);
+                    Submit(f!.jobs[i],args);
+                    f!.whodoeswhat[i] := args;
+                fi; 
+            fi;
+        od;
+    until k = 0;
+  end);
 
 ##
 ##  This program is free software; you can redistribute it and/or modify

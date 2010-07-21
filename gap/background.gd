@@ -30,8 +30,8 @@ DeclareGlobalFunction("CompareTimes");
 
 # The constructor:
 
-DeclareOperation("BackgroundJobByFork", [IsFunction, IsList]);
-DeclareOperation("BackgroundJobByFork", [IsFunction, IsList, IsRecord]);
+DeclareOperation("BackgroundJobByFork", [IsFunction, IsObject]);
+DeclareOperation("BackgroundJobByFork", [IsFunction, IsObject, IsRecord]);
 DeclareGlobalVariable("BackgroundJobByForkOptions");
 DeclareGlobalFunction("BackgroundJobByForkChild");
 
@@ -42,22 +42,11 @@ DeclareOperation("IsIdle", [IsBackgroundJob]);
 DeclareOperation("HasTerminated", [IsBackgroundJob]);
 DeclareOperation("WaitUntilIdle", [IsBackgroundJob]);
 DeclareOperation("Kill", [IsBackgroundJob]);
-DeclareOperation("GetResult", [IsBackgroundJob]);
-DeclareOperation("SendArguments", [IsBackgroundJob, IsObject]);
+DeclareOperation("Pickup", [IsBackgroundJob]);
+DeclareOperation("Submit", [IsBackgroundJob, IsObject]);
 
 
 # Parallel skeletons:
-
-DeclareGlobalFunction("ParMapReduceWorker");
-DeclareGlobalVariable("ParMapReduceByForkOptions");
-
-DeclareOperation("ParMapReduceByFork",
-  [IsList, IsFunction, IsFunction, IsRecord]);
-# Arguments are:
-#   list to work on
-#   map function
-#   reduce function (taking two arguments)
-#   options record
 
 DeclareGlobalVariable("ParTakeFirstResultByForkOptions");
 
@@ -77,19 +66,63 @@ DeclareOperation( "ParDoByFork", [IsList, IsList, IsRecord]);
 #   list of argument lists
 #   options record
 
-DeclareOperation( "ParMakeWorkersByFork", [IsList, IsList]);
-DeclareOperation( "ParMakeWorkersByFork", [IsList, IsList, IsRecord]);
+DeclareGlobalFunction("ParMapReduceWorker");
+DeclareGlobalVariable("ParMapReduceByForkOptions");
+
+DeclareOperation("ParMapReduceByFork",
+  [IsList, IsFunction, IsFunction, IsRecord]);
 # Arguments are:
-#   list of worker functions
-#   list of initial argument lists
+#   list to work on
+#   map function
+#   reduce function (taking two arguments)
+#   options record
+
+DeclareGlobalFunction("ParListWorker");
+DeclareGlobalVariable("ParListByForkOptions");
+
+DeclareOperation("ParListByFork",
+  [IsList, IsFunction, IsRecord]);
+# Arguments are:
+#   list to work on
+#   map function
+#   options record
+
+
+# The types for worker farms by fork:
+
+BindGlobal("WorkerFarmsFamily", NewFamily("WorkerFarmsFamily"));
+
+DeclareCategory("IsWorkerFarm", 
+                IsComponentObjectRep and IsAttributeStoringRep);
+DeclareRepresentation("IsWorkerFarmByFork", IsWorkerFarm,
+  ["jobs", "inqueue", "outqueue", "whodoeswhat"]);
+   
+
+BindGlobal("WorkerFarmByForkType", 
+           NewType(WorkerFarmsFamily, IsWorkerFarmByFork));
+
+DeclareGlobalVariable("ParWorkerFarmByForkOptions");
+
+DeclareOperation("ParWorkerFarmByFork", [IsFunction, IsRecord]);
+# Arguments are:
+#   worker function
 #   options record
 #
-# This creates a new object of type "IsWorkersByFork", planned operations:
-#   DeclareOperation("Kill", [IsWorkersByFork]);
-#   DeclareOperation("SendWork", [IsWorkersByFork, IsList]);
-#   DeclareOperation("IsIdle", [IsWorkersByFork]);
-#   DeclareOperation("AreAllIdle", [IsWorkersByFork]);
+# This creates a new object of type "IsWorkerFarmByFork".
 
+DeclareOperation("DoQueues", [IsWorkerFarmByFork]);
+DeclareOperation("Kill", [IsWorkerFarmByFork]);
+DeclareOperation("Submit", [IsWorkerFarmByFork, IsList]);
+DeclareOperation("IsIdle", [IsWorkerFarmByFork]);
+DeclareOperation("Pickup", [IsWorkerFarmByFork]);
+
+# Semantics:
+#   Starts some background jobs, maintains an "in" and an "out" queue.
+#   DoQueues feeds idle jobs from the input queue and gets results 
+#   from them for the output queue.
+#   Kill and IsIdle work on all workers at the same time. Submit queues
+#   new jobs to the input queue and Pickup fetches all from the current
+#   output queue (pairs of the form [arglist,result]).
 
 ##
 ##  This program is free software; you can redistribute it and/or modify
