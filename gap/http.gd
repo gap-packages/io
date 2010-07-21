@@ -3,7 +3,7 @@
 ##  http.gd               GAP 4 package IO  
 ##                                                            Max Neunhoeffer
 ##
-##  Copyright (C) 2006  Max Neunhoeffer, Lehrstuhl D f. Math., RWTH Aachen
+##  Copyright (C) 2006-2010 by Max Neunhoeffer
 ##  This file is free software, see license information at the end.
 ##
 ##  This file contains declarations for the implementation of the client 
@@ -18,6 +18,8 @@ DeclareGlobalFunction( "SingleHTTPRequest" );
 DeclareGlobalFunction( "FixChunkedBody" );
 
 DeclareGlobalFunction( "CheckForUpdates" );
+
+DeclareGlobalFunction( "ReadWeb" );
 
 ##
 ##  This program is free software; you can redistribute it and/or modify

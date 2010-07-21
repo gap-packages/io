@@ -1,7 +1,3 @@
-Copyright and License issues
-
-ReadFromWeb
-
 Background jobs
 
 getcwd --> update GAPInfo.CurrentDirectory
@@ -9,6 +5,12 @@ getcwd --> update GAPInfo.CurrentDirectory
 Compiling on Snow-Leopard -> email Alex K Sep 10 2009
 
 Later:
+
+License issues? Go to GPL 3?
+
+HTTP access scheint nicht mehr zu funktionieren --> debug
+  offenbar warte ich bei nicht ang. contentlength fuer immer
+    (ev. nur bei "chunked access"???)
 
 HTTP/1.1-Konformitaet -> Alexander Konovalovs Tests mit Online int seq site
 chunked transfer

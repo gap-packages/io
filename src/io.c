@@ -3,7 +3,7 @@
 *A  io.c               IO-package                            Max Neunhoeffer
 **
 **  
-**  Copyright (C) 2006  Max Neunhoeffer, Lehrstuhl D f. Math., RWTH Aachen
+**  Copyright (C) by Max Neunhoeffer
 **  This file is free software, see license information at the end.
 **  
 */

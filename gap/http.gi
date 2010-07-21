@@ -3,7 +3,7 @@
 ##  http.gi               GAP 4 package IO  
 ##                                                            Max Neunhoeffer
 ##
-##  Copyright (C) 2006  Max Neunhoeffer, Lehrstuhl D f. Math., RWTH Aachen
+##  Copyright (C) by Max Neunhoeffer
 ##  This file is free software, see license information at the end.
 ##
 ##  This file contains functions implementing the client side of the
@@ -377,6 +377,27 @@ InstallGlobalFunction( CheckForUpdates,
     Read( InputTextString( r.body{[n1..n2]} ) );
   end );
 
+InstallGlobalFunction( ReadWeb,
+  function(url)
+    local p, domain, uri, f;
+    # split off http://
+    if Length(url)>7 and LowercaseString(url{[1..7]})="http://" then
+      url:=url{[8..Length(url)]};
+    fi;
+    p:=Position(url,'/');
+    domain:=url{[1..p-1]}; # e.g. www.gap-system.org
+    uri:=url{[p+1..Length(url)]}; # e.g. ~xyrxmir/mystuff/bla.txt
+    f:=SingleHTTPRequest(domain,80,"GET",uri,rec(),false,false);
+    if f.statuscode=404 then
+      Error("File not found -- Check URL");
+    elif f.statuscode >= 400 then
+      Error("HTTP error code ",f.statuscode);
+    fi;
+    f:=f.body;
+    # now `f' is a string containing the file.
+    Read(InputTextString(f)); # read in the contents
+  end);
+ 
 ##
 ##  This program is free software; you can redistribute it and/or modify
 ##  it under the terms of the GNU General Public License as published by

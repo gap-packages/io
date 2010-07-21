@@ -2,7 +2,7 @@
 
   main.xml            IO package documentation           Max Neunhoeffer
 
-  Copyright (C) 2006  Max Neunhoeffer, Lehrstuhl D f. Math., RWTH Aachen
+  Copyright (C) 2006-2010  Max Neunhoeffer
   This file is free software, see license information at the end.
 
 This is the main chapter of the documentation.
@@ -2245,6 +2245,21 @@ up to date:
     <URL>http://www.gap-system.org/Download/upgrade.html</URL> and the
     code executed is a single call to the function <C>SuggestUpgrades</C> 
     function in the &GAP; library.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="ReadWeb" Arg="URL"/>
+<Returns> nothing </Returns>
+<Description>
+    This function downloads the file from the given uniform resource
+    locator <A>URL</A> using the HTTP protocol 
+    and reads the contents into &GAP; using
+    <Ref Func="Read" BookName="ref"/>.
+    <P/>
+    Note that this can execute arbitrary code on your machine with the
+    privileges of the &GAP; job running, so you should be very careful
+    what files you download and execute. You have been warned!
 </Description>
 </ManSection>
 
