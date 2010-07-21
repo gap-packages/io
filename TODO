@@ -1,10 +1,10 @@
 Background jobs
 
-getcwd --> update GAPInfo.CurrentDirectory
-
 Compiling on Snow-Leopard -> email Alex K Sep 10 2009
 
 Later:
+
+getcwd --> update GAPInfo.CurrentDirectory
 
 License issues? Go to GPL 3?
 
