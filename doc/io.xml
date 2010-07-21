@@ -6,7 +6,7 @@
 
   io.xml          IO package documentation                Max Neunhoeffer
 
-  Copyright (C) 2006  Max Neunhoeffer, Lehrstuhl D f. Math., RWTH Aachen
+  Copyright (C) 2006-2010  Max Neunhoeffer, Lehrstuhl D f. Math., RWTH Aachen
   This file is free software, see license information at the end.
 
 -->
@@ -31,10 +31,10 @@ Scotland, UK
     <Email>neunhoef@mcs.st-and.ac.uk</Email>
     <Homepage>http://www-groups.mcs.st-and.ac.uk/&tilde;neunhoef</Homepage>
     </Author>
-    <Date>April 2009</Date>
+    <Date>July 2010</Date>
 
 <Copyright>
-    &copyright; 2005-2009 by Max Neunhöffer<P/>
+    &copyright; 2005-2010 by Max Neunhöffer<P/>
 
   This package may be distributed under the terms and conditions of the
   GNU Public License Version 2 or later.

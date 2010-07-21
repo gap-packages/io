@@ -8,7 +8,7 @@
 
 LoadPackage("GAPDoc");
 
-MakeGAPDocDoc("doc", "io", [], "IO");
+MakeGAPDocDoc("doc", "io", [], "IO", "../../..");
 
 GAPDocManualLab("IO");
 
