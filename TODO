@@ -4,16 +4,16 @@ MakeGAPDocDoc
 
 ReadFromWeb
 
-Wall clock time
-
 Background jobs
-
-HTTP/1.1-Konformitaet -> Alexander Konovalovs Tests mit Online int seq site
-chunked transfer
 
 getcwd --> update GAPInfo.CurrentDirectory
 
 Compiling on Snow-Leopard -> email Alex K Sep 10 2009
+
+Later:
+
+HTTP/1.1-Konformitaet -> Alexander Konovalovs Tests mit Online int seq site
+chunked transfer
 
 Web-Proxy???
 
@@ -26,6 +26,7 @@ Ausgabe der Testdateien aussagekraeftiger
 ??? access to utime/utimes?
 
 More tests?
+
 More examples?
 
 

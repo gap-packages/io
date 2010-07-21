@@ -2414,6 +2414,108 @@ pipes remain alive until the parent &GAP; process terminates.
 <Section>
 <Heading>Parallel programming skeletons</Heading>
 
+In this section we document the operations for the available
+skeletons. For a general description of these ideas see other
+sources. 
+
+<ManSection>
+<Oper Name="ParTakeFirstResultByFork" Arg="jobs, args [,opt]"/>
+<Returns>a list of results or <K>fail</K></Returns>
+<Description>
+The argument <A>jobs</A> must be a list of &GAP; functions and the
+argument <A>args</A> a list of the same length containing argument
+lists with which the job functions can be called. This operation
+starts up a background job using <C>fork</C> for each of the functions
+in <A>jobs</A>, calls it with the corresponding argument list in
+<A>args</A>. As soon as any of the background jobs finishes with a result,
+<Ref Oper="ParTakeFirstResultByFork"/> terminates all other jobs and
+reports the results found so far. Note that it can happen that two
+jobs finish <Q>at the same time</Q> in the sense that both results 
+are received before all other jobs could be terminated. Therefore
+the result of <Ref Oper="ParTakeFirstResultByFork"/> is a list, in which
+position <M>i</M> is bound if and only if job number <M>i</M> returned
+a result. So in the result at least one entry is bound but it is possible
+that more than one entry is bound.
+<P/>
+You can specify an overall timeout to give up the whole computation
+if no job finishes by setting the <C>TimeOut</C> component of the
+options record <A>opt</A>. In this case you have to set it to
+a record with two components <C>tv_sec</C> and <C>tv_usec</C> which
+are seconds and microseconds respectively, exactly as returned by the
+<Ref Func="IO_gettimeofday"/> function. In the case of timeout 
+an empty list is returned.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="ParDoByFork" Arg="jobs, args [,opt]"/>
+<Returns>a list of results or <K>fail</K></Returns>
+<Description>
+The argument <A>jobs</A> must be a list of &GAP; functions and the
+argument <A>args</A> a list of the same length containing argument
+lists with which the job functions can be called. This operation
+starts up a background job using <C>fork</C> for each of the functions
+in <A>jobs</A>, calls it with the corresponding argument list in
+<A>args</A>. As soon as all of the background jobs finish with a result,
+<Ref Oper="ParDoByFork"/> reports the results found. 
+Therefore
+the result of <Ref Oper="ParDoByFork"/> is a list, in which
+position <M>i</M> is bound to the result that job number <M>i</M> returned.
+<P/>
+You can specify an overall timeout to stop the whole computation
+if not all jobs finish in time by setting the <C>TimeOut</C> component of the
+options record <A>opt</A>. In this case you have to set it to
+a record with two components <C>tv_sec</C> and <C>tv_usec</C> which
+are seconds and microseconds respectively, exactly as returned by the
+<Ref Func="IO_gettimeofday"/> function. In the case of timeout 
+a list is returned in which the positions corresponding to those
+jobs that have already finished are bound to the respective results
+and the other positions are unbound.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="ParListByFork" Arg="l, worker [,opt]"/>
+<Returns>a list of results or <K>fail</K></Returns>
+<Description>
+This is a parallel version of the <Ref Func="List" BookName="ref"/>
+function. It applies the function <A>worker</A> to all elements of 
+the list <A>l</A> and returns a list containing the results in
+corresponding positions. You have to specify the component
+<C>NumberJobs</C> in the options record <A>opt</A> which indicates how many
+background processes to start. You can optionally use the <C>TimeOut</C>
+option exactly as for <Ref Oper="ParDoByFork"/>, however, if a timeout
+occurs, <Ref Oper="ParListByFork"/> returns <K>fail</K>.
+<P/>
+Note that the usefulness of this operation is relatively limited, since
+every individual result has to be sent back over a pipe from the child process
+to the parent process. Therefore this only makes sense if the computation
+time for the worker function dominates the communication time.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="ParMapReduceByFork" Arg="l, map, reduce [,opt]"/>
+<Returns>a value or <K>fail</K></Returns>
+<Description>
+This is a parallel version implementation of the classical <C>MapReduce</C>
+pattern.
+It applies the function <A>map</A> to all elements of 
+the list <A>l</A> and then reduces the result using the <A>reduce</A> function
+which accepts two return values of <A>map</A> and returns one of them.
+Thus, the final result is one return value or <K>fail</K> if the startup
+of the jobs fails. You have to specify the component
+<C>NumberJobs</C> in the options record <A>opt</A> which indicates how many
+background processes to start. You can optionally use the <C>TimeOut</C>
+option exactly as for <Ref Oper="ParDoByFork"/>, however, if a timeout
+occurs, <Ref Oper="ParMapReduceByFork"/> returns <K>fail</K>.
+<P/>
+Note that this can be very useful because quite often 
+the cumulated computation time for all the worker function calls
+dominates the communication time for a single result.
+</Description>
+</ManSection>
+
 </Section>
 
 </Chapter>

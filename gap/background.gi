@@ -437,6 +437,10 @@ InstallMethod(ParMapReduceByFork, "for a list, two functions and a record",
     od;
     args[n] := [l,[where+1..Length(l)],map,reduce];
     res := ParDoByFork(jobs,args,opt);  # hand down timeout
+    if not(Length(res) = n and ForAll([1..n],x->IsBound(res[x]))) then
+        Info(InfoIO, 1, "Timeout in ParMapReduceByFork");
+        return fail;
+    fi;
     res2 := reduce(res[1],res[2]);  # at least 2 jobs!
     for i in [3..n] do
         res2 := reduce(res2,res[i]);
@@ -485,6 +489,10 @@ InstallMethod(ParListByFork, "for a list, two functions and a record",
     od;
     args[n] := [l,[where+1..Length(l)],map];
     res := ParDoByFork(jobs,args,opt);  # hand down timeout
+    if not(Length(res) = n and ForAll([1..n],x->IsBound(res[x]))) then
+        Info(InfoIO, 1, "Timeout in ParListByFork");
+        return fail;
+    fi;
     return Concatenation(res);
   end);
 
