@@ -386,7 +386,7 @@ InstallGlobalFunction( ReadWeb,
     fi;
     p:=Position(url,'/');
     domain:=url{[1..p-1]}; # e.g. www.gap-system.org
-    uri:=url{[p+1..Length(url)]}; # e.g. ~xyrxmir/mystuff/bla.txt
+    uri:=url{[p..Length(url)]}; # e.g. ~xyrxmir/mystuff/bla.txt
     f:=SingleHTTPRequest(domain,80,"GET",uri,rec(),false,false);
     if f.statuscode=404 then
       Error("File not found -- Check URL");
