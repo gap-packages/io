@@ -1,16 +1,17 @@
-Background jobs
+Later:
 
 Compiling on Snow-Leopard -> email Alex K Sep 10 2009
 
-Later:
+Sort out SIGCHLD handler issues, cooperate with GAP kernel's handler
 
 getcwd --> update GAPInfo.CurrentDirectory
 
 License issues? Go to GPL 3?
 
-HTTP access scheint nicht mehr zu funktionieren --> debug
+HTTP access scheint nicht immer zu funktionieren --> debug
   offenbar warte ich bei nicht ang. contentlength fuer immer
     (ev. nur bei "chunked access"???)
+    --> www.tagesschau.de z.B.
 
 HTTP/1.1-Konformitaet -> Alexander Konovalovs Tests mit Online int seq site
 chunked transfer

@@ -2324,7 +2324,7 @@ over a pipe to the child process. A special case is if the argument
 <A>args</A> is equal to <K>fail</K>, in this case the child process is
 started but does not automatically call <A>fun</A> but rather
 waits in an idle state until an argument list is submitted via the
-pipe using the <Ref Oper="Submit"/> operation described below.
+pipe using the <Ref Oper="Submit" Label="bgjob"/> operation described below.
 <P/>
 There are two components defined which can be bound in the options record
 <A>opt</A>. One is <C>TerminateImmediately</C>, if this is bound to <K>true</K>
@@ -2332,9 +2332,9 @@ then the child process immediately terminates after the function <A>fun</A>
 returns its result. In this case, no pipe for communication from parent
 to child is created since it would never be used. Note that in this case
 one can still get the result of the function <A>fun</A> using the
-<Ref Oper="Pickup"/> operation described below, even when the child
-has already terminated, since the result is first transmitted back to the
-parent before termination.
+<Ref Oper="Pickup" Label="bgjob"/> operation described below, even when
+the child has already terminated, since the result is first transmitted
+back to the parent before termination.
 </Description>
 </ManSection>
 
@@ -2342,7 +2342,7 @@ The following operations are available to deal with background job
 objects:
 
 <ManSection>
-<Oper Name="IsIdle" Arg="job"/>
+<Oper Name="IsIdle" Arg="job" Label="bgjob"/>
 <Returns><K>true</K>, <K>false</K> or <K>fail</K></Returns>
 <Description>
 This operation checks whether or not the background job represented by
@@ -2352,7 +2352,8 @@ is still running and working on the worker function, <K>false</K> is returned.
 If the background job has already terminated altogether, this operation
 returns <K>fail</K>. Note that if a child process terminates automatically
 after the first completion of its worker function and sending the result,
-then the first call to <Ref Oper="IsIdle"/> after completion will return
+then the first call to <Ref Oper="IsIdle" Label="bgjob"/> 
+after completion will return
 <K>true</K> to indicate successful completion and all subsequent calls
 will return <K>fail</K>.
 </Description>
@@ -2381,7 +2382,7 @@ the parent process. If the child process has died before completion
 </ManSection>
 
 <ManSection>
-<Oper Name="Pickup" Arg="job"/>
+<Oper Name="Pickup" Arg="job" Label="bgjob"/>
 <Returns>the result of the worker function or <K>fail</K></Returns>
 <Description>
 This operation does the same as <Ref Oper="WaitUntilIdle"/>.
@@ -2389,16 +2390,18 @@ This operation does the same as <Ref Oper="WaitUntilIdle"/>.
 </ManSection>
 
 <ManSection>
-<Oper Name="Submit" Arg="job, args"/>
+<Oper Name="Submit" Arg="job, args" Label="bgjob"/>
 <Returns><K>true</K> or <K>fail</K></Returns>
 <Description>
 This submits another argument list <A>args</A> for another call to the
 worker function in the background job <A>job</A>. It is an error if
 either the background job has already terminated or if it is still busy
 working on the previous argument list. That is, one must only submit
-another argument in a situation when <Ref Oper="IsIdle"/> would return
+another argument in a situation when <Ref Oper="IsIdle" Label="bgjob"/> 
+would return
 <K>true</K>. This is for example the case directly after a successful
-call to <Ref Oper="Pickup"/> or <Ref Oper="WaitUntilIdle"/> which did
+call to <Ref Oper="Pickup" Label="bgjob"/> or i
+<Ref Oper="WaitUntilIdle"/> which did
 not return <K>fail</K>, unless the background job was created with the
 <C>TerminateImmediately</C> option set to <K>true</K>.
 <P/>
@@ -2410,14 +2413,14 @@ argument list.
 </ManSection>
 
 <ManSection>
-<Oper Name="Kill" Arg="job"/>
+<Oper Name="Kill" Arg="job" Label="bgjob"/>
 <Returns>nothing</Returns>
 <Description>
 This kills the background job represented by the object <A>job</A>
 with immediate effect. No more results can be expected from it.
 Note that unless one has created the background job with the
 <C>TerminateImmediately</C> option set to <K>true</K> one always
-has to call <Ref Oper="Kill"/> on a background job eventually
+has to call <Ref Oper="Kill" Label="bgjob"/> on a background job eventually
 for cleanup purposes. Otherwise, the background job and the connecting
 pipes remain alive until the parent &GAP; process terminates.
 </Description>
@@ -2528,6 +2531,124 @@ occurs, <Ref Oper="ParMapReduceByFork"/> returns <K>fail</K>.
 Note that this can be very useful because quite often 
 the cumulated computation time for all the worker function calls
 dominates the communication time for a single result.
+</Description>
+</ManSection>
+
+Note that the next parallel skeleton is a worker farm which
+is described in the following section.
+</Section>
+
+<Section>
+<Heading>Worker farms</Heading>
+
+The parallel skeleton of a worker farm is basically nothing but
+a bunch of background jobs all with the same worker function and
+all eagerly waiting for work. The only additional concepts needed
+are an input and an output queue. The input queue contains
+argument lists and the output queue pairs of argument lists
+and results.
+
+<P/> 
+One creates a worker farm with the following operation:
+<ManSection>
+<Oper Name="ParWorkerFarmByFork" Arg="fun, opt"/>
+<Returns>an object representing the worker farm or <K>fail</K></Returns>
+<Description>
+This operation creates a worker farm with the worker function
+<A>fun</A> and sets up its input and output queue. An object representing
+the farm is returned unless not all jobs could be started up in which
+case <K>fail</K> is returned. After startup all background jobs in the
+farm are idle. The only valid option in the options record <A>opt</A>
+is <C>NumberJobs</C> and it must be bound to the number of worker
+jobs in the farm, a positive integer.
+</Description>
+</ManSection>
+
+The following operations are for worker farm objects:
+
+<ManSection>
+<Oper Name="DoQueues" Arg="wf, block"/>
+<Returns> nothing </Returns>
+<Description>
+This operation called on a worker farm object <A>wf</A> administrates
+the input and output queues of the worker farm. In particular it
+checks whether new results are available from the workers and if so
+it appends them to the output queue. If jobs are idle and the input
+queue is non-empty, argument lists from the input queue are sent
+to the idle jobs and removed from the input queue.
+<P/>
+This operation must be called regularly to keep up the communication
+with the clients. It uses <C>select</C> and so does not
+block if the boolean argument <A>block</A> is set to <K>false</K>. 
+However, if larger chunks of data has to be sent or received this
+operation might need some time to return.
+<P/>
+If the boolean argument <A>block</A> is set to true then the 
+<Ref Oper="DoQueues"/> blocks until at least one job has returned
+a result. This can be used to wait for the termination of all tasks
+without burning CPU cycles in the parent job. One would repeatedly
+call <Ref Oper="DoQueues"/> with <A>block</A> set to <K>true</K>
+and after each such call check with <Ref Oper="IsIdle" Label="wfarm"/>
+whether all tasks are done. Note that one should no longer call
+<Ref Oper="DoQueues"/> with <A>block</A> set to <K>true</K> once
+this is the case since then it would block forever.
+<P/>
+This operation is called automatically by most of the following
+operations.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="Kill" Arg="wf" Label="wfarm"/>
+<Returns> nothing </Returns>
+<Description>
+This operation terminates all background jobs in the farm <A>wf</A>, 
+which cannot be used subsequently. One should always call this operation
+when the worker farm is no longer needed to free resources.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="IsIdle" Arg="wf" Label="wfarm"/>
+<Returns> <K>true</K> or <K>false</K> </Returns>
+<Description>
+This operation returns <K>true</K> if all background jobs in the
+worker farm <A>wf</A> are idle. This means, that all tasks which
+have previously been submitted using <Ref Oper="Submit" Label="wfarm"/> have
+been completed and their result been appended to the output
+queue. The operation <Ref Oper="DoQueues"/> is automatically
+called before the execution of <Ref Oper="IsIdle" Label="wfarm"/>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="Submit" Arg="wg, arglist" Label="wfarm"/>
+<Returns> nothing </Returns>
+<Description>
+This operation submits a task in the form of an argument list for the
+worker function to the worker farm. It is appended at the end of the
+input queue.
+The operation <Ref Oper="DoQueues"/> is automatically
+called after the execution of <Ref Oper="Submit" Label="wfarm"/>, giving the
+farm a chance to actually send the work out to the worker background
+jobs.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="Pickup" Arg="wg, arglist" Label="wfarm"/>
+<Returns> nothing </Returns>
+<Description>
+This operation collects all results from the output queue of the
+worker farm. The output queue is empty after this function returns.
+The results are reported as a list of pairs, each pair has the
+input argument list as first component and the output object
+as second component.
+<P/>
+The operation <Ref Oper="DoQueues"/> is automatically
+called before the execution of <Ref Oper="Pickup" Label="wfarm"/>, giving the
+farm a chance to actually receive some more results from the worker background
+jobs.
 </Description>
 </ManSection>
 
