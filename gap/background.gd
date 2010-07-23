@@ -110,7 +110,7 @@ DeclareOperation("ParWorkerFarmByFork", [IsFunction, IsRecord]);
 #
 # This creates a new object of type "IsWorkerFarmByFork".
 
-DeclareOperation("DoQueues", [IsWorkerFarmByFork]);
+DeclareOperation("DoQueues", [IsWorkerFarmByFork, IsBool]);
 DeclareOperation("Kill", [IsWorkerFarmByFork]);
 DeclareOperation("Submit", [IsWorkerFarmByFork, IsList]);
 DeclareOperation("IsIdle", [IsWorkerFarmByFork]);

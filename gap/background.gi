@@ -560,14 +560,14 @@ InstallMethod(Submit, "for a worker farm by fork",
   [IsWorkerFarmByFork, IsList],
   function(f,args)
     Add(f!.inqueue,args);
-    DoQueues(f);
+    DoQueues(f,false);
   end);
 
 InstallMethod(Pickup, "for a worker farm by fork",
   [IsWorkerFarmByFork],
   function(f)
     local res;
-    DoQueues(f);
+    DoQueues(f,false);
     res := f!.outqueue;
     f!.outqueue := [];
     return res;
@@ -576,13 +576,13 @@ InstallMethod(Pickup, "for a worker farm by fork",
 InstallMethod(IsIdle, "for a worker farm by fork",
   [IsWorkerFarmByFork],
   function(f)
-    DoQueues(f);
+    DoQueues(f,false);
     return Length(f!.whodoeswhat) = 0;
   end);
 
 InstallMethod(DoQueues, "for a worker farm by fork",
-  [IsWorkerFarmByFork],
-  function(f)
+  [IsWorkerFarmByFork, IsBool],
+  function(f, block)
     local args,i,k,n,pipes,res;
     if Length(f!.jobs) = 0 then
         Error("worker farm is already terminated");
@@ -607,7 +607,11 @@ InstallMethod(DoQueues, "for a worker farm by fork",
     # do not show up here!):
     repeat
         pipes := List(f!.jobs,x->IO_GetFD(x!.childtoparent));
-        k := IO_select(pipes,[],[],0,0);
+        if not(block) then
+            k := IO_select(pipes,[],[],0,0);
+        else
+            k := IO_select(pipes,[],[],false,false);
+        fi;
         for i in [1..Length(f!.jobs)] do
             if pipes[i] <> fail then
                 # Must have finished since we last looked:
@@ -623,7 +627,7 @@ InstallMethod(DoQueues, "for a worker farm by fork",
                 fi; 
             fi;
         od;
-    until k = 0;
+    until k = 0 or block;
   end);
 
 ##
