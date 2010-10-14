@@ -247,11 +247,6 @@ InstallMethod(Submit, "for a background job by fork and an object",
     return true;
   end);
 
-f := function(n,k)
-  Sleep(k);
-  return n*n;
-end;
-
 InstallMethod(ParTakeFirstResultByFork, "for two lists",
   [IsList, IsList],
   function(jobs, args)
