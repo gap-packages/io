@@ -88,7 +88,7 @@ void __stack_chk_fail_local (void)
  * rmdir, mkdir, stat, lstat, fstat, chmod, fchmod, chown, fchown, lchown,
  * mknod, mkfifo, dup, dup2, socket, bind, connect, gethostbyname, listen,
  * accept, recv, recvfrom, send, sendto, getsockopt, setsockopt, select,
- * fork, execv, execvp, execve, pipe, exit,
+ * fork, execv, execvp, execve, pipe, exit, getsockname, gethostname,
  *
  * Additional helper functions:
  * make_sockaddr_in, MakeEnvList, environ,
@@ -1714,6 +1714,43 @@ Obj FuncIO_localtime( Obj self, Obj time )
 }
 #endif
 
+#ifdef HAVE_GETSOCKNAME
+Obj FuncIO_getsockname(Obj self, Obj fd)
+{
+  struct sockaddr_in sa;
+  socklen_t sa_len;
+  Obj res;
+  if (!IS_INTOBJ(fd)) {
+      SyClearErrorNo();
+      return Fail;
+  } else {
+      sa_len = sizeof sa;
+      getsockname (INT_INTOBJ(fd), &sa, &sa_len);
+      res = NEW_STRING(sa_len);
+      memcpy(CHARS_STRING(res),&sa,sa_len);
+      return res;
+  }
+}
+#endif
+
+#ifdef HAVE_GETHOSTNAME
+Obj FuncIO_gethostname(Obj self)
+{
+  char name[256];
+  Obj res;
+  int i,r;
+  r = gethostname(name, 256);
+  if (r < 0) {
+      return Fail;
+  }
+  i = strlen(name);
+  res = NEW_STRING(i);
+  memcpy(CHARS_STRING(res),name,i);
+  return res;
+}
+#endif
+
+
         
 /*F * * * * * * * * * * * * * initialize package * * * * * * * * * * * * * * */
 
@@ -2076,6 +2113,18 @@ static StructGVarFunc GVarFuncs [] = {
   { "IO_localtime", 1, "seconds",
     FuncIO_localtime,
     "io.c:IO_localtime" },
+#endif
+
+#ifdef HAVE_GETSOCKNAME
+  { "IO_getsockname", 1, "fd",
+    FuncIO_getsockname,
+    "io.c:IO_getsockname" },
+#endif
+
+#ifdef HAVE_GETHOSTNAME
+  { "IO_gethostname", 0, "",
+    FuncIO_gethostname,
+    "io.c:IO_gethostname" },
 #endif
 
   { 0 }

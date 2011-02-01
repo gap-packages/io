@@ -8,6 +8,9 @@
 
   - Remove the global function f which was accidentally put in there
     in 3.1.
+  - Update cnf files for clang and to compile on GAP 4.4 and 4.5
+  - Update cnf files to autoconf 2.65
+  - Add functions gethostname and getsockname.
 
 
 ==========================
