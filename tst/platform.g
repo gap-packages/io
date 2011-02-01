@@ -30,7 +30,8 @@ StdGlobalVarsIO := Set(
   "IO_ForkExecWithFDs", "IO_StartPipeline", "IO_StringFilterFile",
   "IO_FuncToUnpickle", "IO_IsAlreadyPickled", "IO_PackageIsLoaded", 
   "IO_PkgThingsToRead", "IO_getpid", "IO_getppid", "IO_kill",
-  "IO_gettimeofday", "IO_gmtime", "IO_localtime" ] );
+  "IO_gettimeofday", "IO_gmtime", "IO_localtime", "IO_gethostname",
+  "IO_getsockname" ] );
 StdComponentsIO := Set(
 [ "AF_APPLETALK", "AF_ASH", "AF_ATMPVC", "AF_ATMSVC", "AF_AX25", 
   "AF_BLUETOOTH", "AF_BRIDGE", "AF_DECnet", "AF_ECONET", "AF_FILE", 
