@@ -54,6 +54,8 @@ AC_DEFUN(GP_CFLAGS,
  [ case "$host-$CC" in
     *-gcc | *-linux*-cc )
      	gp_cv_cflags="-Wall -g -O2";;
+    *-clang )
+        gp_cv_cflags="-Wall -g -O2";;
     i686-*-egcs )
         gp_cv_cflags="-Wall -g -O2 -mcpu=i686";;
     i586-*-egcs )
@@ -93,6 +95,8 @@ AC_DEFUN(GP_LDFLAGS,
  [ case "$host-$CC" in
     *-gcc | *-linux*-cc | *-egcs )
      	gp_cv_ldflags="-g";;
+    *-clang )
+        gp_cv_ldflags="-g";;
     alpha*-*-osf4*-cc )
 	gp_cv_ldflags="-g3 ";;
     *-solaris*-cc )
@@ -129,6 +133,8 @@ AC_DEFUN(GP_PROG_CC_DYNFLAGS,
 	gp_cv_prog_cc_cdynoptions=" -shared -x -O2";;
     *-irix* )
         gp_cv_prog_cc_cdynoptions=" -O3 -woff 1110,1167,1174,1552";;
+    *-clang )
+        gp_cv_prog_cc_cdynoptions="-fPIC";;
    
     * )
         gp_cv_prog_cc_cdynoptions="UNSUPPORTED";;
@@ -147,6 +153,8 @@ AC_DEFUN(GP_PROG_CC_DYNFLAGS,
     *-osf*-cc )
 	gp_cv_prog_cc_cdynlinker="cc";;
     *-irix* )
+        gp_cv_prog_cc_cdynlinker="ld";;
+    *-clang )
         gp_cv_prog_cc_cdynlinker="ld";;
     * )
         gp_cv_prog_cc_cdynlinker="echo";;
