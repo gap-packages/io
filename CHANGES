@@ -11,6 +11,7 @@
   - Update cnf files for clang and to compile on GAP 4.4 and 4.5
   - Update cnf files to autoconf 2.65
   - Add functions gethostname and getsockname.
+  - Change license to GPL 3
 
 
 ==========================
