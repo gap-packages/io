@@ -257,6 +257,11 @@ InstallValue( ParTakeFirstResultByForkOptions,
   rec( TimeOut := rec(tv_sec := false, tv_usec := false),
   ));
 
+# Hack for old windows binary:
+if not(IsBound(IO_gettimeofday)) then
+    IO_gettimeofday := function() return rec( tv_sec := 0, tv_usec := 0 ); end;
+fi;
+
 InstallMethod(ParTakeFirstResultByFork, "for two lists and a record",
   [IsList, IsList, IsRecord],
   function(jobs, args, opt)
