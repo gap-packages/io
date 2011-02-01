@@ -1511,6 +1511,16 @@ directory, or <K>fail</K>, if an error occurred.
 </Description>
 </ManSection>
 
+<ManSection>
+<Func Name="ChangeCurrentDirectory" Arg="pathname"
+      Comm="changes the current directory"/>
+<Returns> <K>true</K> on success and <K>fail</K> on failure </Returns>
+<Description>
+    Changes the current directory. Returns <K>true</K> on success and 
+    <K>fail</K> on failure.
+</Description>
+</ManSection>
+
 The following function is used to create strings describing a pair of
 an IP address and a port number in a binary way. These strings can be
 used in connection with the C library functions <C>connect</C>,
