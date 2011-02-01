@@ -52,6 +52,9 @@
 /* Define to 1 if you have the `gethostbyname' function. */
 #undef HAVE_GETHOSTBYNAME
 
+/* Define to 1 if you have the `gethostname' function. */
+#undef HAVE_GETHOSTNAME
+
 /* Define to 1 if you have the `getpid' function. */
 #undef HAVE_GETPID
 
@@ -60,6 +63,9 @@
 
 /* Define to 1 if you have the `getprotobyname' function. */
 #undef HAVE_GETPROTOBYNAME
+
+/* Define to 1 if you have the `getsockname' function. */
+#undef HAVE_GETSOCKNAME
 
 /* Define to 1 if you have the `getsockopt' function. */
 #undef HAVE_GETSOCKOPT
