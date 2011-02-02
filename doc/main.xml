@@ -552,6 +552,16 @@ with all the relevant information about the host.
 </ManSection>
  
 <ManSection>
+<Func Name="IO_gethostname" Arg=""
+      Comm="Return host name."/>
+<Returns> a string or <K>fail</K> </Returns>
+<Description>
+Return host name.
+For details see <Q><C>man 3 gethostname</C></Q>.
+</Description> 
+</ManSection>
+ 
+<ManSection>
 <Func Name="IO_getpid" Arg="" Comm="Get process ID."/>
 <Returns> an integer </Returns>
 <Description>
@@ -569,6 +579,15 @@ with all the relevant information about the host.
 </Description>
 </ManSection>
 
+<ManSection>
+<Func Name="IO_getsockname" Arg="fd"
+      Comm="Get a socket name."/>
+<Returns> a string or <K>fail</K> </Returns>
+<Description>
+Get a socket name. For details see <Q><C>man 2 getsockname</C></Q>.
+</Description> 
+</ManSection>
+ 
 <ManSection>
 <Func Name="IO_getsockopt" Arg="fd, level, optname, optval"
       Comm="Get a socket option."/>
