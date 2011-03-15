@@ -1727,7 +1727,7 @@ Obj FuncIO_getsockname(Obj self, Obj fd)
       return Fail;
   } else {
       sa_len = sizeof sa;
-      getsockname (INT_INTOBJ(fd), &sa, &sa_len);
+      getsockname (INT_INTOBJ(fd), (struct sockaddr *) (&sa), &sa_len);
       res = NEW_STRING(sa_len);
       memcpy(CHARS_STRING(res),&sa,sa_len);
       return res;
