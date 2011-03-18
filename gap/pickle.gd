@@ -28,6 +28,8 @@ DeclareGlobalFunction( "IO_GenericObjectUnpickler" );
 
 DeclareOperation( "IO_Pickle", [ IsFile, IsObject  ] );
 DeclareOperation( "IO_Unpickle", [ IsFile ] );
+DeclareOperation( "IO_Pickle", [ IsObject ]);
+DeclareOperation( "IO_Unpickle", [ IsStringRep ]);
 BindGlobal ("IO_Unpicklers", rec() );
 
 # Here is an overview over the defined tags in this package:

@@ -268,6 +268,28 @@ InstallMethod( IO_Unpickle, "for a file",
     fi;
   end );
 
+InstallMethod(IO_Pickle, "for an object, pickle to string method",
+  [IsObject],
+  function(o)
+    local f,s;
+    s := EmptyString(1000000);
+    f := IO_WrapFD(-1,false,s);
+    IO_Pickle(f,o);
+    IO_Close(f);
+    ShrinkAllocationString(s);
+    return s;
+  end);
+
+InstallMethod(IO_Unpickle, "for a string, unpickle from string method",
+  [IsStringRep],
+  function(s)
+    local f,o;
+    f := IO_WrapFD(-1,s,false);
+    o := IO_Unpickle(f);
+    IO_Close(f);
+    return o;
+  end);
+
 InstallMethod( IO_Pickle, "for an integer",
   [ IsFile, IsInt ],
   function( f, i )
