@@ -3,9 +3,6 @@
 /* Define to 1 if the `closedir' function returns void instead of `int'. */
 #undef CLOSEDIR_VOID
 
-/* long alignment */
-#undef C_LONG_ALIGN_IO
-
 /* Define to 1 if you have the `accept' function. */
 #undef HAVE_ACCEPT
 

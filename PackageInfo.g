@@ -31,7 +31,7 @@ Version := "3.3",
 
 ##  Release date of the current version in dd/mm/yyyy format.
 # 
-Date := "15/03/2011",
+Date := "23/03/2011",
 
 ##  URL of the archive(s) of the current package release, but *without*
 ##  the format extension(s), like '.zoo', which are given next.
@@ -289,7 +289,8 @@ Autoload := false,
 ##  of the package.
 Keywords := ["input", "output", "I/O", "C-library", "network", "http",
  "object serialisation", "unpredictable random numbers", "TCP/IP",
- "inter process communication", "background jobs", "parallel skeletons"]
+ "inter process communication", "background jobs", "parallel skeletons",
+ "I/O multiplexing" ]
 
 ));
 

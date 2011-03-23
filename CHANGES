@@ -9,6 +9,7 @@
   - Fixed a bug to compile on latest cygwin without warning.
   - Added IOHub functionality and documented it.
   - Hashserver example.
+  - Cleanup autoconf configuration.
 
 
 ==========================
