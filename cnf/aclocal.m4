@@ -52,18 +52,20 @@ dnl ##
 AC_DEFUN(GP_CFLAGS,
 [AC_CACHE_CHECK(C compiler default flags, gp_cv_cflags,
  [ case "$host-$CC" in
-    *-gcc | *-linux*-cc )
-     	gp_cv_cflags="-Wall -g -O2";;
-    *-clang )
-        gp_cv_cflags="-Wall -g -O2";;
+    *-gcc* | *-linux*-cc )
+     	gp_cv_cflags="-Wall -g -O2 -m${BUILD_MODE}";;
+    *-clang* )
+        gp_cv_cflags="-Wall -g -O3 -m${BUILD_MODE} -Wno-unused-value";;
     i686-*-egcs )
-        gp_cv_cflags="-Wall -g -O2 -mcpu=i686";;
+        gp_cv_cflags="-Wall -g -O2 -mcpu=i686 -m${BUILD_MODE}";;
     i586-*-egcs )
-        gp_cv_cflags="-Wall -g -O2 -mcpu=i586";;
+        gp_cv_cflags="-Wall -g -O2 -mcpu=i586 -m${BUILD_MODE}";;
     i486-*-egcs )
-        gp_cv_cflags="-Wall -g -O2 -mcpu=i486";;
+        gp_cv_cflags="-Wall -g -O2 -mcpu=i486 -m${BUILD_MODE}";;
     i386-*-egcs )
-        gp_cv_cflags="-Wall -g -O2 -mcpu=i386";;
+        gp_cv_cflags="-Wall -g -O2 -mcpu=i386 -m${BUILD_MODE}";;
+    *-icc* )
+        gp_cv_cflags="-Wall -g -O2 -m${BUILD_MODE}";;
     alphaev6-*-osf4*-cc )
 	gp_cv_cflags="-g3 -arch ev6 -O1 ";;
     alphaev56-*-osf4*-cc )
@@ -93,10 +95,14 @@ dnl ##
 AC_DEFUN(GP_LDFLAGS,
 [AC_CACHE_CHECK(Linker default flags, gp_cv_ldflags,
  [ case "$host-$CC" in
-    *-gcc | *-linux*-cc | *-egcs )
-     	gp_cv_ldflags="-g";;
-    *-clang )
-        gp_cv_ldflags="-g";;
+    *-gcc* | *-linux*-cc | *-egcs )
+     	gp_cv_ldflags="-g -m${BUILD_MODE}";;
+    *-apple-darwin*-clang* )
+        gp_cv_ldflags="-g -m${BUILD_MODE}";;
+    *-clang* )
+        gp_cv_ldflags="-g -rdynamic -m${BUILD_MODE}";;
+    *-icc* )
+        gp_cv_ldflags="-g -rdynamic -static-libgcc -static-intel -m${BUILD_MODE}";;
     alpha*-*-osf4*-cc )
 	gp_cv_ldflags="-g3 ";;
     *-solaris*-cc )
@@ -119,22 +125,24 @@ dnl ##
 AC_DEFUN(GP_PROG_CC_DYNFLAGS,
 [AC_CACHE_CHECK(dynamic module compile options, gp_cv_prog_cc_cdynoptions,
  [ case "$host-$CC" in
-    i686-pc-cygwin-gcc )
-        gp_cv_prog_cc_cdynoptions="";;
+    i686-pc-cygwin-gcc* )
+        gp_cv_prog_cc_cdynoptions="-m${BUILD_MODE}";;
     *-apple-darwin*gcc* )
-        gp_cv_prog_cc_cdynoptions="-fPIC";;
+        gp_cv_prog_cc_cdynoptions="-fPIC -Wall -m${BUILD_MODE}";;
     *-hpux-gcc )
-        gp_cv_prog_cc_cdynoptions="-fpic";;
-    *-gcc | *-egcs )
-     	gp_cv_prog_cc_cdynoptions="-fpic -Wall -O2";;
+        gp_cv_prog_cc_cdynoptions="-fpic -Wall -m${BUILD_MODE}";;
+    *-gcc* | *-egcs )
+     	gp_cv_prog_cc_cdynoptions="-fpic -Wall -O2 -m${BUILD_MODE}";;
+    *-clang* )
+        gp_cv_prog_cc_cdynoptions="-fPIC -Wall -m${BUILD_MODE} -Wno-unused-value";;
+    *-icc* )
+        gp_cv_prog_cc_cdynoptions="-fpic -Wall -O2 -m${BUILD_MODE}";;
     *-next-nextstep-cc )
         gp_cv_prog_cc_cdynoptions=" -Wall -O2 -arch $hostcpu";;
     *-osf*-cc )
 	gp_cv_prog_cc_cdynoptions=" -shared -x -O2";;
     *-irix* )
         gp_cv_prog_cc_cdynoptions=" -O3 -woff 1110,1167,1174,1552";;
-    *-clang )
-        gp_cv_prog_cc_cdynoptions="-fPIC";;
    
     * )
         gp_cv_prog_cc_cdynoptions="UNSUPPORTED";;
@@ -142,19 +150,23 @@ AC_DEFUN(GP_PROG_CC_DYNFLAGS,
  ])
  AC_CACHE_CHECK(dynamic linker, gp_cv_prog_cc_cdynlinker,
  [ case "$host-$CC" in
-    i686-pc-cygwin-gcc )
-        gp_cv_prog_cc_cdynlinker="gcc";;
+    i686-pc-cygwin-gcc* )
+        gp_cv_prog_cc_cdynlinker="${CC}";;
     *-apple-darwin*gcc* )
-        gp_cv_prog_cc_cdynlinker="ld";;
-    *-gcc | *-egcs )
-        gp_cv_prog_cc_cdynlinker="ld";;
+        gp_cv_prog_cc_cdynlinker="${CC}";;
+    *-gcc* )
+        gp_cv_prog_cc_cdynlinker="${CC}";;
+    *-clang* )
+        gp_cv_prog_cc_cdynlinker="${CC}";;
+    *-egcs )
+        gp_cv_prog_cc_cdynlinker="${CC}";;
+    *-icc* )
+        gp_cv_prog_cc_cdynlinker="${CC}";;
     *-next-nextstep-cc )
         gp_cv_prog_cc_cdynlinker="cc";;
     *-osf*-cc )
 	gp_cv_prog_cc_cdynlinker="cc";;
     *-irix* )
-        gp_cv_prog_cc_cdynlinker="ld";;
-    *-clang )
         gp_cv_prog_cc_cdynlinker="ld";;
     * )
         gp_cv_prog_cc_cdynlinker="echo";;
@@ -162,30 +174,36 @@ AC_DEFUN(GP_PROG_CC_DYNFLAGS,
  ])
  AC_CACHE_CHECK(dynamic module link flags, gp_cv_prog_cc_cdynlinking,
  [ case "$host-$CC" in
-    *linux* )
-        gp_cv_prog_cc_cdynlinking="-Bshareable -x";;
-    *freebsd* )
-        gp_cv_prog_cc_cdynlinking="-Bshareable -x";;
-    *netbsd* )
-        gp_cv_prog_cc_cdynlinking="-shared";;
+    *-apple-darwin*gcc )
+        gp_cv_prog_cc_cdynlinking='-g -bundle -bundle_loader ${gap_bin}/gap -lc -lm'" -m${BUILD_MODE}";;
+    i686-pc-cygwin-gcc* )
+        gp_cv_prog_cc_cdynlinking='-shared ${gap_bin}/gap.dll';;
+    *-gcc )
+        gp_cv_prog_cc_cdynlinking="-shared -g -m${BUILD_MODE}";;
+    *-apple-darwin*clang )
+        gp_cv_prog_cc_cdynlinking='-bundle -g -bundle_loader ${gap_bin}/gap'" -m${BUILD_MODE}";;
+    *-clang )
+        gp_cv_prog_cc_cdynlinking="-shared -g -m${BUILD_MODE}";;
+    *-icc )
+        gp_cv_prog_cc_cdynlinking="-shared -g -m${BUILD_MODE}";;
+    *-egcs )
+        gp_cv_prog_cc_cdynlinking="-shared -g -m${BUILD_MODE}";;
     *hpux* )
         gp_cv_prog_cc_cdynlinking="-b +e Init__Dynamic";;
+    alpha*osf4*-cc )
+        gp_cv_prog_cc_cdynlinking="-shared -g3";;
     alpha*osf*cc )
 	gp_cv_prog_cc_cdynlinking="-shared";;
     *osf*cc )
 	gp_cv_prog_cc_cdynlinking="-shared -r";;
     *-irix* )
-       gp_cv_prog_cc_cdynlinking="-shared";;  
+       gp_cv_prog_cc_cdynlinking="-shared -O3";;  
     *-nextstep*cc )
         gp_cv_prog_cc_cdynlinking="-arch $hostcpu -Xlinker -r -Xlinker -x -nostdlib";;
     *solaris* )
         gp_cv_prog_cc_cdynlinking="-G -Bdynamic";;
     *sunos* )
         gp_cv_prog_cc_cdynlinking="-assert pure-text -Bdynamic -x";;
-    *-apple-darwin*gcc* )
-        gp_cv_prog_cc_cdynlinking='-bundle -bundle_loader ${gap_bin}/gap -lc -lm';;
-    i686-pc-cygwin-gcc )
-        gp_cv_prog_cc_cdynlinking='-shared ${gap_bin}/gap.dll';;
     * )
         gp_cv_prog_cc_cdynlinking="UNSUPPORTED";;
    esac 
