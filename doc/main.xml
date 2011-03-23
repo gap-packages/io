@@ -296,7 +296,7 @@ a string of length 4, containing the 4 bytes of the IP address and
 <A>port</A> is a port number as &GAP; integer. The function
 <Ref Func="IO_MakeIPAddressPort"/> takes the same arguments, but the first can
 be a string containing an IP address in dot notation like
-<Q>137.226.152.77</Q>.<P/>
+<Q>137.226.152.77</Q> or a hostname to be looked up.<P/>
 
 The <C>setsockopt</C> function has no argument <A>optlen</A>. The length
 of the string <A>optval</A> is taken.<P/>
@@ -1556,7 +1556,9 @@ in dot notation, i.e. four numbers in the range from 0 to 255 separated
 by dots <Q>.</Q>, and an integer <A>portnr</A>, which is a port number.
 The result is a string of the correct length to be used for the
 low level C library functions, wherever IP address port number pairs
-are needed.
+are needed. The string <A>ipstring</A> can also be a host name, which
+is then looked up using <Ref Func="IO_gethostbyname"/> to find the IP
+address.
 </Description>
 </ManSection>
 
@@ -2682,6 +2684,247 @@ farm a chance to actually receive some more results from the worker background
 jobs.
 </Description>
 </ManSection>
+
+</Section>
+
+</Chapter>
+
+<Chapter>
+    <Heading>I/O multiplexing</Heading>
+
+    <Section>
+        <Heading>Introduction</Heading>
+
+Whenever one needs to do input/output on more than one connection (file
+descriptor) at a time, some code is needed to organise the I/O
+multiplexing. Due to the single-threaded nature of the current &GAP;
+language one has to use <Ref Func="IO_select"/> and some
+buffering and queueing to organise this. This chapter describes a
+relative generic implementation of I/O-multiplexing using so-called
+<Ref Oper="IOHub"/> objects. The basic idea is that an <Ref
+    Oper="IOHub"/> object handles lots of I/O connections at the same
+time and maintains a buffer for each of them. There is a very simple
+protocol that marks chunks of data (called <Q>messages</Q>) and whenever
+a message has been received completely it is collected in the input
+queue of the <Ref Oper="IOHub"/>, marked with the number of the
+connection it came from. Rather than sending a message away
+in one go, one would always schedule it for sending by appending it to
+the output queue. The operation <Ref Oper="DoIO"/>, when called often
+enough, will then make sure that the message is sent away eventually.
+
+</Section>
+
+<Section>
+    <Heading>The operations for <C>IOHub</C> objects</Heading>
+
+In this section, we simply describe the functions and operations
+to create, use and destroy <Ref Oper="IOHub"/> objects.
+<ManSection>
+<Oper Name="IOHub" Arg=""/>
+<Returns> an <Ref Oper="IOHub"/> object </Returns>
+<Description>
+    This creates a new <Ref Oper="IOHub"/> object at first without any open
+    connections.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="NewConnection" Arg="h, i, o"/>
+<Returns> a positive integer </Returns>
+<Description>
+    This operation adds a new connection to the <Ref Oper="IOHub"/> object
+<A>h</A>. The arguments <A>i</A> and <A>o</A> must be Unix file
+descriptors or <M>0</M> and <A>i</A> must be open for reading if
+it is positive and <A>o</A> must be open for writing if it is
+positive. It is allowed that both file descriptors are equal, but they
+may not both be equal to <M>0</M>. The operation returns a positive
+integer which is the number under which this new connection will be
+administrated in the <Ref Oper="IOHub"/> object. Note that this number is
+specific to the object <A>h</A>. <P/>
+From the moment these file descriptors are registered with the
+<Ref Oper="IOHub"/> object, every subsequent call to <Ref Oper="DoIO"/> will
+try to do input and output on them. This means in particular that the
+other side of this connection should be in the same initial
+state of the protocol. Usually this will be achieved by them being
+added as a new connection to a corresponding <Ref Oper="IOHub"/> object on
+the other side at the same time. <P/> 
+See also <Ref Oper="NewTCPConnection"/> below.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="CloseConnection" Arg="h, nr"/>
+<Returns> nothing </Returns>
+<Description>
+    The argument <A>h</A> must be an <Ref Oper="IOHub"/> object and
+    <A>nr</A> the number of a connection which was previously returned
+    by <Ref Oper="NewConnection"/>. The corresponding connection is
+    closed and removed from the <Ref Oper="IOHub"/>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="AttachServingSocket" Arg="h, addr, port"/>
+<Returns> a Unix file descriptor or <K>fail</K> </Returns>
+<Description>
+The argument <A>h</A> must be an <Ref Oper="IOHub"/> object,
+<A>addr</A> an IP address or host name as a string and <A>port</A> a
+port number (see also <Ref Func="IO_MakeIPAddressPort"/>). 
+This operation creates a new socket, binds it to the IP
+address
+and port and attaches it to the <Ref Oper="IOHub"/> object. From
+this moment on the operation <Ref Oper="DoIO"/> will accept new
+bidirectional TCP/IP connections on that socket and add them to 
+<A>h</A>. The operation returns either the file descriptor of the
+new socket or <K>fail</K> if an error occurred.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="ShutdownServingSocket" Arg="h"/>
+<Returns> nothing </Returns>
+<Description>
+The argument <A>h</A> must be an <Ref Oper="IOHub"/> object.
+Any server socket which was attached to <A>h</A> is shut down,
+so no new connections will be accepted.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="Shutdown" Arg="h"/>
+<Returns> nothing </Returns>
+<Description>
+The argument <A>h</A> must be an <Ref Oper="IOHub"/> object.
+All connections of <A>h</A> will be closed using <Ref
+    Oper="CloseConnection"/> and any serving socket will be
+shut down using <Ref Oper="ShutdownServingSocket"/>. The <Ref
+    Oper="IOHub"/> object will not be usable any more after this call.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="AcceptNewConnection" Arg="h"/>
+<Returns> a positive integer or <K>fail</K></Returns>
+<Description>
+The argument <A>h</A> must be an <Ref Oper="IOHub"/> object.
+The object <A>h</A> must have a serving socket attached to it
+via <Ref Oper="AttachServingSocket"/>, otherwise <K>fail</K> is
+returned and nothing happens. One more connection is accepted through
+the serving socket. It is added as a new bidirectional TCP/IP
+connection to the <Ref Oper="IOHub"/> object and the new connection
+number is returned. Note first that this operation blocks until a new
+connection comes in. Note furthermore that this operation is  usually
+called automatically in <Ref Oper="DoIO"/> whenever a new connection
+has come in, which is reported in the internal <Ref Func="IO_select"/>
+call. So usually, the client code does not have to call this operation
+at all.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="SubmitOutput" Arg="h, nr, st"/>
+<Returns> <K>true</K> or <K>fail</K> </Returns>
+<Description>
+    The argument <A>h</A> must be an <Ref Oper="IOHub"/> object,
+    <A>nr</A> must be a positive integer which is the number of
+    an open connection of <A>h</A> which can be used for output.
+    The argument <A>st</A> must be a &GAP; string. This operation
+    appends the message <A>st</A> to the end of the output queue
+    for the connection <A>nr</A>. Note that at this stage no output
+    is actually performed automatically. One has to call
+    <Ref Oper="DoIO"/> subsequently to actually send the message away.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="GetInput" Arg="h, nr"/>
+<Returns> a list of length <M>2</M> </Returns>
+<Description>
+The argument <A>h</A> must be an <Ref Oper="IOHub"/> object,
+<A>nr</A> must be an integer.
+If <A>nr</A> is positive, this operation returns the earliest message
+which has come in from connection number <A>nr</A> and has not yet been
+returned by <Ref Oper="GetInput"/> before. This message is then removed 
+from the input queue. If there is no such message, then <K>false</K>
+is returned. A message is returned as a plain list of length <M>2</M>
+where the first entry is the connection number it came from and
+the second entry is a string containing the message itself. If
+<A>nr</A> is equal to <M>0</M> then the first message in the input
+queue from any connection is returned or <K>false</K> if there is no
+message in the input queue.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="NewTCPConnection" Arg="h, addr, port"/>
+<Returns> a connection number or <K>fail</K> </Returns>
+<Description>
+The argument <A>h</A> must be an <Ref Oper="IOHub"/> object,
+the arguments <A>addr</A> and <A>port</A> must be an address/port
+pair as used in <Ref Func="IO_MakeIPAddressPort"/>, so <A>address</A>
+can either be a host name or an IP address and <A>port</A> is a port
+number. This operation opens a new TCP connection to the address and
+port specified, adds a new bidirectional connection to the <Ref Oper="IOHub"/>
+<A>h</A> using <Ref Oper="NewConnection"/> 
+and returns the connection number specific to the object
+<A>h</A>. If anything goes wrong, <K>fail</K> is returned.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="OutputQueue" Arg="h"/>
+<Returns> a list </Returns>
+<Description>
+The argument <A>h</A> must be an <Ref Oper="IOHub"/> object.
+This returns the internal object for the output queue. Its elements
+are pairs where the first entry is the connection number where it
+is going to be sent and the second entry is the message as a string.
+Only modify this list if you really know what you are doing.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="InputQueue" Arg="h"/>
+<Returns> a list </Returns>
+<Description>
+The argument <A>h</A> must be an <Ref Oper="IOHub"/> object.
+This returns the internal object for the input queue. Its elements
+are pairs where the first entry is the connection number from where
+the message was received and the second entry is the message as a string.
+Only modify this list if you really know what you are doing.
+</Description>
+</ManSection>
+
+<ManSection>
+<Oper Name="DoIO" Arg="h [,block]"/>
+<Returns> <K>true</K> or <K>false</K> or <K>fail</K> </Returns>
+<Description>
+The argument <A>h</A> must be an <Ref Oper="IOHub"/> object,
+and the optional second argument <A>block</A> must be <K>true</K> or
+<K>false</K>. This operation uses <Ref Func="IO_select"/> to decide
+which of the file descriptors belonging to the connections of <A>h</A>
+are ready to read or write. All file descriptors which are ready are
+served, possibly updating the input and output queues. A possible
+serving socket is also served accepting a new connection if there is one.
+The operation <Ref Oper="DoIO"/> loops until no more file
+descriptors are ready. It returns <K>true</K> if some I/O was
+performed and <K>false</K> if not. It returns <K>fail</K> if the
+<Ref Oper="IOHub"/> is already shut down.
+The second argument <A>block</A> indicates
+whether or not <Ref Oper="DoIO"/> should block until some I/O
+has taken place. If this argument is omitted then <K>false</K>
+(non-blocking operation) is the default.<P/>
+Note that broken connections are silently closed.
+</Description>
+</ManSection>
+
+</Section>
+
+<Section>
+    <Heading> Examples </Heading>
+
+There is an example hash server in the file
+<F>examples/hashserver.g</F>.
 
 </Section>
 

@@ -881,19 +881,29 @@ end );
 
 # A helper to make pairs IP address and port for TCP and UDP transfer:
 InstallGlobalFunction( IO_MakeIPAddressPort, function(ip,port)
-  local i,l,nr,res;
-  l := SplitString(ip,".");
-  if Length(l) <> 4 then
-      Error("IPv4 adresses must have 4 numbers seperated by dots");
-  fi;
-  res := "    ";
-  for i in [1..4] do
-      nr := Int(l[i]);
-      if nr < 0 or nr > 255 then
-          Error("IPv4 addresses must contain numbers between 0 and 255");
+  local i,l,nr,r,res;
+  if Length(ip) = 4 then
+      res := ip;
+  else
+      l := List(SplitString(ip,"."),Int);
+      if Length(l) <> 4 or not(ForAll(l,IsInt)) then
+          r := IO_gethostbyname(ip);
+          if r = fail then
+              Error("This is not an IP address or a valid host name");
+              return fail;
+          fi;
+          res := r.addr[1];
+      else
+          res := "    ";
+          for i in [1..4] do
+              nr := l[i];
+              if nr < 0 or nr > 255 then
+                Error("IPv4 addresses must contain numbers between 0 and 255");
+              fi;
+              res[i] := CHAR_INT(nr);
+          od;
       fi;
-      res[i] := CHAR_INT(nr);
-  od;
+  fi;
   if port < 0 or port > 65535 then
       Error("IPv4 port numbers must be between 0 and 65535");
   fi;

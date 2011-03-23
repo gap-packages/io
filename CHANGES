@@ -6,8 +6,9 @@
  Changes from 3.2 -> 3.3:
 ==========================
 
-  - Fix a bug to compile on latest cygwin without warning.
-  - Add IOHub functionality.
+  - Fixed a bug to compile on latest cygwin without warning.
+  - Added IOHub functionality and documented it.
+  - Hashserver example.
 
 
 ==========================

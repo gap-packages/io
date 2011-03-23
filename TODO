@@ -1,8 +1,5 @@
 Later:
 
-Compiling on Snow-Leopard -> email Alex K Sep 10 2009
-  --> Probably an issue for GAP/gac rather than IO
-
 Sort out SIGCHLD handler issues, cooperate with GAP kernel's handler
   --> later
 
