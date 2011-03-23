@@ -2201,7 +2201,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 ac_config_headers="$ac_config_headers ioconfig.h:ioconfig.hin"
 
 ac_aux_dir=
-for ac_dir in ../../../cnf "$srcdir"/../../../cnf; do
+for ac_dir in . "$srcdir"/.; do
   if test -f "$ac_dir/install-sh"; then
     ac_aux_dir=$ac_dir
     ac_install_sh="$ac_aux_dir/install-sh -c"
@@ -2217,7 +2217,7 @@ for ac_dir in ../../../cnf "$srcdir"/../../../cnf; do
   fi
 done
 if test -z "$ac_aux_dir"; then
-  as_fn_error $? "cannot find install-sh, install.sh, or shtool in ../../../cnf \"$srcdir\"/../../../cnf" "$LINENO" 5
+  as_fn_error $? "cannot find install-sh, install.sh, or shtool in . \"$srcdir\"/." "$LINENO" 5
 fi
 
 # These three variables are undocumented and unsupported,
@@ -5476,7 +5476,7 @@ esac
 
 
 
-ac_config_files="$ac_config_files Makefile:../../../cnf/Makefile.in"
+ac_config_files="$ac_config_files Makefile:Makefile.in"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -6180,7 +6180,7 @@ for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
     "ioconfig.h") CONFIG_HEADERS="$CONFIG_HEADERS ioconfig.h:ioconfig.hin" ;;
-    "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile:../../../cnf/Makefile.in" ;;
+    "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile:Makefile.in" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

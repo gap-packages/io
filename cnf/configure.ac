@@ -4,7 +4,7 @@
 AC_PREREQ(2.68)
 AC_INIT(IOPKG, 1.0, neunhoef@mcs.st-and.ac.uk)
 AC_CONFIG_HEADER([ioconfig.h:ioconfig.hin])
-AC_CONFIG_AUX_DIR(../../../cnf)
+AC_CONFIG_AUX_DIR(.)
 
 AC_CANONICAL_TARGET
 
@@ -64,5 +64,5 @@ esac
 AC_SUBST(GAPPATH)
 AC_SUBST(GAPARCH)
 AC_SUBST(PKGIOPATH)
-AC_CONFIG_FILES([Makefile:../../../cnf/Makefile.in])
+AC_CONFIG_FILES([Makefile:Makefile.in])
 AC_OUTPUT
