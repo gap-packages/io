@@ -12,10 +12,11 @@ GAPINCL=-I@PKGIOPATH@/bin/@GAPARCH@
 
 default: bin/@GAPARCH@/io.so
 
-bin/@GAPARCH@/io.so: src/io.c bin/@GAPARCH@/ioconfig.h
+bin/@GAPARCH@/io.so: src/io.c bin/@GAPARCH@/ioconfig.h bin/@GAPARCH@/Makefile
 	@GAPPATH@/bin/@GAPARCH@/gac -d -p "$(GAPINCL)" -o bin/@GAPARCH@/io.so src/io.c
 
 # make a statically linked GAP including the io module
+# basically does not make much sense, leave it for legacy reasons
 static: src/io.c bin/@GAPARCH@/ioconfig.h
 	(cd @GAPPATH@/bin/@GAPARCH@; ./gac -o gap-static -p "-DIOSTATIC $(GAPINCL)" -P "-static" @PKGIOPATH@/src/io.c)
 
