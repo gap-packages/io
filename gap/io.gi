@@ -29,10 +29,7 @@ InstallValue( FileType,
 
 IO.LineEndChars := "\n";
 IO.LineEndChar := '\n';
-if ARCH_IS_MAC() then
-    IO.LineEndChars := "\r";
-    IO.LineEndChar := '\r';
-elif ARCH_IS_WINDOWS() then
+if ARCH_IS_WINDOWS() then
     IO.LineEndChars := "\r\n";
 fi;
 if IsBound(IO.PIPE_BUF) then
