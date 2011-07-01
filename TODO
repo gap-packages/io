@@ -1,5 +1,7 @@
 Later:
 
+See Mail Laurent Feb 02 2011
+
 Sort out SIGCHLD handler issues, cooperate with GAP kernel's handler
   --> later
 
