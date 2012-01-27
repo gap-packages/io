@@ -62,37 +62,54 @@ Do this in a directory called <Q><F>pkg</F></Q>, preferably (but not necessarily
 in the <Q><F>pkg</F></Q> subdirectory of your &GAP; 4 installation. It creates a
 subdirectory called <Q><F>io</F></Q>.<P/>
 
-To install this package do
+The package  will not work without the following compilation step.<P/>
+
+To compile the C part of the package do (in the <F>pkg</F> directory)
 
 <Verb>
     cd io
-    ./configure [path]
+    ./configure
+    make
 </Verb>
-
-where <Q>path</Q> is a path to the main &GAP; root directory (if not given the
-default <Q><F>../..</F></Q> is assumed).<P/>
-
-Afterwards call <Q><F>make</F></Q> to compile a binary file.<P/>
-
-If you installed &GAP; on several architectures, you must execute this
-configure/make step on each of the architectures immediately after
-configuring &GAP; itself on this architecture.<P/>
-
-The package  will not work without  this  step.<P/>
 
 If you installed the package in another <Q><F>pkg</F></Q> directory than
 the standard <Q><F>pkg</F></Q> directory in your &GAP; 4 installation,
-then you have to add the path to the directory containing your
+then you have to do two things. Firstly during compilation 
+you have to use the option
+<C>--with-gaproot=PATH</C> of the <F>configure</F> script
+where <Q>PATH</Q> is a path to the main &GAP; root directory 
+(if not given the
+default <Q><F>../..</F></Q> is assumed). <P/>
+Secondly you have to 
+specify the path to the directory containing your
 <Q><F>pkg</F></Q>
 directory to &GAP;'s list of directories. This can be done by starting
 &GAP; with the <Q><F>-l</F></Q> command line option followed by the name
 of the directory and a semicolon. Then your directory is prepended to
 the list of directories searched. Otherwise the package is not found by
 &GAP;. Of course, you can add this option to your &GAP; startup script.
+<P/>
+
+If you installed &GAP; on several architectures, you must execute the
+configure/make step for each of the architectures. You can either
+do this immediately after
+configuring and compiling &GAP; itself on this architecture, or alternatively (when
+using version 4.5 of &GAP; or newer) set the environment variable
+<C>CONFIGNAME</C> to the name of the configuration you used when
+compiling &GAP; before running <C>./configure</C>. 
+Note however that your compiler choice and flags
+(environment variables <C>CC</C> and <C>CFLAGS</C>) need to be
+chosen to match the setup of the original &GAP; compilation. For
+example you have to specify 32-bit or 64-bit mode correctly!<P/>
 
 
 <Section>
 <Heading>Static linking</Heading>
+
+
+This feature does not work in this version of the package.
+We leave the old documentation here for the case that the
+feature will be reenabled inthe future.<P/>
 
 This might be interesting for M&dollar; Windows users, as
 dynamic loading of binary modules does not always work there.
@@ -881,7 +898,10 @@ Used for I/O multiplexing.
 For details see <Q><C>man 2 select</C></Q>. <A>inlist</A>, <A>outlist</A> and
 <A>exclist</A> are lists of filedescriptors, which are modified. If the
 corresponding file descriptor is not yet ready, it is replaced by
-<K>fail</K>.
+<K>fail</K>. The timeout values <A>timeoutsec</A> and
+<A>timeoutusec</A> correspond to the usual arguments of <C>select</C>,
+if both are immediate integers, they are set, otherwise
+<C>select</C> is called with no timeout value.
 </Description> 
 </ManSection>
  

@@ -25,7 +25,7 @@ clean-local: uninstall-libLTLIBRARIES
 
 doc:	doc/manual.six
 
-doc/manual.six: doc/main.xml doc/io.xml default VERSION
+doc/manual.six: doc/main.xml doc/io.xml VERSION
 	($(GAPROOT)/bin/gap.sh makedoc.g)
 
 archive: doc
