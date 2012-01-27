@@ -1,15 +1,25 @@
-#                                               -*- Autoconf -*-
-# Process this file with autoconf to produce a configure script.
-
 AC_PREREQ(2.68)
-AC_INIT(IOPKG, 1.0, neunhoef@mcs.st-and.ac.uk)
-AC_CONFIG_HEADER([ioconfig.h:ioconfig.hin])
-AC_CONFIG_AUX_DIR(.)
+AC_INIT([IOPKG], 4.0, neunhoef@mcs.st-and.ac.uk)
+AC_CONFIG_SRCDIR([src/io.c])
+AC_CONFIG_HEADER([src/pkgconfig.h:cnf/pkgconfig.h.in])
+AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_AUX_DIR([cnf])
+AM_INIT_AUTOMAKE([foreign])
 
-AC_CANONICAL_TARGET
+AC_PREFIX_DEFAULT([${PWD}])
 
-# Checks for programs.
 AC_PROG_CC
+
+## Find out what the best compiler flags are
+AX_CC_MAXOPT
+
+AC_LIBTOOL_DLOPEN
+AC_DISABLE_STATIC
+AC_PROG_LIBTOOL
+
+AC_FIND_GAP
+
+AC_CHECK_SIZEOF([void **])
 
 # Checks for libraries.
 
@@ -55,8 +65,5 @@ case "$host" in
         ;;
 esac
      
-AC_SUBST(GAPPATH)
-AC_SUBST(GAPARCH)
-AC_SUBST(PKGIOPATH)
-AC_CONFIG_FILES([Makefile:Makefile.in])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

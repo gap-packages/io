@@ -1,0 +1,48 @@
+ACLOCAL_AMFLAGS = -I m4
+
+SUBDIRS = 
+
+BINARCHDIR = bin/$(GAPARCH)
+GAPINSTALLLIB = $(abs_top_srcdir)/$(BINARCHDIR)/io.so
+
+lib_LTLIBRARIES = io.la
+
+io_la_SOURCES = src/io.c
+io_la_CPPFLAGS = $(GAP_CPPFLAGS) -DCONFIG_H
+# Note that the latter is only for GAP 4.4.12
+io_la_LDFLAGS = -module -avoid-version
+
+all-local: io.la install-libLTLIBRARIES
+#	@$(MAKE) $(AM_MAKEFLAGS) install-libLTLIBRARIES
+	$(mkdir_p) $(top_srcdir)/$(BINARCHDIR)
+	cp $(libdir)/io.so $(GAPINSTALLLIB)
+	@echo "SUCCESS!"
+
+clean-local: uninstall-libLTLIBRARIES
+#	@$(MAKE) $(AM_MAKEFLAGS) uninstall-libLTLIBRARIES
+	(cd doc ; ./clean)
+	rm -f $(GAPINSTALLLIB)
+
+doc:	doc/manual.six
+
+doc/manual.six: doc/main.xml doc/io.xml default VERSION
+	($(GAPROOT)/bin/gap.sh makedoc.g)
+
+archive: doc
+	(cd .. ; tar czvf io-`cat io/VERSION`.tar.gz --exclude ".svn" --exclude bin --exclude test --exclude ".git" --exclude ".libs" --exclude lib --exclude io.la --exclude io_la-io.lo --exclude .deps --exclude autom4te.cache --exclude .gitignore --exclude config.log --exclude stamp-h1 --exclude pkgconfig.h --exclude libtool --exclude config.status io)
+
+WEBPOS=/scratch/neunhoef/mywebpage.pub/Computer/Software/Gap/io
+
+towww: archive
+	echo '<?xml version="1.0" encoding="ISO-8859-1"?>' >${WEBPOS}.version
+	echo '<mixer>' >>${WEBPOS}.version
+	cat VERSION >>${WEBPOS}.version
+	echo '</mixer>' >>${WEBPOS}.version
+	cp PackageInfo.g ${WEBPOS}
+	cp README ${WEBPOS}/README.io
+	cp doc/manual.pdf ${WEBPOS}/io.pdf
+	cp ../io-`cat VERSION`.tar.gz ${WEBPOS}
+	@echo
+	@echo Now please adjust the archive link in 
+	@echo "    " ${WEBPOS}.mixer !
+
