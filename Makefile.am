@@ -13,15 +13,13 @@ io_la_CPPFLAGS = $(GAP_CPPFLAGS) -DCONFIG_H
 io_la_LDFLAGS = -module -avoid-version
 
 all-local: io.la install-libLTLIBRARIES
-#	@$(MAKE) $(AM_MAKEFLAGS) install-libLTLIBRARIES
 	$(mkdir_p) $(top_srcdir)/$(BINARCHDIR)
 	cp $(libdir)/io.so $(GAPINSTALLLIB)
 	@echo "SUCCESS!"
 
-clean-local: uninstall-libLTLIBRARIES
-#	@$(MAKE) $(AM_MAKEFLAGS) uninstall-libLTLIBRARIES
+distclean-local:
+	rm -rf bin/*
 	(cd doc ; ./clean)
-	rm -f $(GAPINSTALLLIB)
 
 doc:	doc/manual.six
 
