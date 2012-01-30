@@ -10,14 +10,18 @@ lib_LTLIBRARIES = io.la
 io_la_SOURCES = src/io.c
 io_la_CPPFLAGS = $(GAP_CPPFLAGS) -DCONFIG_H
 # Note that the latter is only for GAP 4.4.12
-io_la_LDFLAGS = -module -avoid-version -no-undefined -version-info 0:0:0
+io_la_LDFLAGS = -module -avoid-version
 if SYS_IS_CYGWIN
-io_la_LDFLAGS += $(GAPROOT)/bin/$(GAPARCH)/gap.dll
+io_la_LDFLAGS += -no-undefined -version-info 0:0:0 -Wl,$(GAPROOT)/bin/$(GAPARCH)/gap.dll
 endif
 
 all-local: io.la install-libLTLIBRARIES
 	$(mkdir_p) $(top_srcdir)/$(BINARCHDIR)
+if SYS_IS_CYGWIN
+	cp $(libdir)/io.dll $(GAPINSTALLLIB)
+else
 	cp $(libdir)/io.so $(GAPINSTALLLIB)
+endif
 	@echo "SUCCESS!"
 
 distclean-local:
