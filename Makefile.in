@@ -34,6 +34,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@SYS_IS_CYGWIN_TRUE@am__append_1 = $(GAPROOT)/bin/$(GAPARCH)/gap.dll
 subdir = .
 DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(top_srcdir)/cnf/pkgconfig.h.in \
@@ -288,7 +289,8 @@ lib_LTLIBRARIES = io.la
 io_la_SOURCES = src/io.c
 io_la_CPPFLAGS = $(GAP_CPPFLAGS) -DCONFIG_H
 # Note that the latter is only for GAP 4.4.12
-io_la_LDFLAGS = -module -avoid-version -no-undefined -version-info 0:0:0
+io_la_LDFLAGS = -module -avoid-version -no-undefined -version-info \
+	0:0:0 $(am__append_1)
 WEBPOS = /scratch/neunhoef/mywebpage.pub/Computer/Software/Gap/io
 all: all-recursive
 

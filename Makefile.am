@@ -11,6 +11,9 @@ io_la_SOURCES = src/io.c
 io_la_CPPFLAGS = $(GAP_CPPFLAGS) -DCONFIG_H
 # Note that the latter is only for GAP 4.4.12
 io_la_LDFLAGS = -module -avoid-version -no-undefined -version-info 0:0:0
+if SYS_IS_CYGWIN
+io_la_LDFLAGS += $(GAPROOT)/bin/$(GAPARCH)/gap.dll
+endif
 
 all-local: io.la install-libLTLIBRARIES
 	$(mkdir_p) $(top_srcdir)/$(BINARCHDIR)
