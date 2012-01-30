@@ -3,13 +3,19 @@
 ===========================================================================
 
 ==========================
+ Changes from 4.0 -> 4.1:
+==========================
+
+  - Make it compile on Windows.
+
+
+==========================
  Changes from 3.3 -> 4.0:
 ==========================
 
   - Use new build setup using automake/autoconf/libtool
   - Move repository to git@git.gap-system.org/io
   - Updated the documentation of IO_select
-
   
 
 ==========================
