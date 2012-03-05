@@ -1,3 +1,16 @@
+function()
+    local v;
+    v := IO_gettimeofday();
+    return v.tv_sec+0.000001_l*v.tv_usec;
+end;
+for Laurent
+  IO_Gettimeofday()    returning an integer with the microseconds
+and
+  IO_Gettimeofday_float()  returning a float in seconds
+                           with your warning in the documentation
+
+fix "source" in configure script.
+
 Implement posix_openpt, grantpt, unlockpt and ptsname
   to allow usage of pseudo ttys
 
