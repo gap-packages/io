@@ -1318,6 +1318,7 @@ Obj FuncIO_select(Obj self, Obj inlist, Obj outlist, Obj exclist,
   int n,maxfd;
   Int i,j;
   Obj o;
+  time_t t1,t2;
 
   while (inlist == (Obj) 0 || !(IS_PLIST(inlist)))
     inlist = ErrorReturnObj(
@@ -1371,9 +1372,21 @@ Obj FuncIO_select(Obj self, Obj inlist, Obj outlist, Obj exclist,
       timeoutusec != (Obj) 0 && IS_INTOBJ(timeoutusec)) {
     tv.tv_sec = INT_INTOBJ(timeoutsec);
     tv.tv_usec = INT_INTOBJ(timeoutusec);
-    n = select(maxfd+1,&infds,&outfds,&excfds,&tv);
+    while (1) {
+        t1 = time(NULL);
+        n = select(maxfd+1,&infds,&outfds,&excfds,&tv);
+        if (n != -1 || errno != EINTR) break;
+        t2 = time(NULL);
+        tv.tv_sec -= (t2-t1);
+        if (tv.tv_sec < 0) {
+            tv.tv_sec = 0;
+            tv.tv_usec = 0;
+        }
+    }
   } else {
-    n = select(maxfd+1,&infds,&outfds,&excfds,NULL);
+    do {
+        n = select(maxfd+1,&infds,&outfds,&excfds,NULL);
+    } while (n == -1 && errno == EINTR);
   }
     
   if (n >= 0) {
