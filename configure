@@ -13497,7 +13497,7 @@ $as_echo "Not found" >&6; }
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GAP architecture" >&5
 $as_echo_n "checking for GAP architecture... " >&6; }
   GAPARCH="Unknown"
-  source $GAPROOT/$SYSINFO
+  . $GAPROOT/$SYSINFO
   if test "x$GAParch" != "x"; then
     GAPARCH=$GAParch
   fi

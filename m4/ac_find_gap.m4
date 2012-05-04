@@ -75,7 +75,7 @@ AC_DEFUN([AC_FIND_GAP],
         
   AC_MSG_CHECKING([for GAP architecture])
   GAPARCH="Unknown"
-  source $GAPROOT/$SYSINFO
+  . $GAPROOT/$SYSINFO
   if test "x$GAParch" != "x"; then
     GAPARCH=$GAParch
   fi

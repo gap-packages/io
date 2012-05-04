@@ -9,6 +9,7 @@
   - Fix behaviour of IO_select to try again if the system call was
     interrupted. This fixes an infinite loop bug in
     ParTakeFirstResultByFork.
+  - Change "source" to "." in AC_FIND_GAP to provide support for BSD.
 
 
 ==========================
