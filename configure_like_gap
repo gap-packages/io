@@ -1,0 +1,33 @@
+#!/bin/sh
+# Call with one or two arguments:
+#    CONFIGNAME
+# as first and optionally
+#    GAPROOTPATH 
+# as second, where "../.." is the default.
+if [ "x$1" = "x" ] ; then
+    CONFIGNAME=""
+else
+    export CONFIGNAME=$1
+    echo Using CONFIGNAME=$CONFIGNAME
+fi
+if [ "x$2" = "x" ] ; then
+   GAPROOT=../..
+else
+   GAPROOT=$2
+fi
+echo Using GAPROOT=$GAPROOT
+
+if [ "x$CONFIGNAME" = "x" ] ; then
+    . $GAPROOT/sysinfo.gap
+else
+    . $GAPROOT/sysinfo.gap-$CONFIGNAME
+fi
+GAPARCH=$GAPROOT/bin/$GAParch
+. $GAPARCH/sysinfo.gap
+export CC=$c_compiler
+echo Using CC=$CC
+export CFLAGS="$c_options"
+echo Using CFLAGS="$CFLAGS"
+export LDFLAGS="$c_link_options"
+echo Using LDFLAGS=$LDFLAGS
+./configure --with-gaproot=$GAPROOT

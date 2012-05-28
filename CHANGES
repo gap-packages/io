@@ -2,6 +2,7 @@
  This file describes changes in the IO package beginning from version 1.2:
 ===========================================================================
 
+
 ==========================
  Changes from 4.1 -> 4.2:
 ==========================
@@ -10,6 +11,8 @@
     interrupted. This fixes an infinite loop bug in
     ParTakeFirstResultByFork.
   - Change "source" to "." in AC_FIND_GAP to provide support for BSD.
+  - Add script "configure_like_gap"
+  - Compile documentation against 4.5.4
 
 
 ==========================
