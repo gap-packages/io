@@ -44,19 +44,23 @@ To get the newest version of this &GAP; 4 package download one of the
 archive files
 <List>
 <Item> <F>io-x.x.tar.gz</F> </Item>
-<Item> <F>io-x.x.zoo</F> </Item>
 <Item> <F>io-x.x.tar.bz2</F> </Item>
 <Item> <F>io-x.x.zip</F> </Item>
 </List>
 and unpack it using 
 <Verb>
-    gunzip io-x.x.tar.gz; tar xvf io-x.x.tar
+gunzip io-x.x.tar.gz; tar xvf io-x.x.tar
 </Verb>
-respectively
+or
 <Verb>
-    unzoo -x io-x.x.zoo
+bzip2 -d io-x.x.tar.bz2; tar xvf io-x.x.tar
 </Verb>
-and so on. <P/>
+or
+<Verb>
+unzip -x io-x.x.zip
+</Verb>
+respectively.
+<P/>
 
 Do this in a directory called <Q><F>pkg</F></Q>, preferably (but not necessarily)
 in the <Q><F>pkg</F></Q> subdirectory of your &GAP; 4 installation. It creates a
@@ -92,9 +96,9 @@ the list of directories searched. Otherwise the package is not found by
 
 If you installed &GAP; on several architectures, you must execute the
 configure/make step for each of the architectures. You can either
-do this immediately after
-configuring and compiling &GAP; itself on this architecture, or alternatively (when
-using version 4.5 of &GAP; or newer) set the environment variable
+do this immediately after configuring and compiling &GAP; itself on
+this architecture, or alternatively (when using version 4.5 of &GAP; or
+newer) set the environment variable
 <C>CONFIGNAME</C> to the name of the configuration you used when
 compiling &GAP; before running <C>./configure</C>. 
 Note however that your compiler choice and flags
