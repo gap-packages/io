@@ -9,6 +9,8 @@ and
   IO_Gettimeofday_float()  returning a float in seconds
                            with your warning in the documentation
 
+also in Nanoseconds...
+
   -> problem: probably need librt for new timing function
 
 Implement posix_openpt, grantpt, unlockpt and ptsname
