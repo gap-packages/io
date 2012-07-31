@@ -37,10 +37,6 @@ for further options.
 
 Afterwards call 'make' to compile a binary file.
 
-If you installed GAP on several architectures, you must execute this
-configure/make step on each of the architectures giving the correct
-CONFIGNAME on the command line of 'configure'.
-
 The package  will not work without  this  step.
 
 If you installed the package in another 'pkg' directory than the standard
