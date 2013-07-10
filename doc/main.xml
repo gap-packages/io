@@ -538,15 +538,13 @@ For details see <Q><C>man 2 fchown</C></Q>.
 <Returns> an integer or <K>fail</K> </Returns>
 <Description>
 Forks off a child process, which is an identical copy.
-For details see <Q><C>man 2 fork</C></Q>. Note that if you want to use the
-<Ref Func="IO_WaitPid"/> function to wait or check for the termination of
-child processes, you have to activate the SIGCHLD handler for this
-package beforehand by using the function <Ref
-Func="IO_InstallSIGCHLDHandler"/>. Note further that after that you cannot use
-the function <Ref Func="InputOutputLocalProcess" BookName="ref"/>
-any more, since its SIGCHLD handler does not work any more. To switch
-back to that functionality use the function <Ref
-Func="IO_RestoreSIGCHLDHandler"/>.
+For details see <Q><C>man 2 fork</C></Q>. The <Package>IO</Package> package 
+keeps track of all child processes it has spawned to allow for usage
+of the <Ref Func="IO_WaitPid"/> function.
+Note that on the first call to <Ref Func="IO_fork"/> the
+<Package>IO</Package>'s SIGCHLD handler is automatically
+installed using the function <Ref
+    Func="IO_InstallSIGCHLDHandler"/>, if this has not yet happened. 
 </Description> 
 </ManSection>
  
@@ -1008,15 +1006,28 @@ For details see <Q><C>man 2 unlink</C></Q>.
 <ManSection>
 <Func Name="IO_WaitPid" Arg="pid, wait"
       Comm="Waits for the termination of a child process."/>
-<Returns> a record or <K>fail</K> </Returns>
+  <Returns> a record or <K>false</K> or <K>fail</K> </Returns>
 <Description>
-Waits for the termination of a child process.
-For details see <Q><C>man 2 waitpid</C></Q>. Returns a &GAP; record
-describing PID and exit status. The second argument <A>wait</A> must
+    Waits for the termination of a child process. Note that this only
+    covers child processes that were started by <Ref Func="IO_fork"/>
+    which is used in all process starting functions in the
+    <Package>IO</Package> package. That is, it does not cover child
+    processes started indirectly by our child processes and it does
+    not cover child processes that were started by &GAP;'s process
+    starting functions <Ref Func="Exec" BookName="ref"/> and
+    <Ref Oper="InputOutputLocalProcess" BookName="ref"/>.
+
+    The behaviour is analogous to what <Q><C>man 2 waitpid</C></Q> describes. 
+    <A>pid</A> is either a process ID or <M>-1</M> in which case any
+    of our child processes is meant. This function returns a &GAP; record
+    describing PID and exit status, if the child process has terminated. 
+    The second argument <A>wait</A> must
 be either <K>true</K> or <K>false</K>. In the first case, the call
 blocks until new information about a terminated child process is
 available. In the second case no such waiting is performed, the
-call returns immediately. See <Ref Func="IO_fork"/>.
+call returns immediately. In this case a return value of <K>fail</K>
+indicates that no information was available. An error is indicated by
+the return value <K>false</K>. See also <Ref Func="IO_fork"/>.
 </Description> 
 </ManSection>
  
