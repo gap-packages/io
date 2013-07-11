@@ -31,7 +31,7 @@ StdGlobalVarsIO := Set(
   "IO_FuncToUnpickle", "IO_IsAlreadyPickled", "IO_PackageIsLoaded", 
   "IO_PkgThingsToRead", "IO_getpid", "IO_getppid", "IO_kill",
   "IO_gettimeofday", "IO_gmtime", "IO_localtime", "IO_gethostname",
-  "IO_getsockname" ] );
+  "IO_getsockname", "IOHub", "IOHubFamily", "IOHubType" ] );
 StdComponentsIO := Set(
 [ "AF_APPLETALK", "AF_ASH", "AF_ATMPVC", "AF_ATMSVC", "AF_AX25", 
   "AF_BLUETOOTH", "AF_BRIDGE", "AF_DECnet", "AF_ECONET", "AF_FILE", 
@@ -83,7 +83,7 @@ StdComponentsIO := Set(
   "SIGPOLL", "SIGPROF", "SIGPWR", "SIGQUIT", "SIGSEGV", "SIGSTKFLT", 
   "SIGSTOP", "SIGSYS", "SIGTERM", "SIGTRAP", "SIGTSTP", "SIGTTIN", "SIGTTOU", 
   "SIGUNUSED", "SIGURG", "SIGUSR1", "SIGUSR2", "SIGVTALRM", "SIGWINCH", 
-  "SIGXCPU", "SIGXFSZ"]);
+  "SIGXCPU", "SIGXFSZ", "IP_MTU" ]);
 # Note missing but possible (includes missing because of autoconf:
 #   "ENOBUGS", "ICMP_FILTER", "IP_MTU"
 GlobalVarsIO := 

@@ -21,9 +21,6 @@ Later:
 See Mail Laurent Feb 02 2011
   --> partially done
 
-Sort out SIGCHLD handler issues, cooperate with GAP kernel's handler
-  --> later
-
 HTTP access scheint nicht immer zu funktionieren --> debug
   offenbar warte ich bei nicht ang. contentlength fuer immer
     (ev. nur bei "chunked access"???)

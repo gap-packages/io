@@ -2,8 +2,8 @@
 
 LoadPackage("io");
 
-r := SingleHTTPRequest("www.math.rwth-aachen.de",80,"GET",
-        "/~Max.Neunhoeffer/Computer/Software/Gap/io.version",
+r := SingleHTTPRequest("www-groups.mcs.st-and.ac.uk",80,"GET",
+        "/~neunhoef/Computer/Software/Gap/io.version",
         rec(),false,false);
 
 if r.statuscode <> 200 then

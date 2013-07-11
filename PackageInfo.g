@@ -27,11 +27,11 @@ Subtitle := "Bindings for low level C library IO",
 ##  See '?Extending: Version Numbers' in GAP help for an explanation
 ##  of valid version numbers. For an automatic package distribution update
 ##  you must provide a new version number even after small changes.
-Version := "4.2",
+Version := "5.0",
 
 ##  Release date of the current version in dd/mm/yyyy format.
 # 
-Date := "28/05/2012",
+Date := "11/07/2013",
 
 ##  URL of the archive(s) of the current package release, but *without*
 ##  the format extension(s), like '.zoo', which are given next.
@@ -42,7 +42,7 @@ Date := "28/05/2012",
 ##  example/init.g, ...    or  example-1.3/init.g, ...  )
 # 
 ArchiveURL := 
-     "http://www-groups.mcs.st-and.ac.uk/~neunhoef/Computer/Software/Gap/io/io-4.2",
+     "http://www-groups.mcs.st-and.ac.uk/~neunhoef/Computer/Software/Gap/io/io-5.0",
 
 ##  All provided formats as list of file extensions, separated by white
 ##  space or commas.
@@ -235,7 +235,7 @@ PackageDoc := rec(
 Dependencies := rec(
   # GAP version, use version strings for specifying exact versions,
   # prepend a '>=' for specifying a least version.
-  GAP := ">=4.4.12",
+  GAP := ">=4.5.5",
   # list of pairs [package name, (least) version],  package name is case
   # insensitive, least version denoted with '>=' prepended to version string.
   # without these, the package will not load
