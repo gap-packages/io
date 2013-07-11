@@ -190,8 +190,26 @@ static void queuepid(int pid)
         Pr("#E Overflow in table of child processes\n",0,0);
 }
 
-#if defined(HAVE_SIGACTION) 
-void IO_SIGCHLDHandler( int whichsig, siginfo_t *ty, void *p )
+void IO_GAPsSIGCHLDHandlerReplacement()
+{
+  UInt i;
+  int status;
+  int retcode;
+  for (i = 0; i < MAX_PTYS; i++) {
+      if (PtyIOStreams[i].inuse) {
+          retcode = waitpid( PtyIOStreams[i].childPID, &status, 
+                             WNOHANG | WUNTRACED );
+          if (retcode != -1 && retcode != 0 && 
+              (WIFEXITED(status) || WIFSIGNALED(status)) ) {
+              PtyIOStreams[i].changed = 1;
+              PtyIOStreams[i].status = status;
+              PtyIOStreams[i].blocked = 0;
+          }
+      }
+  }
+}
+
+void IO_CheckOnOurOwnChildren()
 {
     int i,result,status;
     if (fistats != lastats || statsfull) {
@@ -204,35 +222,71 @@ void IO_SIGCHLDHandler( int whichsig, siginfo_t *ty, void *p )
                     term[i] = 1;
                 }
             }
-            i++;
+            i++; if (i >= maxstats) i = 0;
         } while (i != lastats);
     }
-    if (oldhandler.sa_flags & SA_SIGINFO)
-        oldhandler.sa_sigaction(whichsig,ty,p);
-    else if (oldhandler.sa_handler != SIG_DFL &&
-             oldhandler.sa_handler != SIG_IGN)
-        oldhandler.sa_handler(whichsig);
+}
+
+void IO_CollectOtherZombies()
+{
+    int retcode,status,found,i;
+    /* Collect up any other zombie children */
+    do {
+        retcode = waitpid( -1, &status, WNOHANG);
+        if (retcode == -1 && errno != ECHILD)
+            Pr("#E Unexpected waitpid error %d\n",errno, 0);
+        else if (retcode > 0) {
+            /* Oops, another one terminated since we checked above! */
+            if (WIFEXITED(status) || WIFSIGNALED(status)) {
+                found = 0;
+                if (fistats != lastats || statsfull) {
+                    i = fistats;
+                    do {
+                        if (retcode == pids[i]) {
+                            stats[i] = WEXITSTATUS(status);
+                            term[i] = 1;
+                            found = 1;
+                            break;
+                        }
+                        i++; if (i >= maxstats) i = 0;
+                    } while (i != lastats);
+                }
+                if (!found) {
+                    for (i = 0; i < MAX_PTYS; i++) {
+                        if (PtyIOStreams[i].inuse && 
+                            retcode == PtyIOStreams[i].childPID) {
+                            PtyIOStreams[i].changed = 1;
+                            PtyIOStreams[i].status = status;
+                            PtyIOStreams[i].blocked = 0;
+                        }
+                    }
+                }
+            }
+        }
+    } while (retcode != 0 && retcode != -1);
+}
+
+#if defined(HAVE_SIGACTION) 
+void IO_SIGCHLDHandler( int whichsig, siginfo_t *ty, void *p )
+{
+    int i,result,status;
+    int retcode,found;
+    struct sigaction sa;
+    //IO_CheckOnOurOwnChildren();
+    //IO_GAPsSIGCHLDHandlerReplacement();
+    IO_CollectOtherZombies();
 }
 #else
 #if defined(HAVE_SIGNAL)
 RETSIGTYPE IO_SIGCHLDHandler( int whichsig )
 {
-    int result,status,i;
-    if (fistats != lastats || statsfull) {
-        i = fistats;
-        do {
-            if (term[i] == 0) {
-                result = waitpid(pids[i],&status,WNOHANG);
-                if (result == pids[i] && WIFEXITED(status)) {
-                    stats[i] = WEXITSTATUS(status);
-                    term[i] = 1;
-                }
-            }
-            i++;
-        } while (i != lastats);
-    }
+    //IO_CheckOnOurOwnChildren();
+    //IO_GAPSSIGCHLDHANDLERREPLACEMENT();
+    IO_CollectOtherZombies();
+#if 0
     if (oldhandler != SIG_DFL && oldhandler != SIG_IGN)
         oldhandler(whichsig);
+#endif
     signal(SIGCHLD, IO_SIGCHLDHandler);
 }
 #endif
@@ -348,7 +402,7 @@ Obj FuncIO_WaitPid(Obj self,Obj pid,Obj wait)
       sigprocmask(SIG_SETMASK,&sigs,NULL);
       if (!found) return False;
       if (wait == False) return Fail;
-      pause();
+      Pr("Doing a round.\n",0L,0L);
   }
 } 
 #endif
