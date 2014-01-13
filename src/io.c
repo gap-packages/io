@@ -8,9 +8,6 @@
 **  
 */
 
-const char * Revision_io_c =
-   "io.c, V5.0";
-
 /* Try to use as much of the GNU C library as possible: */
 #define _GNU_SOURCE
 
@@ -3208,14 +3205,12 @@ static StructInitInfo module = {
 #ifndef IOSTATIC
 StructInitInfo * Init__Dynamic ( void )
 {
-  module.revision_c = Revision_io_c;
   return &module;
 }
 #endif
 
 StructInitInfo * Init__io ( void )
 {
-  module.revision_c = Revision_io_c;
   return &module;
 }
 
