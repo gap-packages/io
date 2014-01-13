@@ -33,17 +33,6 @@ Version := "5.0",
 # 
 Date := "11/07/2013",
 
-##  URL of the archive(s) of the current package release, but *without*
-##  the format extension(s), like '.zoo', which are given next.
-##  The archive file name *must be changed* with each version of the archive
-##  (and probably somehow contain the package name and version).
-##  The paths of the files in the archive must begin with the name of the
-##  directory containing the package (in our "example" probably:
-##  example/init.g, ...    or  example-1.3/init.g, ...  )
-# 
-ArchiveURL := 
-     "http://www-groups.mcs.st-and.ac.uk/~neunhoef/Computer/Software/Gap/io/io-5.0",
-
 ##  All provided formats as list of file extensions, separated by white
 ##  space or commas.
 ##  Currently recognized formats are:
@@ -152,20 +141,12 @@ Status := "deposited",
 # AcceptDate := "08/1999",
 #AcceptDate := "",
 
-##  For a central overview of all packages and a collection of all package
-##  archives it is necessary to have two files accessible which should be
-##  contained in each package:
-##     - A README file, containing a short abstract about the package
-##       content and installation instructions.
-##     - The PackageInfo.g file you are currently reading or editing!
-##  You must specify URLs for these two files, these allow to automate 
-##  the updating of package information on the GAP Website, and inclusion
-##  and updating of the package in the GAP distribution.
-#
-README_URL := 
-  "http://www-groups.mcs.st-and.ac.uk/~neunhoef/Computer/Software/Gap/io/README.io",
-PackageInfoURL := 
-  "http://www-groups.mcs.st-and.ac.uk/~neunhoef/Computer/Software/Gap/io/PackageInfo.g",
+BaseURL := "http://www-groups.mcs.st-and.ac.uk/~neunhoef/Computer/Software/Gap/",
+
+PackageWWWHome := Concatenation( ~.BaseURL, "io.html" ),
+ArchiveURL     := Concatenation( ~.BaseURL, "io/io-", ~.Version ),
+README_URL     := Concatenation( ~.BaseURL, "io/README.io" ),
+PackageInfoURL := Concatenation( ~.BaseURL, "io/PackageInfo.g" ),
 
 ##  Here you  must provide a short abstract explaining the package content 
 ##  in HTML format (used on the package overview Web page) and an URL 
@@ -182,7 +163,6 @@ AbstractHTML :=
    provides bindings for <span class=\"pkgname\">GAP</span> to the lower \
    levels of Input/Output functionality in the C library.",
 
-PackageWWWHome := "http://www-groups.mcs.st-and.ac.uk/~neunhoef/Computer/Software/Gap/io.html",
                
 ##  Here is the information on the help books of the package, used for
 ##  loading into GAP's online help and maybe for an online copy of the 
