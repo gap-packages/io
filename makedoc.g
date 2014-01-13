@@ -10,9 +10,11 @@ LoadPackage("GAPDoc");
 
 MakeGAPDocDoc("doc", "io", [], "IO", "../../..");
 
+CopyHTMLStyleFiles("doc");
+
 GAPDocManualLab("IO");
 
-quit;
+QUIT;
 
 ##
 ##  This program is free software: you can redistribute it and/or modify
