@@ -9,7 +9,7 @@
 */
 
 const char * Revision_io_c =
-   "io.c, V4.0";
+   "io.c, V5.0";
 
 /* Try to use as much of the GNU C library as possible: */
 #define _GNU_SOURCE
