@@ -89,7 +89,6 @@ PackageDoc := rec(
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
   LongTitle := "Bindings to low level I/O in the C library",
-  Autoload  := true
 ),
 
 Dependencies := rec(
@@ -107,12 +106,6 @@ AvailabilityTest := function()
   fi;
   return true;
 end,
-
-##  Suggest here if the package should be *automatically loaded* when GAP is 
-##  started.  This should usually be 'false'. Say 'true' only if your package 
-##  provides some improvements of the GAP library which are likely to enhance 
-##  the overall system performance for many users.
-Autoload := false,
 
 ##  *Optional*, but recommended: path relative to package root to a file which 
 ##  contains as many tests of the package functionality as sensible.
