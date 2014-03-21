@@ -1,0 +1,146 @@
+  
+  [1X7 [33X[0;0YA client side implementation of the HTTP protocol[133X[101X
+  
+  [33X[0;0YThe  [5XIO[105X  package  contains  an implementation of the client side of the HTTP
+  protocol. The basic purpose of this is of course to be able to download data
+  from  web  servers  from  the  [5XGAP[105X  language. However, the HTTP protocol can
+  perform a much bigger variety of tasks.[133X
+  
+  
+  [1X7.1 [33X[0;0YFunctions for client side HTTP[133X[101X
+  
+  [1X7.1-1 OpenHTTPConnection[101X
+  
+  [29X[2XOpenHTTPConnection[102X( [3Xhostname[103X, [3Xport[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya record[133X
+  
+  [33X[0;0YThe  first argument [3Xhostname[103X must be a string containing the hostname of the
+  server  to connect. The second argument [3Xport[103X must be an integer in the range
+  from [22X1[122X to [22X65535[122X and describes the port to connect to on the server.[133X
+  
+  [33X[0;0YThe  function  opens  a TCP/IP connection to the server and returns a record
+  [9Xconn[109X with the following components: [9Xconn.sock[109X is [9Xfail[109X if an error occurs and
+  otherwise a [10XFile[110X object linked to the file descriptor of the socket. In case
+  of  an  error,  the component [9Xconn.errormsg[109X contains an error message, it is
+  otherwise empty. If everything went well then the component [9Xconn.host[109X is the
+  result  from  the  host  name lookup (see [2XIO_gethostbyname[102X ([14X3.2-21[114X)) and the
+  component [9Xconn.closed[109X is set to [9Xfalse[109X.[133X
+  
+  [33X[0;0YNo data is sent or received on the socket in this function.[133X
+  
+  [1X7.1-2 HTTPRequest[101X
+  
+  [29X[2XHTTPRequest[102X( [3Xconn[103X, [3Xmethod[103X, [3Xuri[103X, [3Xheader[103X, [3Xbody[103X, [3Xtarget[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya record[133X
+  
+  [33X[0;0YThis function performs a complete HTTP request. The first argument must be a
+  connection  record  as  returned  by a successful call to [2XOpenHTTPConnection[102X
+  ([14X7.1-1[114X).  The argument [3Xmethod[103X must be a valid HTTP request [21Xmethod[121X in form of
+  a  string. The most common will be [9XGET[109X, [9XPOST[109X, or [9XHEAD[109X. The argument [3Xuri[103X is a
+  string  containing  the URI of the request, which is given in the first line
+  of  the request. This will usually be a relative or absolute path name given
+  to the server. The argument [3Xheader[103X must be a [5XGAP[105X record. Each bound field of
+  this  record  will  we transformed into one header line with the name of the
+  component  being  the  key and the value the value. All bound values must be
+  strings.  The  argument  [3Xbody[103X  must  either be a string or [9Xfalse[109X. If it is a
+  string, this string is sent away as the body of the request. If no string or
+  an  empty  string  is  given,  no  body  will  be  sent.  The  header  field
+  [9XContent-Length[109X  is automatically created from the length of the string [3Xbody[103X.
+  Finally,  the argument [3Xtarget[103X can either be [9Xfalse[109X or a string. In the latter
+  case,  the  body  of the request answer is written to the file with the name
+  given  in  [3Xtarget[103X. The [9Xbody[109X component of the result will be the file name in
+  this  case.  If  [3Xtarget[103X is false, the full body of the answer is stored into
+  the [9Xbody[109X component of the result.[133X
+  
+  [33X[0;0YThe  function sends away the request and awaits the answer. If anything goes
+  wrong  during  the  transfer  (for  example  if  the  connection  is  broken
+  prematurely), then the component [9Xstatuscode[109X of the resulting record is [22X0[122X and
+  the  component  [9Xstatus[109X  is  a corresponding error message. In that case, all
+  other  fields  may or may not be bound to sensible values, according to when
+  the  error occurred. If everything goes well, then [9Xstatuscode[109X and [9Xstatus[109X are
+  bound to the corresponding values coming from the request answer. [9Xstatuscode[109X
+  is  transformed  into  a  [5XGAP[105X  integer.  The header of the answer is parsed,
+  transformed  into  a [5XGAP[105X record, and stored into the component [9Xheader[109X of the
+  result.  The  [9Xbody[109X component of the result record is set as described above.
+  Finally,  the  [9Xprotoversion[109X  component  contains  the  HTTP protocol version
+  number  used  by  the  server  as  a  string  and  the  boolean value [9Xclosed[109X
+  indicates, whether or not the function has detected, that the connection has
+  been  closed  by  the server. Note that by default, the connection will stay
+  open, at least for a certain time after the end of the request.[133X
+  
+  [33X[0;0YSee  the description of the global variable [2XHTTPTimeoutForSelect[102X ([14X7.1-3[114X) for
+  rules how timeouts are done in this function.[133X
+  
+  [33X[0;0YNote that if the [3Xmethod[103X is [9XHEAD[109X, then no body is expected (none will be sent
+  anyway) and the function returns immediately with empty body. Of course, the
+  [9XContent-Length[109X  value  in  the  header is as if it the request would be done
+  with the [9XGET[109X method.[133X
+  
+  [1X7.1-3 HTTPTimeoutForSelect[101X
+  
+  [29X[2XHTTPTimeoutForSelect[102X[32X global variable
+  
+  [33X[0;0YThis  global  variable  holds a list of length two. By default, both entries
+  are  [9Xfail[109X  indicating that [2XHTTPRequest[102X ([14X7.1-2[114X) should never timeout and wait
+  forever  for  an answer. Actually, the two values in this variable are given
+  to the [2XIO_Select[102X ([14X4.3-3[114X) function call during I/O multiplexing. That is, the
+  first  number  is  in  seconds and the second in milliseconds. Together they
+  lead  to  a  timeout  for  the  HTTP  request. If a timeout occurs, an error
+  condition  is triggered which returns a record with status code [22X0[122X and status
+  being the timeout error message.[133X
+  
+  [33X[0;0YYou  can  change  the  timeout  by  accessing  the two entries of this write
+  protected list variable directly.[133X
+  
+  [1X7.1-4 CloseHTTPConnection[101X
+  
+  [29X[2XCloseHTTPConnection[102X( [3Xconn[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YCloses  the connection described by the connection record [3Xconn[103X. No error can
+  possibly occur.[133X
+  
+  [1X7.1-5 SingleHTTPRequest[101X
+  
+  [29X[2XSingleHTTPRequest[102X( [3Xhostname[103X, [3Xport[103X, [3Xmethod[103X, [3Xuri[103X, [3Xheader[103X, [3Xbody[103X, [3Xtarget[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya record[133X
+  
+  [33X[0;0YThe   arguments   are   as   the   corresponding   ones   in  the  functions
+  [2XOpenHTTPConnection[102X   ([14X7.1-1[114X)  and  [2XHTTPRequest[102X  ([14X7.1-2[114X)  respectively.  This
+  function  opens  an  HTTP  connection,  tries  a  single  HTTP  request  and
+  immediately   closes  the  connection  again.  The  result  is  as  for  the
+  [2XHTTPRequest[102X  ([14X7.1-2[114X)  function. If an error occurs during the opening of the
+  connection, the [9Xstatuscode[109X value of the result is [22X0[122X and the error message is
+  stored in the [9Xstatus[109X component of the result.[133X
+  
+  [33X[0;0YThe  previous function allows for a very simple implementation of a function
+  that checks, whether your current [5XGAP[105X installation is up to date:[133X
+  
+  [1X7.1-6 CheckForUpdates[101X
+  
+  [29X[2XCheckForUpdates[102X(  ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis function accesses a web page in St. Andrews and runs some [5XGAP[105X code from
+  there.  This  code  knows all the currently released versions of [5XGAP[105X and its
+  packages.  It prints out a summary and possibly suggests upgrades. If you do
+  not  want  to  executed  code downloaded from the internet, then do not call
+  this function.[133X
+  
+  [33X[0;0YMore         concretely,         the         page         accessed        is
+  [7Xhttp://www.gap-system.org/Download/upgrade.html[107X  and  the code executed is a
+  single call to the function [10XSuggestUpgrades[110X function in the [5XGAP[105X library.[133X
+  
+  [1X7.1-7 ReadWeb[101X
+  
+  [29X[2XReadWeb[102X( [3XURL[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis function downloads the file from the given uniform resource locator [3XURL[103X
+  using  the  HTTP  protocol  and  reads  the  contents  into  [5XGAP[105X  using [2XRead[102X
+  ([14XReference: Read[114X).[133X
+  
+  [33X[0;0YNote  that  this  can  execute  arbitrary  code  on  your  machine  with the
+  privileges  of the [5XGAP[105X job running, so you should be very careful what files
+  you download and execute. You have been warned![133X
+  

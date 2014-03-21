@@ -1,0 +1,27 @@
+  
+  [1X6 [33X[0;0YReally random sources[133X[101X
+  
+  [33X[0;0YThis  section describes so called [21Xreal random sources[121X. It is an extension to
+  the  library  mechanism  of  random  source  objects  that  uses the devices
+  [11X/dev/random[111X  and [11X/dev/urandom[111X available on [11XLinux[111X systems (and maybe on other
+  operating  systems) providing random numbers that are impossible to predict.
+  The  idea  is  that  such  sources  of  random numbers are useful to produce
+  unpredictable secret keys for cryptographic applications.[133X
+  
+  
+  [1X6.1 [33X[0;0YThe functions[133X[101X
+  
+  [1X6.1-1 RandomSource[101X
+  
+  [29X[2XRandomSource[102X( [3Xr[103X, [3Xdev[103X ) [32X method
+  [6XReturns:[106X  [33X[0;10Ya real random source object or [10Xfail[110X[133X
+  
+  [33X[0;0YThe  first  argument  [3Xr[103X  must  be  the [5XGAP[105X filter [10XIsRealRandomSource[110X and the
+  second  either the string [11Xrandom[111X or the string [11Xurandom[111X. A real random source
+  object  is  created  that  draws  its random numbers from the kernel devices
+  [11X/dev/random[111X  and  [11X/dev/urandom[111X  respectively.  Whereas  [11X/dev/urandom[111X  always
+  provides  random  numbers  of not guaranteed [21Xquality[121X, the device [11X/dev/random[111X
+  measures its entropy and produces guaranteed unpredictable numbers. However,
+  it  might  block until enough [21Xrandom[121X events (like mouse movements) have been
+  accumulated.[133X
+  

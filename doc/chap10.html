@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>GAP (IO) - Chapter 10: Examples of usage</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+<script src="manual.js" type="text/javascript"></script>
+<script type="text/javascript">overwriteStyle();</script>
+</head>
+<body class="chap10"  onload="jscontent()">
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chap8.html">8</a>  <a href="chap9.html">9</a>  <a href="chap10.html">10</a>  <a href="chap11.html">11</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap9.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap11.html">[Next Chapter]</a>&nbsp;  </div>
+
+<p><a id="X7EADF566874177D8" name="X7EADF566874177D8"></a></p>
+<div class="ChapSects"><a href="chap10.html#X7EADF566874177D8">10 <span class="Heading">Examples of usage</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap10.html#X7EC25CA68794860A">10.1 <span class="Heading">Writing and reading a file</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap10.html#X7AECE665813D6E4D">10.2 <span class="Heading">Using filtering programs to read and write files</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap10.html#X7A8A180D7B335151">10.3 <span class="Heading">Using filters when reading or writing files sequentially</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap10.html#X7BD2BF7F87573C69">10.4 <span class="Heading">Accessing a web page</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap10.html#X81BD8400832EE20B">10.5 <span class="Heading">(Un-)Pickling</span></a>
+</span>
+</div>
+</div>
+
+<h3>10 <span class="Heading">Examples of usage</span></h3>
+
+<p>For larger examples see the <code class="file">example</code> directory of the package. You find there a small server using the TCP/IP protocol and a corresponding client and another small server using the UDP protocol and a corresponding client.</p>
+
+<p>Further, there is an example for the usage of <code class="code">File</code> objects, that read from or write to strings.</p>
+
+<p>Another example there shows starting up a child process and piping a few megabytes through it using <code class="func">IO_Popen2</code> (<a href="chap4.html#X7E05CF6481CBC0A1"><span class="RefLink">4.4-4</span></a>).</p>
+
+<p>In the following, we present a few explicit, interactive short examples for the usage of the functions in this package. Note that you have to load the <strong class="pkg">IO</strong> package with the command <code class="code">LoadPackage("IO");</code> before trying these examples.</p>
+
+<p><a id="X7EC25CA68794860A" name="X7EC25CA68794860A"></a></p>
+
+<h4>10.1 <span class="Heading">Writing and reading a file</span></h4>
+
+<p>The following sequence of commands opens a file with name <code class="file">guck</code> and writes some things to it:</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">f := IO_File("guck","w");</span>
+&lt;file fd=3 wbufsize=65536 wdata=0&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_Write(f,"Hello world\n");</span>
+12
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_WriteLine(f,"Hello world2!");</span>
+14
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_Write(f,12345);</span>
+5
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_Flush(f);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_Close(f);</span>
+true
+</pre></div>
+
+<p>There is nothing special about this, the numbers are numbers of bytes written. Note that only after the <code class="func">IO_Flush</code> (<a href="chap4.html#X7873A49F7CC7ECFB"><span class="RefLink">4.2-10</span></a>) command the data is actually written to disk. Before that, it resides in the write buffer of the file. Note further, that the <code class="func">IO_Flush</code> (<a href="chap4.html#X7873A49F7CC7ECFB"><span class="RefLink">4.2-10</span></a>) call here would not have been necessary, since the <code class="func">IO_Close</code> (<a href="chap4.html#X820DA9C97C2E80BA"><span class="RefLink">4.2-16</span></a>) call flushes the buffer anyway.</p>
+
+<p>The file can again be read with the following sequence of commands:</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">f := IO_File("guck","r");</span>
+&lt;file fd=3 rbufsize=65536 rpos=1 rdata=0&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_Read(f,10);</span>
+"Hello worl"
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_ReadLine(f);</span>
+"d\n"
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_ReadLine(f);</span>
+"Hello world2!\n"
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_ReadLine(f);</span>
+"12345"
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_ReadLine(f);</span>
+""
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_Close(f);</span>
+true
+</pre></div>
+
+<p>Note here that reading line-wise can only be done efficiently by using buffered I/O. You can mix calls to <code class="func">IO_Read</code> (<a href="chap4.html#X84F3D862836BF17C"><span class="RefLink">4.2-6</span></a>) and to <code class="func">IO_ReadLine</code> (<a href="chap4.html#X8738708E7B9DF8DB"><span class="RefLink">4.2-3</span></a>). The end of file is indicated by an empty string returned by one of the read functions.</p>
+
+<p><a id="X7AECE665813D6E4D" name="X7AECE665813D6E4D"></a></p>
+
+<h4>10.2 <span class="Heading">Using filtering programs to read and write files</span></h4>
+
+<p>If you want to write a big amount of data to file you might want to compress it on the fly without using much disk space. This can be achieved with the following command:</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">s := "";; for i in [1..10000] do Append(s,String(i)); od;;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Length(s);</span>
+38894
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_FileFilterString("guck.gz",[["gzip",["-9c"]]],s);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">sgz := StringFile("guck.gz");;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Length(sgz);</span>
+18541
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ss := IO_StringFilterFile([["gzip",["-dc"]]],"guck.gz");;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">s=ss;</span>
+true
+</pre></div>
+
+<p>This sequence of commands needs that the program <code class="file">gzip</code> is installed on your system.</p>
+
+<p><a id="X7A8A180D7B335151" name="X7A8A180D7B335151"></a></p>
+
+<h4>10.3 <span class="Heading">Using filters when reading or writing files sequentially</span></h4>
+
+<p>If you want to process bigger amounts of data you might not want to store all of it in a single <strong class="pkg">GAP</strong> string. In that case you might want to access a file on disk sequentially through a filter:</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">f := IO_FilteredFile([["gzip",["-9c"]]],"guck.gz","w");</span>
+&lt;file fd=5 wbufsize=65536 wdata=0&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_Write(f,"Hello world!\n");</span>
+13
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_Write(f,Elements(SymmetricGroup(5)),"\n");</span>
+1359
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_Close(f);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">f := IO_FilteredFile([["gzip",["-dc"]]],"guck.gz","r");</span>
+&lt;file fd=4 rbufsize=65536 rpos=1 rdata=0&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_ReadLine(f);</span>
+"Hello world!\n"
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">s := IO_ReadLine(f);; Length(s);</span>
+1359
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_Read(f,10);                  </span>
+""
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_Close(f);</span>
+true
+</pre></div>
+
+<p><a id="X7BD2BF7F87573C69" name="X7BD2BF7F87573C69"></a></p>
+
+<h4>10.4 <span class="Heading">Accessing a web page</span></h4>
+
+<p>The <strong class="pkg">IO</strong> package has an HTTP client implementation. Using this you can access web pages and other web downloads from within <strong class="pkg">GAP</strong>. Here is an example:</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">r := SingleHTTPRequest("www.math.rwth-aachen.de",80,"GET",</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">             "/~Max.Neunhoeffer/index.html",rec(),false,false);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">RecFields(r);</span>
+[ "protoversion", "statuscode", "status", "header", "body", "closed" ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">r.status;</span>
+"OK"
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">r.statuscode;</span>
+200
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">r.header;</span>
+rec( date := "Thu, 07 Dec 2006 22:08:22 GMT", 
+  server := "Apache/2.0.55 (Ubuntu)", 
+  last-modified := "Thu, 16 Nov 2006 00:21:44 GMT", 
+  etag := "\"2179cf-11a5-3c77f600\"", accept-ranges := "bytes", 
+  content-length := "4517", content-type := "text/html; charset=ISO-8859-1" )
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Length(r.body);</span>
+4517
+</pre></div>
+
+<p>Of course, the time stamps and exact sizes of the answer may differ when you do this.</p>
+
+<p><a id="X81BD8400832EE20B" name="X81BD8400832EE20B"></a></p>
+
+<h4>10.5 <span class="Heading">(Un-)Pickling</span></h4>
+
+<p>Assume you have some <strong class="pkg">GAP</strong> objects you want to archive to disk grouped together. Then you might do the following:</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">r := rec( a := 1, b := "Max", c := [1,2,3] );</span>
+rec( a := 1, b := "Max", c := [ 1, 2, 3 ] )
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">r.c[4] := r;</span>
+rec( a := 1, b := "Max", c := [ 1, 2, 3, ~ ] )
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">f := IO_File("guck","w");</span>
+&lt;file fd=3 wbufsize=65536 wdata=0&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_Pickle(f,r);</span>
+IO_OK
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_Pickle(f,[(1,2,3,4),(3,4)]);</span>
+IO_OK
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_Close(f);</span>
+true
+</pre></div>
+
+<p>Then, to read it in again, just do:</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">f := IO_File("guck");</span>
+&lt;file fd=3 rbufsize=65536 rpos=1 rdata=0&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_Unpickle(f);</span>
+rec( a := 1, b := "Max", c := [ 1, 2, 3, ~ ] )
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_Unpickle(f);</span>
+[ (1,2,3,4), (3,4) ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_Unpickle(f);</span>
+IO_Nothing
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IO_Close(f);</span>
+true
+</pre></div>
+
+<p>Note that this works for a certain amount of builtin objects. If you want to archive your own objects or more sophisticated objects you have to use extend the functionality as explained in Section <a href="chap5.html#X7B1C9A9C7D3C0312"><span class="RefLink">5.3</span></a>. However, it works for lists and records and they may be arbitrarily self-referential.</p>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap9.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap11.html">[Next Chapter]</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chap8.html">8</a>  <a href="chap9.html">9</a>  <a href="chap10.html">10</a>  <a href="chap11.html">11</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

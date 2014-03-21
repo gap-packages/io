@@ -1,0 +1,154 @@
+  
+  [1X5 [33X[0;0YObject serialisation (Pickling)[133X[101X
+  
+  [33X[0;0YThe idea of [21Xobject serialisation[121X is that one wants to store nearly arbitrary
+  [5XGAP[105X  objects  to  disk  or  transfer them over the network. To this end, one
+  wants  to convert them to a byte stream that is platform independent and can
+  later be converted back to a copy of the same object in memory, be it in the
+  same  [5XGAP[105X  process  or  another  one maybe even on another machine. The main
+  problem here are the vast amount of different types occurring in [5XGAP[105X and the
+  possibly highly self-referential structure of [5XGAP[105X objects.[133X
+  
+  [33X[0;0YThe  [5XIO[105X  package  contains a framework to implement object serialisation and
+  implementations  for  most  of the basic data types in [5XGAP[105X. The framework is
+  easily  extendible to other types and takes complete care of self-references
+  and  corresponding  problems.  It  builds  upon  the  buffered I/O functions
+  described in Section [14X4[114X. We start by describing the user interface.[133X
+  
+  
+  [1X5.1 [33X[0;0YResult objects[133X[101X
+  
+  [33X[0;0YThe  following static objects are used to report about success or failure of
+  the (un-)pickling operations:[133X
+  
+  [1X5.1-1 IO_Error[101X
+  
+  [29X[2XIO_Error[102X[32X global variable
+  
+  [33X[0;0YThis object is returned if an error occurs.[133X
+  
+  [1X5.1-2 IO_Nothing[101X
+  
+  [29X[2XIO_Nothing[102X[32X global variable
+  
+  [33X[0;0YThis  object  is returned when there is nothing to return, for example if an
+  unpickler (see [2XIO_Unpickle[102X ([14X5.2-2[114X)) encounters the end of a file.[133X
+  
+  [1X5.1-3 IO_OK[101X
+  
+  [29X[2XIO_OK[102X[32X global variable
+  
+  [33X[0;0YThis  object  is  returned  if  everything  went  well and there is no other
+  canonical value to return to indicate this.[133X
+  
+  [33X[0;0YThe  only  thing  you can do with these special values is to compare them to
+  each other and to other objects.[133X
+  
+  
+  [1X5.2 [33X[0;0YPickling and unpickling[133X[101X
+  
+  [1X5.2-1 IO_Pickle[101X
+  
+  [29X[2XIO_Pickle[102X( [3Xf[103X, [3Xob[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Y[10XIO_OK[110X or [10XIO_Error[110X[133X
+  
+  [33X[0;0YThe  argument  [3Xf[103X must be an open, writable [10XFile[110X object. The object [3Xob[103X can be
+  an  arbitrary  [5XGAP[105X object. The operation [21Xpickles[121X or [21Xserialises[121X the object [3Xob[103X
+  and  writes  the  result  into  the  [10XFile[110X object [3Xf[103X. If everything is OK, the
+  unique  value [10XIO_OK[110X is returned and otherwise the unique value [10XIO_Error[110X. The
+  resulting  byte  stream  can  be  read again using the operation [2XIO_Unpickle[102X
+  ([14X5.2-2[114X)  and  is  platform-  and  architecture  independent.  Especially the
+  question  whether  a system has 32 bit or 64 bit wide words and the question
+  of endianess does not matter.[133X
+  
+  [33X[0;0YNote  that  not all of [5XGAP[105X's object types are supported but it is relatively
+  easy  to  extend  the  system.  This  package supports in particular boolean
+  values,  integers,  permutations,  rational  numbers, finite field elements,
+  cyclotomics,  strings,  polynomials,  rational  functions,  lists,  records,
+  compressed vectors and matrices over finite fields (objects are uncompressed
+  in  the  byte  stream but recompressed during unpickling), and straight line
+  programs.[133X
+  
+  [33X[0;0YSelf-referential  objects built from records and lists are handled correctly
+  and are restored completely with the same self-references during unpickling.[133X
+  
+  [1X5.2-2 IO_Unpickle[101X
+  
+  [29X[2XIO_Unpickle[102X( [3Xf[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Y[10XIO_Error[110X or a [5XGAP[105X object[133X
+  
+  [33X[0;0YThe  argument  [3Xf[103X  must be an open, readable [10XFile[110X object. The operation reads
+  from  [3Xf[103X  and [21Xunpickles[121X the next object. If an error occurs, the unique value
+  [10XIO_Error[110X  is  returned.  If  the  [10XFile[110X  object  is at end of file, the value
+  [10XIO_Nothing[110X  is  returned.  Note  that  these  two  values are not picklable,
+  because of their special meaning as return values of this operation here.[133X
+  
+  [1X5.2-3 IO_ClearPickleCache[101X
+  
+  [29X[2XIO_ClearPickleCache[102X(  ) [32X function
+  [6XReturns:[106X  [33X[0;10YNothing[133X
+  
+  [33X[0;0YThis  function clears the [21Xpickle cache[121X. This cache stores all object pickled
+  in  the  current  recursive  call  to  [2XIO_Pickle[102X ([14X5.2-1[114X) and is necessary to
+  handle  self-references.  Usually  it is not necessary to call this function
+  explicitly.  Only  in the rare case (that should not happen) that a pickling
+  or  unpickling  operation enters a break loop which is left by the user, the
+  pickle  cache  has  to  be  cleared explicitly using this function for later
+  calls to [2XIO_Pickle[102X ([14X5.2-1[114X) and [2XIO_Unpickle[102X ([14X5.2-2[114X) to work![133X
+  
+  
+  [1X5.3 [33X[0;0YExtending the pickling framework[133X[101X
+  
+  [33X[0;0YThe framework can be extended for other [5XGAP[105X object types as follows:[133X
+  
+  [33X[0;0YFor  pickling,  a  method  for  the  operation  [2XIO_Pickle[102X  ([14X5.2-1[114X) has to be
+  installed  which  does the work. If the object to be pickled has subobjects,
+  then  the first action of the method is to call the function [10XIO_AddToPickled[110X
+  with the object as argument. This will put it into the pickle cache and take
+  care  of  self-references.  Arbitrary  subobjects  can then be pickled using
+  recursive  calls  to  the  operation [2XIO_Pickle[102X ([14X5.2-1[114X) handing down the same
+  [10XFile[110X  object  into  the recursion. The method must either return [10XIO_Error[110X in
+  case  of  an  error  or  [10XIO_OK[110X  if everything goes well. Before returning, a
+  method   that   has   called   [10XIO_AddToPickled[110X   must   call   the  function
+  [10XIO_FinalizePickled[110X  without  arguments [13Xunder all circumstances[113X. If this call
+  is missing, global data for the pickling procedure becomes corrupt![133X
+  
+  [33X[0;0YEvery  pickling method must first write a 4 byte magic value such that later
+  during  unpickling  of  the  byte  stream the right unpickling method can be
+  called  (see  below).  Then  it can write arbitrary data, however, this data
+  should be platform- and architecture independent, and it must be possible to
+  unpickle it later without [21Xlookahead[121X.[133X
+  
+  [33X[0;0YPickling  methods  should  usually  not  go into a break loop, because after
+  leaving the user has to call [2XIO_ClearPickleCache[102X ([14X5.2-3[114X) explicitly![133X
+  
+  [33X[0;0YUnpickling  is  implemented  as  follows: For every 4 byte magic value there
+  must  be  a function bound to that value in the record [10XIO_Unpicklers[110X. If the
+  unpickling  operation  [2XIO_Unpickle[102X  ([14X5.2-2[114X)  encounters that magic value, it
+  calls  the  corresponding  unpickling  function. This function just gets one
+  [10XFile[110X  object  as  argument.  Since  the  magic value is already read, it can
+  immediately  start  with  reading  and  rebuilding  the serialised object in
+  memory. The method has to take care to restore the object including its type
+  completely.[133X
+  
+  [33X[0;0YIf  an  object  type  has  subobjects,  the unpickling function has to first
+  create   a  skeleton  of  the  object  without  its  subobjects,  then  call
+  [10XIO_AddToUnpickled[110X  on this skeleton, [13Xbefore[113X unpickling subobjects. If things
+  are  not  done  in  this  order, the handling of self-references down in the
+  recursion   will   not   work!   An  unpickling  function  that  has  called
+  [10XIO_AddToUnpickled[110X  at the beginning has to call [10XIO_FinalizeUnpickled[110X without
+  arguments before returning [13Xunder all circumstances[113X! If this call is missing,
+  global data for the unpickling procedure becomes corrupt![133X
+  
+  [33X[0;0YOf  course, unpickling functions can recursively call [2XIO_Unpickle[102X ([14X5.2-2[114X) to
+  unpickle subobjects. Apart from this, unpickling functions can use arbitrary
+  reading  functions  on  the  [10XFile[110X  object.  However,  they  should only read
+  sequentially  and never move the current file position pointer otherwise. An
+  unpickling  function  should  return  the  newly created object or the value
+  [10XIO_Error[110X  if  an  error  occurred.  They  should never go into a break loop,
+  because  after  leaving  the  user  has  to call [2XIO_ClearPickleCache[102X ([14X5.2-3[114X)
+  explicitly![133X
+  
+  [33X[0;0YPerhaps  the  best  way to learn how to extend the framework is to study the
+  code for the basic [5XGAP[105X objects in the file [11Xpkg/io/gap/pickle.gi[111X.[133X
+  

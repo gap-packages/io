@@ -1,43 +1,32 @@
-name: GitHubPagesForGAP
-version: 0.1
-date: 21/03/2014
-description: A GitHubPages generator for GAP packages
+name: IO
+version: 5.0
+date: 11/07/2013
+description: Bindings for low level C library IO
 
 authors:
-    - name: Max Horn
-      url: http://www.quendi.de/math
-    - name: A. U. Thor
+    - name: Max Neunhoeffer
+      url: http://www-groups.mcs.st-and.ac.uk/~neunhoef/
 
 maintainers:
-    - name: Max Horn
-      url: http://www.quendi.de/math
-    - name: Jan Itor
+    - name: Max Neunhoeffer
+      url: http://www-groups.mcs.st-and.ac.uk/~neunhoef/
 
 GAP: ">=4.5.5"
 
 needed-pkgs:
     - name: "GAPDoc"
       version: ">= 1.2"
-    - name: "IO"
-      version: ">= 4.1"
 
-suggested-pkgs:
-    - name: "orb"
-      version: ">= 4.2"
-
-www: http://fingolfin.github.io/GitHubPagesForGAP/
-readme: http://fingolfin.github.io/GitHubPagesForGAP/README
-packageinfo: http://fingolfin.github.io/GitHubPagesForGAP/PackageInfo.g
-github: https://github.com/fingolfin/GitHubPagesForGAP
+www: http://www-groups.mcs.st-and.ac.uk/~neunhoef/Computer/Software/Gap/io.html
+readme: http://www-groups.mcs.st-and.ac.uk/~neunhoef/Computer/Software/Gap/io/README.io
+packageinfo: http://www-groups.mcs.st-and.ac.uk/~neunhoef/Computer/Software/Gap/io/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/fingolfin/GitHubPagesForGAP/releases/download/v0.1/GitHubPagesForGAP-0.1.tar.gz
-    - name: .tar.bz2
-      url: https://github.com/fingolfin/GitHubPagesForGAP/releases/download/v0.1/GitHubPagesForGAP-0.1.tar.bz2
+      url: http://www-groups.mcs.st-and.ac.uk/~neunhoef/Computer/Software/Gap/io/io-5.0.tar.gz
 
-abstract: This is a pseudo package that contains no actual  <span class="pkgname">GAP</span> code. Instead, it is a template for other  GAP packages that allows to quickly setup GitHub pages.
+abstract: The <span class="pkgname">IO</span> package, as its name suggests,    provides bindings for <span class="pkgname">GAP</span> to the lower    levels of Input/Output functionality in the C library.
 
-status: other
+status: deposited
 doc-html: doc/chap0.html
 doc-pdf: doc/manual.pdf

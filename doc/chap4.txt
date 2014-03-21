@@ -1,0 +1,700 @@
+  
+  [1X4 [33X[0;0YHigh level functions for buffered I/O[133X[101X
+  
+  [33X[0;0YThe  functions in the previous sections are intended to be a possibility for
+  direct  access  to  the  low level I/O functions in the C library. Thus, the
+  calling conventions are strictly as in the original.[133X
+  
+  [33X[0;0YThe functionality described in this section is implemented completely in the
+  [5XGAP[105X  language and is intended to provide a good interface for programming in
+  [5XGAP[105X.  The  fundamental  object  for  I/O  on the C library level is the file
+  descriptor,  which  is just a non-negative integer representing an open file
+  of the process. The basic idea is to wrap up file descriptors in [5XGAP[105X objects
+  that do the buffering.[133X
+  
+  [33X[0;0YNote  that  considerable  care  has been taken to ensure that one can do I/O
+  multiplexing  with  buffered I/O. That is, one always has the possibility to
+  make  sure  before  a  read  or  write  operation,  that  this read or write
+  operation  will not block. This is crucial when one wants to serve more than
+  one  I/O  channel  from  the same (single-threaded) [5XGAP[105X process. This design
+  principle  sometimes  made it necessary to have more than one function for a
+  certain  operation.  Those  functions  usually  differ  in a subtle way with
+  respect to their blocking behaviour.[133X
+  
+  [33X[0;0YOne remark applies again to nearly all functions presented here: If an error
+  is  indicated  by  the  returned value [9Xfail[109X one can use the library function
+  [2XLastSystemError[102X  ([14XReference:  LastSystemError[114X)  to  find  out more about the
+  cause of the error. This fact is not mentioned with every single function.[133X
+  
+  
+  [1X4.1 [33X[0;0YTypes and the creation of [10XFile[110X[101X[1X objects[133X[101X
+  
+  [33X[0;0YThe wrapped file objects are in the following category:[133X
+  
+  [1X4.1-1 IsFile[101X
+  
+  [29X[2XIsFile[102X( [3Xo[103X ) [32X Category
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
+  
+  [33X[0;0YThe category of [10XFile[110X objects.[133X
+  
+  [33X[0;0YTo create objects in this category, one uses the following function:[133X
+  
+  [1X4.1-2 IO_WrapFD[101X
+  
+  [29X[2XIO_WrapFD[102X( [3Xfd[103X, [3Xrbufsize[103X, [3Xwbufsize[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya [10XFile[110X object[133X
+  
+  [33X[0;0YThe  argument  [3Xfd[103X  must  be  a  file descriptor (i.e. an integer) or -1 (see
+  below).[133X
+  
+  [33X[0;0Y[3Xrbufsize[103X  can  either  be  [9Xfalse[109X for unbuffered reading or an integer buffer
+  size  or  a string. If it is an integer, a read buffer of that size is used.
+  If it is a string, then [3Xfd[103X must be -1 and a [10XFile[110X object that reads from that
+  string is created.[133X
+  
+  [33X[0;0Y[3Xwbufsize[103X  can  either  be  [9Xfalse[109X for unbuffered writing or an integer buffer
+  size  or a string. If it is an integer, a write buffer of that size is used.
+  If it is a string, then [3Xfd[103X must be -1 and a [10XFile[110X object that appends to that
+  string is created.[133X
+  
+  [33X[0;0YThe result of this function is a new [10XFile[110X object.[133X
+  
+  [33X[0;0YA  convenient  way to do this for reading or writing of files on disk is the
+  following function:[133X
+  
+  [1X4.1-3 IO_File[101X
+  
+  [29X[2XIO_File[102X( [3Xfilename[103X[, [3Xmode[103X] ) [32X function
+  [29X[2XIO_File[102X( [3Xfilename[103X[, [3Xbufsize[103X] ) [32X function
+  [29X[2XIO_File[102X( [3Xfilename[103X, [3Xmode[103X, [3Xbufsize[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya [10XFile[110X object or [9Xfail[109X[133X
+  
+  [33X[0;0YThe  argument [3Xfilename[103X must be a string specifying the path name of the file
+  to  work  on.  [3Xmode[103X  must  also be a string with possible values [21Xr[121X, [21Xw[121X, or [21Xa[121X,
+  meaning read access, write access (with creating and truncating), and append
+  access  respectively.  If  [3Xmode[103X  is  omitted,  it defaults to [21Xr[121X. [3Xbufsize[103X, if
+  given,  must  be  a  positive  integer  or  [10Xfalse[110X,  otherwise it defaults to
+  [10XIO.DefaultBufSize[110X. Internally, the [2XIO_open[102X ([14X3.2-39[114X) function is used and the
+  result  file  descriptor  is wrapped using [2XIO_WrapFD[102X ([14X4.1-2[114X) with [3Xbufsize[103X as
+  the buffer size.[133X
+  
+  [33X[0;0YThe  result  is  either [9Xfail[109X in case of an error or a [10XFile[110X object in case of
+  success.[133X
+  
+  [33X[0;0YNote  that  there  is  a similar function [2XIO_FilteredFile[102X ([14X4.4-9[114X) which also
+  creates  a  [10XFile[110X  object but with additional functionality with respect to a
+  pipeline for filtering. It is described in its section in Section [14X4.4[114X. There
+  is some more low-level functionality to acquire open file descriptors. These
+  can be wrapped into [10XFile[110X objects using [2XIO_WrapFD[102X ([14X4.1-2[114X).[133X
+  
+  
+  [1X4.2 [33X[0;0YReading and writing[133X[101X
+  
+  [33X[0;0YOnce a [10XFile[110X object is created, one can use the following functions on it:[133X
+  
+  [1X4.2-1 IO_ReadUntilEOF[101X
+  
+  [29X[2XIO_ReadUntilEOF[102X( [3Xf[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya string or [9Xfail[109X[133X
+  
+  [33X[0;0YThis function reads all data from the file [3Xf[103X until the end of file. The data
+  is returned as a [5XGAP[105X string. If the file is already at end of file, an empty
+  string is returned. If an error occurs, then [9Xfail[109X is returned. Note that you
+  still  have  to  call [2XIO_Close[102X ([14X4.2-16[114X) on the [10XFile[110X object to properly close
+  the file later.[133X
+  
+  [1X4.2-2 IO_ReadBlock[101X
+  
+  [29X[2XIO_ReadBlock[102X( [3Xf[103X, [3Xlen[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya string or [9Xfail[109X[133X
+  
+  [33X[0;0YThis function gets two arguments, the first argument [3Xf[103X must be a [10XFile[110X object
+  and  the  second argument [3Xlen[103X must be a positive integer. The function tries
+  to  read  [3Xlen[103X  bytes and returns a string of that length. If and only if the
+  end  of  file  is  reached  earlier,  fewer  bytes are returned. If an error
+  occurs,  [9Xfail[109X  is  returned. Note that this function blocks until either [3Xlen[103X
+  bytes  are  read, or the end of file is reached, or an error occurs. For the
+  case  of pipes or internet connections it is possible that currently no more
+  data  is  available,  however, by definition the end of file is only reached
+  after the connection has been closed by the other side![133X
+  
+  [1X4.2-3 IO_ReadLine[101X
+  
+  [29X[2XIO_ReadLine[102X( [3Xf[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya string or [9Xfail[109X[133X
+  
+  [33X[0;0YThis  function  gets exactly one argument, which must be a [10XFile[110X object [3Xf[103X. It
+  reads  one  line  of  data, where the definition of line is operating system
+  dependent.  The  line  end  character(s)  are  included  in  the result. The
+  function  returns a string with the line in case of success and [9Xfail[109X in case
+  of   an   error.   In  the  latter  case,  one  can  query  the  error  with
+  [2XLastSystemError[102X ([14XReference: LastSystemError[114X).[133X
+  
+  [33X[0;0YNote  that  the reading is done via the buffer of [3Xf[103X, such that this function
+  will be quite fast also for large amounts of data.[133X
+  
+  [33X[0;0YIf  the  end  of  file  is  hit  without a line end, the rest of the file is
+  returned.  If  the  file  is  already at end of file before the call, then a
+  string  of  length  0  is  returned.  Note that this is not an error but the
+  standard end of file convention![133X
+  
+  [1X4.2-4 IO_ReadLines[101X
+  
+  [29X[2XIO_ReadLines[102X( [3Xf[103X[, [3Xmax[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya list of strings or [9Xfail[109X[133X
+  
+  [33X[0;0YThis function gets one or two arguments, the first of which must always be a
+  [10XFile[110X  object  [3Xf[103X.  It  reads  lines  of data (where the definition of line is
+  operating  system  dependent)  either  until  end  of file (without a second
+  argument)  or up to [3Xmax[103X lines (with a second argument [3Xmax[103X. A list of strings
+  with  the  result is returned, if everything went well and [9Xfail[109X oterwise. In
+  the  latter  case,  one can query the error with [2XLastSystemError[102X ([14XReference:
+  LastSystemError[114X).[133X
+  
+  [33X[0;0YNote  that  the reading is done via the buffer of [3Xf[103X, such that this function
+  will be quite fast also for large amounts of data.[133X
+  
+  [33X[0;0YIf  the  file  is already at the end of file, the function returns a list of
+  length  0.  Note  that  this  is  not  an error but the standard end of file
+  convention![133X
+  
+  [1X4.2-5 IO_HasData[101X
+  
+  [29X[2XIO_HasData[102X( [3Xf[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
+  
+  [33X[0;0YThis  function  takes one argument [3Xf[103X which must be a [10XFile[110X object. It returns
+  [9Xtrue[109X  or  [9Xfalse[109X  according to whether there is data to read available in the
+  file  [3Xf[103X.  A  return  value  of [9Xtrue[109X guarantees that the next call to [2XIO_Read[102X
+  ([14X4.2-6[114X)  on  that file will succeed without blocking and return at least one
+  byte or an empty string to indicate the end of file.[133X
+  
+  [1X4.2-6 IO_Read[101X
+  
+  [29X[2XIO_Read[102X( [3Xf[103X, [3Xlen[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya string or [9Xfail[109X[133X
+  
+  [33X[0;0YThe function gets two arguments, the first of which must be a [10XFile[110X object [3Xf[103X.
+  The  second  argument must be a positive integer. The function reads data up
+  to  [3Xlen[103X bytes. A string with the result is returned, if everything went well
+  and  [9Xfail[109X  otherwise.  In  the  latter  case,  one  can query the error with
+  [2XLastSystemError[102X ([14XReference: LastSystemError[114X).[133X
+  
+  [33X[0;0YNote  that  the reading is done via the buffer of [3Xf[103X, such that this function
+  will be quite fast also for large amounts of data.[133X
+  
+  [33X[0;0YIf the file is already at the end of the file, the function returns a string
+  of length 0. Note that this is not an error![133X
+  
+  [33X[0;0YIf  a  previous call to [2XIO_HasData[102X ([14X4.2-5[114X) or to [2XIO_Select[102X ([14X4.3-3[114X) indicated
+  that  there  is  data  available  to  read,  then  it is guaranteed that the
+  function [2XIO_Read[102X does not block and returns at least one byte if the file is
+  not yet at end of file and an empty string otherwise.[133X
+  
+  [1X4.2-7 IO_Write[101X
+  
+  [29X[2XIO_Write[102X( [3Xf[103X[, [3Xthings[103X, [3X...[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
+  
+  [33X[0;0YThis  function  can get an arbitrary number of arguments, the first of which
+  must  be  a  [10XFile[110X object [3Xf[103X. All the other arguments are just written to [3Xf[103X if
+  they  are  strings. Otherwise, the [9XString[109X function is called on them and the
+  result is written out to [3Xf[103X.[133X
+  
+  [33X[0;0YNote  that  the writing is done buffered. That is, the data is first written
+  to  the buffer and only really written out after the buffer is full or after
+  the user explicitly calls [2XIO_Flush[102X ([14X4.2-10[114X) on [3Xf[103X.[133X
+  
+  [33X[0;0YThe  result is either the number of bytes written in case of success or [9Xfail[109X
+  in  case  of  an  error.  In  the  latter case the error can be queried with
+  [2XLastSystemError[102X ([14XReference: LastSystemError[114X).[133X
+  
+  [33X[0;0YNote  that  this function blocks until all data is at least written into the
+  buffer and might block until data can be sent again if the buffer is full.[133X
+  
+  [1X4.2-8 IO_WriteLine[101X
+  
+  [29X[2XIO_WriteLine[102X( [3Xf[103X, [3Xline[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
+  
+  [33X[0;0YBehaves like [2XIO_Write[102X ([14X4.2-7[114X) but works on a single string [3Xline[103X and sends an
+  (operating  system  dependent)  end of line string afterwards. Also [2XIO_Flush[102X
+  ([14X4.2-10[114X)  is  called automatically after the operation, such that one can be
+  sure,  that  the  data  is  actually  written  out  after  the  function has
+  completed.[133X
+  
+  [1X4.2-9 IO_WriteLines[101X
+  
+  [29X[2XIO_WriteLines[102X( [3Xf[103X, [3Xlist[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
+  
+  [33X[0;0YBehaves  like [2XIO_Write[102X ([14X4.2-7[114X) but works on a list of strings [3Xlist[103X and sends
+  an  (operating system dependent) end of line string after each string in the
+  list.  Also  [2XIO_Flush[102X  ([14X4.2-10[114X) is called automatically after the operation,
+  such  that  one can be sure, that the data is actually written out after the
+  function has completed.[133X
+  
+  [1X4.2-10 IO_Flush[101X
+  
+  [29X[2XIO_Flush[102X( [3Xf[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
+  
+  [33X[0;0YThis  function  gets  one argument [3Xf[103X, which must be a [10XFile[110X object. It writes
+  out  all  the data that is in the write buffer. This is not necessary before
+  the  call  to  the  function  [2XIO_Close[102X  ([14X4.2-16[114X),  since that function calls
+  [2XIO_Flush[102X  automatically.  However,  it  is  necessary to call [2XIO_Flush[102X after
+  calls  to  [2XIO_Write[102X ([14X4.2-7[114X) to be sure that the data is really sent out. The
+  function returns [9Xtrue[109X if everything goes well and [9Xfail[109X if an error occurs.[133X
+  
+  [33X[0;0YRemember  that  the functions [2XIO_WriteLine[102X ([14X4.2-8[114X) and [2XIO_WriteLines[102X ([14X4.2-9[114X)
+  implicitly call [2XIO_Flush[102X after they are done.[133X
+  
+  [33X[0;0YNote  that  this  function might block until all data is actually written to
+  the file descriptor.[133X
+  
+  [1X4.2-11 IO_WriteFlush[101X
+  
+  [29X[2XIO_WriteFlush[102X( [3Xf[103X[, [3Xthings[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
+  
+  [33X[0;0YThis  function  behaves like [2XIO_Write[102X ([14X4.2-7[114X) followed by a call to [2XIO_Flush[102X
+  ([14X4.2-10[114X).  It returns either the number of bytes written or [9Xfail[109X if an error
+  occurs.[133X
+  
+  [1X4.2-12 IO_ReadyForWrite[101X
+  
+  [29X[2XIO_ReadyForWrite[102X( [3Xf[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
+  
+  [33X[0;0YThis  function  takes one argument [3Xf[103X which must be a [10XFile[110X object. It returns
+  [9Xtrue[109X  or  [9Xfalse[109X  according to whether the file [3Xf[103X is ready to write. A return
+  value  of [9Xtrue[109X guarantees that the next call to [2XIO_WriteNonBlocking[102X ([14X4.2-13[114X)
+  on that file will succeed without blocking and accept at least one byte.[133X
+  
+  [1X4.2-13 IO_WriteNonBlocking[101X
+  
+  [29X[2XIO_WriteNonBlocking[102X( [3Xf[103X, [3Xst[103X, [3Xpos[103X, [3Xlen[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
+  
+  [33X[0;0YThis  function  takes four arguments. The first one [3Xf[103X must be a [10XFile[110X object,
+  the second [3Xst[103X a string, and the arguments [3Xpos[103X and [3Xlen[103X must be integers, such
+  that  positions  [22X[3Xpos[103X+1[122X  until [22X[3Xpos[103X+[3Xlen[103X[122X are bound in [3Xst[103X. The function tries to
+  write  up  to  [3Xlen[103X  bytes  from  [3Xst[103X  from position [22X[3Xpos[103X+1[122X to the file [3Xf[103X. If a
+  previous call to [2XIO_ReadyForWrite[102X ([14X4.2-12[114X) or to [2XIO_Select[102X ([14X4.3-3[114X) indicates
+  that  [3Xf[103X  is  writable,  then  it  is  guaranteed  that the following call to
+  [2XIO_WriteNonBlocking[102X  will  not  block  and accept at least one byte of data.
+  Note  that it is not guaranteed that all [3Xlen[103X bytes are written. The function
+  returns the number of bytes written or [9Xfail[109X if an error occurs.[133X
+  
+  [1X4.2-14 IO_ReadyForFlush[101X
+  
+  [29X[2XIO_ReadyForFlush[102X( [3Xf[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
+  
+  [33X[0;0YThis  function  takes one argument [3Xf[103X which must be a [10XFile[110X object. It returns
+  [9Xtrue[109X  or  [9Xfalse[109X  according to whether the file [3Xf[103X is ready to flush. A return
+  value  of [9Xtrue[109X guarantees that the next call to [2XIO_FlushNonBlocking[102X ([14X4.2-15[114X)
+  on  that file will succeed without blocking and flush out at least one byte.
+  Note  that this does not guarantee, that this call succeeds to flush out the
+  whole content of the buffer![133X
+  
+  [1X4.2-15 IO_FlushNonBlocking[101X
+  
+  [29X[2XIO_FlushNonBlocking[102X( [3Xf[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X, [9Xfalse[109X, or [9Xfail[109X[133X
+  
+  [33X[0;0YThis  function takes one argument [3Xf[103X which must be a [10XFile[110X object. It tries to
+  write  all  data  in  the  writing  buffer  to  the file descriptor. If this
+  succeeds, the function returns [9Xtrue[109X and [9Xfalse[109X otherwise. If an error occurs,
+  [9Xfail[109X  is  returned.  If  a  previous  call  to  [2XIO_ReadyForFlush[102X ([14X4.2-14[114X) or
+  [2XIO_Select[102X  ([14X4.3-3[114X) indicated that [3Xf[103X is flushable, then it is guaranteed that
+  the following call to [2XIO_FlushNonBlocking[102X does not block. However, it is not
+  guaranteed that [9Xtrue[109X is returned from that call.[133X
+  
+  [1X4.2-16 IO_Close[101X
+  
+  [29X[2XIO_Close[102X( [3Xf[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
+  
+  [33X[0;0YThis  function  closes the [10XFile[110X object [3Xf[103X after writing all data in the write
+  buffer  out  and closing the file descriptor. All buffers are freed. In case
+  of  an  error,  the  function returns [9Xfail[109X and otherwise [9Xtrue[109X. Note that for
+  pipes  to  other  processes this function collects data about the terminated
+  processes using [2XIO_WaitPid[102X ([14X3.2-60[114X).[133X
+  
+  
+  [1X4.3 [33X[0;0YOther functions[133X[101X
+  
+  [1X4.3-1 IO_GetFD[101X
+  
+  [29X[2XIO_GetFD[102X( [3Xf[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Yan integer[133X
+  
+  [33X[0;0YThis  function  returns  the  real  file  descriptor that is behind the [10XFile[110X
+  object [3Xf[103X.[133X
+  
+  [1X4.3-2 IO_GetWBuf[101X
+  
+  [29X[2XIO_GetWBuf[102X( [3Xf[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya string or [9Xfalse[109X[133X
+  
+  [33X[0;0YThis  function  gets  one argument [3Xf[103X which must be a [10XFile[110X object and returns
+  the  writing buffer of that [10XFile[110X object. This is necessary for [10XFile[110X objects,
+  that  are  not  associated  to  a  real  file  descriptor  but  just collect
+  everything  that  was  written in their writing buffer. Remember to use this
+  function before closing the [10XFile[110X object.[133X
+  
+  [1X4.3-3 IO_Select[101X
+  
+  [29X[2XIO_Select[102X( [3Xr[103X, [3Xw[103X, [3Xf[103X, [3Xe[103X, [3Xt1[103X, [3Xt2[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
+  
+  [33X[0;0YThis  function  is  the  corresponding  function  to  [2XIO_select[102X ([14X3.2-51[114X) for
+  buffered file access. It behaves similarly to that function. The differences
+  are  the  following:  There are four lists of files [3Xr[103X, [3Xw[103X, [3Xf[103X, and [3Xe[103X. They all
+  can contain either integers (standing for file descriptors) or [10XFile[110X objects.
+  The  list  [3Xr[103X is for checking, whether files or file descriptors are ready to
+  read, the list [3Xw[103X is for checking whether they are ready to write, the list [3Xf[103X
+  is  for  checking  whether  they  are  ready to flush, and the list [3Xe[103X is for
+  checking whether they have exceptions.[133X
+  
+  [33X[0;0YFor  [10XFile[110X  objects  it is always first checked, whether there is either data
+  available  in a reading buffer or space in a writing buffer. If so, they are
+  immediately  reported  to  be  ready  (this  feature  makes the list of [10XFile[110X
+  objects to test for flushability necessary). For the remaining files and for
+  all specified file descriptors, the function [2XIO_select[102X ([14X3.2-51[114X) is called to
+  get  an  overview  about  readiness. The timeout values [3Xt1[103X and [3Xt2[103X are set to
+  zero for immediate returning if one of the requested buffers were ready.[133X
+  
+  [33X[0;0Y[2XIO_Select[102X  returns the number of files or file descriptors that are ready to
+  serve or [9Xfail[109X if an error occurs.[133X
+  
+  [33X[0;0YThe following function is a convenience function for directory access:[133X
+  
+  [1X4.3-4 IO_ListDir[101X
+  
+  [29X[2XIO_ListDir[102X( [3Xpathname[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya list of strings or [9Xfail[109X[133X
+  
+  [33X[0;0YThis  function  gets  a string containing a path name as single argument and
+  returns a list of strings that are the names of the files in that directory,
+  or [9Xfail[109X, if an error occurred.[133X
+  
+  [1X4.3-5 ChangeCurrentDirectory[101X
+  
+  [29X[2XChangeCurrentDirectory[102X( [3Xpathname[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X on success and [9Xfail[109X on failure[133X
+  
+  [33X[0;0YChanges the current directory. Returns [9Xtrue[109X on success and [9Xfail[109X on failure.[133X
+  
+  [33X[0;0YThe  following function is used to create strings describing a pair of an IP
+  address  and  a  port  number  in a binary way. These strings can be used in
+  connection  with the C library functions [10Xconnect[110X, [10Xbind[110X, [10Xrecvfrom[110X, and [10Xsendto[110X
+  for the arguments needing such address pairs.[133X
+  
+  [1X4.3-6 IO_MakeIPAddressPort[101X
+  
+  [29X[2XIO_MakeIPAddressPort[102X( [3Xipstring[103X, [3Xportnr[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya string[133X
+  
+  [33X[0;0YThis  function  gets  a  string  [3Xipstring[103X  containing  an  IP address in dot
+  notation,  i.e. four numbers in the range from 0 to 255 separated by dots [21X.[121X,
+  and an integer [3Xportnr[103X, which is a port number. The result is a string of the
+  correct length to be used for the low level C library functions, wherever IP
+  address port number pairs are needed. The string [3Xipstring[103X can also be a host
+  name, which is then looked up using [2XIO_gethostbyname[102X ([14X3.2-21[114X) to find the IP
+  address.[133X
+  
+  [1X4.3-7 IO_Environment[101X
+  
+  [29X[2XIO_Environment[102X(  ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya record or [9Xfail[109X[133X
+  
+  [33X[0;0YTakes  no  arguments,  uses  [2XIO_environ[102X  ([14X3.3-2[114X)  to get the environment and
+  returns  a  record  in  which  the  component  names  are  the  names of the
+  environment  variables  and  the  values  are  the  values. This can then be
+  changed  and  the  changed  record can be given to [2XIO_MakeEnvList[102X ([14X4.3-8[114X) to
+  produce  again  a  list  which  can  be used for [2XIO_execve[102X ([14X3.2-13[114X) as third
+  argument.[133X
+  
+  [1X4.3-8 IO_MakeEnvList[101X
+  
+  [29X[2XIO_MakeEnvList[102X( [3Xr[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya list of strings[133X
+  
+  [33X[0;0YTakes  a  record  as  returned by [2XIO_Environment[102X ([14X4.3-7[114X) and turns it into a
+  list of strings as needed by [2XIO_execve[102X ([14X3.2-13[114X) as third argument.[133X
+  
+  
+  [1X4.4 [33X[0;0YInter process communication[133X[101X
+  
+  [1X4.4-1 IO_FindExecutable[101X
+  
+  [29X[2XIO_FindExecutable[102X( [3Xpath[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Y[9Xfail[109X or the path to an executable[133X
+  
+  [33X[0;0YIf  the path name [3Xpath[103X contains a slash, this function simply checks whether
+  the string [3Xpath[103X refers to an executable file. If so, [3Xpath[103X is returned as is.
+  Otherwise, [9Xfail[109X is returned. If the path name [3Xpath[103X does not contain a slash,
+  all  directories  in  the  environment  variable  [11XPATH[111X  are  searched for an
+  executable  with  name  [3Xpath[103X.  If  so,  the  full path to that executable is
+  returned, otherwise [9Xfail[109X.[133X
+  
+  [33X[0;0YThis  function  is  used  whenever  one  of  the following functions gets an
+  argument that should refer to an executable.[133X
+  
+  [1X4.4-2 IO_CloseAllFDs[101X
+  
+  [29X[2XIO_CloseAllFDs[102X( [3Xexceptions[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YCloses all file descriptors except those listed in [3Xexceptions[103X, which must be
+  a list of integers.[133X
+  
+  [1X4.4-3 IO_Popen[101X
+  
+  [29X[2XIO_Popen[102X( [3Xpath[103X, [3Xargv[103X, [3Xmode[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya [10XFile[110X object or [9Xfail[109X[133X
+  
+  [33X[0;0YThe  argument  [3Xpath[103X  must  refer  to  an  executable  file  in  the sense of
+  [2XIO_FindExecutable[102X ([14X4.4-1[114X).[133X
+  
+  [33X[0;0YStarts  a  child  process using the executable in [3Xpath[103X with either stdout or
+  stdin  being  a  pipe.  The argument [3Xmode[103X must be either the string [21X[10Xr[110X[121X or the
+  string [21X[10Xw[110X[121X.[133X
+  
+  [33X[0;0YIn  the  first  case,  the  standard output of the child process will be the
+  writing  end  of  a pipe. A [10XFile[110X object for reading connected to the reading
+  end  of  the  pipe is returned. The standard input and standard error of the
+  child process will be the same than the calling [5XGAP[105X process.[133X
+  
+  [33X[0;0YIn  the  second  case,  the  standard input of the child process will be the
+  reading  end  of  a pipe. A [10XFile[110X object for writing connected to the writing
+  end  of  the pipe is returned. The standard output and standard error of the
+  child process will be the same than the calling [5XGAP[105X process.[133X
+  
+  [33X[0;0YIn case of an error, [9Xfail[109X is returned.[133X
+  
+  [33X[0;0YThe  process  will  usually die, when the pipe is closed, but can also do so
+  without  that.  The  [10XFile[110X  object  remembers  the  process ID of the started
+  process  and  the  [2XIO_Close[102X ([14X4.2-16[114X) function then calls [2XIO_WaitPid[102X ([14X3.2-60[114X)
+  for it to acquire information about the terminated process.[133X
+  
+  [33X[0;0YNote     that     [2XIO_Popen[102X    activates    our    SIGCHLD    handler    (see
+  [2XIO_InstallSIGCHLDHandler[102X ([14X3.3-3[114X)).[133X
+  
+  [33X[0;0YIn  either case the [10XFile[110X object will have the attribute [21X[9XProcessID[109X[121X set to the
+  process ID of the child process.[133X
+  
+  [1X4.4-4 IO_Popen2[101X
+  
+  [29X[2XIO_Popen2[102X( [3Xpath[103X, [3Xargv[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya record or [9Xfail[109X[133X
+  
+  [33X[0;0YThe  argument  [3Xpath[103X  must  refer  to  an  executable  file  in  the sense of
+  [2XIO_FindExecutable[102X ([14X4.4-1[114X).[133X
+  
+  [33X[0;0YA  new  child  process  is started using the executable in [3Xpath[103X The standard
+  input and standard output of it are pipes. The writing end of the input pipe
+  and the reading end of the output pipe are returned as [10XFile[110X objects bound to
+  two  components [21X[10Xstdin[110X[121X and [21X[10Xstdout[110X[121X (resp.) of the returned record. This means,
+  you  have to [13Xwrite[113X to [21X[10Xstdin[110X[121X and [13Xread[113X from [21X[10Xstdout[110X[121X in the calling [5XGAP[105X process.
+  The  standard  error of the child process will be the same as the one of the
+  calling [5XGAP[105X process.[133X
+  
+  [33X[0;0YReturns [9Xfail[109X if an error occurred.[133X
+  
+  [33X[0;0YThe  process  will  usually  die,  when one of the pipes is closed. The [10XFile[110X
+  objects  remember the process ID of the called process and the function call
+  to [2XIO_Close[102X ([14X4.2-16[114X) for the [10Xstdout[110X object will call [2XIO_WaitPid[102X ([14X3.2-60[114X) for
+  it to acquire information about the terminated process.[133X
+  
+  [33X[0;0YNote     that    [2XIO_Popen2[102X    activates    our    SIGCHLD    handler    (see
+  [2XIO_InstallSIGCHLDHandler[102X ([14X3.3-3[114X)).[133X
+  
+  [33X[0;0YBoth [10XFile[110X objects will have the attribute [21X[9XProcessID[109X[121X set to the process ID of
+  the  child  process,  which  will  also be bound to the [21X[9Xpid[109X[121X component of the
+  returned record.[133X
+  
+  [1X4.4-5 IO_Popen3[101X
+  
+  [29X[2XIO_Popen3[102X( [3Xpath[103X, [3Xargv[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya record or [9Xfail[109X[133X
+  
+  [33X[0;0YThe  argument  [3Xpath[103X  must  refer  to  an  executable  file  in  the sense of
+  [2XIO_FindExecutable[102X ([14X4.4-1[114X).[133X
+  
+  [33X[0;0YA  new  child  process  is started using the executable in [3Xpath[103X The standard
+  input,  standard output, and standard error of it are pipes. The writing end
+  of the input pipe, the reading end of the output pipe and the reading end of
+  the  error  pipe are returned as [10XFile[110X objects bound to two components [21X[10Xstdin[110X[121X,
+  [21X[10Xstdout[110X[121X,  and  [21X[10Xstderr[110X[121X (resp.) of the returned record. This means, you have to
+  [13Xwrite[113X to [21X[10Xstdin[110X[121X and [13Xread[113X from [21X[10Xstdout[110X[121X and [21X[10Xstderr[110X[121X in the calling [5XGAP[105X process.[133X
+  
+  [33X[0;0YReturns [9Xfail[109X if an error occurred.[133X
+  
+  [33X[0;0YThe  process  will  usually  die, when one of the pipes is closed. All three
+  [10XFile[110X  objects  will remember the process ID of the newly created process and
+  the  call  to the [2XIO_Close[102X ([14X4.2-16[114X) function for the [10Xstdout[110X object will call
+  [2XIO_WaitPid[102X ([14X3.2-60[114X) for it to acquire information about the terminated child
+  process.[133X
+  
+  [33X[0;0YNote     that    [2XIO_Popen3[102X    activates    our    SIGCHLD    handler    (see
+  [2XIO_InstallSIGCHLDHandler[102X ([14X3.3-3[114X)).[133X
+  
+  [33X[0;0YAll  three [10XFile[110X objects will have the attribute [21X[9XProcessID[109X[121X set to the process
+  ID  of  the  child process, which will also be bound to the [21X[9Xpid[109X[121X component of
+  the returned record.[133X
+  
+  [1X4.4-6 IO_StartPipeline[101X
+  
+  [29X[2XIO_StartPipeline[102X( [3Xprogs[103X, [3Xinfd[103X, [3Xoutfd[103X, [3Xswitcherror[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya record or [9Xfail[109X[133X
+  
+  [33X[0;0YThe  argument  [3Xprogs[103X  is a list of pairs, the first entry being a path to an
+  executable  (in  the  sense  of  [2XIO_FindExecutable[102X  ([14X4.4-1[114X)),  the second an
+  argument  list,  the  argument  [3Xinfd[103X is an open file descriptor for reading,
+  [3Xoutfd[103X  is  an  open file descriptor for writing, both can be replaced by the
+  string  [21X[9Xopen[109X[121X  in  which  case  a  new  pipe  will  be  opened.  The argument
+  [3Xswitcherror[103X is a boolean indicating whether standard error channels are also
+  switched to the corresponding output channels.[133X
+  
+  [33X[0;0YThis  function  starts  up  all  processes and connects them with pipes. The
+  input of the first is switched to [3Xinfd[103X and the output of the last to [3Xoutfd[103X.[133X
+  
+  [33X[0;0YReturns  a  record  with the following components: [9Xpids[109X is a list of process
+  ids if everything worked. For each process for which some error occurred the
+  corresponding  pid  is  replaced  by  [9Xfail[109X.  The [9Xstdin[109X component is equal to
+  [9Xfalse[109X,  or  to  the  file descriptor of the writing end of the newly created
+  pipe  which  is  connected  to  the  standard  input of the first of the new
+  processes if [3Xinfd[103X was [21X[9Xopen[109X[121X. The [9Xstdout[109X component is equal to [9Xfalse[109X or to the
+  file  descriptor  of  the  reading  end  of  the newly created pipe which is
+  connected  to  the standard output of the last of the new processes if [3Xoutfd[103X
+  was [21X[9Xopen[109X[121X.[133X
+  
+  [33X[0;0YNote  that  the  SIGCHLD  handler  of  the  [5XIO[105X  package is installed by this
+  function  (see  [2XIO_InstallSIGCHLDHandler[102X  ([14X3.3-3[114X))  and  that it lies in the
+  responsibility  of  the  caller  to  use  [2XIO_WaitPid[102X ([14X3.2-60[114X) to ask for the
+  status information of all child processes after their termination.[133X
+  
+  [1X4.4-7 IO_StringFilterFile[101X
+  
+  [29X[2XIO_StringFilterFile[102X( [3Xprogs[103X, [3Xfilename[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya string or [9Xfail[109X[133X
+  
+  [33X[0;0YReads the file with the name [3Xfilename[103X, however, a pipeline is created by the
+  processes  described  by  [3Xprogs[103X (see [2XIO_StartPipeline[102X ([14X4.4-6[114X)) to filter the
+  content  of  the  file  through  the  pipeline. The result is put into a [5XGAP[105X
+  string and returned. If something goes wrong, [9Xfail[109X is returned.[133X
+  
+  [1X4.4-8 IO_FileFilterString[101X
+  
+  [29X[2XIO_FileFilterString[102X( [3Xfilename[103X, [3Xprogs[103X, [3Xst[103X[, [3Xappend[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya string or [9Xfail[109X[133X
+  
+  [33X[0;0YWrites  the  content  of  the  string [3Xst[103X to the file with the name [3Xfilename[103X,
+  however,  a  pipeline  is  created  by the processes described by [3Xprogs[103X (see
+  [2XIO_StartPipeline[102X  ([14X4.4-6[114X))  to  filter the content of the string through the
+  pipeline.  The  result  is put into the file. If the boolean value [3Xappend[103X is
+  given  and  equal  to  [9Xtrue[109X,  then  the data will be appended to the already
+  existing file. If something goes wrong, [9Xfail[109X is returned.[133X
+  
+  [1X4.4-9 IO_FilteredFile[101X
+  
+  [29X[2XIO_FilteredFile[102X( [3Xprogs[103X, [3Xfilename[103X[, [3Xmode[103X][, [3Xbufsize[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya [10XFile[110X object or [9Xfail[109X[133X
+  
+  [33X[0;0YThis  function is similar to [2XIO_File[102X ([14X4.1-3[114X) and behaves nearly identically.
+  The  only  difference  is  that a filtering pipeline is switched between the
+  file  and  the [10XFile[110X object such that all things read or written respectively
+  are filtered through this pipeline of processes.[133X
+  
+  [33X[0;0YThe  [10XFile[110X  object remembers the started processes and upon the final call to
+  [2XIO_Close[102X  ([14X4.2-16[114X)  automatically  uses  the [2XIO_WaitPid[102X ([14X3.2-60[114X) function to
+  acquire  information  from  the  terminated  processes in the pipeline after
+  their  termination.  This  means  that  you  do  not have to call [2XIO_WaitPid[102X
+  ([14X3.2-60[114X) any more after the call to [2XIO_Close[102X ([14X4.2-16[114X).[133X
+  
+  [33X[0;0YNote    that    [2XIO_FilteredFile[102X   activates   our   SIGCHLD   handler   (see
+  [2XIO_InstallSIGCHLDHandler[102X ([14X3.3-3[114X)).[133X
+  
+  [33X[0;0YThe [10XFile[110X object will have the attribute [21X[9XProcessID[109X[121X set to the list of process
+  IDs of the child processes.[133X
+  
+  [1X4.4-10 IO_SendStringBackground[101X
+  
+  [29X[2XIO_SendStringBackground[102X( [3Xf[103X, [3Xst[103X ) [32X function
+  
+  [33X[0;0YThis  functions  uses  [2XIO_Write[102X  ([14X4.2-7[114X) to write the whole string [3Xst[103X to the
+  [10XFile[110X  object  [3Xf[103X.  However,  this  is  done  by  forking  off a child process
+  identical  to the calling [5XGAP[105X process that does the sending. The calling [5XGAP[105X
+  process  returns  immediately,  even before anything has been sent away with
+  the result [9Xtrue[109X. The forked off sender process terminates itself immediately
+  after it has sent all data away.[133X
+  
+  [33X[0;0YThe  reason for having this function available is the following: If one uses
+  [2XIO_Popen2[102X  ([14X4.4-4[114X)  or  [2XIO_Popen3[102X  ([14X4.4-5[114X)  to start up a child process with
+  standard  input  and  standard output being a pipe, then one usually has the
+  problem,  that the child process starts reading some data, but then wants to
+  write  data,  before it received all data coming. If the calling [5XGAP[105X process
+  would  first  try to write all data and only start to read the output of the
+  child process after sending away all data, a deadlock situation would occur.
+  This is avoided with the forking and backgrounding approach.[133X
+  
+  [33X[0;0YRemember  to close the writing end of the standard input pipe in the calling
+  [5XGAP[105X  process  directly  after  [2XIO_SendStringBackground[102X has returned, because
+  otherwise  the  child  process  might  not notice that all data has arrived,
+  because  the  pipe  persists! See the file [11Xpopen2.g[111X in the [11Xexample[111X directory
+  for an example.[133X
+  
+  [33X[0;0YNote that with most modern operating systems the forking off of an identical
+  child  process  does in fact [13Xnot[113X mean a duplication of the total main memory
+  used by both processes, because the operating system kernel will use [21Xcopy on
+  write[121X.  However,  if a garbage collection happens to become necessary during
+  the  sending  of  the  data  in  the  forked off sending process, this might
+  trigger doubled memory usage.[133X
+  
+  [1X4.4-11 IO_PipeThrough[101X
+  
+  [29X[2XIO_PipeThrough[102X( [3Xcmd[103X, [3Xargs[103X, [3Xinput[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya string or [9Xfail[109X[133X
+  
+  [33X[0;0YStarts  the  process  with the executable given by the file name [3Xcmd[103X (in the
+  sense of [2XIO_FindExecutable[102X ([14X4.4-1[114X)) with arguments in the argument list [3Xargs[103X
+  (a  list  of  strings). The standard input and output of the started process
+  are  connected  via  pipes to the calling process. The content of the string
+  [3Xinput[103X  is  written  to  the  standard  input  of  the called process and its
+  standard output is read and returned as a string.[133X
+  
+  [33X[0;0YAll  the  necessary I/O multiplexing and non-blocking I/O to avoid deadlocks
+  is done in this function.[133X
+  
+  [33X[0;0YThis  function properly does [2XIO_WaitPid[102X ([14X3.2-60[114X) to wait for the termination
+  of  the  child  process but does not restore the original [5XGAP[105X SIGCHLD signal
+  handler (see [2XIO_InstallSIGCHLDHandler[102X ([14X3.3-3[114X)).[133X
+  
+  [1X4.4-12 IO_PipeThroughWithError[101X
+  
+  [29X[2XIO_PipeThroughWithError[102X( [3Xcmd[103X, [3Xargs[103X, [3Xinput[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya record or [9Xfail[109X[133X
+  
+  [33X[0;0YStarts  the  process  with the executable given by the file name [3Xcmd[103X (in the
+  sense of [2XIO_FindExecutable[102X ([14X4.4-1[114X)) with arguments in the argument list [3Xargs[103X
+  (a  list  of  strings).  The standard input, output and error of the started
+  process  are  connected via pipes to the calling process. The content of the
+  string  [3Xinput[103X is written to the standard input of the called process and its
+  standard  output and error are read and returned as a record with components
+  [9Xout[109X and [9Xerr[109X, which are strings.[133X
+  
+  [33X[0;0YAll  the  necessary I/O multiplexing and non-blocking I/O to avoid deadlocks
+  is done in this function.[133X
+  
+  [33X[0;0YThis  function properly does [2XIO_WaitPid[102X ([14X3.2-60[114X) to wait for the termination
+  of  the  child  process but does not restore the original [5XGAP[105X SIGCHLD signal
+  handler (see [2XIO_InstallSIGCHLDHandler[102X ([14X3.3-3[114X)).[133X
+  
+  [33X[0;0YThe  functions  returns  either  [9Xfail[109X  if  an error occurred, or otherwise a
+  record with components [9Xout[109X and [9Xerr[109X which are bound to strings containing the
+  full standard output and standard error of the called process.[133X
+  

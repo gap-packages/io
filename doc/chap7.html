@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>GAP (IO) - Chapter 7: A client side implementation of the HTTP protocol</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+<script src="manual.js" type="text/javascript"></script>
+<script type="text/javascript">overwriteStyle();</script>
+</head>
+<body class="chap7"  onload="jscontent()">
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chap8.html">8</a>  <a href="chap9.html">9</a>  <a href="chap10.html">10</a>  <a href="chap11.html">11</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap6.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap8.html">[Next Chapter]</a>&nbsp;  </div>
+
+<p><a id="X79DA05BB7CCC1749" name="X79DA05BB7CCC1749"></a></p>
+<div class="ChapSects"><a href="chap7.html#X79DA05BB7CCC1749">7 <span class="Heading">A client side implementation of the HTTP protocol</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap7.html#X7E8B5F0A87F2C1F7">7.1 <span class="Heading">Functions for client side HTTP</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7.html#X7B5588D5856BE6DD">7.1-1 OpenHTTPConnection</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7.html#X80FF9E307BDA0659">7.1-2 HTTPRequest</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7.html#X83526BF378B3D8F2">7.1-3 HTTPTimeoutForSelect</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7.html#X81702FA07F2AF472">7.1-4 CloseHTTPConnection</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7.html#X7DBCB0B4801E4D6D">7.1-5 SingleHTTPRequest</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7.html#X78BAF7A77F6BE631">7.1-6 CheckForUpdates</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7.html#X872B174F7FFD345B">7.1-7 ReadWeb</a></span>
+</div></div>
+</div>
+
+<h3>7 <span class="Heading">A client side implementation of the HTTP protocol</span></h3>
+
+<p>The <strong class="pkg">IO</strong> package contains an implementation of the client side of the HTTP protocol. The basic purpose of this is of course to be able to download data from web servers from the <strong class="pkg">GAP</strong> language. However, the HTTP protocol can perform a much bigger variety of tasks.</p>
+
+<p><a id="X7E8B5F0A87F2C1F7" name="X7E8B5F0A87F2C1F7"></a></p>
+
+<h4>7.1 <span class="Heading">Functions for client side HTTP</span></h4>
+
+<p><a id="X7B5588D5856BE6DD" name="X7B5588D5856BE6DD"></a></p>
+
+<h5>7.1-1 OpenHTTPConnection</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; OpenHTTPConnection</code>( <var class="Arg">hostname</var>, <var class="Arg">port</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a record</p>
+
+<p>The first argument <var class="Arg">hostname</var> must be a string containing the hostname of the server to connect. The second argument <var class="Arg">port</var> must be an integer in the range from <span class="SimpleMath">1</span> to <span class="SimpleMath">65535</span> and describes the port to connect to on the server.</p>
+
+<p>The function opens a TCP/IP connection to the server and returns a record <code class="keyw">conn</code> with the following components: <code class="keyw">conn.sock</code> is <code class="keyw">fail</code> if an error occurs and otherwise a <code class="code">File</code> object linked to the file descriptor of the socket. In case of an error, the component <code class="keyw">conn.errormsg</code> contains an error message, it is otherwise empty. If everything went well then the component <code class="keyw">conn.host</code> is the result from the host name lookup (see <code class="func">IO_gethostbyname</code> (<a href="chap3.html#X7DD25BDC79EE65AD"><span class="RefLink">3.2-21</span></a>)) and the component <code class="keyw">conn.closed</code> is set to <code class="keyw">false</code>.</p>
+
+<p>No data is sent or received on the socket in this function.</p>
+
+<p><a id="X80FF9E307BDA0659" name="X80FF9E307BDA0659"></a></p>
+
+<h5>7.1-2 HTTPRequest</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; HTTPRequest</code>( <var class="Arg">conn</var>, <var class="Arg">method</var>, <var class="Arg">uri</var>, <var class="Arg">header</var>, <var class="Arg">body</var>, <var class="Arg">target</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a record</p>
+
+<p>This function performs a complete HTTP request. The first argument must be a connection record as returned by a successful call to <code class="func">OpenHTTPConnection</code> (<a href="chap7.html#X7B5588D5856BE6DD"><span class="RefLink">7.1-1</span></a>). The argument <var class="Arg">method</var> must be a valid HTTP request "method" in form of a string. The most common will be <code class="keyw">GET</code>, <code class="keyw">POST</code>, or <code class="keyw">HEAD</code>. The argument <var class="Arg">uri</var> is a string containing the URI of the request, which is given in the first line of the request. This will usually be a relative or absolute path name given to the server. The argument <var class="Arg">header</var> must be a <strong class="pkg">GAP</strong> record. Each bound field of this record will we transformed into one header line with the name of the component being the key and the value the value. All bound values must be strings. The argument <var class="Arg">body</var> must either be a string or <code class="keyw">false</code>. If it is a string, this string is sent away as the body of the request. If no string or an empty string is given, no body will be sent. The header field <code class="keyw">Content-Length</code> is automatically created from the length of the string <var class="Arg">body</var>. Finally, the argument <var class="Arg">target</var> can either be <code class="keyw">false</code> or a string. In the latter case, the body of the request answer is written to the file with the name given in <var class="Arg">target</var>. The <code class="keyw">body</code> component of the result will be the file name in this case. If <var class="Arg">target</var> is false, the full body of the answer is stored into the <code class="keyw">body</code> component of the result.</p>
+
+<p>The function sends away the request and awaits the answer. If anything goes wrong during the transfer (for example if the connection is broken prematurely), then the component <code class="keyw">statuscode</code> of the resulting record is <span class="SimpleMath">0</span> and the component <code class="keyw">status</code> is a corresponding error message. In that case, all other fields may or may not be bound to sensible values, according to when the error occurred. If everything goes well, then <code class="keyw">statuscode</code> and <code class="keyw">status</code> are bound to the corresponding values coming from the request answer. <code class="keyw">statuscode</code> is transformed into a <strong class="pkg">GAP</strong> integer. The header of the answer is parsed, transformed into a <strong class="pkg">GAP</strong> record, and stored into the component <code class="keyw">header</code> of the result. The <code class="keyw">body</code> component of the result record is set as described above. Finally, the <code class="keyw">protoversion</code> component contains the HTTP protocol version number used by the server as a string and the boolean value <code class="keyw">closed</code> indicates, whether or not the function has detected, that the connection has been closed by the server. Note that by default, the connection will stay open, at least for a certain time after the end of the request.</p>
+
+<p>See the description of the global variable <code class="func">HTTPTimeoutForSelect</code> (<a href="chap7.html#X83526BF378B3D8F2"><span class="RefLink">7.1-3</span></a>) for rules how timeouts are done in this function.</p>
+
+<p>Note that if the <var class="Arg">method</var> is <code class="keyw">HEAD</code>, then no body is expected (none will be sent anyway) and the function returns immediately with empty body. Of course, the <code class="keyw">Content-Length</code> value in the header is as if it the request would be done with the <code class="keyw">GET</code> method.</p>
+
+<p><a id="X83526BF378B3D8F2" name="X83526BF378B3D8F2"></a></p>
+
+<h5>7.1-3 HTTPTimeoutForSelect</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; HTTPTimeoutForSelect</code></td><td class="tdright">( global variable )</td></tr></table></div>
+<p>This global variable holds a list of length two. By default, both entries are <code class="keyw">fail</code> indicating that <code class="func">HTTPRequest</code> (<a href="chap7.html#X80FF9E307BDA0659"><span class="RefLink">7.1-2</span></a>) should never timeout and wait forever for an answer. Actually, the two values in this variable are given to the <code class="func">IO_Select</code> (<a href="chap4.html#X81CA6EE88062010E"><span class="RefLink">4.3-3</span></a>) function call during I/O multiplexing. That is, the first number is in seconds and the second in milliseconds. Together they lead to a timeout for the HTTP request. If a timeout occurs, an error condition is triggered which returns a record with status code <span class="SimpleMath">0</span> and status being the timeout error message.</p>
+
+<p>You can change the timeout by accessing the two entries of this write protected list variable directly.</p>
+
+<p><a id="X81702FA07F2AF472" name="X81702FA07F2AF472"></a></p>
+
+<h5>7.1-4 CloseHTTPConnection</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; CloseHTTPConnection</code>( <var class="Arg">conn</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: nothing</p>
+
+<p>Closes the connection described by the connection record <var class="Arg">conn</var>. No error can possibly occur.</p>
+
+<p><a id="X7DBCB0B4801E4D6D" name="X7DBCB0B4801E4D6D"></a></p>
+
+<h5>7.1-5 SingleHTTPRequest</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SingleHTTPRequest</code>( <var class="Arg">hostname</var>, <var class="Arg">port</var>, <var class="Arg">method</var>, <var class="Arg">uri</var>, <var class="Arg">header</var>, <var class="Arg">body</var>, <var class="Arg">target</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a record</p>
+
+<p>The arguments are as the corresponding ones in the functions <code class="func">OpenHTTPConnection</code> (<a href="chap7.html#X7B5588D5856BE6DD"><span class="RefLink">7.1-1</span></a>) and <code class="func">HTTPRequest</code> (<a href="chap7.html#X80FF9E307BDA0659"><span class="RefLink">7.1-2</span></a>) respectively. This function opens an HTTP connection, tries a single HTTP request and immediately closes the connection again. The result is as for the <code class="func">HTTPRequest</code> (<a href="chap7.html#X80FF9E307BDA0659"><span class="RefLink">7.1-2</span></a>) function. If an error occurs during the opening of the connection, the <code class="keyw">statuscode</code> value of the result is <span class="SimpleMath">0</span> and the error message is stored in the <code class="keyw">status</code> component of the result.</p>
+
+<p>The previous function allows for a very simple implementation of a function that checks, whether your current <strong class="pkg">GAP</strong> installation is up to date:</p>
+
+<p><a id="X78BAF7A77F6BE631" name="X78BAF7A77F6BE631"></a></p>
+
+<h5>7.1-6 CheckForUpdates</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; CheckForUpdates</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: nothing</p>
+
+<p>This function accesses a web page in St. Andrews and runs some <strong class="pkg">GAP</strong> code from there. This code knows all the currently released versions of <strong class="pkg">GAP</strong> and its packages. It prints out a summary and possibly suggests upgrades. If you do not want to executed code downloaded from the internet, then do not call this function.</p>
+
+<p>More concretely, the page accessed is <span class="URL"><a href="http://www.gap-system.org/Download/upgrade.html">http://www.gap-system.org/Download/upgrade.html</a></span> and the code executed is a single call to the function <code class="code">SuggestUpgrades</code> function in the <strong class="pkg">GAP</strong> library.</p>
+
+<p><a id="X872B174F7FFD345B" name="X872B174F7FFD345B"></a></p>
+
+<h5>7.1-7 ReadWeb</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ReadWeb</code>( <var class="Arg">URL</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: nothing</p>
+
+<p>This function downloads the file from the given uniform resource locator <var class="Arg">URL</var> using the HTTP protocol and reads the contents into <strong class="pkg">GAP</strong> using <code class="func">Read</code> (<a href="/Users/mhorn/Projekte/GAP/repos/doc/ref/chap9_mj.html#X8373AC6B7D5F9167"><span class="RefLink">Reference: Read</span></a>).</p>
+
+<p>Note that this can execute arbitrary code on your machine with the privileges of the <strong class="pkg">GAP</strong> job running, so you should be very careful what files you download and execute. You have been warned!</p>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap6.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap8.html">[Next Chapter]</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chap8.html">8</a>  <a href="chap9.html">9</a>  <a href="chap10.html">10</a>  <a href="chap11.html">11</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

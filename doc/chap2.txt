@@ -1,0 +1,107 @@
+  
+  [1X2 [33X[0;0YInstallation of the [5XIO[105X[101X[1X-package[133X[101X
+  
+  [33X[0;0YTo  get the newest version of this [5XGAP[105X 4 package download one of the archive
+  files[133X
+  
+  [30X    [33X[0;6Y[11Xio-x.x.tar.gz[111X[133X
+  
+  [30X    [33X[0;6Y[11Xio-x.x.tar.bz2[111X[133X
+  
+  [30X    [33X[0;6Y[11Xio-x.x.zip[111X[133X
+  
+  [33X[0;0Yand unpack it using[133X
+  
+  gunzip io-x.x.tar.gz; tar xvf io-x.x.tar
+  
+  [33X[0;0Yor[133X
+  
+  bzip2 -d io-x.x.tar.bz2; tar xvf io-x.x.tar
+  
+  [33X[0;0Yor[133X
+  
+  unzip -x io-x.x.zip
+  
+  [33X[0;0Yrespectively.[133X
+  
+  [33X[0;0YDo  this  in a directory called [21X[11Xpkg[111X[121X, preferably (but not necessarily) in the
+  [21X[11Xpkg[111X[121X  subdirectory  of  your  [5XGAP[105X  4  installation. It creates a subdirectory
+  called [21X[11Xio[111X[121X.[133X
+  
+  [33X[0;0YThe package will not work without the following compilation step.[133X
+  
+  [33X[0;0YTo compile the C part of the package do (in the [11Xpkg[111X directory)[133X
+  
+      cd io
+      ./configure
+      make
+  
+  [33X[0;0YIf  you installed the package in another [21X[11Xpkg[111X[121X directory than the standard [21X[11Xpkg[111X[121X
+  directory  in  your  [5XGAP[105X  4  installation,  then  you have to do two things.
+  Firstly during compilation you have to use the option [10X--with-gaproot=PATH[110X of
+  the [11Xconfigure[111X script where [21XPATH[121X is a path to the main [5XGAP[105X root directory (if
+  not given the default [21X[11X../..[111X[121X is assumed).[133X
+  
+  [33X[0;0YSecondly  you  have to specify the path to the directory containing your [21X[11Xpkg[111X[121X
+  directory  to  [5XGAP[105X's  list  of directories. This can be done by starting [5XGAP[105X
+  with  the [21X[11X-l[111X[121X command line option followed by the name of the directory and a
+  semicolon.  Then  your  directory  is  prepended  to the list of directories
+  searched.  Otherwise the package is not found by [5XGAP[105X. Of course, you can add
+  this option to your [5XGAP[105X startup script.[133X
+  
+  [33X[0;0YIf  you  installed  [5XGAP[105X  on  several  architectures,  you  must  execute the
+  configure/make  step  for  each of the architectures. You can either do this
+  immediately after configuring and compiling [5XGAP[105X itself on this architecture,
+  or  alternatively  (when  using  version  4.5  of  [5XGAP[105X  or  newer)  set  the
+  environment  variable  [10XCONFIGNAME[110X  to the name of the configuration you used
+  when  compiling  [5XGAP[105X  before  running  [10X./configure[110X.  Note  however that your
+  compiler  choice  and flags (environment variables [10XCC[110X and [10XCFLAGS[110X) need to be
+  chosen  to  match the setup of the original [5XGAP[105X compilation. For example you
+  have to specify 32-bit or 64-bit mode correctly![133X
+  
+  
+  [1X2.1 [33X[0;0YStatic linking[133X[101X
+  
+  [33X[0;0YThis  feature does not work in this version of the package. We leave the old
+  documentation  here  for  the  case that the feature will be reenabled inthe
+  future.[133X
+  
+  [33X[0;0YThis might be interesting for M$ Windows users, as dynamic loading of binary
+  modules  does  not  always  work there. You can also create a new statically
+  linked [21X[11Xgap[111X[121X binary as follows:[133X
+  
+  [33X[0;0YGo  into  the main [5XGAP[105X directory and then into [11Xbin/BINDIR[111X. Here [11XBINDIR[111X means
+  the  directory  containing  the  [21X[11Xgap[111X[121X  executable  after  compiling [21X[11Xgap[111X[121X. This
+  directory  also  contains  the  [5XGAP[105X  compiler script [21X[11Xgac[111X[121X. Assuming IO in the
+  standard location you can then say[133X
+  
+      ./gac -o gap-static -p "-DIOSTATIC -I../../pkg/io/bin/BINDIR" \
+          -P "-static" ../../pkg/io/src/io.c
+  
+  [33X[0;0YThen  copy  your [21X[11Xgap[111X[121X start script to, say, [21X[11Xgaps[111X[121X and change the references to
+  the [5XGAP[105X binary to [21X[11Xgap-static[111X[121X.[133X
+  
+  [33X[0;0YNote  that  you  have  to  replace  [11XBINDIR[111X  by  the  name containing the [21X[11Xgap[111X[121X
+  executable  after  compiling GAP as above. If you have installed the package
+  in  a  different  place  than the standard, you have to replace [21X[11X../..[111X[121X in the
+  above command by the path to the directory containing the [21X[11Xpkg[111X[121X directory into
+  which  you installed [5XIO[105X. If you want to install more than one package with a
+  C-part  like  this  package,  you  can  still create a statically linked [5XGAP[105X
+  executable  by  combining  all  the  compile and link options and all the .c
+  files as in the ./gac command above. For the IO package, you have to add[133X
+  
+      -DIOSTATIC -I../../pkg/io/bin/BINDIR
+  
+  [33X[0;0Yto the string of the -p option and the file[133X
+  
+    ../../pkg/io/src/io.c
+  
+  [33X[0;0Ysomewhere  on  the  command  line.  As  above,  [21X[11X../..[111X[121X  and [21X[11XBINDIR[111X[121X have to be
+  replaced if you installed in a non-standard location.[133X
+  
+  
+  [1X2.2 [33X[0;0YRecompiling the documentation[133X[101X
+  
+  [33X[0;0YRecompiling  the  documentation  is possible by the command [21X[11Xgap makedoc.g[111X[121X in
+  the [11Xio[111X directory. But this should not be necessary.[133X
+  

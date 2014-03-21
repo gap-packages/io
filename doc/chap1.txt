@@ -1,0 +1,23 @@
+  
+  [1X1 [33X[0;0YPreface[133X[101X
+  
+  [33X[0;0YThe  purpose of this package is to allow efficient and flexible input/output
+  operations from [5XGAP[105X. This is achieved by providing bindings to the low-level
+  I/O functions in the C-library. On top of this an implementation of buffered
+  I/O  in the [5XGAP[105X language is provided. Further, a framework for serialisation
+  of  arbitrary  [5XGAP[105X objects is implemented. Finally, an implementation of the
+  client side of the HTTP protocol is included in the package.[133X
+  
+  [33X[0;0YThis package allows to use file based I/O, access to links and file systems,
+  pipes, sockets, and the UDP and TCP/IP protocols.[133X
+  
+  [33X[0;0YBy  default  the  [5XIO[105X  package  is not automatically loaded by [5XGAP[105X when it is
+  installed.  You  must  load  the  package with [10XLoadPackage("IO");[110X before its
+  functions become available.[133X
+  
+  [33X[0;0YPlease, send me an e-mail ([7Xmailto:neunhoef@mcs.st-and.ac.uk[107X) if you have any
+  questions, remarks, suggestions, etc. concerning this package. Also, I would
+  like to hear about applications of this package.[133X
+  
+  [33X[0;0YMax Neunhöffer[133X
+  

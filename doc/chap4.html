@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>GAP (IO) - Chapter 4: High level functions for buffered I/O</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+<script src="manual.js" type="text/javascript"></script>
+<script type="text/javascript">overwriteStyle();</script>
+</head>
+<body class="chap4"  onload="jscontent()">
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chap8.html">8</a>  <a href="chap9.html">9</a>  <a href="chap10.html">10</a>  <a href="chap11.html">11</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap3.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap5.html">[Next Chapter]</a>&nbsp;  </div>
+
+<p><a id="X7D6A3F7178CB6169" name="X7D6A3F7178CB6169"></a></p>
+<div class="ChapSects"><a href="chap4.html#X7D6A3F7178CB6169">4 <span class="Heading">High level functions for buffered I/O</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4.html#X7F697A8884B57F27">4.1 <span class="Heading">Types and the creation of <code class="code">File</code> objects</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X80C9B80A80E3A555">4.1-1 IsFile</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7DDB0BA6836DA208">4.1-2 IO_WrapFD</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7EC160D07E815DBB">4.1-3 IO_File</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4.html#X818FA8A37C8BBB95">4.2 <span class="Heading">Reading and writing</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X865A873E78C822B7">4.2-1 IO_ReadUntilEOF</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7D2686ED854BEF95">4.2-2 IO_ReadBlock</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X8738708E7B9DF8DB">4.2-3 IO_ReadLine</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X81E72756806C0945">4.2-4 IO_ReadLines</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X87E0AC547835F21D">4.2-5 IO_HasData</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X84F3D862836BF17C">4.2-6 IO_Read</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X84EB06707D1BD3F1">4.2-7 IO_Write</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X83A03ACB81F53BB1">4.2-8 IO_WriteLine</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X87CE6EC17C1573AC">4.2-9 IO_WriteLines</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7873A49F7CC7ECFB">4.2-10 IO_Flush</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7870634278F6C69F">4.2-11 IO_WriteFlush</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X80CF240F78664DF4">4.2-12 IO_ReadyForWrite</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X84052F9886ADED0D">4.2-13 IO_WriteNonBlocking</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7C5786E07813434B">4.2-14 IO_ReadyForFlush</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X80E977B48771D207">4.2-15 IO_FlushNonBlocking</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X820DA9C97C2E80BA">4.2-16 IO_Close</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4.html#X87C3D1B984960984">4.3 <span class="Heading">Other functions</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7F893EFC7D0C7BF2">4.3-1 IO_GetFD</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X86666C9681EA7297">4.3-2 IO_GetWBuf</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X81CA6EE88062010E">4.3-3 IO_Select</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X84B16DB878265F02">4.3-4 IO_ListDir</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7D849D987800A0F6">4.3-5 ChangeCurrentDirectory</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X8568CE6684C90CE5">4.3-6 IO_MakeIPAddressPort</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7F9AAE018474E1D8">4.3-7 IO_Environment</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7CF3DB5081A91600">4.3-8 IO_MakeEnvList</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4.html#X85BB2BA684485CD6">4.4 <span class="Heading">Inter process communication</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X84E91FE27A7860F3">4.4-1 IO_FindExecutable</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7C43017E7AC5973A">4.4-2 IO_CloseAllFDs</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7891F56386C008CE">4.4-3 IO_Popen</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7E05CF6481CBC0A1">4.4-4 IO_Popen2</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7975BC6D80BC71E5">4.4-5 IO_Popen3</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X813219C17FB54731">4.4-6 IO_StartPipeline</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X86D61FAE871B23E8">4.4-7 IO_StringFilterFile</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X83E765D783531845">4.4-8 IO_FileFilterString</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X801CE3708656FB00">4.4-9 IO_FilteredFile</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7D62E9C57F1F96FB">4.4-10 IO_SendStringBackground</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X8484B0CD7836A19E">4.4-11 IO_PipeThrough</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7A9ACA3979635506">4.4-12 IO_PipeThroughWithError</a></span>
+</div></div>
+</div>
+
+<h3>4 <span class="Heading">High level functions for buffered I/O</span></h3>
+
+<p>The functions in the previous sections are intended to be a possibility for direct access to the low level I/O functions in the C library. Thus, the calling conventions are strictly as in the original.</p>
+
+<p>The functionality described in this section is implemented completely in the <strong class="pkg">GAP</strong> language and is intended to provide a good interface for programming in <strong class="pkg">GAP</strong>. The fundamental object for I/O on the C library level is the file descriptor, which is just a non-negative integer representing an open file of the process. The basic idea is to wrap up file descriptors in <strong class="pkg">GAP</strong> objects that do the buffering.</p>
+
+<p>Note that considerable care has been taken to ensure that one can do I/O multiplexing with buffered I/O. That is, one always has the possibility to make sure before a read or write operation, that this read or write operation will not block. This is crucial when one wants to serve more than one I/O channel from the same (single-threaded) <strong class="pkg">GAP</strong> process. This design principle sometimes made it necessary to have more than one function for a certain operation. Those functions usually differ in a subtle way with respect to their blocking behaviour.</p>
+
+<p>One remark applies again to nearly all functions presented here: If an error is indicated by the returned value <code class="keyw">fail</code> one can use the library function <code class="func">LastSystemError</code> (<a href="/Users/mhorn/Projekte/GAP/repos/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>) to find out more about the cause of the error. This fact is not mentioned with every single function.</p>
+
+<p><a id="X7F697A8884B57F27" name="X7F697A8884B57F27"></a></p>
+
+<h4>4.1 <span class="Heading">Types and the creation of <code class="code">File</code> objects</span></h4>
+
+<p>The wrapped file objects are in the following category:</p>
+
+<p><a id="X80C9B80A80E3A555" name="X80C9B80A80E3A555"></a></p>
+
+<h5>4.1-1 IsFile</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsFile</code>( <var class="Arg">o</var> )</td><td class="tdright">( category )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
+
+<p>The category of <code class="code">File</code> objects.</p>
+
+<p>To create objects in this category, one uses the following function:</p>
+
+<p><a id="X7DDB0BA6836DA208" name="X7DDB0BA6836DA208"></a></p>
+
+<h5>4.1-2 IO_WrapFD</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_WrapFD</code>( <var class="Arg">fd</var>, <var class="Arg">rbufsize</var>, <var class="Arg">wbufsize</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a <code class="code">File</code> object</p>
+
+<p>The argument <var class="Arg">fd</var> must be a file descriptor (i.e. an integer) or -1 (see below).</p>
+
+<p><var class="Arg">rbufsize</var> can either be <code class="keyw">false</code> for unbuffered reading or an integer buffer size or a string. If it is an integer, a read buffer of that size is used. If it is a string, then <var class="Arg">fd</var> must be -1 and a <code class="code">File</code> object that reads from that string is created.</p>
+
+<p><var class="Arg">wbufsize</var> can either be <code class="keyw">false</code> for unbuffered writing or an integer buffer size or a string. If it is an integer, a write buffer of that size is used. If it is a string, then <var class="Arg">fd</var> must be -1 and a <code class="code">File</code> object that appends to that string is created.</p>
+
+<p>The result of this function is a new <code class="code">File</code> object.</p>
+
+<p>A convenient way to do this for reading or writing of files on disk is the following function:</p>
+
+<p><a id="X7EC160D07E815DBB" name="X7EC160D07E815DBB"></a></p>
+
+<h5>4.1-3 IO_File</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_File</code>( <var class="Arg">filename</var>[, <var class="Arg">mode</var>] )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_File</code>( <var class="Arg">filename</var>[, <var class="Arg">bufsize</var>] )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_File</code>( <var class="Arg">filename</var>, <var class="Arg">mode</var>, <var class="Arg">bufsize</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a <code class="code">File</code> object or <code class="keyw">fail</code></p>
+
+<p>The argument <var class="Arg">filename</var> must be a string specifying the path name of the file to work on. <var class="Arg">mode</var> must also be a string with possible values "r", "w", or "a", meaning read access, write access (with creating and truncating), and append access respectively. If <var class="Arg">mode</var> is omitted, it defaults to "r". <var class="Arg">bufsize</var>, if given, must be a positive integer or <code class="code">false</code>, otherwise it defaults to <code class="code">IO.DefaultBufSize</code>. Internally, the <code class="func">IO_open</code> (<a href="chap3.html#X8731A44E8032D9D2"><span class="RefLink">3.2-39</span></a>) function is used and the result file descriptor is wrapped using <code class="func">IO_WrapFD</code> (<a href="chap4.html#X7DDB0BA6836DA208"><span class="RefLink">4.1-2</span></a>) with <var class="Arg">bufsize</var> as the buffer size.</p>
+
+<p>The result is either <code class="keyw">fail</code> in case of an error or a <code class="code">File</code> object in case of success.</p>
+
+<p>Note that there is a similar function <code class="func">IO_FilteredFile</code> (<a href="chap4.html#X801CE3708656FB00"><span class="RefLink">4.4-9</span></a>) which also creates a <code class="code">File</code> object but with additional functionality with respect to a pipeline for filtering. It is described in its section in Section <a href="chap4.html#X85BB2BA684485CD6"><span class="RefLink">4.4</span></a>. There is some more low-level functionality to acquire open file descriptors. These can be wrapped into <code class="code">File</code> objects using <code class="func">IO_WrapFD</code> (<a href="chap4.html#X7DDB0BA6836DA208"><span class="RefLink">4.1-2</span></a>).</p>
+
+<p><a id="X818FA8A37C8BBB95" name="X818FA8A37C8BBB95"></a></p>
+
+<h4>4.2 <span class="Heading">Reading and writing</span></h4>
+
+<p>Once a <code class="code">File</code> object is created, one can use the following functions on it:</p>
+
+<p><a id="X865A873E78C822B7" name="X865A873E78C822B7"></a></p>
+
+<h5>4.2-1 IO_ReadUntilEOF</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_ReadUntilEOF</code>( <var class="Arg">f</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a string or <code class="keyw">fail</code></p>
+
+<p>This function reads all data from the file <var class="Arg">f</var> until the end of file. The data is returned as a <strong class="pkg">GAP</strong> string. If the file is already at end of file, an empty string is returned. If an error occurs, then <code class="keyw">fail</code> is returned. Note that you still have to call <code class="func">IO_Close</code> (<a href="chap4.html#X820DA9C97C2E80BA"><span class="RefLink">4.2-16</span></a>) on the <code class="code">File</code> object to properly close the file later.</p>
+
+<p><a id="X7D2686ED854BEF95" name="X7D2686ED854BEF95"></a></p>
+
+<h5>4.2-2 IO_ReadBlock</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_ReadBlock</code>( <var class="Arg">f</var>, <var class="Arg">len</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a string or <code class="keyw">fail</code></p>
+
+<p>This function gets two arguments, the first argument <var class="Arg">f</var> must be a <code class="code">File</code> object and the second argument <var class="Arg">len</var> must be a positive integer. The function tries to read <var class="Arg">len</var> bytes and returns a string of that length. If and only if the end of file is reached earlier, fewer bytes are returned. If an error occurs, <code class="keyw">fail</code> is returned. Note that this function blocks until either <var class="Arg">len</var> bytes are read, or the end of file is reached, or an error occurs. For the case of pipes or internet connections it is possible that currently no more data is available, however, by definition the end of file is only reached after the connection has been closed by the other side!</p>
+
+<p><a id="X8738708E7B9DF8DB" name="X8738708E7B9DF8DB"></a></p>
+
+<h5>4.2-3 IO_ReadLine</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_ReadLine</code>( <var class="Arg">f</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a string or <code class="keyw">fail</code></p>
+
+<p>This function gets exactly one argument, which must be a <code class="code">File</code> object <var class="Arg">f</var>. It reads one line of data, where the definition of line is operating system dependent. The line end character(s) are included in the result. The function returns a string with the line in case of success and <code class="keyw">fail</code> in case of an error. In the latter case, one can query the error with <code class="func">LastSystemError</code> (<a href="/Users/mhorn/Projekte/GAP/repos/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>).</p>
+
+<p>Note that the reading is done via the buffer of <var class="Arg">f</var>, such that this function will be quite fast also for large amounts of data.</p>
+
+<p>If the end of file is hit without a line end, the rest of the file is returned. If the file is already at end of file before the call, then a string of length 0 is returned. Note that this is not an error but the standard end of file convention!</p>
+
+<p><a id="X81E72756806C0945" name="X81E72756806C0945"></a></p>
+
+<h5>4.2-4 IO_ReadLines</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_ReadLines</code>( <var class="Arg">f</var>[, <var class="Arg">max</var>] )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a list of strings or <code class="keyw">fail</code></p>
+
+<p>This function gets one or two arguments, the first of which must always be a <code class="code">File</code> object <var class="Arg">f</var>. It reads lines of data (where the definition of line is operating system dependent) either until end of file (without a second argument) or up to <var class="Arg">max</var> lines (with a second argument <var class="Arg">max</var>. A list of strings with the result is returned, if everything went well and <code class="keyw">fail</code> oterwise. In the latter case, one can query the error with <code class="func">LastSystemError</code> (<a href="/Users/mhorn/Projekte/GAP/repos/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>).</p>
+
+<p>Note that the reading is done via the buffer of <var class="Arg">f</var>, such that this function will be quite fast also for large amounts of data.</p>
+
+<p>If the file is already at the end of file, the function returns a list of length 0. Note that this is not an error but the standard end of file convention!</p>
+
+<p><a id="X87E0AC547835F21D" name="X87E0AC547835F21D"></a></p>
+
+<h5>4.2-5 IO_HasData</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_HasData</code>( <var class="Arg">f</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
+
+<p>This function takes one argument <var class="Arg">f</var> which must be a <code class="code">File</code> object. It returns <code class="keyw">true</code> or <code class="keyw">false</code> according to whether there is data to read available in the file <var class="Arg">f</var>. A return value of <code class="keyw">true</code> guarantees that the next call to <code class="func">IO_Read</code> (<a href="chap4.html#X84F3D862836BF17C"><span class="RefLink">4.2-6</span></a>) on that file will succeed without blocking and return at least one byte or an empty string to indicate the end of file.</p>
+
+<p><a id="X84F3D862836BF17C" name="X84F3D862836BF17C"></a></p>
+
+<h5>4.2-6 IO_Read</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Read</code>( <var class="Arg">f</var>, <var class="Arg">len</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a string or <code class="keyw">fail</code></p>
+
+<p>The function gets two arguments, the first of which must be a <code class="code">File</code> object <var class="Arg">f</var>. The second argument must be a positive integer. The function reads data up to <var class="Arg">len</var> bytes. A string with the result is returned, if everything went well and <code class="keyw">fail</code> otherwise. In the latter case, one can query the error with <code class="func">LastSystemError</code> (<a href="/Users/mhorn/Projekte/GAP/repos/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>).</p>
+
+<p>Note that the reading is done via the buffer of <var class="Arg">f</var>, such that this function will be quite fast also for large amounts of data.</p>
+
+<p>If the file is already at the end of the file, the function returns a string of length 0. Note that this is not an error!</p>
+
+<p>If a previous call to <code class="func">IO_HasData</code> (<a href="chap4.html#X87E0AC547835F21D"><span class="RefLink">4.2-5</span></a>) or to <code class="func">IO_Select</code> (<a href="chap4.html#X81CA6EE88062010E"><span class="RefLink">4.3-3</span></a>) indicated that there is data available to read, then it is guaranteed that the function <code class="func">IO_Read</code> does not block and returns at least one byte if the file is not yet at end of file and an empty string otherwise.</p>
+
+<p><a id="X84EB06707D1BD3F1" name="X84EB06707D1BD3F1"></a></p>
+
+<h5>4.2-7 IO_Write</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Write</code>( <var class="Arg">f</var>[, <var class="Arg">things</var>, <var class="Arg">...</var>] )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>This function can get an arbitrary number of arguments, the first of which must be a <code class="code">File</code> object <var class="Arg">f</var>. All the other arguments are just written to <var class="Arg">f</var> if they are strings. Otherwise, the <code class="keyw">String</code> function is called on them and the result is written out to <var class="Arg">f</var>.</p>
+
+<p>Note that the writing is done buffered. That is, the data is first written to the buffer and only really written out after the buffer is full or after the user explicitly calls <code class="func">IO_Flush</code> (<a href="chap4.html#X7873A49F7CC7ECFB"><span class="RefLink">4.2-10</span></a>) on <var class="Arg">f</var>.</p>
+
+<p>The result is either the number of bytes written in case of success or <code class="keyw">fail</code> in case of an error. In the latter case the error can be queried with <code class="func">LastSystemError</code> (<a href="/Users/mhorn/Projekte/GAP/repos/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>).</p>
+
+<p>Note that this function blocks until all data is at least written into the buffer and might block until data can be sent again if the buffer is full.</p>
+
+<p><a id="X83A03ACB81F53BB1" name="X83A03ACB81F53BB1"></a></p>
+
+<h5>4.2-8 IO_WriteLine</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_WriteLine</code>( <var class="Arg">f</var>, <var class="Arg">line</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>Behaves like <code class="func">IO_Write</code> (<a href="chap4.html#X84EB06707D1BD3F1"><span class="RefLink">4.2-7</span></a>) but works on a single string <var class="Arg">line</var> and sends an (operating system dependent) end of line string afterwards. Also <code class="func">IO_Flush</code> (<a href="chap4.html#X7873A49F7CC7ECFB"><span class="RefLink">4.2-10</span></a>) is called automatically after the operation, such that one can be sure, that the data is actually written out after the function has completed.</p>
+
+<p><a id="X87CE6EC17C1573AC" name="X87CE6EC17C1573AC"></a></p>
+
+<h5>4.2-9 IO_WriteLines</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_WriteLines</code>( <var class="Arg">f</var>, <var class="Arg">list</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>Behaves like <code class="func">IO_Write</code> (<a href="chap4.html#X84EB06707D1BD3F1"><span class="RefLink">4.2-7</span></a>) but works on a list of strings <var class="Arg">list</var> and sends an (operating system dependent) end of line string after each string in the list. Also <code class="func">IO_Flush</code> (<a href="chap4.html#X7873A49F7CC7ECFB"><span class="RefLink">4.2-10</span></a>) is called automatically after the operation, such that one can be sure, that the data is actually written out after the function has completed.</p>
+
+<p><a id="X7873A49F7CC7ECFB" name="X7873A49F7CC7ECFB"></a></p>
+
+<h5>4.2-10 IO_Flush</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Flush</code>( <var class="Arg">f</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
+
+<p>This function gets one argument <var class="Arg">f</var>, which must be a <code class="code">File</code> object. It writes out all the data that is in the write buffer. This is not necessary before the call to the function <code class="func">IO_Close</code> (<a href="chap4.html#X820DA9C97C2E80BA"><span class="RefLink">4.2-16</span></a>), since that function calls <code class="func">IO_Flush</code> automatically. However, it is necessary to call <code class="func">IO_Flush</code> after calls to <code class="func">IO_Write</code> (<a href="chap4.html#X84EB06707D1BD3F1"><span class="RefLink">4.2-7</span></a>) to be sure that the data is really sent out. The function returns <code class="keyw">true</code> if everything goes well and <code class="keyw">fail</code> if an error occurs.</p>
+
+<p>Remember that the functions <code class="func">IO_WriteLine</code> (<a href="chap4.html#X83A03ACB81F53BB1"><span class="RefLink">4.2-8</span></a>) and <code class="func">IO_WriteLines</code> (<a href="chap4.html#X87CE6EC17C1573AC"><span class="RefLink">4.2-9</span></a>) implicitly call <code class="func">IO_Flush</code> after they are done.</p>
+
+<p>Note that this function might block until all data is actually written to the file descriptor.</p>
+
+<p><a id="X7870634278F6C69F" name="X7870634278F6C69F"></a></p>
+
+<h5>4.2-11 IO_WriteFlush</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_WriteFlush</code>( <var class="Arg">f</var>[, <var class="Arg">things</var>] )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>This function behaves like <code class="func">IO_Write</code> (<a href="chap4.html#X84EB06707D1BD3F1"><span class="RefLink">4.2-7</span></a>) followed by a call to <code class="func">IO_Flush</code> (<a href="chap4.html#X7873A49F7CC7ECFB"><span class="RefLink">4.2-10</span></a>). It returns either the number of bytes written or <code class="keyw">fail</code> if an error occurs.</p>
+
+<p><a id="X80CF240F78664DF4" name="X80CF240F78664DF4"></a></p>
+
+<h5>4.2-12 IO_ReadyForWrite</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_ReadyForWrite</code>( <var class="Arg">f</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
+
+<p>This function takes one argument <var class="Arg">f</var> which must be a <code class="code">File</code> object. It returns <code class="keyw">true</code> or <code class="keyw">false</code> according to whether the file <var class="Arg">f</var> is ready to write. A return value of <code class="keyw">true</code> guarantees that the next call to <code class="func">IO_WriteNonBlocking</code> (<a href="chap4.html#X84052F9886ADED0D"><span class="RefLink">4.2-13</span></a>) on that file will succeed without blocking and accept at least one byte.</p>
+
+<p><a id="X84052F9886ADED0D" name="X84052F9886ADED0D"></a></p>
+
+<h5>4.2-13 IO_WriteNonBlocking</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_WriteNonBlocking</code>( <var class="Arg">f</var>, <var class="Arg">st</var>, <var class="Arg">pos</var>, <var class="Arg">len</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>This function takes four arguments. The first one <var class="Arg">f</var> must be a <code class="code">File</code> object, the second <var class="Arg">st</var> a string, and the arguments <var class="Arg">pos</var> and <var class="Arg">len</var> must be integers, such that positions <span class="SimpleMath"><var class="Arg">pos</var>+1</span> until <span class="SimpleMath"><var class="Arg">pos</var>+<var class="Arg">len</var></span> are bound in <var class="Arg">st</var>. The function tries to write up to <var class="Arg">len</var> bytes from <var class="Arg">st</var> from position <span class="SimpleMath"><var class="Arg">pos</var>+1</span> to the file <var class="Arg">f</var>. If a previous call to <code class="func">IO_ReadyForWrite</code> (<a href="chap4.html#X80CF240F78664DF4"><span class="RefLink">4.2-12</span></a>) or to <code class="func">IO_Select</code> (<a href="chap4.html#X81CA6EE88062010E"><span class="RefLink">4.3-3</span></a>) indicates that <var class="Arg">f</var> is writable, then it is guaranteed that the following call to <code class="func">IO_WriteNonBlocking</code> will not block and accept at least one byte of data. Note that it is not guaranteed that all <var class="Arg">len</var> bytes are written. The function returns the number of bytes written or <code class="keyw">fail</code> if an error occurs.</p>
+
+<p><a id="X7C5786E07813434B" name="X7C5786E07813434B"></a></p>
+
+<h5>4.2-14 IO_ReadyForFlush</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_ReadyForFlush</code>( <var class="Arg">f</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
+
+<p>This function takes one argument <var class="Arg">f</var> which must be a <code class="code">File</code> object. It returns <code class="keyw">true</code> or <code class="keyw">false</code> according to whether the file <var class="Arg">f</var> is ready to flush. A return value of <code class="keyw">true</code> guarantees that the next call to <code class="func">IO_FlushNonBlocking</code> (<a href="chap4.html#X80E977B48771D207"><span class="RefLink">4.2-15</span></a>) on that file will succeed without blocking and flush out at least one byte. Note that this does not guarantee, that this call succeeds to flush out the whole content of the buffer!</p>
+
+<p><a id="X80E977B48771D207" name="X80E977B48771D207"></a></p>
+
+<h5>4.2-15 IO_FlushNonBlocking</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_FlushNonBlocking</code>( <var class="Arg">f</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code>, <code class="keyw">false</code>, or <code class="keyw">fail</code></p>
+
+<p>This function takes one argument <var class="Arg">f</var> which must be a <code class="code">File</code> object. It tries to write all data in the writing buffer to the file descriptor. If this succeeds, the function returns <code class="keyw">true</code> and <code class="keyw">false</code> otherwise. If an error occurs, <code class="keyw">fail</code> is returned. If a previous call to <code class="func">IO_ReadyForFlush</code> (<a href="chap4.html#X7C5786E07813434B"><span class="RefLink">4.2-14</span></a>) or <code class="func">IO_Select</code> (<a href="chap4.html#X81CA6EE88062010E"><span class="RefLink">4.3-3</span></a>) indicated that <var class="Arg">f</var> is flushable, then it is guaranteed that the following call to <code class="func">IO_FlushNonBlocking</code> does not block. However, it is not guaranteed that <code class="keyw">true</code> is returned from that call.</p>
+
+<p><a id="X820DA9C97C2E80BA" name="X820DA9C97C2E80BA"></a></p>
+
+<h5>4.2-16 IO_Close</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Close</code>( <var class="Arg">f</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
+
+<p>This function closes the <code class="code">File</code> object <var class="Arg">f</var> after writing all data in the write buffer out and closing the file descriptor. All buffers are freed. In case of an error, the function returns <code class="keyw">fail</code> and otherwise <code class="keyw">true</code>. Note that for pipes to other processes this function collects data about the terminated processes using <code class="func">IO_WaitPid</code> (<a href="chap3.html#X80737A008450184F"><span class="RefLink">3.2-60</span></a>).</p>
+
+<p><a id="X87C3D1B984960984" name="X87C3D1B984960984"></a></p>
+
+<h4>4.3 <span class="Heading">Other functions</span></h4>
+
+<p><a id="X7F893EFC7D0C7BF2" name="X7F893EFC7D0C7BF2"></a></p>
+
+<h5>4.3-1 IO_GetFD</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_GetFD</code>( <var class="Arg">f</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer</p>
+
+<p>This function returns the real file descriptor that is behind the <code class="code">File</code> object <var class="Arg">f</var>.</p>
+
+<p><a id="X86666C9681EA7297" name="X86666C9681EA7297"></a></p>
+
+<h5>4.3-2 IO_GetWBuf</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_GetWBuf</code>( <var class="Arg">f</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a string or <code class="keyw">false</code></p>
+
+<p>This function gets one argument <var class="Arg">f</var> which must be a <code class="code">File</code> object and returns the writing buffer of that <code class="code">File</code> object. This is necessary for <code class="code">File</code> objects, that are not associated to a real file descriptor but just collect everything that was written in their writing buffer. Remember to use this function before closing the <code class="code">File</code> object.</p>
+
+<p><a id="X81CA6EE88062010E" name="X81CA6EE88062010E"></a></p>
+
+<h5>4.3-3 IO_Select</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Select</code>( <var class="Arg">r</var>, <var class="Arg">w</var>, <var class="Arg">f</var>, <var class="Arg">e</var>, <var class="Arg">t1</var>, <var class="Arg">t2</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>This function is the corresponding function to <code class="func">IO_select</code> (<a href="chap3.html#X81CA6EE88062010E"><span class="RefLink">3.2-51</span></a>) for buffered file access. It behaves similarly to that function. The differences are the following: There are four lists of files <var class="Arg">r</var>, <var class="Arg">w</var>, <var class="Arg">f</var>, and <var class="Arg">e</var>. They all can contain either integers (standing for file descriptors) or <code class="code">File</code> objects. The list <var class="Arg">r</var> is for checking, whether files or file descriptors are ready to read, the list <var class="Arg">w</var> is for checking whether they are ready to write, the list <var class="Arg">f</var> is for checking whether they are ready to flush, and the list <var class="Arg">e</var> is for checking whether they have exceptions.</p>
+
+<p>For <code class="code">File</code> objects it is always first checked, whether there is either data available in a reading buffer or space in a writing buffer. If so, they are immediately reported to be ready (this feature makes the list of <code class="code">File</code> objects to test for flushability necessary). For the remaining files and for all specified file descriptors, the function <code class="func">IO_select</code> (<a href="chap3.html#X81CA6EE88062010E"><span class="RefLink">3.2-51</span></a>) is called to get an overview about readiness. The timeout values <var class="Arg">t1</var> and <var class="Arg">t2</var> are set to zero for immediate returning if one of the requested buffers were ready.</p>
+
+<p><code class="func">IO_Select</code> returns the number of files or file descriptors that are ready to serve or <code class="keyw">fail</code> if an error occurs.</p>
+
+<p>The following function is a convenience function for directory access:</p>
+
+<p><a id="X84B16DB878265F02" name="X84B16DB878265F02"></a></p>
+
+<h5>4.3-4 IO_ListDir</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_ListDir</code>( <var class="Arg">pathname</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a list of strings or <code class="keyw">fail</code></p>
+
+<p>This function gets a string containing a path name as single argument and returns a list of strings that are the names of the files in that directory, or <code class="keyw">fail</code>, if an error occurred.</p>
+
+<p><a id="X7D849D987800A0F6" name="X7D849D987800A0F6"></a></p>
+
+<h5>4.3-5 ChangeCurrentDirectory</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ChangeCurrentDirectory</code>( <var class="Arg">pathname</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> on success and <code class="keyw">fail</code> on failure</p>
+
+<p>Changes the current directory. Returns <code class="keyw">true</code> on success and <code class="keyw">fail</code> on failure.</p>
+
+<p>The following function is used to create strings describing a pair of an IP address and a port number in a binary way. These strings can be used in connection with the C library functions <code class="code">connect</code>, <code class="code">bind</code>, <code class="code">recvfrom</code>, and <code class="code">sendto</code> for the arguments needing such address pairs.</p>
+
+<p><a id="X8568CE6684C90CE5" name="X8568CE6684C90CE5"></a></p>
+
+<h5>4.3-6 IO_MakeIPAddressPort</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_MakeIPAddressPort</code>( <var class="Arg">ipstring</var>, <var class="Arg">portnr</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a string</p>
+
+<p>This function gets a string <var class="Arg">ipstring</var> containing an IP address in dot notation, i.e. four numbers in the range from 0 to 255 separated by dots ".", and an integer <var class="Arg">portnr</var>, which is a port number. The result is a string of the correct length to be used for the low level C library functions, wherever IP address port number pairs are needed. The string <var class="Arg">ipstring</var> can also be a host name, which is then looked up using <code class="func">IO_gethostbyname</code> (<a href="chap3.html#X7DD25BDC79EE65AD"><span class="RefLink">3.2-21</span></a>) to find the IP address.</p>
+
+<p><a id="X7F9AAE018474E1D8" name="X7F9AAE018474E1D8"></a></p>
+
+<h5>4.3-7 IO_Environment</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Environment</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a record or <code class="keyw">fail</code></p>
+
+<p>Takes no arguments, uses <code class="func">IO_environ</code> (<a href="chap3.html#X7F3E88AD7EFD52F4"><span class="RefLink">3.3-2</span></a>) to get the environment and returns a record in which the component names are the names of the environment variables and the values are the values. This can then be changed and the changed record can be given to <code class="func">IO_MakeEnvList</code> (<a href="chap4.html#X7CF3DB5081A91600"><span class="RefLink">4.3-8</span></a>) to produce again a list which can be used for <code class="func">IO_execve</code> (<a href="chap3.html#X875D9A9E8201D461"><span class="RefLink">3.2-13</span></a>) as third argument.</p>
+
+<p><a id="X7CF3DB5081A91600" name="X7CF3DB5081A91600"></a></p>
+
+<h5>4.3-8 IO_MakeEnvList</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_MakeEnvList</code>( <var class="Arg">r</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a list of strings</p>
+
+<p>Takes a record as returned by <code class="func">IO_Environment</code> (<a href="chap4.html#X7F9AAE018474E1D8"><span class="RefLink">4.3-7</span></a>) and turns it into a list of strings as needed by <code class="func">IO_execve</code> (<a href="chap3.html#X875D9A9E8201D461"><span class="RefLink">3.2-13</span></a>) as third argument.</p>
+
+<p><a id="X85BB2BA684485CD6" name="X85BB2BA684485CD6"></a></p>
+
+<h4>4.4 <span class="Heading">Inter process communication</span></h4>
+
+<p><a id="X84E91FE27A7860F3" name="X84E91FE27A7860F3"></a></p>
+
+<h5>4.4-1 IO_FindExecutable</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_FindExecutable</code>( <var class="Arg">path</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">fail</code> or the path to an executable</p>
+
+<p>If the path name <var class="Arg">path</var> contains a slash, this function simply checks whether the string <var class="Arg">path</var> refers to an executable file. If so, <var class="Arg">path</var> is returned as is. Otherwise, <code class="keyw">fail</code> is returned. If the path name <var class="Arg">path</var> does not contain a slash, all directories in the environment variable <code class="file">PATH</code> are searched for an executable with name <var class="Arg">path</var>. If so, the full path to that executable is returned, otherwise <code class="keyw">fail</code>.</p>
+
+<p>This function is used whenever one of the following functions gets an argument that should refer to an executable.</p>
+
+<p><a id="X7C43017E7AC5973A" name="X7C43017E7AC5973A"></a></p>
+
+<h5>4.4-2 IO_CloseAllFDs</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_CloseAllFDs</code>( <var class="Arg">exceptions</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: nothing</p>
+
+<p>Closes all file descriptors except those listed in <var class="Arg">exceptions</var>, which must be a list of integers.</p>
+
+<p><a id="X7891F56386C008CE" name="X7891F56386C008CE"></a></p>
+
+<h5>4.4-3 IO_Popen</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Popen</code>( <var class="Arg">path</var>, <var class="Arg">argv</var>, <var class="Arg">mode</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a <code class="code">File</code> object or <code class="keyw">fail</code></p>
+
+<p>The argument <var class="Arg">path</var> must refer to an executable file in the sense of <code class="func">IO_FindExecutable</code> (<a href="chap4.html#X84E91FE27A7860F3"><span class="RefLink">4.4-1</span></a>).</p>
+
+<p>Starts a child process using the executable in <var class="Arg">path</var> with either stdout or stdin being a pipe. The argument <var class="Arg">mode</var> must be either the string "<code class="code">r</code>" or the string "<code class="code">w</code>".</p>
+
+<p>In the first case, the standard output of the child process will be the writing end of a pipe. A <code class="code">File</code> object for reading connected to the reading end of the pipe is returned. The standard input and standard error of the child process will be the same than the calling <strong class="pkg">GAP</strong> process.</p>
+
+<p>In the second case, the standard input of the child process will be the reading end of a pipe. A <code class="code">File</code> object for writing connected to the writing end of the pipe is returned. The standard output and standard error of the child process will be the same than the calling <strong class="pkg">GAP</strong> process.</p>
+
+<p>In case of an error, <code class="keyw">fail</code> is returned.</p>
+
+<p>The process will usually die, when the pipe is closed, but can also do so without that. The <code class="code">File</code> object remembers the process ID of the started process and the <code class="func">IO_Close</code> (<a href="chap4.html#X820DA9C97C2E80BA"><span class="RefLink">4.2-16</span></a>) function then calls <code class="func">IO_WaitPid</code> (<a href="chap3.html#X80737A008450184F"><span class="RefLink">3.2-60</span></a>) for it to acquire information about the terminated process.</p>
+
+<p>Note that <code class="func">IO_Popen</code> activates our SIGCHLD handler (see <code class="func">IO_InstallSIGCHLDHandler</code> (<a href="chap3.html#X8383E62D86BE30C6"><span class="RefLink">3.3-3</span></a>)).</p>
+
+<p>In either case the <code class="code">File</code> object will have the attribute "<code class="keyw">ProcessID</code>" set to the process ID of the child process.</p>
+
+<p><a id="X7E05CF6481CBC0A1" name="X7E05CF6481CBC0A1"></a></p>
+
+<h5>4.4-4 IO_Popen2</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Popen2</code>( <var class="Arg">path</var>, <var class="Arg">argv</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a record or <code class="keyw">fail</code></p>
+
+<p>The argument <var class="Arg">path</var> must refer to an executable file in the sense of <code class="func">IO_FindExecutable</code> (<a href="chap4.html#X84E91FE27A7860F3"><span class="RefLink">4.4-1</span></a>).</p>
+
+<p>A new child process is started using the executable in <var class="Arg">path</var> The standard input and standard output of it are pipes. The writing end of the input pipe and the reading end of the output pipe are returned as <code class="code">File</code> objects bound to two components "<code class="code">stdin</code>" and "<code class="code">stdout</code>" (resp.) of the returned record. This means, you have to <em>write</em> to "<code class="code">stdin</code>" and <em>read</em> from "<code class="code">stdout</code>" in the calling <strong class="pkg">GAP</strong> process. The standard error of the child process will be the same as the one of the calling <strong class="pkg">GAP</strong> process.</p>
+
+<p>Returns <code class="keyw">fail</code> if an error occurred.</p>
+
+<p>The process will usually die, when one of the pipes is closed. The <code class="code">File</code> objects remember the process ID of the called process and the function call to <code class="func">IO_Close</code> (<a href="chap4.html#X820DA9C97C2E80BA"><span class="RefLink">4.2-16</span></a>) for the <code class="code">stdout</code> object will call <code class="func">IO_WaitPid</code> (<a href="chap3.html#X80737A008450184F"><span class="RefLink">3.2-60</span></a>) for it to acquire information about the terminated process.</p>
+
+<p>Note that <code class="func">IO_Popen2</code> activates our SIGCHLD handler (see <code class="func">IO_InstallSIGCHLDHandler</code> (<a href="chap3.html#X8383E62D86BE30C6"><span class="RefLink">3.3-3</span></a>)).</p>
+
+<p>Both <code class="code">File</code> objects will have the attribute "<code class="keyw">ProcessID</code>" set to the process ID of the child process, which will also be bound to the "<code class="keyw">pid</code>" component of the returned record.</p>
+
+<p><a id="X7975BC6D80BC71E5" name="X7975BC6D80BC71E5"></a></p>
+
+<h5>4.4-5 IO_Popen3</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Popen3</code>( <var class="Arg">path</var>, <var class="Arg">argv</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a record or <code class="keyw">fail</code></p>
+
+<p>The argument <var class="Arg">path</var> must refer to an executable file in the sense of <code class="func">IO_FindExecutable</code> (<a href="chap4.html#X84E91FE27A7860F3"><span class="RefLink">4.4-1</span></a>).</p>
+
+<p>A new child process is started using the executable in <var class="Arg">path</var> The standard input, standard output, and standard error of it are pipes. The writing end of the input pipe, the reading end of the output pipe and the reading end of the error pipe are returned as <code class="code">File</code> objects bound to two components "<code class="code">stdin</code>", "<code class="code">stdout</code>", and "<code class="code">stderr</code>" (resp.) of the returned record. This means, you have to <em>write</em> to "<code class="code">stdin</code>" and <em>read</em> from "<code class="code">stdout</code>" and "<code class="code">stderr</code>" in the calling <strong class="pkg">GAP</strong> process.</p>
+
+<p>Returns <code class="keyw">fail</code> if an error occurred.</p>
+
+<p>The process will usually die, when one of the pipes is closed. All three <code class="code">File</code> objects will remember the process ID of the newly created process and the call to the <code class="func">IO_Close</code> (<a href="chap4.html#X820DA9C97C2E80BA"><span class="RefLink">4.2-16</span></a>) function for the <code class="code">stdout</code> object will call <code class="func">IO_WaitPid</code> (<a href="chap3.html#X80737A008450184F"><span class="RefLink">3.2-60</span></a>) for it to acquire information about the terminated child process.</p>
+
+<p>Note that <code class="func">IO_Popen3</code> activates our SIGCHLD handler (see <code class="func">IO_InstallSIGCHLDHandler</code> (<a href="chap3.html#X8383E62D86BE30C6"><span class="RefLink">3.3-3</span></a>)).</p>
+
+<p>All three <code class="code">File</code> objects will have the attribute "<code class="keyw">ProcessID</code>" set to the process ID of the child process, which will also be bound to the "<code class="keyw">pid</code>" component of the returned record.</p>
+
+<p><a id="X813219C17FB54731" name="X813219C17FB54731"></a></p>
+
+<h5>4.4-6 IO_StartPipeline</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_StartPipeline</code>( <var class="Arg">progs</var>, <var class="Arg">infd</var>, <var class="Arg">outfd</var>, <var class="Arg">switcherror</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a record or <code class="keyw">fail</code></p>
+
+<p>The argument <var class="Arg">progs</var> is a list of pairs, the first entry being a path to an executable (in the sense of <code class="func">IO_FindExecutable</code> (<a href="chap4.html#X84E91FE27A7860F3"><span class="RefLink">4.4-1</span></a>)), the second an argument list, the argument <var class="Arg">infd</var> is an open file descriptor for reading, <var class="Arg">outfd</var> is an open file descriptor for writing, both can be replaced by the string "<code class="keyw">open</code>" in which case a new pipe will be opened. The argument <var class="Arg">switcherror</var> is a boolean indicating whether standard error channels are also switched to the corresponding output channels.</p>
+
+<p>This function starts up all processes and connects them with pipes. The input of the first is switched to <var class="Arg">infd</var> and the output of the last to <var class="Arg">outfd</var>.</p>
+
+<p>Returns a record with the following components: <code class="keyw">pids</code> is a list of process ids if everything worked. For each process for which some error occurred the corresponding pid is replaced by <code class="keyw">fail</code>. The <code class="keyw">stdin</code> component is equal to <code class="keyw">false</code>, or to the file descriptor of the writing end of the newly created pipe which is connected to the standard input of the first of the new processes if <var class="Arg">infd</var> was "<code class="keyw">open</code>". The <code class="keyw">stdout</code> component is equal to <code class="keyw">false</code> or to the file descriptor of the reading end of the newly created pipe which is connected to the standard output of the last of the new processes if <var class="Arg">outfd</var> was "<code class="keyw">open</code>".</p>
+
+<p>Note that the SIGCHLD handler of the <strong class="pkg">IO</strong> package is installed by this function (see <code class="func">IO_InstallSIGCHLDHandler</code> (<a href="chap3.html#X8383E62D86BE30C6"><span class="RefLink">3.3-3</span></a>)) and that it lies in the responsibility of the caller to use <code class="func">IO_WaitPid</code> (<a href="chap3.html#X80737A008450184F"><span class="RefLink">3.2-60</span></a>) to ask for the status information of all child processes after their termination.</p>
+
+<p><a id="X86D61FAE871B23E8" name="X86D61FAE871B23E8"></a></p>
+
+<h5>4.4-7 IO_StringFilterFile</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_StringFilterFile</code>( <var class="Arg">progs</var>, <var class="Arg">filename</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a string or <code class="keyw">fail</code></p>
+
+<p>Reads the file with the name <var class="Arg">filename</var>, however, a pipeline is created by the processes described by <var class="Arg">progs</var> (see <code class="func">IO_StartPipeline</code> (<a href="chap4.html#X813219C17FB54731"><span class="RefLink">4.4-6</span></a>)) to filter the content of the file through the pipeline. The result is put into a <strong class="pkg">GAP</strong> string and returned. If something goes wrong, <code class="keyw">fail</code> is returned.</p>
+
+<p><a id="X83E765D783531845" name="X83E765D783531845"></a></p>
+
+<h5>4.4-8 IO_FileFilterString</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_FileFilterString</code>( <var class="Arg">filename</var>, <var class="Arg">progs</var>, <var class="Arg">st</var>[, <var class="Arg">append</var>] )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a string or <code class="keyw">fail</code></p>
+
+<p>Writes the content of the string <var class="Arg">st</var> to the file with the name <var class="Arg">filename</var>, however, a pipeline is created by the processes described by <var class="Arg">progs</var> (see <code class="func">IO_StartPipeline</code> (<a href="chap4.html#X813219C17FB54731"><span class="RefLink">4.4-6</span></a>)) to filter the content of the string through the pipeline. The result is put into the file. If the boolean value <var class="Arg">append</var> is given and equal to <code class="keyw">true</code>, then the data will be appended to the already existing file. If something goes wrong, <code class="keyw">fail</code> is returned.</p>
+
+<p><a id="X801CE3708656FB00" name="X801CE3708656FB00"></a></p>
+
+<h5>4.4-9 IO_FilteredFile</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_FilteredFile</code>( <var class="Arg">progs</var>, <var class="Arg">filename</var>[, <var class="Arg">mode</var>][, <var class="Arg">bufsize</var>] )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a <code class="code">File</code> object or <code class="keyw">fail</code></p>
+
+<p>This function is similar to <code class="func">IO_File</code> (<a href="chap4.html#X7EC160D07E815DBB"><span class="RefLink">4.1-3</span></a>) and behaves nearly identically. The only difference is that a filtering pipeline is switched between the file and the <code class="code">File</code> object such that all things read or written respectively are filtered through this pipeline of processes.</p>
+
+<p>The <code class="code">File</code> object remembers the started processes and upon the final call to <code class="func">IO_Close</code> (<a href="chap4.html#X820DA9C97C2E80BA"><span class="RefLink">4.2-16</span></a>) automatically uses the <code class="func">IO_WaitPid</code> (<a href="chap3.html#X80737A008450184F"><span class="RefLink">3.2-60</span></a>) function to acquire information from the terminated processes in the pipeline after their termination. This means that you do not have to call <code class="func">IO_WaitPid</code> (<a href="chap3.html#X80737A008450184F"><span class="RefLink">3.2-60</span></a>) any more after the call to <code class="func">IO_Close</code> (<a href="chap4.html#X820DA9C97C2E80BA"><span class="RefLink">4.2-16</span></a>).</p>
+
+<p>Note that <code class="func">IO_FilteredFile</code> activates our SIGCHLD handler (see <code class="func">IO_InstallSIGCHLDHandler</code> (<a href="chap3.html#X8383E62D86BE30C6"><span class="RefLink">3.3-3</span></a>)).</p>
+
+<p>The <code class="code">File</code> object will have the attribute "<code class="keyw">ProcessID</code>" set to the list of process IDs of the child processes.</p>
+
+<p><a id="X7D62E9C57F1F96FB" name="X7D62E9C57F1F96FB"></a></p>
+
+<h5>4.4-10 IO_SendStringBackground</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_SendStringBackground</code>( <var class="Arg">f</var>, <var class="Arg">st</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>This functions uses <code class="func">IO_Write</code> (<a href="chap4.html#X84EB06707D1BD3F1"><span class="RefLink">4.2-7</span></a>) to write the whole string <var class="Arg">st</var> to the <code class="code">File</code> object <var class="Arg">f</var>. However, this is done by forking off a child process identical to the calling <strong class="pkg">GAP</strong> process that does the sending. The calling <strong class="pkg">GAP</strong> process returns immediately, even before anything has been sent away with the result <code class="keyw">true</code>. The forked off sender process terminates itself immediately after it has sent all data away.</p>
+
+<p>The reason for having this function available is the following: If one uses <code class="func">IO_Popen2</code> (<a href="chap4.html#X7E05CF6481CBC0A1"><span class="RefLink">4.4-4</span></a>) or <code class="func">IO_Popen3</code> (<a href="chap4.html#X7975BC6D80BC71E5"><span class="RefLink">4.4-5</span></a>) to start up a child process with standard input and standard output being a pipe, then one usually has the problem, that the child process starts reading some data, but then wants to write data, before it received all data coming. If the calling <strong class="pkg">GAP</strong> process would first try to write all data and only start to read the output of the child process after sending away all data, a deadlock situation would occur. This is avoided with the forking and backgrounding approach.</p>
+
+<p>Remember to close the writing end of the standard input pipe in the calling <strong class="pkg">GAP</strong> process directly after <code class="func">IO_SendStringBackground</code> has returned, because otherwise the child process might not notice that all data has arrived, because the pipe persists! See the file <code class="file">popen2.g</code> in the <code class="file">example</code> directory for an example.</p>
+
+<p>Note that with most modern operating systems the forking off of an identical child process does in fact <em>not</em> mean a duplication of the total main memory used by both processes, because the operating system kernel will use "copy on write". However, if a garbage collection happens to become necessary during the sending of the data in the forked off sending process, this might trigger doubled memory usage.</p>
+
+<p><a id="X8484B0CD7836A19E" name="X8484B0CD7836A19E"></a></p>
+
+<h5>4.4-11 IO_PipeThrough</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_PipeThrough</code>( <var class="Arg">cmd</var>, <var class="Arg">args</var>, <var class="Arg">input</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a string or <code class="keyw">fail</code></p>
+
+<p>Starts the process with the executable given by the file name <var class="Arg">cmd</var> (in the sense of <code class="func">IO_FindExecutable</code> (<a href="chap4.html#X84E91FE27A7860F3"><span class="RefLink">4.4-1</span></a>)) with arguments in the argument list <var class="Arg">args</var> (a list of strings). The standard input and output of the started process are connected via pipes to the calling process. The content of the string <var class="Arg">input</var> is written to the standard input of the called process and its standard output is read and returned as a string.</p>
+
+<p>All the necessary I/O multiplexing and non-blocking I/O to avoid deadlocks is done in this function.</p>
+
+<p>This function properly does <code class="func">IO_WaitPid</code> (<a href="chap3.html#X80737A008450184F"><span class="RefLink">3.2-60</span></a>) to wait for the termination of the child process but does not restore the original <strong class="pkg">GAP</strong> SIGCHLD signal handler (see <code class="func">IO_InstallSIGCHLDHandler</code> (<a href="chap3.html#X8383E62D86BE30C6"><span class="RefLink">3.3-3</span></a>)).</p>
+
+<p><a id="X7A9ACA3979635506" name="X7A9ACA3979635506"></a></p>
+
+<h5>4.4-12 IO_PipeThroughWithError</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_PipeThroughWithError</code>( <var class="Arg">cmd</var>, <var class="Arg">args</var>, <var class="Arg">input</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a record or <code class="keyw">fail</code></p>
+
+<p>Starts the process with the executable given by the file name <var class="Arg">cmd</var> (in the sense of <code class="func">IO_FindExecutable</code> (<a href="chap4.html#X84E91FE27A7860F3"><span class="RefLink">4.4-1</span></a>)) with arguments in the argument list <var class="Arg">args</var> (a list of strings). The standard input, output and error of the started process are connected via pipes to the calling process. The content of the string <var class="Arg">input</var> is written to the standard input of the called process and its standard output and error are read and returned as a record with components <code class="keyw">out</code> and <code class="keyw">err</code>, which are strings.</p>
+
+<p>All the necessary I/O multiplexing and non-blocking I/O to avoid deadlocks is done in this function.</p>
+
+<p>This function properly does <code class="func">IO_WaitPid</code> (<a href="chap3.html#X80737A008450184F"><span class="RefLink">3.2-60</span></a>) to wait for the termination of the child process but does not restore the original <strong class="pkg">GAP</strong> SIGCHLD signal handler (see <code class="func">IO_InstallSIGCHLDHandler</code> (<a href="chap3.html#X8383E62D86BE30C6"><span class="RefLink">3.3-3</span></a>)).</p>
+
+<p>The functions returns either <code class="keyw">fail</code> if an error occurred, or otherwise a record with components <code class="keyw">out</code> and <code class="keyw">err</code> which are bound to strings containing the full standard output and standard error of the called process.</p>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap3.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap5.html">[Next Chapter]</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chap8.html">8</a>  <a href="chap9.html">9</a>  <a href="chap10.html">10</a>  <a href="chap11.html">11</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

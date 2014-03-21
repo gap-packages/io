@@ -1,0 +1,328 @@
+  
+  [1X8 [33X[0;0YBackground jobs using fork[133X[101X
+  
+  [33X[0;0YThis  chapter  describes a way to use multi-processor or multi-core machines
+  from  within [5XGAP[105X. In its current version the [5XGAP[105X system is a single threaded
+  and  single process system. However, modern operating systems allow, via the
+  [10Xfork[110X  system  call,  to  replicate  a  complete  process on the same machine
+  relatively  efficiently.  That  is,  at first after a [10Xfork[110X the two processes
+  actually use the same physical memory such that not much copying needs to be
+  done.  The child process is in exactly the same state as the parent process,
+  sharing  open  files,  network  connections  and  the complete status of the
+  workspace.  However,  whenever  a  page  of  memory  is  written, it is then
+  automatically  copied  using  new,  additional physical memory, such that it
+  behaves   like   a  completely  separate  process.  This  method  is  called
+  [21Xcopy-on-write[121X.[133X
+  
+  [33X[0;0YThus  this  is  a  method to parallelise certain computations. Note however,
+  that  from  the  point  of  time  when  the  [10Xfork[110X  has occurred, all further
+  communication between the two processes has to be realised via pipes or even
+  files.[133X
+  
+  [33X[0;0YThe operations and methods described in this chapter help to use [5XGAP[105X in this
+  way  and  implement  certain [21Xskeletons[121X of parallel programming to make these
+  readily  available  in  [5XGAP[105X.  Note  that  this implementation has its severe
+  limitations   and  should  probably  eventually  be  replaced  by  a  proper
+  multi-threaded version of [5XGAP[105X.[133X
+  
+  
+  [1X8.1 [33X[0;0YBackground jobs[133X[101X
+  
+  [33X[0;0YOne creates a background job with the following operation:[133X
+  
+  [1X8.1-1 BackgroundJobByFork[101X
+  
+  [29X[2XBackgroundJobByFork[102X( [3Xfun[103X, [3Xargs[103X[, [3Xopt[103X] ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ya background job object or [9Xfail[109X[133X
+  
+  [33X[0;0YThis  operation creates a background job using [2XIO_fork[102X ([14X3.2-19[114X) which starts
+  up  as an identical copy of the currently running [5XGAP[105X process. In this child
+  process  the  function  [3Xfun[103X is called with the argument list [3Xargs[103X. The third
+  argument  [3Xopt[103X  must be a record for options. The operation returns either an
+  object representing the background job or [9Xfail[109X if the startup did not work.[133X
+  
+  [33X[0;0YThis  operation  automatically  sets up two pipes for communication with the
+  child  process.  This  is  in  particular  used  to report the result of the
+  function  call  to  [3Xfun[103X  back  to the parent. However, if called without the
+  option  [10XTerminateImmediately[110X  (see below) the child process stays alive even
+  after  the  completion  of [3Xfun[103X and one can submit further argument lists for
+  subsequent  calls  to  [3Xfun[103X.  Of course, these additional argument lists will
+  have  to  be sent over a pipe to the child process. A special case is if the
+  argument  [3Xargs[103X  is  equal to [9Xfail[109X, in this case the child process is started
+  but  does not automatically call [3Xfun[103X but rather waits in an idle state until
+  an  argument  list  is  submitted  via  the  pipe  using  the [2XSubmit[102X ([14X8.1-6[114X)
+  operation described below.[133X
+  
+  [33X[0;0YThere  are  two  components defined which can be bound in the options record
+  [3Xopt[103X.  One  is  [10XTerminateImmediately[110X, if this is bound to [9Xtrue[109X then the child
+  process immediately terminates after the function [3Xfun[103X returns its result. In
+  this  case,  no pipe for communication from parent to child is created since
+  it  would never be used. Note that in this case one can still get the result
+  of the function [3Xfun[103X using the [2XPickup[102X ([14X8.1-5[114X) operation described below, even
+  when the child has already terminated, since the result is first transmitted
+  back to the parent before termination.[133X
+  
+  [33X[0;0YThe following operations are available to deal with background job objects:[133X
+  
+  [1X8.1-2 IsIdle[101X
+  
+  [29X[2XIsIdle[102X( [3Xjob[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X, [9Xfalse[109X or [9Xfail[109X[133X
+  
+  [33X[0;0YThis  operation  checks whether or not the background job represented by the
+  object [3Xjob[103X has already finished the function call to its worker function and
+  is  now idle. If so, [9Xtrue[109X is returned. If it is still running and working on
+  the  worker  function,  [9Xfalse[109X is returned. If the background job has already
+  terminated  altogether,  this  operation  returns [9Xfail[109X. Note that if a child
+  process  terminates  automatically  after the first completion of its worker
+  function  and  sending  the  result,  then  the  first  call to [2XIsIdle[102X after
+  completion  will  return  [9Xtrue[109X  to  indicate  successful  completion and all
+  subsequent calls will return [9Xfail[109X.[133X
+  
+  [1X8.1-3 HasTerminated[101X
+  
+  [29X[2XHasTerminated[102X( [3Xjob[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
+  
+  [33X[0;0YThis  operation  checks whether or not the background job represented by the
+  object [3Xjob[103X has already terminated. If so, [9Xtrue[109X is returned, if not, [9Xfalse[109X is
+  returned.[133X
+  
+  [1X8.1-4 WaitUntilIdle[101X
+  
+  [29X[2XWaitUntilIdle[102X( [3Xjob[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ythe result of the worker function or [9Xfail[109X[133X
+  
+  [33X[0;0YThis operation waits until the worker function of the background job [3Xjob[103X has
+  finished  and  the  job  is  idle.  It then returns the result of the worker
+  function, which has automatically been transmitted to the parent process. If
+  the child process has died before completion [9Xfail[109X is returned.[133X
+  
+  [1X8.1-5 Pickup[101X
+  
+  [29X[2XPickup[102X( [3Xjob[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ythe result of the worker function or [9Xfail[109X[133X
+  
+  [33X[0;0YThis operation does the same as [2XWaitUntilIdle[102X ([14X8.1-4[114X).[133X
+  
+  [1X8.1-6 Submit[101X
+  
+  [29X[2XSubmit[102X( [3Xjob[103X, [3Xargs[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
+  
+  [33X[0;0YThis  submits  another  argument  list  [3Xargs[103X  for another call to the worker
+  function  in the background job [3Xjob[103X. It is an error if either the background
+  job  has  already  terminated or if it is still busy working on the previous
+  argument list. That is, one must only submit another argument in a situation
+  when [2XIsIdle[102X ([14X8.1-2[114X) would return [9Xtrue[109X. This is for example the case directly
+  after  a  successful call to [2XPickup[102X ([14X8.1-5[114X) or i [2XWaitUntilIdle[102X ([14X8.1-4[114X) which
+  did  not  return  [9Xfail[109X,  unless  the  background  job  was  created with the
+  [10XTerminateImmediately[110X option set to [9Xtrue[109X.[133X
+  
+  [33X[0;0YThis  operation  returns immediately after submission, when the new argument
+  list  has  been  sent to the child process through a pipe. In particular, it
+  does not await completion of the worker function for the new argument list.[133X
+  
+  [1X8.1-7 Kill[101X
+  
+  [29X[2XKill[102X( [3Xjob[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis  kills  the background job represented by the object [3Xjob[103X with immediate
+  effect.  No  more  results can be expected from it. Note that unless one has
+  created  the background job with the [10XTerminateImmediately[110X option set to [9Xtrue[109X
+  one  always  has  to  call  [2XKill[102X  on a background job eventually for cleanup
+  purposes.  Otherwise,  the  background  job  and the connecting pipes remain
+  alive until the parent [5XGAP[105X process terminates.[133X
+  
+  
+  [1X8.2 [33X[0;0YParallel programming skeletons[133X[101X
+  
+  [33X[0;0YIn  this section we document the operations for the available skeletons. For
+  a general description of these ideas see other sources.[133X
+  
+  [1X8.2-1 ParTakeFirstResultByFork[101X
+  
+  [29X[2XParTakeFirstResultByFork[102X( [3Xjobs[103X, [3Xargs[103X[, [3Xopt[103X] ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ya list of results or [9Xfail[109X[133X
+  
+  [33X[0;0YThe  argument  [3Xjobs[103X  must be a list of [5XGAP[105X functions and the argument [3Xargs[103X a
+  list  of  the  same  length  containing  argument  lists  with which the job
+  functions  can  be  called.  This operation starts up a background job using
+  [10Xfork[110X  for  each  of  the  functions in [3Xjobs[103X, calls it with the corresponding
+  argument list in [3Xargs[103X. As soon as any of the background jobs finishes with a
+  result,  [2XParTakeFirstResultByFork[102X  terminates all other jobs and reports the
+  results  found  so  far. Note that it can happen that two jobs finish [21Xat the
+  same  time[121X in the sense that both results are received before all other jobs
+  could  be  terminated. Therefore the result of [2XParTakeFirstResultByFork[102X is a
+  list,  in  which  position [22Xi[122X is bound if and only if job number [22Xi[122X returned a
+  result. So in the result at least one entry is bound but it is possible that
+  more than one entry is bound.[133X
+  
+  [33X[0;0YYou  can  specify  an overall timeout to give up the whole computation if no
+  job  finishes by setting the [10XTimeOut[110X component of the options record [3Xopt[103X. In
+  this  case  you  have  to  set it to a record with two components [10Xtv_sec[110X and
+  [10Xtv_usec[110X which are seconds and microseconds respectively, exactly as returned
+  by  the  [2XIO_gettimeofday[102X  ([14X3.2-27[114X) function. In the case of timeout an empty
+  list is returned.[133X
+  
+  [1X8.2-2 ParDoByFork[101X
+  
+  [29X[2XParDoByFork[102X( [3Xjobs[103X, [3Xargs[103X[, [3Xopt[103X] ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ya list of results or [9Xfail[109X[133X
+  
+  [33X[0;0YThe  argument  [3Xjobs[103X  must be a list of [5XGAP[105X functions and the argument [3Xargs[103X a
+  list  of  the  same  length  containing  argument  lists  with which the job
+  functions  can  be  called.  This operation starts up a background job using
+  [10Xfork[110X  for  each  of  the  functions in [3Xjobs[103X, calls it with the corresponding
+  argument  list  in [3Xargs[103X. As soon as all of the background jobs finish with a
+  result,  [2XParDoByFork[102X  reports  the  results  found.  Therefore the result of
+  [2XParDoByFork[102X  is  a list, in which position [22Xi[122X is bound to the result that job
+  number [22Xi[122X returned.[133X
+  
+  [33X[0;0YYou  can specify an overall timeout to stop the whole computation if not all
+  jobs  finish  in time by setting the [10XTimeOut[110X component of the options record
+  [3Xopt[103X.  In this case you have to set it to a record with two components [10Xtv_sec[110X
+  and  [10Xtv_usec[110X  which  are  seconds  and microseconds respectively, exactly as
+  returned  by the [2XIO_gettimeofday[102X ([14X3.2-27[114X) function. In the case of timeout a
+  list  is  returned  in  which the positions corresponding to those jobs that
+  have  already  finished  are  bound  to the respective results and the other
+  positions are unbound.[133X
+  
+  [1X8.2-3 ParListByFork[101X
+  
+  [29X[2XParListByFork[102X( [3Xl[103X, [3Xworker[103X[, [3Xopt[103X] ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ya list of results or [9Xfail[109X[133X
+  
+  [33X[0;0YThis  is  a  parallel  version  of  the [2XList[102X ([14XReference: Lists[114X) function. It
+  applies the function [3Xworker[103X to all elements of the list [3Xl[103X and returns a list
+  containing  the  results in corresponding positions. You have to specify the
+  component  [10XNumberJobs[110X  in  the  options  record [3Xopt[103X which indicates how many
+  background  processes  to  start.  You can optionally use the [10XTimeOut[110X option
+  exactly   as   for  [2XParDoByFork[102X  ([14X8.2-2[114X),  however,  if  a  timeout  occurs,
+  [2XParListByFork[102X returns [9Xfail[109X.[133X
+  
+  [33X[0;0YNote  that  the  usefulness  of  this operation is relatively limited, since
+  every  individual  result  has  to  be  sent back over a pipe from the child
+  process  to  the  parent  process.  Therefore  this  only makes sense if the
+  computation time for the worker function dominates the communication time.[133X
+  
+  [1X8.2-4 ParMapReduceByFork[101X
+  
+  [29X[2XParMapReduceByFork[102X( [3Xl[103X, [3Xmap[103X, [3Xreduce[103X[, [3Xopt[103X] ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ya value or [9Xfail[109X[133X
+  
+  [33X[0;0YThis  is  a  parallel  version  implementation  of  the  classical [10XMapReduce[110X
+  pattern.  It applies the function [3Xmap[103X to all elements of the list [3Xl[103X and then
+  reduces the result using the [3Xreduce[103X function which accepts two return values
+  of  [3Xmap[103X  and returns one of them. Thus, the final result is one return value
+  or  [9Xfail[109X if the startup of the jobs fails. You have to specify the component
+  [10XNumberJobs[110X  in  the  options  record [3Xopt[103X which indicates how many background
+  processes to start. You can optionally use the [10XTimeOut[110X option exactly as for
+  [2XParDoByFork[102X  ([14X8.2-2[114X),  however,  if  a  timeout  occurs,  [2XParMapReduceByFork[102X
+  returns [9Xfail[109X.[133X
+  
+  [33X[0;0YNote  that  this  can  be  very  useful  because  quite  often the cumulated
+  computation   time   for   all  the  worker  function  calls  dominates  the
+  communication time for a single result.[133X
+  
+  [33X[0;0YNote  that the next parallel skeleton is a worker farm which is described in
+  the following section.[133X
+  
+  
+  [1X8.3 [33X[0;0YWorker farms[133X[101X
+  
+  [33X[0;0YThe  parallel  skeleton of a worker farm is basically nothing but a bunch of
+  background  jobs  all  with the same worker function and all eagerly waiting
+  for  work.  The  only  additional concepts needed are an input and an output
+  queue. The input queue contains argument lists and the output queue pairs of
+  argument lists and results.[133X
+  
+  [33X[0;0YOne creates a worker farm with the following operation:[133X
+  
+  [1X8.3-1 ParWorkerFarmByFork[101X
+  
+  [29X[2XParWorkerFarmByFork[102X( [3Xfun[103X, [3Xopt[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Yan object representing the worker farm or [9Xfail[109X[133X
+  
+  [33X[0;0YThis  operation  creates a worker farm with the worker function [3Xfun[103X and sets
+  up  its  input and output queue. An object representing the farm is returned
+  unless  not  all  jobs  could  be started up in which case [9Xfail[109X is returned.
+  After  startup  all  background  jobs  in  the farm are idle. The only valid
+  option  in  the options record [3Xopt[103X is [10XNumberJobs[110X and it must be bound to the
+  number of worker jobs in the farm, a positive integer.[133X
+  
+  [33X[0;0YThe following operations are for worker farm objects:[133X
+  
+  [1X8.3-2 DoQueues[101X
+  
+  [29X[2XDoQueues[102X( [3Xwf[103X, [3Xblock[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis operation called on a worker farm object [3Xwf[103X administrates the input and
+  output  queues  of  the  worker  farm.  In  particular it checks whether new
+  results  are  available  from  the  workers and if so it appends them to the
+  output  queue.  If  jobs are idle and the input queue is non-empty, argument
+  lists  from  the  input queue are sent to the idle jobs and removed from the
+  input queue.[133X
+  
+  [33X[0;0YThis  operation  must  be called regularly to keep up the communication with
+  the  clients.  It  uses [10Xselect[110X and so does not block if the boolean argument
+  [3Xblock[103X  is  set to [9Xfalse[109X. However, if larger chunks of data has to be sent or
+  received this operation might need some time to return.[133X
+  
+  [33X[0;0YIf  the boolean argument [3Xblock[103X is set to true then the [2XDoQueues[102X blocks until
+  at  least  one  job  has returned a result. This can be used to wait for the
+  termination  of  all tasks without burning CPU cycles in the parent job. One
+  would  repeatedly  call  [2XDoQueues[102X with [3Xblock[103X set to [9Xtrue[109X and after each such
+  call  check  with  [2XIsIdle[102X  ([14X8.3-4[114X) whether all tasks are done. Note that one
+  should  no longer call [2XDoQueues[102X with [3Xblock[103X set to [9Xtrue[109X once this is the case
+  since then it would block forever.[133X
+  
+  [33X[0;0YThis operation is called automatically by most of the following operations.[133X
+  
+  [1X8.3-3 Kill[101X
+  
+  [29X[2XKill[102X( [3Xwf[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis  operation  terminates all background jobs in the farm [3Xwf[103X, which cannot
+  be  used subsequently. One should always call this operation when the worker
+  farm is no longer needed to free resources.[133X
+  
+  [1X8.3-4 IsIdle[101X
+  
+  [29X[2XIsIdle[102X( [3Xwf[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
+  
+  [33X[0;0YThis operation returns [9Xtrue[109X if all background jobs in the worker farm [3Xwf[103X are
+  idle.  This means, that all tasks which have previously been submitted using
+  [2XSubmit[102X  ([14X8.3-5[114X)  have  been  completed and their result been appended to the
+  output  queue. The operation [2XDoQueues[102X ([14X8.3-2[114X) is automatically called before
+  the execution of [2XIsIdle[102X.[133X
+  
+  [1X8.3-5 Submit[101X
+  
+  [29X[2XSubmit[102X( [3Xwg[103X, [3Xarglist[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis operation submits a task in the form of an argument list for the worker
+  function  to  the worker farm. It is appended at the end of the input queue.
+  The  operation  [2XDoQueues[102X ([14X8.3-2[114X) is automatically called after the execution
+  of  [2XSubmit[102X,  giving  the  farm a chance to actually send the work out to the
+  worker background jobs.[133X
+  
+  [1X8.3-6 Pickup[101X
+  
+  [29X[2XPickup[102X( [3Xwg[103X, [3Xarglist[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis  operation  collects  all  results  from the output queue of the worker
+  farm. The output queue is empty after this function returns. The results are
+  reported  as a list of pairs, each pair has the input argument list as first
+  component and the output object as second component.[133X
+  
+  [33X[0;0YThe  operation [2XDoQueues[102X ([14X8.3-2[114X) is automatically called before the execution
+  of  [2XPickup[102X,  giving  the farm a chance to actually receive some more results
+  from the worker background jobs.[133X
+  

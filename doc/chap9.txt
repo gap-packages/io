@@ -1,0 +1,198 @@
+  
+  [1X9 [33X[0;0YI/O multiplexing[133X[101X
+  
+  
+  [1X9.1 [33X[0;0YIntroduction[133X[101X
+  
+  [33X[0;0YWhenever  one  needs  to  do  input/output on more than one connection (file
+  descriptor) at a time, some code is needed to organise the I/O multiplexing.
+  Due to the single-threaded nature of the current [5XGAP[105X language one has to use
+  [2XIO_select[102X  ([14X3.2-51[114X)  and  some buffering and queueing to organise this. This
+  chapter  describes  a  relative  generic  implementation of I/O-multiplexing
+  using  so-called  [2XIOHub[102X  ([14X9.2-1[114X)  objects.  The  basic idea is that an [2XIOHub[102X
+  ([14X9.2-1[114X)  object  handles  lots  of  I/O  connections  at  the  same time and
+  maintains  a  buffer  for each of them. There is a very simple protocol that
+  marks  chunks  of  data  (called  [21Xmessages[121X)  and whenever a message has been
+  received completely it is collected in the input queue of the [2XIOHub[102X ([14X9.2-1[114X),
+  marked with the number of the connection it came from. Rather than sending a
+  message  away  in  one  go,  one  would  always  schedule  it for sending by
+  appending  it  to the output queue. The operation [2XDoIO[102X ([14X9.2-13[114X), when called
+  often enough, will then make sure that the message is sent away eventually.[133X
+  
+  
+  [1X9.2 [33X[0;0YThe operations for [10XIOHub[110X[101X[1X objects[133X[101X
+  
+  [33X[0;0YIn  this section, we simply describe the functions and operations to create,
+  use and destroy [2XIOHub[102X ([14X9.2-1[114X) objects.[133X
+  
+  [1X9.2-1 IOHub[101X
+  
+  [29X[2XIOHub[102X(  ) [32X operation
+  [6XReturns:[106X  [33X[0;10Yan [2XIOHub[102X object[133X
+  
+  [33X[0;0YThis creates a new [2XIOHub[102X object at first without any open connections.[133X
+  
+  [1X9.2-2 NewConnection[101X
+  
+  [29X[2XNewConnection[102X( [3Xh[103X, [3Xi[103X, [3Xo[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ya positive integer[133X
+  
+  [33X[0;0YThis  operation  adds  a  new  connection to the [2XIOHub[102X ([14X9.2-1[114X) object [3Xh[103X. The
+  arguments  [3Xi[103X and [3Xo[103X must be Unix file descriptors or [22X0[122X and [3Xi[103X must be open for
+  reading  if it is positive and [3Xo[103X must be open for writing if it is positive.
+  It is allowed that both file descriptors are equal, but they may not both be
+  equal  to  [22X0[122X.  The  operation returns a positive integer which is the number
+  under  which  this new connection will be administrated in the [2XIOHub[102X ([14X9.2-1[114X)
+  object. Note that this number is specific to the object [3Xh[103X.[133X
+  
+  [33X[0;0YFrom the moment these file descriptors are registered with the [2XIOHub[102X ([14X9.2-1[114X)
+  object,  every  subsequent  call  to  [2XDoIO[102X ([14X9.2-13[114X) will try to do input and
+  output  on  them.  This  means  in  particular  that  the other side of this
+  connection should be in the same initial state of the protocol. Usually this
+  will  be achieved by them being added as a new connection to a corresponding
+  [2XIOHub[102X ([14X9.2-1[114X) object on the other side at the same time.[133X
+  
+  [33X[0;0YSee also [2XNewTCPConnection[102X ([14X9.2-10[114X) below.[133X
+  
+  [1X9.2-3 CloseConnection[101X
+  
+  [29X[2XCloseConnection[102X( [3Xh[103X, [3Xnr[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThe  argument  [3Xh[103X  must  be  an  [2XIOHub[102X  ([14X9.2-1[114X) object and [3Xnr[103X the number of a
+  connection  which  was  previously  returned  by  [2XNewConnection[102X ([14X9.2-2[114X). The
+  corresponding connection is closed and removed from the [2XIOHub[102X ([14X9.2-1[114X).[133X
+  
+  [1X9.2-4 AttachServingSocket[101X
+  
+  [29X[2XAttachServingSocket[102X( [3Xh[103X, [3Xaddr[103X, [3Xport[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ya Unix file descriptor or [9Xfail[109X[133X
+  
+  [33X[0;0YThe  argument  [3Xh[103X must be an [2XIOHub[102X ([14X9.2-1[114X) object, [3Xaddr[103X an IP address or host
+  name  as  a  string  and  [3Xport[103X  a port number (see also [2XIO_MakeIPAddressPort[102X
+  ([14X4.3-6[114X)).  This  operation  creates a new socket, binds it to the IP address
+  and  port  and  attaches it to the [2XIOHub[102X ([14X9.2-1[114X) object. From this moment on
+  the operation [2XDoIO[102X ([14X9.2-13[114X) will accept new bidirectional TCP/IP connections
+  on  that  socket  and  add  them to [3Xh[103X. The operation returns either the file
+  descriptor of the new socket or [9Xfail[109X if an error occurred.[133X
+  
+  [1X9.2-5 ShutdownServingSocket[101X
+  
+  [29X[2XShutdownServingSocket[102X( [3Xh[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThe  argument [3Xh[103X must be an [2XIOHub[102X ([14X9.2-1[114X) object. Any server socket which was
+  attached to [3Xh[103X is shut down, so no new connections will be accepted.[133X
+  
+  [1X9.2-6 Shutdown[101X
+  
+  [29X[2XShutdown[102X( [3Xh[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThe argument [3Xh[103X must be an [2XIOHub[102X ([14X9.2-1[114X) object. All connections of [3Xh[103X will be
+  closed  using  [2XCloseConnection[102X  ([14X9.2-3[114X)  and any serving socket will be shut
+  down  using [2XShutdownServingSocket[102X ([14X9.2-5[114X). The [2XIOHub[102X ([14X9.2-1[114X) object will not
+  be usable any more after this call.[133X
+  
+  [1X9.2-7 AcceptNewConnection[101X
+  
+  [29X[2XAcceptNewConnection[102X( [3Xh[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ya positive integer or [9Xfail[109X[133X
+  
+  [33X[0;0YThe  argument  [3Xh[103X  must  be an [2XIOHub[102X ([14X9.2-1[114X) object. The object [3Xh[103X must have a
+  serving  socket  attached  to  it via [2XAttachServingSocket[102X ([14X9.2-4[114X), otherwise
+  [9Xfail[109X  is  returned  and  nothing  happens.  One  more connection is accepted
+  through  the  serving  socket.  It  is  added  as a new bidirectional TCP/IP
+  connection  to  the  [2XIOHub[102X  ([14X9.2-1[114X)  object and the new connection number is
+  returned. Note first that this operation blocks until a new connection comes
+  in.  Note furthermore that this operation is usually called automatically in
+  [2XDoIO[102X  ([14X9.2-13[114X)  whenever  a new connection has come in, which is reported in
+  the  internal  [2XIO_select[102X ([14X3.2-51[114X) call. So usually, the client code does not
+  have to call this operation at all.[133X
+  
+  [1X9.2-8 SubmitOutput[101X
+  
+  [29X[2XSubmitOutput[102X( [3Xh[103X, [3Xnr[103X, [3Xst[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
+  
+  [33X[0;0YThe  argument  [3Xh[103X  must  be  an  [2XIOHub[102X  ([14X9.2-1[114X) object, [3Xnr[103X must be a positive
+  integer which is the number of an open connection of [3Xh[103X which can be used for
+  output.  The  argument  [3Xst[103X  must be a [5XGAP[105X string. This operation appends the
+  message  [3Xst[103X  to the end of the output queue for the connection [3Xnr[103X. Note that
+  at this stage no output is actually performed automatically. One has to call
+  [2XDoIO[102X ([14X9.2-13[114X) subsequently to actually send the message away.[133X
+  
+  [1X9.2-9 GetInput[101X
+  
+  [29X[2XGetInput[102X( [3Xh[103X, [3Xnr[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ya list of length [22X2[122X[133X
+  
+  [33X[0;0YThe argument [3Xh[103X must be an [2XIOHub[102X ([14X9.2-1[114X) object, [3Xnr[103X must be an integer. If [3Xnr[103X
+  is  positive,  this operation returns the earliest message which has come in
+  from  connection number [3Xnr[103X and has not yet been returned by [2XGetInput[102X before.
+  This  message  is  then  removed  from  the input queue. If there is no such
+  message,  then  [9Xfalse[109X  is returned. A message is returned as a plain list of
+  length [22X2[122X where the first entry is the connection number it came from and the
+  second  entry is a string containing the message itself. If [3Xnr[103X is equal to [22X0[122X
+  then the first message in the input queue from any connection is returned or
+  [9Xfalse[109X if there is no message in the input queue.[133X
+  
+  [1X9.2-10 NewTCPConnection[101X
+  
+  [29X[2XNewTCPConnection[102X( [3Xh[103X, [3Xaddr[103X, [3Xport[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ya connection number or [9Xfail[109X[133X
+  
+  [33X[0;0YThe  argument [3Xh[103X must be an [2XIOHub[102X ([14X9.2-1[114X) object, the arguments [3Xaddr[103X and [3Xport[103X
+  must  be  an  address/port  pair as used in [2XIO_MakeIPAddressPort[102X ([14X4.3-6[114X), so
+  [3Xaddress[103X  can  either  be  a  host  name  or an IP address and [3Xport[103X is a port
+  number.  This  operation  opens a new TCP connection to the address and port
+  specified,  adds a new bidirectional connection to the [2XIOHub[102X ([14X9.2-1[114X) [3Xh[103X using
+  [2XNewConnection[102X  ([14X9.2-2[114X)  and  returns  the  connection number specific to the
+  object [3Xh[103X. If anything goes wrong, [9Xfail[109X is returned.[133X
+  
+  [1X9.2-11 OutputQueue[101X
+  
+  [29X[2XOutputQueue[102X( [3Xh[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ya list[133X
+  
+  [33X[0;0YThe  argument  [3Xh[103X  must be an [2XIOHub[102X ([14X9.2-1[114X) object. This returns the internal
+  object for the output queue. Its elements are pairs where the first entry is
+  the  connection  number where it is going to be sent and the second entry is
+  the  message  as a string. Only modify this list if you really know what you
+  are doing.[133X
+  
+  [1X9.2-12 InputQueue[101X
+  
+  [29X[2XInputQueue[102X( [3Xh[103X ) [32X operation
+  [6XReturns:[106X  [33X[0;10Ya list[133X
+  
+  [33X[0;0YThe  argument  [3Xh[103X  must be an [2XIOHub[102X ([14X9.2-1[114X) object. This returns the internal
+  object  for the input queue. Its elements are pairs where the first entry is
+  the  connection  number  from  where the message was received and the second
+  entry  is  the message as a string. Only modify this list if you really know
+  what you are doing.[133X
+  
+  [1X9.2-13 DoIO[101X
+  
+  [29X[2XDoIO[102X( [3Xh[103X[, [3Xblock[103X] ) [32X operation
+  [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X or [9Xfail[109X[133X
+  
+  [33X[0;0YThe  argument  [3Xh[103X  must  be  an [2XIOHub[102X ([14X9.2-1[114X) object, and the optional second
+  argument [3Xblock[103X must be [9Xtrue[109X or [9Xfalse[109X. This operation uses [2XIO_select[102X ([14X3.2-51[114X)
+  to  decide  which  of the file descriptors belonging to the connections of [3Xh[103X
+  are ready to read or write. All file descriptors which are ready are served,
+  possibly  updating the input and output queues. A possible serving socket is
+  also  served  accepting a new connection if there is one. The operation [2XDoIO[102X
+  loops  until no more file descriptors are ready. It returns [9Xtrue[109X if some I/O
+  was  performed  and  [9Xfalse[109X  if  not. It returns [9Xfail[109X if the [2XIOHub[102X ([14X9.2-1[114X) is
+  already  shut  down. The second argument [3Xblock[103X indicates whether or not [2XDoIO[102X
+  should  block  until  some  I/O has taken place. If this argument is omitted
+  then [9Xfalse[109X (non-blocking operation) is the default.[133X
+  
+  [33X[0;0YNote that broken connections are silently closed.[133X
+  
+  
+  [1X9.3 [33X[0;0YExamples[133X[101X
+  
+  [33X[0;0YThere is an example hash server in the file [11Xexamples/hashserver.g[111X.[133X
+  

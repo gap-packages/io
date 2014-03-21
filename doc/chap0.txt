@@ -1,1 +1,227 @@
-Placeholder
+  
+  
+                                [1XGAP 4 Package [5XIO[105X[101X
+  
+  
+                 [1XBindings for low level C library I/O routines[101X
+  
+  
+                                  Version 5.0
+  
+  
+                                  January 2012
+  
+  
+                                 Max Neunhöffer
+  
+  
+  
+  Max Neunhöffer
+      Email:    [7Xmailto:neunhoef@mcs.st-and.ac.uk[107X
+      Homepage: [7Xhttp://www-groups.mcs.st-and.ac.uk/~neunhoef[107X
+      Address:  [33X[0;14YSchool  of  Mathematics  and Statistics Mathematical Institute
+                University of St Andrews North Haugh St Andrews, Fife KY16 9SS
+                Scotland, UK[133X
+  
+  
+  
+  -------------------------------------------------------
+  [1XCopyright[101X
+  [33X[0;0Y© 2005-2012 by Max Neunhöffer[133X
+  
+  [33X[0;0YThis  package  may  be distributed under the terms and conditions of the GNU
+  Public License Version 3 or later.[133X
+  
+  
+  -------------------------------------------------------
+  
+  
+  [1XContents (IO)[101X
+  
+  1 [33X[0;0YPreface[133X
+  2 [33X[0;0YInstallation of the [5XIO[105X-package[133X
+    2.1 [33X[0;0YStatic linking[133X
+    2.2 [33X[0;0YRecompiling the documentation[133X
+  3 [33X[0;0YFunctions directly available from the C library[133X
+    3.1 [33X[0;0YDifferences in arguments - an overview[133X
+    3.2 [33X[0;0YThe low-level functions in detail[133X
+      3.2-1 IO_accept
+      3.2-2 IO_bind
+      3.2-3 IO_chdir
+      3.2-4 IO_chmod
+      3.2-5 IO_chown
+      3.2-6 IO_close
+      3.2-7 IO_closedir
+      3.2-8 IO_connect
+      3.2-9 IO_creat
+      3.2-10 IO_dup
+      3.2-11 IO_dup2
+      3.2-12 IO_execv
+      3.2-13 IO_execve
+      3.2-14 IO_execvp
+      3.2-15 IO_exit
+      3.2-16 IO_fchmod
+      3.2-17 IO_fchown
+      3.2-18 IO_fcntl
+      3.2-19 IO_fork
+      3.2-20 IO_fstat
+      3.2-21 IO_gethostbyname
+      3.2-22 IO_gethostname
+      3.2-23 IO_getpid
+      3.2-24 IO_getppid
+      3.2-25 IO_getsockname
+      3.2-26 IO_getsockopt
+      3.2-27 IO_gettimeofday
+      3.2-28 IO_gmtime
+      3.2-29 IO_kill
+      3.2-30 IO_lchown
+      3.2-31 IO_link
+      3.2-32 IO_listen
+      3.2-33 IO_localtime
+      3.2-34 IO_lseek
+      3.2-35 IO_lstat
+      3.2-36 IO_mkdir
+      3.2-37 IO_mkfifo
+      3.2-38 IO_mknod
+      3.2-39 IO_open
+      3.2-40 IO_opendir
+      3.2-41 IO_pipe
+      3.2-42 IO_read
+      3.2-43 IO_readdir
+      3.2-44 IO_readlink
+      3.2-45 IO_recv
+      3.2-46 IO_recvfrom
+      3.2-47 IO_rename
+      3.2-48 IO_rewinddir
+      3.2-49 IO_rmdir
+      3.2-50 IO_seekdir
+      3.2-51 IO_select
+      3.2-52 IO_send
+      3.2-53 IO_sendto
+      3.2-54 IO_setsockopt
+      3.2-55 IO_socket
+      3.2-56 IO_stat
+      3.2-57 IO_symlink
+      3.2-58 IO_telldir
+      3.2-59 IO_unlink
+      3.2-60 IO_WaitPid
+      3.2-61 IO_write
+    3.3 [33X[0;0YFurther C level functions[133X
+      3.3-1 IO_make_sockaddr_in
+      3.3-2 IO_environ
+      3.3-3 IO_InstallSIGCHLDHandler
+      3.3-4 IO_RestoreSIGCHLDHandler
+  4 [33X[0;0YHigh level functions for buffered I/O[133X
+    4.1 [33X[0;0YTypes and the creation of [10XFile[110X objects[133X
+      4.1-1 IsFile
+      4.1-2 IO_WrapFD
+      4.1-3 IO_File
+    4.2 [33X[0;0YReading and writing[133X
+      4.2-1 IO_ReadUntilEOF
+      4.2-2 IO_ReadBlock
+      4.2-3 IO_ReadLine
+      4.2-4 IO_ReadLines
+      4.2-5 IO_HasData
+      4.2-6 IO_Read
+      4.2-7 IO_Write
+      4.2-8 IO_WriteLine
+      4.2-9 IO_WriteLines
+      4.2-10 IO_Flush
+      4.2-11 IO_WriteFlush
+      4.2-12 IO_ReadyForWrite
+      4.2-13 IO_WriteNonBlocking
+      4.2-14 IO_ReadyForFlush
+      4.2-15 IO_FlushNonBlocking
+      4.2-16 IO_Close
+    4.3 [33X[0;0YOther functions[133X
+      4.3-1 IO_GetFD
+      4.3-2 IO_GetWBuf
+      4.3-3 IO_Select
+      4.3-4 IO_ListDir
+      4.3-5 ChangeCurrentDirectory
+      4.3-6 IO_MakeIPAddressPort
+      4.3-7 IO_Environment
+      4.3-8 IO_MakeEnvList
+    4.4 [33X[0;0YInter process communication[133X
+      4.4-1 IO_FindExecutable
+      4.4-2 IO_CloseAllFDs
+      4.4-3 IO_Popen
+      4.4-4 IO_Popen2
+      4.4-5 IO_Popen3
+      4.4-6 IO_StartPipeline
+      4.4-7 IO_StringFilterFile
+      4.4-8 IO_FileFilterString
+      4.4-9 IO_FilteredFile
+      4.4-10 IO_SendStringBackground
+      4.4-11 IO_PipeThrough
+      4.4-12 IO_PipeThroughWithError
+  5 [33X[0;0YObject serialisation (Pickling)[133X
+    5.1 [33X[0;0YResult objects[133X
+      5.1-1 IO_Error
+      5.1-2 IO_Nothing
+      5.1-3 IO_OK
+    5.2 [33X[0;0YPickling and unpickling[133X
+      5.2-1 IO_Pickle
+      5.2-2 IO_Unpickle
+      5.2-3 IO_ClearPickleCache
+    5.3 [33X[0;0YExtending the pickling framework[133X
+  6 [33X[0;0YReally random sources[133X
+    6.1 [33X[0;0YThe functions[133X
+      6.1-1 RandomSource
+  7 [33X[0;0YA client side implementation of the HTTP protocol[133X
+    7.1 [33X[0;0YFunctions for client side HTTP[133X
+      7.1-1 OpenHTTPConnection
+      7.1-2 HTTPRequest
+      7.1-3 HTTPTimeoutForSelect
+      7.1-4 CloseHTTPConnection
+      7.1-5 SingleHTTPRequest
+      7.1-6 CheckForUpdates
+      7.1-7 ReadWeb
+  8 [33X[0;0YBackground jobs using fork[133X
+    8.1 [33X[0;0YBackground jobs[133X
+      8.1-1 BackgroundJobByFork
+      8.1-2 IsIdle
+      8.1-3 HasTerminated
+      8.1-4 WaitUntilIdle
+      8.1-5 Pickup
+      8.1-6 Submit
+      8.1-7 Kill
+    8.2 [33X[0;0YParallel programming skeletons[133X
+      8.2-1 ParTakeFirstResultByFork
+      8.2-2 ParDoByFork
+      8.2-3 ParListByFork
+      8.2-4 ParMapReduceByFork
+    8.3 [33X[0;0YWorker farms[133X
+      8.3-1 ParWorkerFarmByFork
+      8.3-2 DoQueues
+      8.3-3 Kill
+      8.3-4 IsIdle
+      8.3-5 Submit
+      8.3-6 Pickup
+  9 [33X[0;0YI/O multiplexing[133X
+    9.1 [33X[0;0YIntroduction[133X
+    9.2 [33X[0;0YThe operations for [10XIOHub[110X objects[133X
+      9.2-1 IOHub
+      9.2-2 NewConnection
+      9.2-3 CloseConnection
+      9.2-4 AttachServingSocket
+      9.2-5 ShutdownServingSocket
+      9.2-6 Shutdown
+      9.2-7 AcceptNewConnection
+      9.2-8 SubmitOutput
+      9.2-9 GetInput
+      9.2-10 NewTCPConnection
+      9.2-11 OutputQueue
+      9.2-12 InputQueue
+      9.2-13 DoIO
+    9.3 [33X[0;0YExamples[133X
+  10 [33X[0;0YExamples of usage[133X
+    10.1 [33X[0;0YWriting and reading a file[133X
+    10.2 [33X[0;0YUsing filtering programs to read and write files[133X
+    10.3 [33X[0;0YUsing filters when reading or writing files sequentially[133X
+    10.4 [33X[0;0YAccessing a web page[133X
+    10.5 [33X[0;0Y(Un-)Pickling[133X
+  11 [33X[0;0YLicense[133X
+  
+  
+  [32X

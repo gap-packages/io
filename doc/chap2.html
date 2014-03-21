@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>GAP (IO) - Chapter 2: Installation of the IO-package</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+<script src="manual.js" type="text/javascript"></script>
+<script type="text/javascript">overwriteStyle();</script>
+</head>
+<body class="chap2"  onload="jscontent()">
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chap8.html">8</a>  <a href="chap9.html">9</a>  <a href="chap10.html">10</a>  <a href="chap11.html">11</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap1.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap3.html">[Next Chapter]</a>&nbsp;  </div>
+
+<p><a id="X87D1C7D0861CBE25" name="X87D1C7D0861CBE25"></a></p>
+<div class="ChapSects"><a href="chap2.html#X87D1C7D0861CBE25">2 <span class="Heading">Installation of the <strong class="pkg">IO</strong>-package</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2.html#X7F7AFC7E808A56C7">2.1 <span class="Heading">Static linking</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2.html#X7FB00ED2787027A3">2.2 <span class="Heading">Recompiling the documentation</span></a>
+</span>
+</div>
+</div>
+
+<h3>2 <span class="Heading">Installation of the <strong class="pkg">IO</strong>-package</span></h3>
+
+<p>To get the newest version of this <strong class="pkg">GAP</strong> 4 package download one of the archive files</p>
+
+
+<ul>
+<li><p><code class="file">io-x.x.tar.gz</code></p>
+
+</li>
+<li><p><code class="file">io-x.x.tar.bz2</code></p>
+
+</li>
+<li><p><code class="file">io-x.x.zip</code></p>
+
+</li>
+</ul>
+<p>and unpack it using</p>
+
+
+<pre class="normal">
+
+gunzip io-x.x.tar.gz; tar xvf io-x.x.tar
+
+</pre>
+
+<p>or</p>
+
+
+<pre class="normal">
+
+bzip2 -d io-x.x.tar.bz2; tar xvf io-x.x.tar
+
+</pre>
+
+<p>or</p>
+
+
+<pre class="normal">
+
+unzip -x io-x.x.zip
+
+</pre>
+
+<p>respectively.</p>
+
+<p>Do this in a directory called "<code class="file">pkg</code>", preferably (but not necessarily) in the "<code class="file">pkg</code>" subdirectory of your <strong class="pkg">GAP</strong> 4 installation. It creates a subdirectory called "<code class="file">io</code>".</p>
+
+<p>The package will not work without the following compilation step.</p>
+
+<p>To compile the C part of the package do (in the <code class="file">pkg</code> directory)</p>
+
+
+<pre class="normal">
+
+    cd io
+    ./configure
+    make
+
+</pre>
+
+<p>If you installed the package in another "<code class="file">pkg</code>" directory than the standard "<code class="file">pkg</code>" directory in your <strong class="pkg">GAP</strong> 4 installation, then you have to do two things. Firstly during compilation you have to use the option <code class="code">--with-gaproot=PATH</code> of the <code class="file">configure</code> script where "PATH" is a path to the main <strong class="pkg">GAP</strong> root directory (if not given the default "<code class="file">../..</code>" is assumed).</p>
+
+<p>Secondly you have to specify the path to the directory containing your "<code class="file">pkg</code>" directory to <strong class="pkg">GAP</strong>'s list of directories. This can be done by starting <strong class="pkg">GAP</strong> with the "<code class="file">-l</code>" command line option followed by the name of the directory and a semicolon. Then your directory is prepended to the list of directories searched. Otherwise the package is not found by <strong class="pkg">GAP</strong>. Of course, you can add this option to your <strong class="pkg">GAP</strong> startup script.</p>
+
+<p>If you installed <strong class="pkg">GAP</strong> on several architectures, you must execute the configure/make step for each of the architectures. You can either do this immediately after configuring and compiling <strong class="pkg">GAP</strong> itself on this architecture, or alternatively (when using version 4.5 of <strong class="pkg">GAP</strong> or newer) set the environment variable <code class="code">CONFIGNAME</code> to the name of the configuration you used when compiling <strong class="pkg">GAP</strong> before running <code class="code">./configure</code>. Note however that your compiler choice and flags (environment variables <code class="code">CC</code> and <code class="code">CFLAGS</code>) need to be chosen to match the setup of the original <strong class="pkg">GAP</strong> compilation. For example you have to specify 32-bit or 64-bit mode correctly!</p>
+
+<p><a id="X7F7AFC7E808A56C7" name="X7F7AFC7E808A56C7"></a></p>
+
+<h4>2.1 <span class="Heading">Static linking</span></h4>
+
+<p>This feature does not work in this version of the package. We leave the old documentation here for the case that the feature will be reenabled inthe future.</p>
+
+<p>This might be interesting for M$ Windows users, as dynamic loading of binary modules does not always work there. You can also create a new statically linked "<code class="file">gap</code>" binary as follows:</p>
+
+<p>Go into the main <strong class="pkg">GAP</strong> directory and then into <code class="file">bin/BINDIR</code>. Here <code class="file">BINDIR</code> means the directory containing the "<code class="file">gap</code>" executable after compiling "<code class="file">gap</code>". This directory also contains the <strong class="pkg">GAP</strong> compiler script "<code class="file">gac</code>". Assuming IO in the standard location you can then say</p>
+
+
+<pre class="normal">
+
+    ./gac -o gap-static -p "-DIOSTATIC -I../../pkg/io/bin/BINDIR" \
+        -P "-static" ../../pkg/io/src/io.c
+
+</pre>
+
+<p>Then copy your "<code class="file">gap</code>" start script to, say, "<code class="file">gaps</code>" and change the references to the <strong class="pkg">GAP</strong> binary to "<code class="file">gap-static</code>".</p>
+
+<p>Note that you have to replace <code class="file">BINDIR</code> by the name containing the "<code class="file">gap</code>" executable after compiling GAP as above. If you have installed the package in a different place than the standard, you have to replace "<code class="file">../..</code>" in the above command by the path to the directory containing the "<code class="file">pkg</code>" directory into which you installed <strong class="pkg">IO</strong>. If you want to install more than one package with a C-part like this package, you can still create a statically linked <strong class="pkg">GAP</strong> executable by combining all the compile and link options and all the .c files as in the ./gac command above. For the IO package, you have to add</p>
+
+
+<pre class="normal">
+
+    -DIOSTATIC -I../../pkg/io/bin/BINDIR
+
+</pre>
+
+<p>to the string of the -p option and the file</p>
+
+
+<pre class="normal">
+
+  ../../pkg/io/src/io.c
+
+</pre>
+
+<p>somewhere on the command line. As above, "<code class="file">../..</code>" and "<code class="file">BINDIR</code>" have to be replaced if you installed in a non-standard location.</p>
+
+<p><a id="X7FB00ED2787027A3" name="X7FB00ED2787027A3"></a></p>
+
+<h4>2.2 <span class="Heading">Recompiling the documentation</span></h4>
+
+<p>Recompiling the documentation is possible by the command "<code class="file">gap makedoc.g</code>" in the <code class="file">io</code> directory. But this should not be necessary.</p>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap1.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap3.html">[Next Chapter]</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chap8.html">8</a>  <a href="chap9.html">9</a>  <a href="chap10.html">10</a>  <a href="chap11.html">11</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

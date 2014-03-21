@@ -1,0 +1,189 @@
+  
+  [1X10 [33X[0;0YExamples of usage[133X[101X
+  
+  [33X[0;0YFor larger examples see the [11Xexample[111X directory of the package. You find there
+  a  small  server  using  the  TCP/IP protocol and a corresponding client and
+  another small server using the UDP protocol and a corresponding client.[133X
+  
+  [33X[0;0YFurther,  there  is an example for the usage of [10XFile[110X objects, that read from
+  or write to strings.[133X
+  
+  [33X[0;0YAnother  example  there  shows  starting up a child process and piping a few
+  megabytes through it using [2XIO_Popen2[102X ([14X4.4-4[114X).[133X
+  
+  [33X[0;0YIn  the following, we present a few explicit, interactive short examples for
+  the  usage  of the functions in this package. Note that you have to load the
+  [5XIO[105X package with the command [10XLoadPackage("IO");[110X before trying these examples.[133X
+  
+  
+  [1X10.1 [33X[0;0YWriting and reading a file[133X[101X
+  
+  [33X[0;0YThe  following  sequence  of commands opens a file with name [11Xguck[111X and writes
+  some things to it:[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xf := IO_File("guck","w");[127X[104X
+    [4X[28X<file fd=3 wbufsize=65536 wdata=0>[128X[104X
+    [4X[25Xgap>[125X [27XIO_Write(f,"Hello world\n");[127X[104X
+    [4X[28X12[128X[104X
+    [4X[25Xgap>[125X [27XIO_WriteLine(f,"Hello world2!");[127X[104X
+    [4X[28X14[128X[104X
+    [4X[25Xgap>[125X [27XIO_Write(f,12345);[127X[104X
+    [4X[28X5[128X[104X
+    [4X[25Xgap>[125X [27XIO_Flush(f);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XIO_Close(f);[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThere  is  nothing  special  about  this,  the  numbers are numbers of bytes
+  written.  Note  that  only  after  the [2XIO_Flush[102X ([14X4.2-10[114X) command the data is
+  actually written to disk. Before that, it resides in the write buffer of the
+  file. Note further, that the [2XIO_Flush[102X ([14X4.2-10[114X) call here would not have been
+  necessary, since the [2XIO_Close[102X ([14X4.2-16[114X) call flushes the buffer anyway.[133X
+  
+  [33X[0;0YThe file can again be read with the following sequence of commands:[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xf := IO_File("guck","r");[127X[104X
+    [4X[28X<file fd=3 rbufsize=65536 rpos=1 rdata=0>[128X[104X
+    [4X[25Xgap>[125X [27XIO_Read(f,10);[127X[104X
+    [4X[28X"Hello worl"[128X[104X
+    [4X[25Xgap>[125X [27XIO_ReadLine(f);[127X[104X
+    [4X[28X"d\n"[128X[104X
+    [4X[25Xgap>[125X [27XIO_ReadLine(f);[127X[104X
+    [4X[28X"Hello world2!\n"[128X[104X
+    [4X[25Xgap>[125X [27XIO_ReadLine(f);[127X[104X
+    [4X[28X"12345"[128X[104X
+    [4X[25Xgap>[125X [27XIO_ReadLine(f);[127X[104X
+    [4X[28X""[128X[104X
+    [4X[25Xgap>[125X [27XIO_Close(f);[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YNote  here  that  reading  line-wise  can  only be done efficiently by using
+  buffered  I/O.  You  can  mix  calls  to  [2XIO_Read[102X ([14X4.2-6[114X) and to [2XIO_ReadLine[102X
+  ([14X4.2-3[114X).  The end of file is indicated by an empty string returned by one of
+  the read functions.[133X
+  
+  
+  [1X10.2 [33X[0;0YUsing filtering programs to read and write files[133X[101X
+  
+  [33X[0;0YIf you want to write a big amount of data to file you might want to compress
+  it  on  the fly without using much disk space. This can be achieved with the
+  following command:[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xs := "";; for i in [1..10000] do Append(s,String(i)); od;;[127X[104X
+    [4X[25Xgap>[125X [27XLength(s);[127X[104X
+    [4X[28X38894[128X[104X
+    [4X[25Xgap>[125X [27XIO_FileFilterString("guck.gz",[["gzip",["-9c"]]],s);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27Xsgz := StringFile("guck.gz");;[127X[104X
+    [4X[25Xgap>[125X [27XLength(sgz);[127X[104X
+    [4X[28X18541[128X[104X
+    [4X[25Xgap>[125X [27Xss := IO_StringFilterFile([["gzip",["-dc"]]],"guck.gz");;[127X[104X
+    [4X[25Xgap>[125X [27Xs=ss;[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThis  sequence  of commands needs that the program [11Xgzip[111X is installed on your
+  system.[133X
+  
+  
+  [1X10.3 [33X[0;0YUsing filters when reading or writing files sequentially[133X[101X
+  
+  [33X[0;0YIf  you  want  to process bigger amounts of data you might not want to store
+  all  of  it  in a single [5XGAP[105X string. In that case you might want to access a
+  file on disk sequentially through a filter:[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xf := IO_FilteredFile([["gzip",["-9c"]]],"guck.gz","w");[127X[104X
+    [4X[28X<file fd=5 wbufsize=65536 wdata=0>[128X[104X
+    [4X[25Xgap>[125X [27XIO_Write(f,"Hello world!\n");[127X[104X
+    [4X[28X13[128X[104X
+    [4X[25Xgap>[125X [27XIO_Write(f,Elements(SymmetricGroup(5)),"\n");[127X[104X
+    [4X[28X1359[128X[104X
+    [4X[25Xgap>[125X [27XIO_Close(f);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27Xf := IO_FilteredFile([["gzip",["-dc"]]],"guck.gz","r");[127X[104X
+    [4X[28X<file fd=4 rbufsize=65536 rpos=1 rdata=0>[128X[104X
+    [4X[25Xgap>[125X [27XIO_ReadLine(f);[127X[104X
+    [4X[28X"Hello world!\n"[128X[104X
+    [4X[25Xgap>[125X [27Xs := IO_ReadLine(f);; Length(s);[127X[104X
+    [4X[28X1359[128X[104X
+    [4X[25Xgap>[125X [27XIO_Read(f,10);                  [127X[104X
+    [4X[28X""[128X[104X
+    [4X[25Xgap>[125X [27XIO_Close(f);[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X10.4 [33X[0;0YAccessing a web page[133X[101X
+  
+  [33X[0;0YThe  [5XIO[105X package has an HTTP client implementation. Using this you can access
+  web pages and other web downloads from within [5XGAP[105X. Here is an example:[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xr := SingleHTTPRequest("www.math.rwth-aachen.de",80,"GET",[127X[104X
+    [4X[25X>[125X [27X             "/~Max.Neunhoeffer/index.html",rec(),false,false);;[127X[104X
+    [4X[25Xgap>[125X [27XRecFields(r);[127X[104X
+    [4X[28X[ "protoversion", "statuscode", "status", "header", "body", "closed" ][128X[104X
+    [4X[25Xgap>[125X [27Xr.status;[127X[104X
+    [4X[28X"OK"[128X[104X
+    [4X[25Xgap>[125X [27Xr.statuscode;[127X[104X
+    [4X[28X200[128X[104X
+    [4X[25Xgap>[125X [27Xr.header;[127X[104X
+    [4X[28Xrec( date := "Thu, 07 Dec 2006 22:08:22 GMT", [128X[104X
+    [4X[28X  server := "Apache/2.0.55 (Ubuntu)", [128X[104X
+    [4X[28X  last-modified := "Thu, 16 Nov 2006 00:21:44 GMT", [128X[104X
+    [4X[28X  etag := "\"2179cf-11a5-3c77f600\"", accept-ranges := "bytes", [128X[104X
+    [4X[28X  content-length := "4517", content-type := "text/html; charset=ISO-8859-1" )[128X[104X
+    [4X[25Xgap>[125X [27XLength(r.body);[127X[104X
+    [4X[28X4517[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YOf course, the time stamps and exact sizes of the answer may differ when you
+  do this.[133X
+  
+  
+  [1X10.5 [33X[0;0Y(Un-)Pickling[133X[101X
+  
+  [33X[0;0YAssume  you  have  some  [5XGAP[105X  objects  you  want  to archive to disk grouped
+  together. Then you might do the following:[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xr := rec( a := 1, b := "Max", c := [1,2,3] );[127X[104X
+    [4X[28Xrec( a := 1, b := "Max", c := [ 1, 2, 3 ] )[128X[104X
+    [4X[25Xgap>[125X [27Xr.c[4] := r;[127X[104X
+    [4X[28Xrec( a := 1, b := "Max", c := [ 1, 2, 3, ~ ] )[128X[104X
+    [4X[25Xgap>[125X [27Xf := IO_File("guck","w");[127X[104X
+    [4X[28X<file fd=3 wbufsize=65536 wdata=0>[128X[104X
+    [4X[25Xgap>[125X [27XIO_Pickle(f,r);[127X[104X
+    [4X[28XIO_OK[128X[104X
+    [4X[25Xgap>[125X [27XIO_Pickle(f,[(1,2,3,4),(3,4)]);[127X[104X
+    [4X[28XIO_OK[128X[104X
+    [4X[25Xgap>[125X [27XIO_Close(f);[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YThen, to read it in again, just do:[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xf := IO_File("guck");[127X[104X
+    [4X[28X<file fd=3 rbufsize=65536 rpos=1 rdata=0>[128X[104X
+    [4X[25Xgap>[125X [27XIO_Unpickle(f);[127X[104X
+    [4X[28Xrec( a := 1, b := "Max", c := [ 1, 2, 3, ~ ] )[128X[104X
+    [4X[25Xgap>[125X [27XIO_Unpickle(f);[127X[104X
+    [4X[28X[ (1,2,3,4), (3,4) ][128X[104X
+    [4X[25Xgap>[125X [27XIO_Unpickle(f);[127X[104X
+    [4X[28XIO_Nothing[128X[104X
+    [4X[25Xgap>[125X [27XIO_Close(f);[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [33X[0;0YNote that this works for a certain amount of builtin objects. If you want to
+  archive  your  own  objects  or  more  sophisticated objects you have to use
+  extend  the functionality as explained in Section [14X5.3[114X. However, it works for
+  lists and records and they may be arbitrarily self-referential.[133X
+  

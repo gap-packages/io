@@ -1,0 +1,750 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>GAP (IO) - Chapter 3: Functions directly available from the C library</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+<script src="manual.js" type="text/javascript"></script>
+<script type="text/javascript">overwriteStyle();</script>
+</head>
+<body class="chap3"  onload="jscontent()">
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chap8.html">8</a>  <a href="chap9.html">9</a>  <a href="chap10.html">10</a>  <a href="chap11.html">11</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap2.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap4.html">[Next Chapter]</a>&nbsp;  </div>
+
+<p><a id="X85DE7F82801DDA50" name="X85DE7F82801DDA50"></a></p>
+<div class="ChapSects"><a href="chap3.html#X85DE7F82801DDA50">3 <span class="Heading">Functions directly available from the C library</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap3.html#X85D3551379BA32FC">3.1 <span class="Heading">Differences in arguments - an overview</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap3.html#X800F9F3E810A7228">3.2 <span class="Heading">The low-level functions in detail</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7E474E9787012FE4">3.2-1 IO_accept</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X791A6341852001F8">3.2-2 IO_bind</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X790139B37E87FA61">3.2-3 IO_chdir</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X83D4CB2681674FA4">3.2-4 IO_chmod</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X85C0617479E4D952">3.2-5 IO_chown</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X820DA9C97C2E80BA">3.2-6 IO_close</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X8078699B84F082A4">3.2-7 IO_closedir</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7DE9D8B387D3A3D5">3.2-8 IO_connect</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X78FCF69C7FCF3BD7">3.2-9 IO_creat</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7DAAD93A80F76681">3.2-10 IO_dup</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7F7B8FAC7ABA285B">3.2-11 IO_dup2</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7B30A7FA84692EC5">3.2-12 IO_execv</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X875D9A9E8201D461">3.2-13 IO_execve</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X818044D07C64A412">3.2-14 IO_execvp</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X843634347E88C357">3.2-15 IO_exit</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7F08E1187BDB619A">3.2-16 IO_fchmod</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X791C4B4A81059A88">3.2-17 IO_fchown</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7870647E866D29A4">3.2-18 IO_fcntl</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X86C819F37D07ECF7">3.2-19 IO_fork</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7E27748983EC7B5C">3.2-20 IO_fstat</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7DD25BDC79EE65AD">3.2-21 IO_gethostbyname</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7B7164EF8307D26B">3.2-22 IO_gethostname</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7ECF948083E38BD0">3.2-23 IO_getpid</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7EC6ABAB7AB9F40F">3.2-24 IO_getppid</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X877A161482FC1769">3.2-25 IO_getsockname</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X790213D885BAB495">3.2-26 IO_getsockopt</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7BC965198011083B">3.2-27 IO_gettimeofday</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7DC156EA86F3F356">3.2-28 IO_gmtime</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7D0439128512FBF6">3.2-29 IO_kill</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X8305F97C87FE448E">3.2-30 IO_lchown</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7E1C65EB84497185">3.2-31 IO_link</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7957063B807025C7">3.2-32 IO_listen</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7B7D3D64805F335F">3.2-33 IO_localtime</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X85C475187C824830">3.2-34 IO_lseek</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7A8C75038517A55A">3.2-35 IO_lstat</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X83D968AB84F00ABF">3.2-36 IO_mkdir</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X80BFF17A8099815F">3.2-37 IO_mkfifo</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7928F1DB8379F850">3.2-38 IO_mknod</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X8731A44E8032D9D2">3.2-39 IO_open</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X78E234797EB01883">3.2-40 IO_opendir</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7C8F0A44837BBE8C">3.2-41 IO_pipe</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X84F3D862836BF17C">3.2-42 IO_read</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X8410C6F17DE9302D">3.2-43 IO_readdir</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7943F25E7EBA9A6B">3.2-44 IO_readlink</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X78EB295E78B363B2">3.2-45 IO_recv</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X84C617887EE02EB4">3.2-46 IO_recvfrom</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X78EC95007A92AB69">3.2-47 IO_rename</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7F86DBEB7876FBA5">3.2-48 IO_rewinddir</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7FA4DD537C83A199">3.2-49 IO_rmdir</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X84A98D2380BF6574">3.2-50 IO_seekdir</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X81CA6EE88062010E">3.2-51 IO_select</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X87019FD887F55C27">3.2-52 IO_send</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X8388B0147B5745EC">3.2-53 IO_sendto</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7BE641C1784D0899">3.2-54 IO_setsockopt</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X852B16CF82B96C84">3.2-55 IO_socket</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7F7D23867B45D525">3.2-56 IO_stat</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7B0D9CEF7A3CD431">3.2-57 IO_symlink</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X81FF8B678748900B">3.2-58 IO_telldir</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X78C93B6587B478C2">3.2-59 IO_unlink</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X80737A008450184F">3.2-60 IO_WaitPid</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X84EB06707D1BD3F1">3.2-61 IO_write</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap3.html#X85065AD381BD8E0F">3.3 <span class="Heading">Further C level functions</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X878007A67E806CEF">3.3-1 IO_make_sockaddr_in</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7F3E88AD7EFD52F4">3.3-2 IO_environ</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X8383E62D86BE30C6">3.3-3 IO_InstallSIGCHLDHandler</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7EEB7471816B64DF">3.3-4 IO_RestoreSIGCHLDHandler</a></span>
+</div></div>
+</div>
+
+<h3>3 <span class="Heading">Functions directly available from the C library</span></h3>
+
+<p>The following functions from the C library are made available as <strong class="pkg">GAP</strong> functions:</p>
+
+<p><code class="code">accept</code>, <code class="code">bind</code>, <code class="code">chdir</code>, <code class="code">chmod</code>, <code class="code">chown</code>, <code class="code">close</code>, <code class="code">closedir</code>, <code class="code">connect</code>, <code class="code">creat</code>, <code class="code">dup</code>, <code class="code">dup2</code>, <code class="code">execv</code>, <code class="code">execve</code>, <code class="code">execvp</code>, <code class="code">exit</code>, <code class="code">fchmod</code>, <code class="code">fchown</code>, <code class="code">fcntl</code>, <code class="code">fork</code>, <code class="code">fstat</code>, <code class="code">gethostbyname</code>, <code class="code">gethostname</code>, <code class="code">getpid</code>, <code class="code">getppid</code>, <code class="code">getsockname</code>, <code class="code">getsockopt</code>, <code class="code">gettimeofday</code>, <code class="code">gmtime</code>, <code class="code">kill</code>, <code class="code">lchown</code>, <code class="code">link</code>, <code class="code">listen</code>, <code class="code">localtime</code>, <code class="code">lseek</code>, <code class="code">lstat</code>, <code class="code">mkdir</code>, <code class="code">mkfifo</code>, <code class="code">mknod</code>, <code class="code">open</code>, <code class="code">opendir</code>, <code class="code">pipe</code>, <code class="code">read</code>, <code class="code">readdir</code>, <code class="code">readlink</code>, <code class="code">recv</code>, <code class="code">recvfrom</code>, <code class="code">rename</code>, <code class="code">rewinddir</code>, <code class="code">rmdir</code>, <code class="code">seekdir</code>, <code class="code">select</code>, <code class="code">send</code>, <code class="code">sendto</code>, <code class="code">setsockopt</code>, <code class="code">socket</code>, <code class="code">stat</code>, <code class="code">symlink</code>, <code class="code">telldir</code>, <code class="code">unlink</code>, <code class="code">write</code>.</p>
+
+<p>Use the <code class="code">man</code> command in your shell to get information about these functions.</p>
+
+<p>For each of these functions there is a corresponding <strong class="pkg">GAP</strong> global function with the prefix <code class="code">IO_</code> before its name. Apart from minor differences (see below) they take exactly the same arguments as their C counterparts. Strings must be specified as <strong class="pkg">GAP</strong> strings and integers as <strong class="pkg">GAP</strong> immediate integers. Return values are in general the same as for the C counterparts. However, an error condition is indicated by the value <code class="code">fail</code> instead of -1, and if the result can only be success or failure, <code class="code">true</code> indicates success.</p>
+
+<p>All errors are reported via the <code class="func">LastSystemError</code> (<a href="/Users/mhorn/Projekte/GAP/repos/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>) function.</p>
+
+<p>In the C library a lot of integers are defined as macros in header files. All the necessary values for the above functions are bound to their name in the global <code class="code">IO</code> record.</p>
+
+<p><em>Warning:</em> Existence of many of these functions and constants is platform dependent. The compilation process checks existence and this leads to the situation that on the <strong class="pkg">GAP</strong> levels the functions and constants are there or not. If you want to develop platform independent <strong class="pkg">GAP</strong> code using this package, then you have to check for existence of the functions and constants you need.</p>
+
+<p><a id="X85D3551379BA32FC" name="X85D3551379BA32FC"></a></p>
+
+<h4>3.1 <span class="Heading">Differences in arguments - an overview</span></h4>
+
+<p>The <code class="code">open</code> function has to be called with three arguments. The version with two arguments is not available on the <strong class="pkg">GAP</strong> level.</p>
+
+<p>The <code class="code">read</code> function takes four arguments: <var class="Arg">fd</var> is an integer file descriptor, <var class="Arg">st</var> is a <strong class="pkg">GAP</strong> string, <var class="Arg">offset</var> is an offset within this string (zero based), and <var class="Arg">count</var> is the maximal number of bytes to read. The data is read and stored into the string <var class="Arg">st</var>, starting at position <span class="SimpleMath"><var class="Arg">offset</var>+1</span>. The string <var class="Arg">st</var> is made long enough, such that <var class="Arg">count</var> bytes would fit into it, beginning at position <span class="SimpleMath"><var class="Arg">offset</var>+1</span>. The number of bytes read is returned or <code class="code">fail</code> in case of an error.</p>
+
+<p>The <code class="code">write</code> function is similar, it also takes four arguments: <var class="Arg">fd</var> is an integer file descriptor, <var class="Arg">st</var> is a <strong class="pkg">GAP</strong> string, <var class="Arg">offset</var> is an offset within this string (zero based), and <var class="Arg">count</var> is the number of bytes to write, starting from position <span class="SimpleMath"><var class="Arg">offset</var>+1</span> in the string <var class="Arg">st</var>. The number of bytes written is returned, or a <code class="code">fail</code> in case of an error.</p>
+
+<p>The <code class="code">opendir</code> function only returns <code class="code">true</code> or <code class="code">fail</code>.</p>
+
+<p>The <code class="code">readdir</code> function takes no argument. It reads the directory that was specified in the last call to <code class="code">opendir</code>. It just returns a string, which is the name of a file or subdirectory in the corresponding directory. It returns <code class="code">false</code> after the last file name in the directory or <code class="code">fail</code> in case of an error.</p>
+
+<p>The <code class="code">closedir</code> function takes no argument. It should be called after <code class="code">readdir</code> returned <code class="code">false</code> or <code class="code">fail</code> to avoid excessive use of file descriptors.</p>
+
+<p>The functions <code class="code">stat</code>, <code class="code">fstat</code>, and <code class="code">lstat</code> only take one argument and return a <strong class="pkg">GAP</strong> record that has the same entries as a <code class="code">struct stat</code>.</p>
+
+<p>The function <code class="code">socket</code> can optionally take a string as third argument. In that case it automatically calls <code class="code">getprotobyname</code> to look up the protocol name.</p>
+
+<p>The functions <code class="code">bind</code> and <code class="code">connect</code> take only one string argument as address field, because the string already encodes the length.</p>
+
+<p>There are two convenience functions <code class="func">IO_make_sockaddr_in</code> (<a href="chap3.html#X878007A67E806CEF"><span class="RefLink">3.3-1</span></a>) and <code class="func">IO_MakeIPAddressPort</code> (<a href="chap4.html#X8568CE6684C90CE5"><span class="RefLink">4.3-6</span></a>) to create such addresses. The first takes two arguments <var class="Arg">addr</var> and <var class="Arg">port</var>, where <var class="Arg">addr</var> is a string of length 4, containing the 4 bytes of the IP address and <var class="Arg">port</var> is a port number as <strong class="pkg">GAP</strong> integer. The function <code class="func">IO_MakeIPAddressPort</code> (<a href="chap4.html#X8568CE6684C90CE5"><span class="RefLink">4.3-6</span></a>) takes the same arguments, but the first can be a string containing an IP address in dot notation like "137.226.152.77" or a hostname to be looked up.</p>
+
+<p>The <code class="code">setsockopt</code> function has no argument <var class="Arg">optlen</var>. The length of the string <var class="Arg">optval</var> is taken.</p>
+
+<p>The <code class="code">select</code> function works as the function <code class="code">UNIXSelect</code> in the <strong class="pkg">GAP</strong> library.</p>
+
+<p>As of now, the file locking mechanisms of <code class="code">fcntl</code> using <code class="code">struct flock</code> are not yet implemented on the <strong class="pkg">GAP</strong> level.</p>
+
+<p><a id="X800F9F3E810A7228" name="X800F9F3E810A7228"></a></p>
+
+<h4>3.2 <span class="Heading">The low-level functions in detail</span></h4>
+
+<p>Nearly all of this functions return an integer result in the C library. On the <strong class="pkg">GAP</strong> level this is either returned as a non-negative integer in case of success or as <code class="keyw">fail</code> in case of an error (where on the C level <span class="SimpleMath">-1</span> would be returned). If the integer can only be <span class="SimpleMath">0</span> for "no error" this is changed to <code class="keyw">true</code> on the <strong class="pkg">GAP</strong> level.</p>
+
+<p><a id="X7E474E9787012FE4" name="X7E474E9787012FE4"></a></p>
+
+<h5>3.2-1 IO_accept</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_accept</code>( <var class="Arg">fd</var>, <var class="Arg">addr</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>Accepts an incoming network connection. For details see "<code class="code">man 2 accept</code>". The argument <var class="Arg">addr</var> can be made with <code class="func">IO_make_sockaddr_in</code> (<a href="chap3.html#X878007A67E806CEF"><span class="RefLink">3.3-1</span></a>) and contains its length such that no third argument is necessary.</p>
+
+<p><a id="X791A6341852001F8" name="X791A6341852001F8"></a></p>
+
+<h5>3.2-2 IO_bind</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_bind</code>( <var class="Arg">fd</var>, <var class="Arg">my_addr</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>Binds a local address to a socket. For details see "<code class="code">man 2 bind</code>". The argument <var class="Arg">my_addr</var> can be made with <code class="func">IO_make_sockaddr_in</code> (<a href="chap3.html#X878007A67E806CEF"><span class="RefLink">3.3-1</span></a>) and contains its length such that no third argument is necessary.</p>
+
+<p><a id="X790139B37E87FA61" name="X790139B37E87FA61"></a></p>
+
+<h5>3.2-3 IO_chdir</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_chdir</code>( <var class="Arg">path</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
+
+<p>Changes the current working directory. For details see "<code class="code">man 2 chdir</code>".</p>
+
+<p><a id="X83D4CB2681674FA4" name="X83D4CB2681674FA4"></a></p>
+
+<h5>3.2-4 IO_chmod</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_chmod</code>( <var class="Arg">pathname</var>, <var class="Arg">mode</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
+
+<p>Changes the mode of a file. For details see "<code class="code">man 2 chmod</code>".</p>
+
+<p><a id="X85C0617479E4D952" name="X85C0617479E4D952"></a></p>
+
+<h5>3.2-5 IO_chown</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_chown</code>( <var class="Arg">path</var>, <var class="Arg">owner</var>, <var class="Arg">group</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
+
+<p>Sets owner and/or group of file. For details see "<code class="code">man 2 chown</code>".</p>
+
+<p><a id="X820DA9C97C2E80BA" name="X820DA9C97C2E80BA"></a></p>
+
+<h5>3.2-6 IO_close</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_close</code>( <var class="Arg">fd</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
+
+<p>Closes a file descriptor. For details see "<code class="code">man 2 close</code>".</p>
+
+<p><a id="X8078699B84F082A4" name="X8078699B84F082A4"></a></p>
+
+<h5>3.2-7 IO_closedir</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_closedir</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
+
+<p>Closes a directory. For details see "<code class="code">man 3 closedir</code>". Has no arguments, because we only have one <code class="code">DIR</code> struct in the C part.</p>
+
+<p><a id="X7DE9D8B387D3A3D5" name="X7DE9D8B387D3A3D5"></a></p>
+
+<h5>3.2-8 IO_connect</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_connect</code>( <var class="Arg">fd</var>, <var class="Arg">serv_addr</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
+
+<p>Connects to a remote socket. For details see "<code class="code">man 2 connect</code>". The argument <var class="Arg">serv_addr</var> can be made with <code class="func">IO_make_sockaddr_in</code> (<a href="chap3.html#X878007A67E806CEF"><span class="RefLink">3.3-1</span></a>) and contains its length such that no third argument is necessary.</p>
+
+<p><a id="X78FCF69C7FCF3BD7" name="X78FCF69C7FCF3BD7"></a></p>
+
+<h5>3.2-9 IO_creat</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_creat</code>( <var class="Arg">pathname</var>, <var class="Arg">mode</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>Creates a new file. For details see "<code class="code">man 2 creat</code>".</p>
+
+<p><a id="X7DAAD93A80F76681" name="X7DAAD93A80F76681"></a></p>
+
+<h5>3.2-10 IO_dup</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_dup</code>( <var class="Arg">oldfd</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>Duplicates a file descriptor. For details see "<code class="code">man 2 dup</code>".</p>
+
+<p><a id="X7F7B8FAC7ABA285B" name="X7F7B8FAC7ABA285B"></a></p>
+
+<h5>3.2-11 IO_dup2</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_dup2</code>( <var class="Arg">oldfd</var>, <var class="Arg">newfd</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
+
+<p>Duplicates a file descriptor to a new one. For details see "<code class="code">man 2 dup2</code>".</p>
+
+<p><a id="X7B30A7FA84692EC5" name="X7B30A7FA84692EC5"></a></p>
+
+<h5>3.2-12 IO_execv</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_execv</code>( <var class="Arg">path</var>, <var class="Arg">argv</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">fail</code> or does not return</p>
+
+<p>Replaces the process with another process. For details see "<code class="code">man 3 execv</code>". The argument <var class="Arg">argv</var> is a list of strings. The called program does not have to be the first argument in this list.</p>
+
+<p><a id="X875D9A9E8201D461" name="X875D9A9E8201D461"></a></p>
+
+<h5>3.2-13 IO_execve</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_execve</code>( <var class="Arg">path</var>, <var class="Arg">argv</var>, <var class="Arg">envp</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">fail</code> or does not return</p>
+
+<p>Replaces the process with another process. For details see "<code class="code">man 3 execve</code>". The arguments <var class="Arg">argv</var> and <var class="Arg">envp</var> are both lists of strings. The called program does not have to be the first argument in <var class="Arg">argv</var>. The list <var class="Arg">envp</var> can be made with <code class="func">IO_MakeEnvList</code> (<a href="chap4.html#X7CF3DB5081A91600"><span class="RefLink">4.3-8</span></a>) from a record acquired from <code class="func">IO_Environment</code> (<a href="chap4.html#X7F9AAE018474E1D8"><span class="RefLink">4.3-7</span></a>) and modified later.</p>
+
+<p><a id="X818044D07C64A412" name="X818044D07C64A412"></a></p>
+
+<h5>3.2-14 IO_execvp</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_execvp</code>( <var class="Arg">path</var>, <var class="Arg">argv</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">fail</code> or does not return</p>
+
+<p>Replaces the process with another process. For details see "<code class="code">man 3 execvp</code>". The argument <var class="Arg">argv</var> is a list of strings. The called program does not have to be the first argument in this list.</p>
+
+<p><a id="X843634347E88C357" name="X843634347E88C357"></a></p>
+
+<h5>3.2-15 IO_exit</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_exit</code>( <var class="Arg">status</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Stops process immediately with return code <var class="Arg">status</var>. For details see "<code class="code">man 2 exit</code>". The argument <var class="Arg">status</var> must be an integer. Does not return.</p>
+
+<p><a id="X7F08E1187BDB619A" name="X7F08E1187BDB619A"></a></p>
+
+<h5>3.2-16 IO_fchmod</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_fchmod</code>( <var class="Arg">fd</var>, <var class="Arg">mode</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
+
+<p>Changes mode of an opened file. For details see "<code class="code">man 2 fchmod</code>".</p>
+
+<p><a id="X791C4B4A81059A88" name="X791C4B4A81059A88"></a></p>
+
+<h5>3.2-17 IO_fchown</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_fchown</code>( <var class="Arg">fd</var>, <var class="Arg">owner</var>, <var class="Arg">group</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
+
+<p>Changes owner and/or group of an opened file. For details see "<code class="code">man 2 fchown</code>".</p>
+
+<p><a id="X7870647E866D29A4" name="X7870647E866D29A4"></a></p>
+
+<h5>3.2-18 IO_fcntl</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_fcntl</code>( <var class="Arg">fd</var>, <var class="Arg">cmd</var>, <var class="Arg">arg</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>Does various things to control the behaviour of a file descriptor. For details see "<code class="code">man 2 fcntl</code>".</p>
+
+<p><a id="X86C819F37D07ECF7" name="X86C819F37D07ECF7"></a></p>
+
+<h5>3.2-19 IO_fork</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_fork</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>Forks off a child process, which is an identical copy. For details see "<code class="code">man 2 fork</code>". The <strong class="pkg">IO</strong> package keeps track of all child processes it has spawned to allow for usage of the <code class="func">IO_WaitPid</code> (<a href="chap3.html#X80737A008450184F"><span class="RefLink">3.2-60</span></a>) function. Note that on the first call to <code class="func">IO_fork</code> the <strong class="pkg">IO</strong>'s SIGCHLD handler is automatically installed using the function <code class="func">IO_InstallSIGCHLDHandler</code> (<a href="chap3.html#X8383E62D86BE30C6"><span class="RefLink">3.3-3</span></a>), if this has not yet happened.</p>
+
+<p><a id="X7E27748983EC7B5C" name="X7E27748983EC7B5C"></a></p>
+
+<h5>3.2-20 IO_fstat</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_fstat</code>( <var class="Arg">fd</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a record or <code class="keyw">fail</code></p>
+
+<p>Returns the file meta data for an opened file. For details see "<code class="code">man 2 fstat</code>". A <strong class="pkg">GAP</strong> record is returned with the same entries than a <code class="code">struct stat</code>.</p>
+
+<p><a id="X7DD25BDC79EE65AD" name="X7DD25BDC79EE65AD"></a></p>
+
+<h5>3.2-21 IO_gethostbyname</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_gethostbyname</code>( <var class="Arg">name</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a record or <code class="keyw">fail</code></p>
+
+<p>Return host information by name. For details see "<code class="code">man 3 gethostbyname</code>". A <strong class="pkg">GAP</strong> record is returned with all the relevant information about the host.</p>
+
+<p><a id="X7B7164EF8307D26B" name="X7B7164EF8307D26B"></a></p>
+
+<h5>3.2-22 IO_gethostname</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_gethostname</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a string or <code class="keyw">fail</code></p>
+
+<p>Return host name. For details see "<code class="code">man 3 gethostname</code>".</p>
+
+<p><a id="X7ECF948083E38BD0" name="X7ECF948083E38BD0"></a></p>
+
+<h5>3.2-23 IO_getpid</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_getpid</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer</p>
+
+<p>Returns the process ID of the current process as an integer. For details see "<code class="code">man 2 getpid</code>".</p>
+
+<p><a id="X7EC6ABAB7AB9F40F" name="X7EC6ABAB7AB9F40F"></a></p>
+
+<h5>3.2-24 IO_getppid</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_getppid</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer</p>
+
+<p>Returns the process ID of the parent of the current process as an integer. For details see "<code class="code">man 2 getppid</code>".</p>
+
+<p><a id="X877A161482FC1769" name="X877A161482FC1769"></a></p>
+
+<h5>3.2-25 IO_getsockname</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_getsockname</code>( <var class="Arg">fd</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a string or <code class="keyw">fail</code></p>
+
+<p>Get a socket name. For details see "<code class="code">man 2 getsockname</code>".</p>
+
+<p><a id="X790213D885BAB495" name="X790213D885BAB495"></a></p>
+
+<h5>3.2-26 IO_getsockopt</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_getsockopt</code>( <var class="Arg">fd</var>, <var class="Arg">level</var>, <var class="Arg">optname</var>, <var class="Arg">optval</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
+
+<p>Get a socket option. For details see "<code class="code">man 2 getsockopt</code>". Note that the argument <var class="Arg">optval</var> carries its length around, such that no 5th argument is necessary.</p>
+
+<p><a id="X7BC965198011083B" name="X7BC965198011083B"></a></p>
+
+<h5>3.2-27 IO_gettimeofday</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_gettimeofday</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: A record with components <code class="code">tv_sec</code> and <code class="code">tv_usec</code></p>
+
+<p>This returns the time elapsed since 1.1.1970, 0:00 GMT. The component <code class="code">tv_sec</code> contains the number of full seconds and the number <code class="code">tv_usec</code> the additional microseconds.</p>
+
+<p><a id="X7DC156EA86F3F356" name="X7DC156EA86F3F356"></a></p>
+
+<h5>3.2-28 IO_gmtime</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_gmtime</code>( <var class="Arg">seconds</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: A record</p>
+
+<p>The argument is the number of seconds that have elapsed since 1.1.1970, 0:00 GMT. The result is a record with the current Greenwich mean time broken down into date and time as in the C-library function <code class="code">gmtime</code>.</p>
+
+<p><a id="X7D0439128512FBF6" name="X7D0439128512FBF6"></a></p>
+
+<h5>3.2-29 IO_kill</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_kill</code>( <var class="Arg">pid</var>, <var class="Arg">sig</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
+
+<p>Sends the signal <var class="Arg">sig</var> to the process with process ID <var class="Arg">pid</var>. For details see "<code class="code">man 2 kill</code>". The signal numbers available can be found in the global <code class="code">IO</code> record with names like <code class="code">SIGTERM</code>.</p>
+
+<p><a id="X8305F97C87FE448E" name="X8305F97C87FE448E"></a></p>
+
+<h5>3.2-30 IO_lchown</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_lchown</code>( <var class="Arg">path</var>, <var class="Arg">owner</var>, <var class="Arg">group</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
+
+<p>Changes owner and/or group of a file not following links. For details see "<code class="code">man 2 lchown</code>".</p>
+
+<p><a id="X7E1C65EB84497185" name="X7E1C65EB84497185"></a></p>
+
+<h5>3.2-31 IO_link</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_link</code>( <var class="Arg">oldpath</var>, <var class="Arg">newpath</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
+
+<p>Create a hard link. For details see "<code class="code">man 2 link</code>".</p>
+
+<p><a id="X7957063B807025C7" name="X7957063B807025C7"></a></p>
+
+<h5>3.2-32 IO_listen</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_listen</code>( <var class="Arg">fd</var>, <var class="Arg">backlog</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
+
+<p>Switch a socket to listening. For details see "<code class="code">man 2 listen</code>".</p>
+
+<p><a id="X7B7D3D64805F335F" name="X7B7D3D64805F335F"></a></p>
+
+<h5>3.2-33 IO_localtime</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_localtime</code>( <var class="Arg">seconds</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: A record</p>
+
+<p>The argument is the number of seconds that have elapsed since 1.1.1970, 0:00 GMT. The result is a record with the current local time broken down into date and time as in the C-library function <code class="code">localtime</code>.</p>
+
+<p><a id="X85C475187C824830" name="X85C475187C824830"></a></p>
+
+<h5>3.2-34 IO_lseek</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_lseek</code>( <var class="Arg">fd</var>, <var class="Arg">offset</var>, <var class="Arg">whence</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>Seeks within an open file. For details see "<code class="code">man 2 lseek</code>".</p>
+
+<p><a id="X7A8C75038517A55A" name="X7A8C75038517A55A"></a></p>
+
+<h5>3.2-35 IO_lstat</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_lstat</code>( <var class="Arg">name</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a record or <code class="keyw">fail</code></p>
+
+<p>Returns the file meta data for a file not following links. For details see "<code class="code">man 2 lstat</code>". A <strong class="pkg">GAP</strong> record is returned with the same entries than a <code class="code">struct stat</code>.</p>
+
+<p><a id="X83D968AB84F00ABF" name="X83D968AB84F00ABF"></a></p>
+
+<h5>3.2-36 IO_mkdir</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_mkdir</code>( <var class="Arg">pathname</var>, <var class="Arg">mode</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
+
+<p>Creates a directory. For details see "<code class="code">man 2 mkdir</code>".</p>
+
+<p><a id="X80BFF17A8099815F" name="X80BFF17A8099815F"></a></p>
+
+<h5>3.2-37 IO_mkfifo</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_mkfifo</code>( <var class="Arg">pathname</var>, <var class="Arg">mode</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
+
+<p>Creates a FIFO special file (a named pipe). For details see "<code class="code">man 3 mkfifo</code>".</p>
+
+<p><a id="X7928F1DB8379F850" name="X7928F1DB8379F850"></a></p>
+
+<h5>3.2-38 IO_mknod</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_mknod</code>( <var class="Arg">pathname</var>, <var class="Arg">mode</var>, <var class="Arg">dev</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
+
+<p>Create a special or ordinary file. For details see "<code class="code">man 2 mknod</code>".</p>
+
+<p><a id="X8731A44E8032D9D2" name="X8731A44E8032D9D2"></a></p>
+
+<h5>3.2-39 IO_open</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_open</code>( <var class="Arg">pathname</var>, <var class="Arg">flags</var>, <var class="Arg">mode</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>Open and possibly create a file or device. For details see "<code class="code">man 2 open</code>". Only the variant with 3 arguments can be used.</p>
+
+<p><a id="X78E234797EB01883" name="X78E234797EB01883"></a></p>
+
+<h5>3.2-40 IO_opendir</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_opendir</code>( <var class="Arg">name</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
+
+<p>Opens a directory. For details see "<code class="code">man 3 opendir</code>". Note that only <code class="keyw">true</code> is returned if everything is OK, since only one <code class="code">DIR</code> struct is stored on the C level and thus only one directory can be open at any time.</p>
+
+<p><a id="X7C8F0A44837BBE8C" name="X7C8F0A44837BBE8C"></a></p>
+
+<h5>3.2-41 IO_pipe</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_pipe</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a record or <code class="keyw">fail</code></p>
+
+<p>Create a pair of file descriptors with a pipe between them. For details see "<code class="code">man 2 pipe</code>". Note that no arguments are needed. The result is either <code class="keyw">fail</code> in case of an error or a record with two components <code class="code">toread</code> and <code class="code">towrite</code> bound to the two filedescriptors for reading and writing respectively.</p>
+
+<p><a id="X84F3D862836BF17C" name="X84F3D862836BF17C"></a></p>
+
+<h5>3.2-42 IO_read</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_read</code>( <var class="Arg">fd</var>, <var class="Arg">st</var>, <var class="Arg">offset</var>, <var class="Arg">count</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>Reads from file descriptor. For details see "<code class="code">man 2 read</code>". Note that there is one more argument <var class="Arg">offset</var> to specify at which position in the string <var class="Arg">st</var> the read data should be stored. Note that <var class="Arg">offset</var> zero means at the beginning of the string, which is position 1 in <strong class="pkg">GAP</strong>. The number of bytes read or <code class="keyw">fail</code> in case of an error is returned.</p>
+
+<p><a id="X8410C6F17DE9302D" name="X8410C6F17DE9302D"></a></p>
+
+<h5>3.2-43 IO_readdir</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_readdir</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a string or <code class="keyw">fail</code> or <code class="keyw">false</code></p>
+
+<p>Reads from a directory. For details see "<code class="code">man 2 readdir</code>". Note that no argument is required as we have only one <code class="code">DIR</code> struct on the C level. If the directory is read completely <code class="keyw">false</code> is returned, and otherwise a string. An error is indicated by <code class="keyw">fail</code>.</p>
+
+<p><a id="X7943F25E7EBA9A6B" name="X7943F25E7EBA9A6B"></a></p>
+
+<h5>3.2-44 IO_readlink</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_readlink</code>( <var class="Arg">path</var>, <var class="Arg">buf</var>, <var class="Arg">bufsize</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>Reads the value of a symbolic link. For details see "<code class="code">man 2 readlink</code>". <var class="Arg">buf</var> is modified. The new length of <var class="Arg">buf</var> is returned or <code class="keyw">fail</code> in case of an error.</p>
+
+<p><a id="X78EB295E78B363B2" name="X78EB295E78B363B2"></a></p>
+
+<h5>3.2-45 IO_recv</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_recv</code>( <var class="Arg">fd</var>, <var class="Arg">st</var>, <var class="Arg">offset</var>, <var class="Arg">len</var>, <var class="Arg">flags</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>Receives data from a socket. For details see "<code class="code">man 2 recv</code>". Note the additional argument <var class="Arg">offset</var> which plays the same role as for the <code class="func">IO_read</code> (<a href="chap3.html#X84F3D862836BF17C"><span class="RefLink">3.2-42</span></a>) function.</p>
+
+<p><a id="X84C617887EE02EB4" name="X84C617887EE02EB4"></a></p>
+
+<h5>3.2-46 IO_recvfrom</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_recvfrom</code>( <var class="Arg">fd</var>, <var class="Arg">st</var>, <var class="Arg">offset</var>, <var class="Arg">len</var>, <var class="Arg">flags</var>, <var class="Arg">addr</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>Receives data from a socket with given address. For details see "<code class="code">man 2 recvfrom</code>". Note the additional argument <var class="Arg">offset</var> which plays the same role as for the <code class="func">IO_read</code> (<a href="chap3.html#X84F3D862836BF17C"><span class="RefLink">3.2-42</span></a>) function. The argument <var class="Arg">addr</var> can be made with <code class="func">IO_make_sockaddr_in</code> (<a href="chap3.html#X878007A67E806CEF"><span class="RefLink">3.3-1</span></a>) and contains its length such that no 7th argument is necessary.</p>
+
+<p><a id="X78EC95007A92AB69" name="X78EC95007A92AB69"></a></p>
+
+<h5>3.2-47 IO_rename</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_rename</code>( <var class="Arg">oldpath</var>, <var class="Arg">newpath</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
+
+<p>Renames a file or moves it. For details see "<code class="code">man 2 rename</code>".</p>
+
+<p><a id="X7F86DBEB7876FBA5" name="X7F86DBEB7876FBA5"></a></p>
+
+<h5>3.2-48 IO_rewinddir</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_rewinddir</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
+
+<p>Rewinds a directory. For details see "<code class="code">man 2 rewinddir</code>". Note that no argument is required as we have only one <code class="code">DIR</code> struct on the C level. Returns <code class="keyw">fail</code> only, if no prior <code class="func">IO_opendir</code> (<a href="chap3.html#X78E234797EB01883"><span class="RefLink">3.2-40</span></a>) command has been called.</p>
+
+<p><a id="X7FA4DD537C83A199" name="X7FA4DD537C83A199"></a></p>
+
+<h5>3.2-49 IO_rmdir</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_rmdir</code>( <var class="Arg">name</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
+
+<p>Removes an empty directory. For details see "<code class="code">man 2 rmdir</code>".</p>
+
+<p><a id="X84A98D2380BF6574" name="X84A98D2380BF6574"></a></p>
+
+<h5>3.2-50 IO_seekdir</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_seekdir</code>( <var class="Arg">offset</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
+
+<p>Sets the position of the next readdir call. For details see "<code class="code">man 3 seekdir</code>". Note that no second argument is required as we have only one <code class="code">DIR</code> struct on the C level.</p>
+
+<p><a id="X81CA6EE88062010E" name="X81CA6EE88062010E"></a></p>
+
+<h5>3.2-51 IO_select</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_select</code>( <var class="Arg">inlist</var>, <var class="Arg">outlist</var>, <var class="Arg">exclist</var>, <var class="Arg">timeoutsec</var>, <var class="Arg">timeoutusec</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>Used for I/O multiplexing. For details see "<code class="code">man 2 select</code>". <var class="Arg">inlist</var>, <var class="Arg">outlist</var> and <var class="Arg">exclist</var> are lists of filedescriptors, which are modified. If the corresponding file descriptor is not yet ready, it is replaced by <code class="keyw">fail</code>. The timeout values <var class="Arg">timeoutsec</var> and <var class="Arg">timeoutusec</var> correspond to the usual arguments of <code class="code">select</code>, if both are immediate integers, they are set, otherwise <code class="code">select</code> is called with no timeout value.</p>
+
+<p><a id="X87019FD887F55C27" name="X87019FD887F55C27"></a></p>
+
+<h5>3.2-52 IO_send</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_send</code>( <var class="Arg">fd</var>, <var class="Arg">st</var>, <var class="Arg">offset</var>, <var class="Arg">len</var>, <var class="Arg">flags</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>Sends data to a socket. For details see "<code class="code">man 2 send</code>". Note that the additional argument <var class="Arg">offset</var> specifies the position of the data to send within the string <var class="Arg">st</var>. It is zero based, meaning that zero indicates the start of the string, which is position 1 in <strong class="pkg">GAP</strong>.</p>
+
+<p><a id="X8388B0147B5745EC" name="X8388B0147B5745EC"></a></p>
+
+<h5>3.2-53 IO_sendto</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_sendto</code>( <var class="Arg">fd</var>, <var class="Arg">st</var>, <var class="Arg">offset</var>, <var class="Arg">len</var>, <var class="Arg">flags</var>, <var class="Arg">addr</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>Sends data to a socket. For details see "<code class="code">man 2 sendto</code>". Note that the additional argument <var class="Arg">offset</var> specifies the position of the data to send within the string <var class="Arg">st</var>. It is zero based, meaning that zero indicates the start of the string, which is position 1 in <strong class="pkg">GAP</strong>. The argument <var class="Arg">addr</var> can be made with <code class="func">IO_make_sockaddr_in</code> (<a href="chap3.html#X878007A67E806CEF"><span class="RefLink">3.3-1</span></a>) and contains its length such that no 7th argument is necessary.</p>
+
+<p><a id="X7BE641C1784D0899" name="X7BE641C1784D0899"></a></p>
+
+<h5>3.2-54 IO_setsockopt</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_setsockopt</code>( <var class="Arg">fd</var>, <var class="Arg">level</var>, <var class="Arg">optname</var>, <var class="Arg">optval</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
+
+<p>Sets a socket option. For details see "<code class="code">man 2 setsockopt</code>". Note that the argument <var class="Arg">optval</var> carries its length around, such that no 5th argument is necessary.</p>
+
+<p><a id="X852B16CF82B96C84" name="X852B16CF82B96C84"></a></p>
+
+<h5>3.2-55 IO_socket</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_socket</code>( <var class="Arg">domain</var>, <var class="Arg">type</var>, <var class="Arg">protocol</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>Creates a socket, an endpoint for communication. For details see "<code class="code">man 2 socket</code>". There is one little special: On systems that have <code class="code">getprotobyname</code> you can pass a string as third argument <var class="Arg">protocol</var> which is automatically looked up by <code class="code">getprotobyname</code>.</p>
+
+<p><a id="X7F7D23867B45D525" name="X7F7D23867B45D525"></a></p>
+
+<h5>3.2-56 IO_stat</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_stat</code>( <var class="Arg">pathname</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a record or <code class="keyw">fail</code></p>
+
+<p>Returns the file metadata for the file <var class="Arg">pathname</var>. For details see "<code class="code">man 2 stat</code>". A <strong class="pkg">GAP</strong> record is returned with the same entries than a <code class="code">struct stat</code>.</p>
+
+<p><a id="X7B0D9CEF7A3CD431" name="X7B0D9CEF7A3CD431"></a></p>
+
+<h5>3.2-57 IO_symlink</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_symlink</code>( <var class="Arg">oldpath</var>, <var class="Arg">newpath</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
+
+<p>Creates a symbolic link. For details see "<code class="code">man 2 symlink</code>".</p>
+
+<p><a id="X81FF8B678748900B" name="X81FF8B678748900B"></a></p>
+
+<h5>3.2-58 IO_telldir</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_telldir</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>Return current location in directory. For details see "<code class="code">man 3 telldir</code>". Note that no second argument is required as we have only one <code class="code">DIR</code> struct on the C level.</p>
+
+<p><a id="X78C93B6587B478C2" name="X78C93B6587B478C2"></a></p>
+
+<h5>3.2-59 IO_unlink</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_unlink</code>( <var class="Arg">pathname</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
+
+<p>Delete a name and possibly the file it refers to. For details see "<code class="code">man 2 unlink</code>".</p>
+
+<p><a id="X80737A008450184F" name="X80737A008450184F"></a></p>
+
+<h5>3.2-60 IO_WaitPid</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_WaitPid</code>( <var class="Arg">pid</var>, <var class="Arg">wait</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a record or <code class="keyw">false</code> or <code class="keyw">fail</code></p>
+
+<p>Waits for the termination of a child process. Note that this only covers child processes that were started by <code class="func">IO_fork</code> (<a href="chap3.html#X86C819F37D07ECF7"><span class="RefLink">3.2-19</span></a>) which is used in all process starting functions in the <strong class="pkg">IO</strong> package. That is, it does not cover child processes started indirectly by our child processes and it does not cover child processes that were started by <strong class="pkg">GAP</strong>'s process starting functions <code class="func">Exec</code> (<a href="/Users/mhorn/Projekte/GAP/repos/doc/ref/chap11_mj.html#X81402C91833986FC"><span class="RefLink">Reference: Exec</span></a>) and <code class="func">InputOutputLocalProcess</code> (<a href="/Users/mhorn/Projekte/GAP/repos/doc/ref/chap10_mj.html#X820799A3824684AC"><span class="RefLink">Reference: InputOutputLocalProcess</span></a>). The behaviour is analogous to what "<code class="code">man 2 waitpid</code>" describes. <var class="Arg">pid</var> is either a process ID or <span class="SimpleMath">-1</span> in which case any of our child processes is meant. This function returns a <strong class="pkg">GAP</strong> record describing PID and exit status, if the child process has terminated. The second argument <var class="Arg">wait</var> must be either <code class="keyw">true</code> or <code class="keyw">false</code>. In the first case, the call blocks until new information about a terminated child process is available. In the second case no such waiting is performed, the call returns immediately. In this case a return value of <code class="keyw">fail</code> indicates that no information was available. An error is indicated by the return value <code class="keyw">false</code>. See also <code class="func">IO_fork</code> (<a href="chap3.html#X86C819F37D07ECF7"><span class="RefLink">3.2-19</span></a>).</p>
+
+<p><a id="X84EB06707D1BD3F1" name="X84EB06707D1BD3F1"></a></p>
+
+<h5>3.2-61 IO_write</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_write</code>( <var class="Arg">fd</var>, <var class="Arg">st</var>, <var class="Arg">offset</var>, <var class="Arg">count</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: an integer or <code class="keyw">fail</code></p>
+
+<p>Writes to a file descriptor. For details see "<code class="code">man 2 write</code>". Note that the additional argument <var class="Arg">offset</var> specifies the position of the data to send within the string <var class="Arg">st</var>. It is zero based, meaning that zero indicates the start of the string, which is position 1 in <strong class="pkg">GAP</strong>.</p>
+
+<p><a id="X85065AD381BD8E0F" name="X85065AD381BD8E0F"></a></p>
+
+<h4>3.3 <span class="Heading">Further C level functions</span></h4>
+
+<p>The following functions do not correspond to functions in the C library, but are there to provide convenience to use other functions:</p>
+
+<p><a id="X878007A67E806CEF" name="X878007A67E806CEF"></a></p>
+
+<h5>3.3-1 IO_make_sockaddr_in</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_make_sockaddr_in</code>( <var class="Arg">ip</var>, <var class="Arg">port</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a string or <code class="keyw">fail</code></p>
+
+<p>Makes a struct <code class="code">sockaddr_in</code> from IP address and port. The IP address must be given as a string of length four, containing the four bytes of an IPv4 address in natural order. The port must be a port number. Returns a string containing the struct, which can be given to all functions above having an address argument.</p>
+
+<p><a id="X7F3E88AD7EFD52F4" name="X7F3E88AD7EFD52F4"></a></p>
+
+<h5>3.3-2 IO_environ</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_environ</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: a list of strings</p>
+
+<p>For details see "<code class="code">man environ</code>". Returns the current environment as a list of strings of the form "key=value".</p>
+
+<p><a id="X8383E62D86BE30C6" name="X8383E62D86BE30C6"></a></p>
+
+<h5>3.3-3 IO_InstallSIGCHLDHandler</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_InstallSIGCHLDHandler</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
+
+<p>Installs our SIGCHLD handler. This functions works as an idempotent. That is, calling it twice does exactly the same as calling it once. It returns <code class="keyw">true</code> when it is called for the first time since then a pointer to the old signal handler is stored in a global variable. See <code class="func">IO_fork</code> (<a href="chap3.html#X86C819F37D07ECF7"><span class="RefLink">3.2-19</span></a>).</p>
+
+<p><a id="X7EEB7471816B64DF" name="X7EEB7471816B64DF"></a></p>
+
+<h5>3.3-4 IO_RestoreSIGCHLDHandler</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_RestoreSIGCHLDHandler</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Restores the original SIGCHLD handler. This function works as an idempotent. That is, calling it twice does exactly the same as calling it once. It returns <code class="keyw">true</code> when it is called for the first time after calling <code class="func">IO_InstallSIGCHLDHandler</code> (<a href="chap3.html#X8383E62D86BE30C6"><span class="RefLink">3.3-3</span></a>). See <code class="func">IO_fork</code> (<a href="chap3.html#X86C819F37D07ECF7"><span class="RefLink">3.2-19</span></a>).</p>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap2.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap4.html">[Next Chapter]</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chap5.html">5</a>  <a href="chap6.html">6</a>  <a href="chap7.html">7</a>  <a href="chap8.html">8</a>  <a href="chap9.html">9</a>  <a href="chap10.html">10</a>  <a href="chap11.html">11</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>
