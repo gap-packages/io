@@ -55,17 +55,6 @@ if test "$CYGWIN" = "yes"; then
 else
   AC_DEFINE(SYS_IS_CYGWIN32, 0, are we on CYGWIN?)
 fi
-
-
-
-case "$host" in
-        *-darwin* )
-        AC_DEFINE(SYS_IS_DARWIN, 1, are we on DARWIN?)
-        ;;
-        * )
-        AC_DEFINE(SYS_IS_DARWIN, 0, are we on DARWIN?)
-        ;;
-esac
      
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

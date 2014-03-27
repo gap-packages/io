@@ -1,7 +1,4 @@
 ACLOCAL_AMFLAGS = -I m4
-AM_LIBTOOLFLAGS=--silent
-
-SUBDIRS = 
 
 BINARCHDIR = bin/$(GAPARCH)
 GAPINSTALLLIB = $(abs_top_srcdir)/$(BINARCHDIR)/io.so
