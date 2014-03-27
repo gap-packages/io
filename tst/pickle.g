@@ -33,6 +33,15 @@ SuPeRfail,
 -1,
 1,
 1234567123512636523123561311223123123123234234234,
+1.0,
+-1.0,
+1.23456789123456789
+-0., # Note, we test floats further at Error(36)
+0.,
+1.0/0.0, # inf
+(-1.0)/0.0, # -inf
+3.141^100,
+3.141^-100,
 "Max",
 'M',
 E(4),
@@ -183,5 +192,15 @@ if IO_Unpickle(f) <> IO_Nothing then Error(35); fi;
 
 IO_Close(f);
 
-Print("Unpickling OK.\n");
+floatlist := [-0.0, 0.0, 0.0/0.0, 1.0/0.0, -1.0/0.0, 1.23456789123456789];
 
+pickledlist := IO_Unpickle(IO_Pickle(floatlist));
+
+# ExtRepOfObj deals with issues like infinity, -0 vs +0, nan, etc.
+
+if List(floatlist, x -> ExtRepOfObj(x)) <>
+   List(pickledlist, x -> ExtRepOfObj(x)) then
+    Error(36);
+fi;
+
+Print("Unpickling OK.\n");
