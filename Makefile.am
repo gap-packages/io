@@ -16,12 +16,12 @@ if SYS_IS_CYGWIN
 io_la_LDFLAGS += -no-undefined -version-info 0:0:0 -Wl,$(GAPROOT)/bin/$(GAPARCH)/gap.dll
 endif
 
-all-local: io.la install-libLTLIBRARIES
+all-local: io.la
 	$(mkdir_p) $(top_srcdir)/$(BINARCHDIR)
 if SYS_IS_CYGWIN
-	cp $(libdir)/io.dll $(GAPINSTALLLIB)
+	cp .libs/io.dll $(GAPINSTALLLIB)
 else
-	cp $(libdir)/io.so $(GAPINSTALLLIB)
+	cp .libs/io.so $(GAPINSTALLLIB)
 endif
 	@echo "SUCCESS!"
 

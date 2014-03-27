@@ -10,8 +10,6 @@ m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES])
 AM_MAINTAINER_MODE
 LT_INIT([disable-static dlopen win32-dll])
 
-AC_PREFIX_DEFAULT([${PWD}])
-
 AC_PROG_CC
 
 ## Find out what the best compiler flags are
