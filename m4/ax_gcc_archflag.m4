@@ -1,4 +1,6 @@
-##### http://autoconf-archive.cryp.to/ax_gcc_archflag.html
+# ===========================================================================
+#      http://www.gnu.org/software/autoconf-archive/ax_gcc_archflag.html
+# ===========================================================================
 #
 # SYNOPSIS
 #
@@ -6,76 +8,70 @@
 #
 # DESCRIPTION
 #
-#   This macro tries to guess the "native" arch corresponding to the
-#   target architecture for use with gcc's -march=arch or -mtune=arch
-#   flags. If found, the cache variable $ax_cv_gcc_archflag is set to
-#   this flag and ACTION-SUCCESS is executed; otherwise
-#   $ax_cv_gcc_archflag is is set to "unknown" and ACTION-FAILURE is
-#   executed. The default ACTION-SUCCESS is to add $ax_cv_gcc_archflag
-#   to the end of $CFLAGS.
+#   This macro tries to guess the "native" arch corresponding to the target
+#   architecture for use with gcc's -march=arch or -mtune=arch flags. If
+#   found, the cache variable $ax_cv_gcc_archflag is set to this flag and
+#   ACTION-SUCCESS is executed; otherwise $ax_cv_gcc_archflag is set to
+#   "unknown" and ACTION-FAILURE is executed. The default ACTION-SUCCESS is
+#   to add $ax_cv_gcc_archflag to the end of $CFLAGS.
 #
-#   PORTABLE? should be either [yes] (default) or [no]. In the former
-#   case, the flag is set to -mtune (or equivalent) so that the
-#   architecture is only used for tuning, but the instruction set used
-#   is still portable. In the latter case, the flag is set to -march
-#   (or equivalent) so that architecture-specific instructions are
-#   enabled.
+#   PORTABLE? should be either [yes] (default) or [no]. In the former case,
+#   the flag is set to -mtune (or equivalent) so that the architecture is
+#   only used for tuning, but the instruction set used is still portable. In
+#   the latter case, the flag is set to -march (or equivalent) so that
+#   architecture-specific instructions are enabled.
 #
-#   The user can specify --with-gcc-arch=<arch> in order to override
-#   the macro's choice of architecture, or --without-gcc-arch to
-#   disable this.
+#   The user can specify --with-gcc-arch=<arch> in order to override the
+#   macro's choice of architecture, or --without-gcc-arch to disable this.
 #
 #   When cross-compiling, or if $CC is not gcc, then ACTION-FAILURE is
 #   called unless the user specified --with-gcc-arch manually.
 #
-#   Requires macros: AX_CHECK_COMPILER_FLAGS, AX_GCC_X86_CPUID
+#   Requires macros: AX_CHECK_COMPILE_FLAG, AX_GCC_X86_CPUID
 #
-#   (The main emphasis here is on recent CPUs, on the principle that
-#   doing high-performance computing on old hardware is uncommon.)
+#   (The main emphasis here is on recent CPUs, on the principle that doing
+#   high-performance computing on old hardware is uncommon.)
 #
-# LAST MODIFICATION
+# LICENSE
 #
-#   2007-07-29
+#   Copyright (c) 2008 Steven G. Johnson <stevenj@alum.mit.edu>
+#   Copyright (c) 2008 Matteo Frigo
+#   Copyright (c) 2012 Tsukasa Oi
 #
-# COPYLEFT
-#
-#   Copyright (c) 2007 Steven G. Johnson <stevenj@alum.mit.edu>
-#   Copyright (c) 2007 Matteo Frigo
-#
-#   This program is free software: you can redistribute it and/or
-#   modify it under the terms of the GNU General Public License as
-#   published by the Free Software Foundation, either version 3 of the
-#   License, or (at your option) any later version.
+#   This program is free software: you can redistribute it and/or modify it
+#   under the terms of the GNU General Public License as published by the
+#   Free Software Foundation, either version 3 of the License, or (at your
+#   option) any later version.
 #
 #   This program is distributed in the hope that it will be useful, but
 #   WITHOUT ANY WARRANTY; without even the implied warranty of
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-#   General Public License for more details.
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+#   Public License for more details.
 #
-#   You should have received a copy of the GNU General Public License
-#   along with this program. If not, see
-#   <http://www.gnu.org/licenses/>.
+#   You should have received a copy of the GNU General Public License along
+#   with this program. If not, see <http://www.gnu.org/licenses/>.
 #
-#   As a special exception, the respective Autoconf Macro's copyright
-#   owner gives unlimited permission to copy, distribute and modify the
-#   configure scripts that are the output of Autoconf when processing
-#   the Macro. You need not follow the terms of the GNU General Public
-#   License when using or distributing such scripts, even though
-#   portions of the text of the Macro appear in them. The GNU General
-#   Public License (GPL) does govern all other use of the material that
-#   constitutes the Autoconf Macro.
+#   As a special exception, the respective Autoconf Macro's copyright owner
+#   gives unlimited permission to copy, distribute and modify the configure
+#   scripts that are the output of Autoconf when processing the Macro. You
+#   need not follow the terms of the GNU General Public License when using
+#   or distributing such scripts, even though portions of the text of the
+#   Macro appear in them. The GNU General Public License (GPL) does govern
+#   all other use of the material that constitutes the Autoconf Macro.
 #
-#   This special exception to the GPL applies to versions of the
-#   Autoconf Macro released by the Autoconf Macro Archive. When you
-#   make and distribute a modified version of the Autoconf Macro, you
-#   may extend this special exception to the GPL to apply to your
-#   modified version as well.
+#   This special exception to the GPL applies to versions of the Autoconf
+#   Macro released by the Autoconf Archive. When you make and distribute a
+#   modified version of the Autoconf Macro, you may extend this special
+#   exception to the GPL to apply to your modified version as well.
+
+#serial 14
 
 AC_DEFUN([AX_GCC_ARCHFLAG],
 [AC_REQUIRE([AC_PROG_CC])
 AC_REQUIRE([AC_CANONICAL_HOST])
+AC_REQUIRE([AC_PROG_SED])
 
-AC_ARG_WITH(gcc-arch, [AC_HELP_STRING([--with-gcc-arch=<arch>], [use architecture <arch> for gcc -march/-mtune, instead of guessing])],
+AC_ARG_WITH(gcc-arch, [AS_HELP_STRING([--with-gcc-arch=<arch>], [use architecture <arch> for gcc -march/-mtune, instead of guessing])],
 	ax_gcc_arch=$withval, ax_gcc_arch=yes)
 
 AC_MSG_CHECKING([for gcc architecture flag])
@@ -90,7 +86,7 @@ if test "x$ax_gcc_arch" = xyes; then
 ax_gcc_arch=""
 if test "$cross_compiling" = no; then
 case $host_cpu in
-  i[[3456]]86*|x86_64*) # use cpuid codes, in part from x86info-1.7 by D. Jones
+  i[[3456]]86*|x86_64*|amd64*) # use cpuid codes
      AX_GCC_X86_CPUID(0)
      AX_GCC_X86_CPUID(1)
      case $ax_cv_gcc_x86_cpuid_0 in
@@ -98,18 +94,24 @@ case $host_cpu in
           case $ax_cv_gcc_x86_cpuid_1 in
 	    *5[[48]]?:*:*:*) ax_gcc_arch="pentium-mmx pentium" ;;
 	    *5??:*:*:*) ax_gcc_arch=pentium ;;
+	    *1?6[[7d]]?:*:*:*) ax_gcc_arch="penryn core2 pentium-m pentium3 pentiumpro" ;;
+	    *1?6[[aef]]?:*:*:*|*2?6[[5cef]]?:*:*:*) ax_gcc_arch="corei7 core2 pentium-m pentium3 pentiumpro" ;;
+	    *1?6c?:*:*:*|*[[23]]?66?:*:*:*) ax_gcc_arch="atom core2 pentium-m pentium3 pentiumpro" ;;
+	    *2?6[[ad]]?:*:*:*) ax_gcc_arch="corei7-avx corei7 core2 pentium-m pentium3 pentiumpro" ;;
+	    *[[1-9a-f]]?6??:*:*:*) ax_gcc_arch="core2 pentiumpro" ;;
 	    *6[[3456]]?:*:*:*) ax_gcc_arch="pentium2 pentiumpro" ;;
 	    *6a?:*[[01]]:*:*) ax_gcc_arch="pentium2 pentiumpro" ;;
 	    *6a?:*[[234]]:*:*) ax_gcc_arch="pentium3 pentiumpro" ;;
-	    *6[[9d]]?:*:*:*) ax_gcc_arch="pentium-m pentium3 pentiumpro" ;;
+	    *6[[9de]]?:*:*:*) ax_gcc_arch="pentium-m pentium3 pentiumpro" ;;
 	    *6[[78b]]?:*:*:*) ax_gcc_arch="pentium3 pentiumpro" ;;
+	    *6f?:*:*:*) ax_gcc_arch="core2 pentium-m pentium3 pentiumpro" ;;
 	    *6??:*:*:*) ax_gcc_arch=pentiumpro ;;
-            *f3[[347]]:*:*:*|*f4[1347]:*:*:*)
+	    *f3[[347]]:*:*:*|*f4[1347]:*:*:*|*f6?:*:*:*)
 		case $host_cpu in
-                  x86_64*) ax_gcc_arch="nocona pentium4 pentiumpro" ;;
-                  *) ax_gcc_arch="prescott pentium4 pentiumpro" ;;
-                esac ;;
-            *f??:*:*:*) ax_gcc_arch="pentium4 pentiumpro";;
+	          x86_64*) ax_gcc_arch="nocona pentium4 pentiumpro" ;;
+	          *) ax_gcc_arch="prescott pentium4 pentiumpro" ;;
+	        esac ;;
+	    *f??:*:*:*) ax_gcc_arch="pentium4 pentiumpro";;
           esac ;;
        *:68747541:*:*) # AMD
           case $ax_cv_gcc_x86_cpuid_1 in
@@ -127,6 +129,9 @@ case $host_cpu in
 			ax_gcc_arch="athlon-xp athlon-4 athlon k7" ;;
                  *) ax_gcc_arch="athlon-4 athlon k7" ;;
 	       esac ;;
+	    *5??f??:*:*:*) ax_gcc_arch="btver1 amdfam10 k8" ;;
+	    *6??f??:*:*:*) ax_gcc_arch="bdver1 amdfam10 k8" ;;
+	    *[[1-9a-f]]??f??:*:*:*) ax_gcc_arch="amdfam10 k8" ;;
 	    *f[[4cef8b]]?:*:*:*) ax_gcc_arch="athlon64 k8" ;;
 	    *f5?:*:*:*) ax_gcc_arch="opteron k8" ;;
 	    *f7?:*:*:*) ax_gcc_arch="athlon-fx opteron k8" ;;
@@ -151,7 +156,7 @@ case $host_cpu in
   sparc*)
      AC_PATH_PROG([PRTDIAG], [prtdiag], [prtdiag], [$PATH:/usr/platform/`uname -i`/sbin/:/usr/platform/`uname -m`/sbin/])
      cputype=`(((grep cpu /proc/cpuinfo | cut -d: -f2) ; ($PRTDIAG -v |grep -i sparc) ; grep -i cpu /var/run/dmesg.boot ) | head -n 1) 2> /dev/null`
-     cputype=`echo "$cputype" | tr -d ' -' |tr $as_cr_LETTERS $as_cr_letters`
+     cputype=`echo "$cputype" | tr -d ' -' | $SED 's/SPARCIIi/SPARCII/' |tr $as_cr_LETTERS $as_cr_letters`
      case $cputype in
          *ultrasparciv*) ax_gcc_arch="ultrasparc4 ultrasparc3 ultrasparc v9" ;;
          *ultrasparciii*) ax_gcc_arch="ultrasparc3 ultrasparc v9" ;;
@@ -173,8 +178,8 @@ case $host_cpu in
   alphaev79) ax_gcc_arch="ev79 ev7 ev69 ev68 ev67" ;;
 
   powerpc*)
-     cputype=`((grep cpu /proc/cpuinfo | head -n 1 | cut -d: -f2 | cut -d, -f1 | sed 's/ //g') ; /usr/bin/machine ; /bin/machine; grep CPU /var/run/dmesg.boot | head -n 1 | cut -d" " -f2) 2> /dev/null`
-     cputype=`echo $cputype | sed -e 's/ppc//g;s/ *//g'`
+     cputype=`((grep cpu /proc/cpuinfo | head -n 1 | cut -d: -f2 | cut -d, -f1 | $SED 's/ //g') ; /usr/bin/machine ; /bin/machine; grep CPU /var/run/dmesg.boot | head -n 1 | cut -d" " -f2) 2> /dev/null`
+     cputype=`echo $cputype | $SED -e 's/ppc//g;s/ *//g'`
      case $cputype in
        *750*) ax_gcc_arch="750 G3" ;;
        *740[[0-9]]*) ax_gcc_arch="$cputype 7400 G4" ;;
@@ -203,7 +208,7 @@ for arch in $ax_gcc_arch; do
     flags="-march=$arch -mcpu=$arch -m$arch"
   fi
   for flag in $flags; do
-    AX_CHECK_COMPILER_FLAGS($flag, [ax_cv_gcc_archflag=$flag; break])
+    AX_CHECK_COMPILE_FLAG($flag, [ax_cv_gcc_archflag=$flag; break])
   done
   test "x$ax_cv_gcc_archflag" = xunknown || break
 done
