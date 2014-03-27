@@ -1,6 +1,6 @@
 AC_PREREQ(2.68)
 LT_PREREQ([2.4.2])
-AC_INIT([IOPKG], 5.0, neunhoef@mcs.st-and.ac.uk)
+AC_INIT([io], m4_esyscmd([tr -d '\n' < VERSION]), [https://github.com/neunhoef/io/issues], [io], [http://neunhoef.github.io/io/])
 AC_CONFIG_SRCDIR([src/io.c])
 AC_CONFIG_HEADER([src/pkgconfig.h:cnf/pkgconfig.h.in])
 AC_CONFIG_MACRO_DIR([m4])
