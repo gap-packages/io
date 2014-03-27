@@ -5,12 +5,14 @@ AC_CONFIG_SRCDIR([src/io.c])
 AC_CONFIG_HEADER([src/pkgconfig.h:cnf/pkgconfig.h.in])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([cnf])
-AM_INIT_AUTOMAKE([foreign])
-m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES])
+AM_INIT_AUTOMAKE([1.11 -Wall foreign subdir-objects])
+AM_SILENT_RULES([yes])
 AM_MAINTAINER_MODE
-LT_INIT([disable-static dlopen win32-dll])
 
 AC_PROG_CC
+AM_PROG_AR
+
+LT_INIT([disable-static dlopen win32-dll])
 
 ## Find out what the best compiler flags are
 AX_CC_MAXOPT
