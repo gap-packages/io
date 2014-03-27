@@ -6,12 +6,13 @@
 ##  This file is free software, see license information at the end.
 ##  
 
+SetPackagePath("io", ".");
+PrintTo("VERSION", PackageInfo("io")[1].Version);
+
 LoadPackage("GAPDoc");
 
-MakeGAPDocDoc("doc", "io", [], "IO", "../../..");
-
+MakeGAPDocDoc("doc", "io", [], "IO");
 CopyHTMLStyleFiles("doc");
-
 GAPDocManualLab("IO");
 
 QUIT;
