@@ -23,6 +23,7 @@ DeclareGlobalFunction( "IO_WriteAttribute" );
 DeclareGlobalFunction( "IO_ReadAttribute" );
 DeclareGlobalFunction( "IO_PickleByString" );
 DeclareGlobalFunction( "IO_UnpickleByEvalString" );
+DeclareGlobalFunction( "IO_UnpickleByFunction" );
 DeclareGlobalFunction( "IO_GenericObjectPickler" );
 DeclareGlobalFunction( "IO_GenericObjectUnpickler" );
 
@@ -39,6 +40,7 @@ BindGlobal ("IO_Unpicklers", rec() );
 # FAIL  fail
 # FALS  false
 # FFEL  a finite field element
+# FLOT  a Floating point number
 # FUNC  a GAP function, if it is a global one, only its name is pickled
 # GAPL  a gap in a list (unbound entries)
 # GSLP  a GAP straight line program
