@@ -125,11 +125,10 @@ void __stack_chk_fail_local (void)
  */
 
 /***********************************************************************
- * First we have our own SIGCHLD handler. It first deals with our
- * children (created by IO_fork) and then calls GAP's old handler.
- * Therefore we need a table of our children and their return
- * statuses if they have terminated. These can then be retrieved
- * by IO_WaitPid.
+ * First we have our own SIGCHLD handler. It is a copy of the one in the
+ * GAP kernel, however, information about all children that are not 
+ * coming from streams is stored in one data structure here, such that
+ * we can read it out from GAP using IO.Wait. 
  ***********************************************************************/
 
 #define MAXCHLDS 1024
@@ -137,190 +136,35 @@ void __stack_chk_fail_local (void)
 static int maxstats = MAXCHLDS;    /* This number must always be the same */
 static int stats[MAXCHLDS];        /* than this number */
 static int pids[MAXCHLDS];         /* and this number! */
-static int term[MAXCHLDS];         /* 0 if still running and 1 if terminated */
 static int fistats = 0;            /* First used entry */
 static int lastats = 0;            /* First unused entry */
 static int statsfull = 0;          /* Flag, whether stats FIFO full */
-#ifdef HAVE_SIGACTION
-static struct sigaction oldhandler;
-static struct sigaction oldpipe;
-static int handlerset = 0;         /* Is 1 if our handler is set */
-#else
-#ifdef HAVE_SIGNAL
 static RETSIGTYPE (*oldhandler)(int whichsig) = 0;  /* the old handler */
-#endif
-#endif
 
-static void dequeuepid(int pos)
-/* To call this SIGCHLD must be blocked! Also, pos must be a used
- * position in the queue. */
-{
-  int newpos;
-  /* Dequeue element: */
-  if (pos == fistats) {  /* this is the easy case: */
-      fistats++;
-      if (fistats >= maxstats) fistats = 0;
-  } else {  /* The more difficult case: */
-      do {
-          newpos = pos+1;
-          if (newpos >= maxstats) newpos = 0;
-          if (newpos == lastats) break;
-          stats[pos] = stats[newpos];
-          pids[pos] = pids[newpos];
-          term[pos] = term[newpos];
-          pos = newpos;
-      } while(1);
-      lastats = pos;
-  }
-  statsfull = 0;
-}
-
-static void queuepid(int pid)
-{
-    if (!statsfull) {
-        stats[lastats] = 0;
-        term[lastats] = 0;
-        pids[lastats++] = pid;
-        if (lastats >= maxstats) lastats = 0;
-        if (lastats == fistats) statsfull = 1;
-    } else 
-        Pr("#E Overflow in table of child processes\n",0,0);
-}
-
-void IO_GAPsSIGCHLDHandlerReplacement()
-{
-  UInt i;
-  int status;
-  int retcode;
-  for (i = 0; i < MAX_PTYS; i++) {
-      if (PtyIOStreams[i].inuse) {
-          retcode = waitpid( PtyIOStreams[i].childPID, &status, 
-                             WNOHANG | WUNTRACED );
-          if (retcode != -1 && retcode != 0 && 
-              (WIFEXITED(status) || WIFSIGNALED(status)) ) {
-              PtyIOStreams[i].changed = 1;
-              PtyIOStreams[i].status = status;
-              PtyIOStreams[i].blocked = 0;
-          }
-      }
-  }
-}
-
-void IO_CheckOnOurOwnChildren()
-{
-    int i,result,status;
-    if (fistats != lastats || statsfull) {
-        i = fistats;
-        do {
-            if (term[i] == 0) {
-                result = waitpid(pids[i],&status,WNOHANG);
-                if (result == pids[i] && WIFEXITED(status)) {
-                    stats[i] = WEXITSTATUS(status);
-                    term[i] = 1;
-                }
-            }
-            i++; if (i >= maxstats) i = 0;
-        } while (i != lastats);
-    }
-}
-
-void IO_CollectOtherZombies()
-{
-    int retcode,status,found,i;
-    /* Collect up any other zombie children */
-    do {
-        retcode = waitpid( -1, &status, WNOHANG);
-        if (retcode == -1 && errno != ECHILD)
-            Pr("#E Unexpected waitpid error %d\n",errno, 0);
-        else if (retcode > 0) {
-            /* Oops, another one terminated since we checked above! */
-            if (WIFEXITED(status) || WIFSIGNALED(status)) {
-                found = 0;
-                if (fistats != lastats || statsfull) {
-                    i = fistats;
-                    do {
-                        if (retcode == pids[i]) {
-                            stats[i] = WEXITSTATUS(status);
-                            term[i] = 1;
-                            found = 1;
-                            break;
-                        }
-                        i++; if (i >= maxstats) i = 0;
-                    } while (i != lastats);
-                }
-                if (!found) {
-                    for (i = 0; i < MAX_PTYS; i++) {
-                        if (PtyIOStreams[i].inuse && 
-                            retcode == PtyIOStreams[i].childPID) {
-                            PtyIOStreams[i].changed = 1;
-                            PtyIOStreams[i].status = status;
-                            PtyIOStreams[i].blocked = 0;
-                        }
-                    }
-                }
-            }
-        }
-    } while (retcode != 0 && retcode != -1);
-}
-
-#if defined(HAVE_SIGACTION) 
-void IO_SIGCHLDHandler( int whichsig, siginfo_t *ty, void *p )
-{
-    int i,result,status;
-    int retcode,found;
-    struct sigaction sa;
-    //IO_CheckOnOurOwnChildren();
-    //IO_GAPsSIGCHLDHandlerReplacement();
-    IO_CollectOtherZombies();
-}
-#else
-#if defined(HAVE_SIGNAL)
+#ifdef HAVE_SIGNAL
 RETSIGTYPE IO_SIGCHLDHandler( int whichsig )
 {
-    //IO_CheckOnOurOwnChildren();
-    //IO_GAPSSIGCHLDHANDLERREPLACEMENT();
-    IO_CollectOtherZombies();
-#if 0
-    if (oldhandler != SIG_DFL && oldhandler != SIG_IGN)
-        oldhandler(whichsig);
-#endif
-    signal(SIGCHLD, IO_SIGCHLDHandler);
-}
-#endif
-#endif
-
-#ifdef HAVE_SIGACTION
-Obj FuncIO_InstallSIGCHLDHandler( Obj self )
-{
-  struct sigaction sa;
-  /* Do not install ourselves twice: */
-  if (handlerset == 0) {
-      sa.sa_sigaction = IO_SIGCHLDHandler;
-      sigemptyset(&sa.sa_mask);
-      sa.sa_flags = SA_SIGINFO | SA_NOCLDSTOP;
-      sigaction(SIGCHLD,&sa,&oldhandler);
-      sa.sa_handler = SIG_IGN;
-      sigemptyset(&sa.sa_mask);
-      sa.sa_flags = 0;
-      sigaction(SIGPIPE,&sa,&oldpipe);
-      handlerset = 1;
-      return True;
-  } else return False;
+  int retcode,status;
+  /* We collect information about our child processes that have
+     terminated: */
+  do {
+    retcode = waitpid(-1, &status, WNOHANG);
+    if (retcode > 0) {   /* One of our child processes terminated */
+        if (WIFEXITED(status) || WIFSIGNALED(status)) {
+            if (!statsfull) {
+                stats[lastats] = status;
+                pids[lastats++] = retcode;
+                if (lastats >= maxstats) lastats = 0;
+                if (lastats == fistats) statsfull = 1;
+            } else 
+                Pr("#E Overflow in table of terminated processes\n",0,0);
+        }
+    }
+  } while (retcode > 0);
+  
+  signal(SIGCHLD, IO_SIGCHLDHandler);
 }
 
-Obj FuncIO_RestoreSIGCHLDHandler( Obj self )
-{
-  if (handlerset == 0)
-      return False;
-  else {
-      sigaction(SIGCHLD,&oldhandler,NULL);
-      sigaction(SIGPIPE,&oldpipe,NULL);
-      handlerset = 0;
-      return True;
-  }
-}
-#else
-#ifdef HAVE_SIGNAL
 Obj FuncIO_InstallSIGCHLDHandler( Obj self )
 {
   /* Do not install ourselves twice: */
@@ -343,64 +187,86 @@ Obj FuncIO_RestoreSIGCHLDHandler( Obj self )
       return True;
   }
 }
-#endif
-#endif
-
-#if defined(HAVE_SIGNAL) || defined(HAVE_SIGACTION)
-void blockSIGCHLD(sigset_t *old)
-{
-  sigset_t n;
-  sigemptyset(&n);
-  sigaddset(&n,SIGCHLD);
-  sigprocmask(SIG_BLOCK,&n,old);
-}
 
 Obj FuncIO_WaitPid(Obj self,Obj pid,Obj wait)
 {
   Int pidc;
-  int pos;
+  int pos,newpos;
   Obj tmp;
   int retcode,status;
-  sigset_t sigs;
-  int found;
-
+  int reallytried;
   if (!IS_INTOBJ(pid)) {
       SyClearErrorNo();
       return Fail;
   }
-  pidc = INT_INTOBJ(pid);
-  while (1) {
-      /* First look through our data: */
-      found = 0;
-      /* Block SIGCHLD to avoid clashes with access: */
-      blockSIGCHLD(&sigs);
-      if (fistats != lastats || statsfull) {
+  /* First set SIGCHLD to default action to avoid clashes with access: */
+  signal(SIGCHLD,SIG_DFL);
+  reallytried = 0;
+  do {
+      pidc = INT_INTOBJ(pid);
+      if (fistats == lastats && !statsfull) /* queue empty */
+          pos = -1;
+      else if (pidc == -1)  /* queue not empty and any entry welcome */
+          pos = fistats;
+      else {  /* Queue nonempty, so look for matching entry: */
           pos = fistats;
           do {
-              if (pids[pos] == pidc || pidc == -1) {
-                  if (term[pos]) {
-                      retcode = stats[pos];
-                      tmp = NEW_PREC(0);
-                      AssPRec(tmp,RNamName("pid"),INTOBJ_INT(pids[pos]));
-                      AssPRec(tmp,RNamName("status"),INTOBJ_INT(stats[pos]));
-                      dequeuepid(pos);
-                      /* Reset signal mask: */
-                      sigprocmask(SIG_SETMASK,&sigs,NULL);
-                      return tmp;
-                  } else {
-                      found = 1;
-                      break;
-                  }
+              if (pids[pos] == pidc) break;
+              pos++;
+              if (pos >= maxstats) pos = 0;
+              if (pos == lastats) {
+                  pos = -1;  /* None found */
+                  break;
               }
-              pos++; if (pos >= maxstats) pos = 0;
-          } while (pos != lastats);
+          } while (1);
       }
-      /* Reset signal mask: */
-      sigprocmask(SIG_SETMASK,&sigs,NULL);
-      if (!found) return False;
-      if (wait == False) return Fail;
-      Pr("Doing a round.\n",0L,0L);
+      if (pos != -1) break;  /* we found something! */
+      if (reallytried && wait != True) {
+          /* Reinstantiate our handler: */
+          signal(SIGCHLD,IO_SIGCHLDHandler);
+          return False;
+      }
+      /* Really wait for something, blocking: */
+      if (wait == True)
+          retcode = waitpid(-1, &status, 0);
+      else
+          retcode = waitpid(-1, &status, WNOHANG);
+      if (retcode > 0) {   /* One of our child processes terminated */
+          if (WIFEXITED(status) || WIFSIGNALED(status)) {
+              /* Append it to the queue: */
+              if (!statsfull) {
+                  stats[lastats] = status;
+                  pids[lastats++] = retcode;
+                  if (lastats >= maxstats) lastats = 0;
+                  if (lastats == fistats) statsfull = 1;
+              } else 
+                  Pr("#E Overflow in table of terminated processes\n",0,0);
+          }
+      }
+      reallytried = 1;  /* Do not try again. */
+  } while (1);  /* Left by break */
+  tmp = NEW_PREC(0);
+  AssPRec(tmp,RNamName("pid"),INTOBJ_INT(pids[pos]));
+  AssPRec(tmp,RNamName("status"),INTOBJ_INT(stats[pos]));
+  /* Dequeue element: */
+  if (pos == fistats) {  /* this is the easy case: */
+      fistats++;
+      if (fistats >= maxstats) fistats = 0;
+  } else {  /* The more difficult case: */
+      do {
+          newpos = pos+1;
+          if (newpos >= maxstats) newpos = 0;
+          if (newpos == lastats) break;
+          stats[pos] = stats[newpos];
+          pids[pos] = pids[newpos];
+          pos = newpos;
+      } while(1);
+      lastats = pos;
   }
+  statsfull = 0;
+  /* Reinstantiate our handler: */
+  signal(SIGCHLD,IO_SIGCHLDHandler);
+  return tmp;
 } 
 #endif
 
@@ -1567,14 +1433,12 @@ Obj FuncIO_select(Obj self, Obj inlist, Obj outlist, Obj exclist,
 Obj FuncIO_fork(Obj self)
 {
   int res;
-  FuncIO_InstallSIGCHLDHandler(self);
   res = fork();
   if (res == -1) {
       SySetErrorNo();
       return Fail;
   }
   if (res != 0) {   /* we are the parent */
-      queuepid(res);
       return INTOBJ_INT(res);
   } else {
       /* we are the child */
