@@ -7,20 +7,10 @@
 
 SetPackageInfo( rec(
 
-##  This is case sensitive, use your preferred spelling.
 PackageName := "IO",
-
-##  This may be used by a default banner or on a Web page, should fit on
-##  one line.
 Subtitle := "Bindings for low level C library IO",
-
-##  See '?Extending: Version Numbers' in GAP help for an explanation
-##  of valid version numbers. For an automatic package distribution update
-##  you must provide a new version number even after small changes.
 Version := "5.0",
-
-##  Release date of the current version in dd/mm/yyyy format.
-Date := "11/07/2013",
+Date := "11/07/2013", # dd/mm/yyyy format
 
 ##  Information about authors and maintainers.
 Persons := [
