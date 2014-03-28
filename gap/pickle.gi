@@ -139,16 +139,22 @@ InstallGlobalFunction( IO_PickleByString,
     return IO_OK;
   end );
   
-InstallGlobalFunction( IO_UnpickleByEvalString,
-  function( f )
-    local len,s;
-    len := IO_ReadSmallInt(f);
-    if len = IO_Error then return IO_Error; fi;
-    s := IO_ReadBlock(f,len);
-    if s = fail then return IO_Error; fi;
-    return EvalString(s);
+InstallGlobalFunction( IO_UnpickleByFunction,
+  function( unpickleFn )
+    return function( f )
+      local len,s;
+      len := IO_ReadSmallInt(f);
+      if len = IO_Error then return IO_Error; fi;
+      s := IO_ReadBlock(f,len);
+      if s = fail then return IO_Error; fi;
+      return unpickleFn(s);
+    end;
   end );
   
+InstallGlobalFunction( IO_UnpickleByEvalString,
+    IO_UnpickleByFunction(EvalString)
+);
+
 InstallGlobalFunction( IO_GenericObjectPickler,
   function( f, tag, prepickle, ob, atts, filts, comps )
     local at,com,fil,nr,o;
@@ -371,6 +377,14 @@ InstallMethod( IO_Pickle, "for a permutation",
   end );
 
 IO_Unpicklers.PERM := IO_UnpickleByEvalString;
+
+InstallMethod( IO_Pickle, "for a float",
+  [ IsFile, IsFloat ],
+  function( f, fl )
+    return IO_PickleByString( f, fl, "FLOT" );
+  end );
+
+IO_Unpicklers.FLOT := IO_UnpickleByFunction(Float);
 
 InstallMethod( IO_Pickle, "for a character",
   [ IsFile, IsChar ],
