@@ -107,6 +107,7 @@ chosen to match the setup of the original &GAP; compilation. For
 example you have to specify 32-bit or 64-bit mode correctly!<P/>
 
 
+<!--
 <Section>
 <Heading>Static linking</Heading>
 
@@ -159,6 +160,7 @@ non-standard location.
 
 
 </Section>
+-->
 
 <Section>
 <Heading>Recompiling the documentation</Heading>
