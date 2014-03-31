@@ -29,12 +29,9 @@ by   &GAP;   when   it   is  installed.   You  must   load  the   package
 with   <C>LoadPackage("IO");</C>   before  its   functions   become
 available.<P/>
 
-Please,            send             me            an            e-mail
-(<Email>neunhoef@mcs.st-and.ac.uk</Email>)  if  you  have  any
-questions,  remarks, suggestions,  etc. concerning  this package.
-Also, I would like to hear about applications of this package.<P/>
+For bug reports, feature requests and suggestions, please use our
+<URL Text="issue tracker">https://github.com/neunhoef/io/issues</URL>.
 
-Max Neunhöffer
 </Chapter>
 
 <Chapter Label="Chap-Install">
