@@ -12,6 +12,7 @@ GAP: ">=4.5.5"
 needed-pkgs:
     - name: "GAPDoc"
       version: ">= 1.2"
+      url: "http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc"
 
 www: http://neunhoef.github.io/io/
 readme: http://neunhoef.github.io/io/README
