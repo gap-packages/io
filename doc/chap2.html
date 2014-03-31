@@ -21,10 +21,7 @@
 
 <p><a id="X87D1C7D0861CBE25" name="X87D1C7D0861CBE25"></a></p>
 <div class="ChapSects"><a href="chap2.html#X87D1C7D0861CBE25">2 <span class="Heading">Installation of the <strong class="pkg">IO</strong>-package</span></a>
-<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2.html#X7F7AFC7E808A56C7">2.1 <span class="Heading">Static linking</span></a>
-</span>
-</div>
-<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2.html#X7FB00ED2787027A3">2.2 <span class="Heading">Recompiling the documentation</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2.html#X7FB00ED2787027A3">2.1 <span class="Heading">Recompiling the documentation</span></a>
 </span>
 </div>
 </div>
@@ -95,49 +92,9 @@ unzip -x io-x.x.zip
 
 <p>If you installed <strong class="pkg">GAP</strong> on several architectures, you must execute the configure/make step for each of the architectures. You can either do this immediately after configuring and compiling <strong class="pkg">GAP</strong> itself on this architecture, or alternatively (when using version 4.5 of <strong class="pkg">GAP</strong> or newer) set the environment variable <code class="code">CONFIGNAME</code> to the name of the configuration you used when compiling <strong class="pkg">GAP</strong> before running <code class="code">./configure</code>. Note however that your compiler choice and flags (environment variables <code class="code">CC</code> and <code class="code">CFLAGS</code>) need to be chosen to match the setup of the original <strong class="pkg">GAP</strong> compilation. For example you have to specify 32-bit or 64-bit mode correctly!</p>
 
-<p><a id="X7F7AFC7E808A56C7" name="X7F7AFC7E808A56C7"></a></p>
-
-<h4>2.1 <span class="Heading">Static linking</span></h4>
-
-<p>This feature does not work in this version of the package. We leave the old documentation here for the case that the feature will be reenabled inthe future.</p>
-
-<p>This might be interesting for M$ Windows users, as dynamic loading of binary modules does not always work there. You can also create a new statically linked "<code class="file">gap</code>" binary as follows:</p>
-
-<p>Go into the main <strong class="pkg">GAP</strong> directory and then into <code class="file">bin/BINDIR</code>. Here <code class="file">BINDIR</code> means the directory containing the "<code class="file">gap</code>" executable after compiling "<code class="file">gap</code>". This directory also contains the <strong class="pkg">GAP</strong> compiler script "<code class="file">gac</code>". Assuming IO in the standard location you can then say</p>
-
-
-<pre class="normal">
-
-    ./gac -o gap-static -p "-DIOSTATIC -I../../pkg/io/bin/BINDIR" \
-        -P "-static" ../../pkg/io/src/io.c
-
-</pre>
-
-<p>Then copy your "<code class="file">gap</code>" start script to, say, "<code class="file">gaps</code>" and change the references to the <strong class="pkg">GAP</strong> binary to "<code class="file">gap-static</code>".</p>
-
-<p>Note that you have to replace <code class="file">BINDIR</code> by the name containing the "<code class="file">gap</code>" executable after compiling GAP as above. If you have installed the package in a different place than the standard, you have to replace "<code class="file">../..</code>" in the above command by the path to the directory containing the "<code class="file">pkg</code>" directory into which you installed <strong class="pkg">IO</strong>. If you want to install more than one package with a C-part like this package, you can still create a statically linked <strong class="pkg">GAP</strong> executable by combining all the compile and link options and all the .c files as in the ./gac command above. For the IO package, you have to add</p>
-
-
-<pre class="normal">
-
-    -DIOSTATIC -I../../pkg/io/bin/BINDIR
-
-</pre>
-
-<p>to the string of the -p option and the file</p>
-
-
-<pre class="normal">
-
-  ../../pkg/io/src/io.c
-
-</pre>
-
-<p>somewhere on the command line. As above, "<code class="file">../..</code>" and "<code class="file">BINDIR</code>" have to be replaced if you installed in a non-standard location.</p>
-
 <p><a id="X7FB00ED2787027A3" name="X7FB00ED2787027A3"></a></p>
 
-<h4>2.2 <span class="Heading">Recompiling the documentation</span></h4>
+<h4>2.1 <span class="Heading">Recompiling the documentation</span></h4>
 
 <p>Recompiling the documentation is possible by the command "<code class="file">gap makedoc.g</code>" in the <code class="file">io</code> directory. But this should not be necessary.</p>
 

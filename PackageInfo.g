@@ -7,20 +7,10 @@
 
 SetPackageInfo( rec(
 
-##  This is case sensitive, use your preferred spelling.
 PackageName := "IO",
-
-##  This may be used by a default banner or on a Web page, should fit on
-##  one line.
 Subtitle := "Bindings for low level C library IO",
-
-##  See '?Extending: Version Numbers' in GAP help for an explanation
-##  of valid version numbers. For an automatic package distribution update
-##  you must provide a new version number even after small changes.
-Version := "5.0",
-
-##  Release date of the current version in dd/mm/yyyy format.
-Date := "11/07/2013",
+Version := "4.3",
+Date := "31/04/2014", # dd/mm/yyyy format
 
 ##  Information about authors and maintainers.
 Persons := [
@@ -28,7 +18,7 @@ Persons := [
     LastName      := "Neunhoeffer",
     FirstNames    := "Max",
     IsAuthor      := true,
-    IsMaintainer  := true,
+    IsMaintainer  := false,
     Email         := "neunhoef@mcs.st-and.ac.uk",
     WWWHome       := "http://www-groups.mcs.st-and.ac.uk/~neunhoef/",
     PostalAddress := Concatenation( [
@@ -61,14 +51,13 @@ Status := "deposited",
 # AcceptDate := "08/1999",
 #AcceptDate := "",
 
-BaseURL := "http://www-groups.mcs.st-and.ac.uk/~neunhoef/Computer/Software/Gap/",
-
-PackageWWWHome := Concatenation( ~.BaseURL, "io.html" ),
-ArchiveURL     := Concatenation( ~.BaseURL, "io/io-", ~.Version ),
-README_URL     := Concatenation( ~.BaseURL, "io/README.io" ),
-PackageInfoURL := Concatenation( ~.BaseURL, "io/PackageInfo.g" ),
-
-ArchiveFormats := ".tar.gz",
+PackageWWWHome := "http://neunhoef.github.io/io/",
+README_URL     := Concatenation(~.PackageWWWHome, "README"),
+PackageInfoURL := Concatenation(~.PackageWWWHome, "PackageInfo.g"),
+ArchiveURL     := Concatenation("https://github.com/neunhoef/io/",
+                                "releases/download/v", ~.Version,
+                                "/io-", ~.Version),
+ArchiveFormats := ".tar.gz .tar.bz2",
 
 ##  Here you  must provide a short abstract explaining the package content 
 ##  in HTML format (used on the package overview Web page) and an URL 

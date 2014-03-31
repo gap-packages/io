@@ -15,9 +15,6 @@
   installed.  You  must  load  the  package with [10XLoadPackage("IO");[110X before its
   functions become available.[133X
   
-  [33X[0;0YPlease, send me an e-mail ([7Xmailto:neunhoef@mcs.st-and.ac.uk[107X) if you have any
-  questions, remarks, suggestions, etc. concerning this package. Also, I would
-  like to hear about applications of this package.[133X
-  
-  [33X[0;0YMax Neunhöffer[133X
+  [33X[0;0YFor  bug  reports,  feature  requests  and suggestions, please use our issue
+  tracker ([7Xhttps://github.com/neunhoef/io/issues[107X).[133X
   

@@ -6,10 +6,10 @@
                  [1XBindings for low level C library I/O routines[101X
   
   
-                                  Version 5.0
+                                  Version 4.3
   
   
-                                  January 2012
+                                   March 2014
   
   
                                  Max Neunhöffer
@@ -40,8 +40,7 @@
   
   1 [33X[0;0YPreface[133X
   2 [33X[0;0YInstallation of the [5XIO[105X-package[133X
-    2.1 [33X[0;0YStatic linking[133X
-    2.2 [33X[0;0YRecompiling the documentation[133X
+    2.1 [33X[0;0YRecompiling the documentation[133X
   3 [33X[0;0YFunctions directly available from the C library[133X
     3.1 [33X[0;0YDifferences in arguments - an overview[133X
     3.2 [33X[0;0YThe low-level functions in detail[133X

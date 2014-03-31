@@ -60,47 +60,7 @@
   have to specify 32-bit or 64-bit mode correctly![133X
   
   
-  [1X2.1 [33X[0;0YStatic linking[133X[101X
-  
-  [33X[0;0YThis  feature does not work in this version of the package. We leave the old
-  documentation  here  for  the  case that the feature will be reenabled inthe
-  future.[133X
-  
-  [33X[0;0YThis might be interesting for M$ Windows users, as dynamic loading of binary
-  modules  does  not  always  work there. You can also create a new statically
-  linked [21X[11Xgap[111X[121X binary as follows:[133X
-  
-  [33X[0;0YGo  into  the main [5XGAP[105X directory and then into [11Xbin/BINDIR[111X. Here [11XBINDIR[111X means
-  the  directory  containing  the  [21X[11Xgap[111X[121X  executable  after  compiling [21X[11Xgap[111X[121X. This
-  directory  also  contains  the  [5XGAP[105X  compiler script [21X[11Xgac[111X[121X. Assuming IO in the
-  standard location you can then say[133X
-  
-      ./gac -o gap-static -p "-DIOSTATIC -I../../pkg/io/bin/BINDIR" \
-          -P "-static" ../../pkg/io/src/io.c
-  
-  [33X[0;0YThen  copy  your [21X[11Xgap[111X[121X start script to, say, [21X[11Xgaps[111X[121X and change the references to
-  the [5XGAP[105X binary to [21X[11Xgap-static[111X[121X.[133X
-  
-  [33X[0;0YNote  that  you  have  to  replace  [11XBINDIR[111X  by  the  name containing the [21X[11Xgap[111X[121X
-  executable  after  compiling GAP as above. If you have installed the package
-  in  a  different  place  than the standard, you have to replace [21X[11X../..[111X[121X in the
-  above command by the path to the directory containing the [21X[11Xpkg[111X[121X directory into
-  which  you installed [5XIO[105X. If you want to install more than one package with a
-  C-part  like  this  package,  you  can  still create a statically linked [5XGAP[105X
-  executable  by  combining  all  the  compile and link options and all the .c
-  files as in the ./gac command above. For the IO package, you have to add[133X
-  
-      -DIOSTATIC -I../../pkg/io/bin/BINDIR
-  
-  [33X[0;0Yto the string of the -p option and the file[133X
-  
-    ../../pkg/io/src/io.c
-  
-  [33X[0;0Ysomewhere  on  the  command  line.  As  above,  [21X[11X../..[111X[121X  and [21X[11XBINDIR[111X[121X have to be
-  replaced if you installed in a non-standard location.[133X
-  
-  
-  [1X2.2 [33X[0;0YRecompiling the documentation[133X[101X
+  [1X2.1 [33X[0;0YRecompiling the documentation[133X[101X
   
   [33X[0;0YRecompiling  the  documentation  is possible by the command [21X[11Xgap makedoc.g[111X[121X in
   the [11Xio[111X directory. But this should not be necessary.[133X
