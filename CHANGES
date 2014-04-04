@@ -2,6 +2,11 @@
  This file describes changes in the IO package
 ===============================================
 
+4.3.1 (2014-04-04)
+  - Previous release had an invalid release date in
+    PackageInfo.g (2014-04-31 instead of 2014-03-31).
+  - Merge HISTORY and CHANGES files.
+
 4.3 (2014-03-31)
   - Update and tweak the package build system
   - Move package repository and website to GitHub
