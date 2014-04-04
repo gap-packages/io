@@ -1,6 +1,6 @@
 name: IO
-version: 4.3
-date: 31/04/2014
+version: 4.3.1
+date: 04/04/2014
 description: Bindings for low level C library IO
 
 authors:
@@ -20,9 +20,9 @@ packageinfo: http://neunhoef.github.io/io/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/neunhoef/io/releases/download/v4.3/io-4.3.tar.gz
+      url: https://github.com/neunhoef/io/releases/download/v4.3.1/io-4.3.1.tar.gz
     - name: .tar.bz2
-      url: https://github.com/neunhoef/io/releases/download/v4.3/io-4.3.tar.bz2
+      url: https://github.com/neunhoef/io/releases/download/v4.3.1/io-4.3.1.tar.bz2
 
 abstract: The <span class="pkgname">IO</span> package, as its name suggests,    provides bindings for <span class="pkgname">GAP</span> to the lower    levels of Input/Output functionality in the C library.
 
