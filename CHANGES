@@ -1,6 +1,7 @@
-===============================================
- This file describes changes in the IO package
-===============================================
+This file describes changes in the IO package.
+
+X.Y (YYYY-MM-DD)
+  - ...
 
 4.3.1 (2014-04-04)
   - Previous release had an invalid release date in
