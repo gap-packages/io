@@ -1,34 +1,30 @@
 #############################################################################
 ##  
-##  PackageInfo.g for the package `IO'                        Max Neunhoeffer
-##
-##  (created from Frank L�beck's PackageInfo.g template file)
+##  PackageInfo.g for the package `IO'
 ##  
 
 SetPackageInfo( rec(
 
 PackageName := "IO",
-Subtitle := "Bindings for low level C library IO",
+Subtitle := "Bindings for low level C library I/O routines",
 Version := "4.3.1",
 Date := "04/04/2014", # dd/mm/yyyy format
 
 ##  Information about authors and maintainers.
 Persons := [
   rec( 
-    LastName      := "Neunhoeffer",
+    LastName      := "Neunhöffer",
     FirstNames    := "Max",
     IsAuthor      := true,
     IsMaintainer  := false,
-    Email         := "neunhoef@mcs.st-and.ac.uk",
+    Email         := "max@9hoeffer.de",
     WWWHome       := "http://www-groups.mcs.st-and.ac.uk/~neunhoef/",
     PostalAddress := Concatenation( [
-                       "School of Mathematics and Statistics\n",
-                       "Mathematical Institute\n",
-                       "North Haugh\n",
-                       "St Andrews, Fife KY16 9SS\n",
-                       "Scotland, UK" ] ),
-    Place         := "St Andrews",
-    Institution   := "University of St Andrews"
+                       "Gustav-Freytag-Straße 40\n",
+                       "50354 Hürth\n",
+                       "Germany" ] ),
+    #Place         := "St Andrews",
+    #Institution   := "University of St Andrews"
   ),
 ],
 
@@ -77,7 +73,7 @@ PackageDoc := rec(
   HTMLStart := "doc/chap0.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
-  LongTitle := "Bindings to low level I/O in the C library",
+  LongTitle := "Bindings for low level C library I/O routines",
 ),
 
 Dependencies := rec(
