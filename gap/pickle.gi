@@ -380,6 +380,50 @@ InstallMethod( IO_Pickle, "for a permutation",
 
 IO_Unpicklers.PERM := IO_UnpickleByEvalString;
 
+InstallMethod( IO_Pickle, "for a transformation",
+  [ IsFile, IsTransformation ],
+  function( f, t )
+    if IO_Write(f,"TRAN") = fail then return IO_Error; fi;
+    if IO_Pickle(f,ListTransformation(t)) = IO_Error then 
+        return IO_Error;
+    fi;
+    return IO_OK;
+  end);
+
+IO_Unpicklers.TRAN :=
+  function( f )
+    local l;
+    l := IO_Unpickle(f);
+    if l = IO_Error then return IO_Error; fi;
+    return TransformationList(l);
+  end;
+
+InstallMethod( IO_Pickle, "for a partial perm",
+  [ IsFile, IsPartialPerm ],
+  function( f, pp )
+    local d;
+    d := DomainOfPartialPerm(pp);
+    if IO_Write(f,"PPER") = fail then return IO_Error; fi;
+    if IO_Pickle(f,d) = IO_Error then 
+        return IO_Error;
+    fi;
+    if IO_Pickle(f,List(d, x -> x^pp)) = IO_Error then 
+        return IO_Error;
+    fi;
+    return IO_OK;
+  end);
+
+IO_Unpicklers.PPER :=
+  function( f )
+    local dom, im;
+    dom := IO_Unpickle(f);
+    if dom = IO_Error then return IO_Error; fi;
+    im := IO_Unpickle(f);
+    if im = IO_Error then return IO_Error; fi;
+    return PartialPerm(dom, im);
+  end;
+  
+  
 InstallMethod( IO_Pickle, "for a float",
   [ IsFile, IsFloat ],
   function( f, fl )

@@ -2,6 +2,8 @@ This file describes changes in the IO package.
 
 X.Y (YYYY-MM-DD)
   - Fix problem with IO_Pickling some very large objects
+  - Add pickle support for transformations and partial
+    permutations
   - ...
 
 4.3.1 (2014-04-04)
