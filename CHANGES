@@ -3,6 +3,13 @@
 ===========================================================================
 
 ==========================
+ Changes from 4.3 -> 4.4:
+==========================
+
+  - Fix problem with IO_Pickling some very large objects
+
+
+==========================
  Changes from 4.2 -> 4.3:
 ==========================
 
@@ -200,5 +207,3 @@
   - follow Frank's suggestion to allow more than one package with a
     C-part to be linked to a statically compiled GAP, document this
   - release subversion revision 155 as Version 1.3
-
-
