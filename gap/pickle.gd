@@ -61,6 +61,7 @@ BindGlobal ("IO_Unpicklers", rec() );
 # MSTR  a mutable string
 # OPER  a GAP operation, only its name is pickled
 # PERM  a permutation
+# PPER  a partial permutation
 # POLF  an object in the representation IsPolynomialDefaultRep
 # POLY  a Laurent polynomial (or a rational function) deprecated
 # RATF  an object in the representation IsRationalFunctionDefaultRep
@@ -70,6 +71,7 @@ BindGlobal ("IO_Unpicklers", rec() );
 # RSRE  a really random source
 # SPRF  SuPeRfail
 # SREF  a self-reference
+# TRAN  a transformation
 # TRUE  true
 # UPOL  an object in the representation IsLaurentPolynomialDefaultRep
 # URFU  an object in the representation IsUnivariateRationalFunctionDefaultRep
