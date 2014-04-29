@@ -1839,6 +1839,26 @@ The <C>File</C> object will have the attribute
 </ManSection>
 
 <ManSection>
+<Func Name="IO_CompressedFile" Arg="filename [,mode][,bufsize]"/>
+<Returns> a <C>File</C> object or <K>fail</K> </Returns>
+<Description>
+This function is a convenience wrapper around
+<Ref Func="IO_FilteredFile"/> which handles a number of common
+compressed file formats transparently, by calling an external program. The
+arguments to this function are identical to <Ref Func="IO_File" Label="mode"/>.
+If the extension to <A>filename</A> is one of gz, bz2 or xz, then the file
+is transparently compressed/uncompressed using gzip, bzip2 or xz respectively.
+If the extension is none of these, then the command behaves identically to
+<Ref Func="IO_File" Label="mode"/>.<P/>
+Note that as this function calls <Ref Func="IO_FilteredFile"/>, it will
+activate our SIGCHLD handler (see <Ref Func="IO_InstallSIGCHLDHandler"/>).<P/>
+When compression / decompression is active, the <C>File</C> object will have
+the attribute <Q><K>ProcessID</K></Q> set to the list of process IDs of the
+child processes.
+</Description>
+</ManSection>
+
+<ManSection>
 <Func Name="IO_SendStringBackground" Arg="f, st"
       Comm="Sends away the string st to f in the background"/>
 <Description>

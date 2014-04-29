@@ -58,6 +58,7 @@ DeclareGlobalFunction( "IO_StartPipeline" );
 DeclareGlobalFunction( "IO_StringFilterFile" );
 DeclareGlobalFunction( "IO_FileFilterString" );
 DeclareGlobalFunction( "IO_FilteredFile" );
+DeclareGlobalFunction( "IO_CompressedFile" );
 DeclareGlobalFunction( "IO_SendStringBackground" );
 DeclareGlobalFunction( "IO_PipeThroughWithError" );
 DeclareGlobalFunction( "IO_PipeThrough" );

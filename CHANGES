@@ -6,6 +6,9 @@ X.Y (YYYY-MM-DD)
     permutations
   - Try to ensure files are flushed on exit, even if they are
     not explicitly closed.
+  - Ensure file buffers are flushed before GAP closes, to
+    avoid data loss when files are not Closed before exiting.
+  - Add = and < methods for IsFile objects
   - ...
 
 4.3.1 (2014-04-04)
