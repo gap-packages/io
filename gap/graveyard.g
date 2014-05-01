@@ -2,9 +2,9 @@ HTTPRequestOld := function(server,port,method,uri,header,body)
   local byt,chunk,f,inpflushed,inpos,k,line,lineend,lookup,msg,nr,out,
         outeof,pos,pos2,pos3,r,res,responseheader,ret,s,sock,w;
   s := IO_socket(IO.PF_INET,IO.SOCK_STREAM,"tcp");
-  if s = fail then 
+  if s = fail then
       Print("HTTPRequest: cannot create socket\n");
-      return fail; 
+      return fail;
   fi;
   lookup := IO_gethostbyname(server);
   if lookup = fail then
@@ -18,7 +18,7 @@ HTTPRequestOld := function(server,port,method,uri,header,body)
       return fail;
   fi;
   sock := IO_WrapFD(s,false,false);
-  
+
   # Maybe add some default values:
   if not(IsBound(header.UserAgent)) then
       header.UserAgent := Concatenation("GAP/IO/",
@@ -63,8 +63,8 @@ HTTPRequestOld := function(server,port,method,uri,header,body)
           f := [];
       else
           w := [];
-          if not(inpflushed) then 
-              f := [sock]; 
+          if not(inpflushed) then
+              f := [sock];
           else
               f := [];
           fi;
@@ -118,7 +118,7 @@ HTTPRequestOld := function(server,port,method,uri,header,body)
   responseheader := rec();
   while true do   # will be left by break
       lineend := Position(out,'\n',pos);
-      if lineend <= pos+2 or lineend = fail then 
+      if lineend <= pos+2 or lineend = fail then
           if lineend <> fail then pos := lineend+1; fi;
           break;   # we have seen the header
       fi;

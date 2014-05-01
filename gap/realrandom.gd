@@ -1,6 +1,6 @@
 #############################################################################
 ##
-##  realrandom.gd           IO package 
+##  realrandom.gd           IO package
 ##                                                        by Max Neunhoeffer
 ##
 ##  Copyright (C) by Max Neunhoeffer

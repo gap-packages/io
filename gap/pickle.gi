@@ -10,7 +10,7 @@
 ##
 
 #################
-# (Un-)Pickling: 
+# (Un-)Pickling:
 #################
 
 InstallValue( IO_PICKLECACHE, rec( ids := [], nrs := [], obs := [],
@@ -95,7 +95,7 @@ InstallGlobalFunction( IO_WriteSmallInt,
     else
         return IO_OK;
     fi;
-  end ); 
+  end );
 
 InstallGlobalFunction( IO_ReadSmallInt,
   function( f )
@@ -140,7 +140,7 @@ InstallGlobalFunction( IO_PickleByString,
     if IO_Write(f,s) = fail then return IO_Error; fi;
     return IO_OK;
   end );
-  
+
 InstallGlobalFunction( IO_UnpickleByFunction,
   function( unpickleFn )
     return function( f )
@@ -152,7 +152,7 @@ InstallGlobalFunction( IO_UnpickleByFunction,
       return unpickleFn(s);
     end;
   end );
-  
+
 InstallGlobalFunction( IO_UnpickleByEvalString,
     IO_UnpickleByFunction(EvalString)
 );
@@ -172,26 +172,26 @@ InstallGlobalFunction( IO_GenericObjectPickler,
             return IO_Error;
         fi;
         for at in atts do
-            if IO_WriteAttribute(f,at,ob) = IO_Error then 
+            if IO_WriteAttribute(f,at,ob) = IO_Error then
                 IO_FinalizePickled();
                 return IO_Error;
             fi;
         od;
         for fil in filts do
-            if IO_Pickle(f,fil(ob)) = IO_Error then 
+            if IO_Pickle(f,fil(ob)) = IO_Error then
                 IO_FinalizePickled();
-                return IO_Error; 
+                return IO_Error;
             fi;
         od;
         for com in comps do
             if IsBound(ob!.(com)) then
-                if IO_Pickle(f,com) = IO_Error then 
+                if IO_Pickle(f,com) = IO_Error then
                     IO_FinalizePickled();
-                    return IO_Error; 
+                    return IO_Error;
                 fi;
-                if IO_Pickle(f,ob!.(com)) = IO_Error then 
+                if IO_Pickle(f,ob!.(com)) = IO_Error then
                     IO_FinalizePickled();
-                    return IO_Error; 
+                    return IO_Error;
                 fi;
             fi;
         od;
@@ -199,7 +199,7 @@ InstallGlobalFunction( IO_GenericObjectPickler,
         if IO_Pickle(f,fail) = IO_Error then return IO_Error; fi;
         return IO_OK;
     else   # this object was already pickled once!
-        if IO_Write(f,"SREF") = IO_Error then 
+        if IO_Write(f,"SREF") = IO_Error then
             return IO_Error;
         fi;
         if IO_WriteSmallInt(f,nr) = IO_Error then
@@ -214,16 +214,16 @@ InstallGlobalFunction( IO_GenericObjectUnpickler,
     local at,fil,val,val2;
     IO_AddToUnpickled(ob);
     for at in atts do
-        if IO_ReadAttribute(f,at,ob) = IO_Error then 
+        if IO_ReadAttribute(f,at,ob) = IO_Error then
             IO_FinalizeUnpickled();
-            return IO_Error; 
+            return IO_Error;
         fi;
     od;
     for fil in filts do
         val := IO_Unpickle(f);
-        if val = IO_Error then 
+        if val = IO_Error then
             IO_FinalizeUnpickled();
-            return IO_Error; 
+            return IO_Error;
         fi;
         if val <> fil(ob) then
             if val then
@@ -235,33 +235,33 @@ InstallGlobalFunction( IO_GenericObjectUnpickler,
     od;
     while true do
         val := IO_Unpickle(f);
-        if val = fail then 
+        if val = fail then
             IO_FinalizeUnpickled();
             return ob;
         fi;
-        if val = IO_Error then 
+        if val = IO_Error then
             IO_FinalizeUnpickled();
-            return IO_Error; 
+            return IO_Error;
         fi;
         if IsString(val) then
             val2 := IO_Unpickle(f);
-            if val2 = IO_Error then 
+            if val2 = IO_Error then
                 IO_FinalizeUnpickled();
-                return IO_Error; 
+                return IO_Error;
             fi;
             ob!.(val) := val2;
         fi;
     od;
   end );
 
-        
+
 InstallMethod( IO_Unpickle, "for a file",
   [ IsFile ],
   function( f )
     local magic,up;
     magic := IO_ReadBlock(f,4);
-    if magic = fail then return IO_Error; 
-    elif Length(magic) < 4 then return IO_Nothing; 
+    if magic = fail then return IO_Error;
+    elif Length(magic) < 4 then return IO_Nothing;
     fi;
     if not(IsBound(IO_Unpicklers.(magic))) then
         Print("No unpickler for magic value \"",magic,"\"\n");
@@ -341,7 +341,7 @@ IO_Unpicklers.MSTR :=
     return s;
   end;
 
-IO_Unpicklers.ISTR := 
+IO_Unpicklers.ISTR :=
   function( f )
     local s;
     s := IO_Unpicklers.MSTR(f); if s = IO_Error then return IO_Error; fi;
@@ -360,7 +360,7 @@ InstallMethod( IO_Pickle, "for a boolean",
     else
         Error("Unknown boolean value");
     fi;
-    if IO_Write(f,val) = fail then 
+    if IO_Write(f,val) = fail then
         return IO_Error;
     else
         return IO_OK;
@@ -384,7 +384,7 @@ InstallMethod( IO_Pickle, "for a transformation",
   [ IsFile, IsTransformation ],
   function( f, t )
     if IO_Write(f,"TRAN") = fail then return IO_Error; fi;
-    if IO_Pickle(f,ListTransformation(t)) = IO_Error then 
+    if IO_Pickle(f,ListTransformation(t)) = IO_Error then
         return IO_Error;
     fi;
     return IO_OK;
@@ -404,10 +404,10 @@ InstallMethod( IO_Pickle, "for a partial perm",
     local d;
     d := DomainOfPartialPerm(pp);
     if IO_Write(f,"PPER") = fail then return IO_Error; fi;
-    if IO_Pickle(f,d) = IO_Error then 
+    if IO_Pickle(f,d) = IO_Error then
         return IO_Error;
     fi;
-    if IO_Pickle(f,List(d, x -> x^pp)) = IO_Error then 
+    if IO_Pickle(f,List(d, x -> x^pp)) = IO_Error then
         return IO_Error;
     fi;
     return IO_OK;
@@ -422,8 +422,8 @@ IO_Unpicklers.PPER :=
     if im = IO_Error then return IO_Error; fi;
     return PartialPerm(dom, im);
   end;
-  
-  
+
+
 InstallMethod( IO_Pickle, "for a float",
   [ IsFile, IsFloat ],
   function( f, fl )
@@ -451,7 +451,7 @@ IO_Unpicklers.CHAR :=
   end;
 
 InstallMethod( IO_Pickle, "for a finite field element",
-  [ IsFile, IsFFE ], 
+  [ IsFile, IsFFE ],
   function( f, ffe )
     return IO_PickleByString( f, ffe, "FFEL" );
   end );
@@ -479,7 +479,7 @@ InstallMethod( IO_Pickle, "for a list",
         elif IsGF2MatrixRep(l) then Append(tag,"F2M");
         elif Is8BitMatrixRep(l) then Append(tag,"F8M");
         else Append(tag,"LIS"); fi;
-        if IO_Write(f,tag) = fail then 
+        if IO_Write(f,tag) = fail then
             IO_FinalizePickled();
             return IO_Error;
         fi;
@@ -515,7 +515,7 @@ InstallMethod( IO_Pickle, "for a list",
         IO_FinalizePickled();
         return IO_OK;
     else
-        if IO_Write(f,"SREF") = IO_Error then 
+        if IO_Write(f,"SREF") = IO_Error then
             IO_FinalizePickled();
             return IO_Error;
         fi;
@@ -528,7 +528,7 @@ InstallMethod( IO_Pickle, "for a list",
     fi;
   end );
 
-IO_Unpicklers.MLIS := 
+IO_Unpicklers.MLIS :=
   function( f )
     local i,j,l,len,ob;
     len := IO_ReadSmallInt(f);
@@ -582,7 +582,7 @@ IO_Unpicklers.MF8V :=
     ConvertToVectorRep(v);
     return v;
   end;
- 
+
 IO_Unpicklers.IF2V :=
   function( f )
     local v;
@@ -591,7 +591,7 @@ IO_Unpicklers.IF2V :=
     MakeImmutable(v);
     return v;
   end;
-    
+
 IO_Unpicklers.IF8V :=
   function( f )
     local v;
@@ -600,7 +600,7 @@ IO_Unpicklers.IF8V :=
     MakeImmutable(v);
     return v;
   end;
- 
+
 IO_Unpicklers.MF2M :=
   function( f )
     local v;
@@ -616,7 +616,7 @@ IO_Unpicklers.MF8M :=
     ConvertToMatrixRep(v);
     return v;
   end;
- 
+
 IO_Unpicklers.IF2M :=
   function( f )
     local v;
@@ -625,7 +625,7 @@ IO_Unpicklers.IF2M :=
     MakeImmutable(v);
     return v;
   end;
-    
+
 IO_Unpicklers.IF8M :=
   function( f )
     local v;
@@ -634,7 +634,7 @@ IO_Unpicklers.IF8M :=
     MakeImmutable(v);
     return v;
   end;
- 
+
 IO_Unpicklers.GAPL :=
   function( f )
     local ob;
@@ -645,7 +645,7 @@ IO_Unpicklers.GAPL :=
     return Objectify( NewType( IO_ResultsFamily, IO_Result ), ob );
   end;
 
-IO_Unpicklers.SREF := 
+IO_Unpicklers.SREF :=
   function( f )
     local nr;
     nr := IO_ReadSmallInt(f); if nr = IO_Error then return IO_Error; fi;
@@ -687,7 +687,7 @@ InstallMethod( IO_Pickle, "for a record",
         IO_FinalizePickled();
         return IO_OK;
     else
-        if IO_Write(f,"SREF") = IO_Error then 
+        if IO_Write(f,"SREF") = IO_Error then
             IO_FinalizePickled();
             return IO_Error;
         fi;
@@ -700,7 +700,7 @@ InstallMethod( IO_Pickle, "for a record",
     fi;
   end );
 
-IO_Unpicklers.MREC := 
+IO_Unpicklers.MREC :=
   function( f )
     local i,len,name,ob,r;
     len := IO_ReadSmallInt(f);
@@ -756,7 +756,7 @@ InstallMethod( IO_Pickle, "for rational functions",
     return IO_OK;
   end );
 
-IO_Unpicklers.RATF := 
+IO_Unpicklers.RATF :=
   function( f )
     local num,den,one,poly;
     one := IO_Unpickle(f);
@@ -765,7 +765,7 @@ IO_Unpicklers.RATF :=
     if num = IO_Error then return IO_Error; fi;
     den := IO_Unpickle(f);
     if den = IO_Error then return IO_Error; fi;
-    poly := RationalFunctionByExtRepNC( 
+    poly := RationalFunctionByExtRepNC(
                    RationalFunctionsFamily(FamilyObj(one)),num,den);
     return poly;
   end;
@@ -782,14 +782,14 @@ InstallMethod( IO_Pickle, "for rational functions",
     return IO_OK;
   end );
 
-IO_Unpicklers.POLF := 
+IO_Unpicklers.POLF :=
   function( f )
     local num,one,poly;
     one := IO_Unpickle(f);
     if one = IO_Error then return IO_Error; fi;
     num := IO_Unpickle(f);
     if num = IO_Error then return IO_Error; fi;
-    poly := PolynomialByExtRepNC( 
+    poly := PolynomialByExtRepNC(
                    RationalFunctionsFamily(FamilyObj(one)),num);
     return poly;
   end;
@@ -836,7 +836,7 @@ IO_Unpicklers.UPOL :=
   end;
 
 InstallMethod( IO_Pickle, "for a univariate rational function",
-  [ IsFile, 
+  [ IsFile,
     IsUnivariateRationalFunction and IsUnivariateRationalFunctionDefaultRep ],
   function( f, pol )
     local cofs,one,ind;
@@ -868,7 +868,7 @@ InstallMethod( IO_Pickle, "for a straight line program",
   [ IsFile, IsStraightLineProgram ],
   function( f, s )
     if IO_Write(f,"GSLP") = fail then return IO_Error; fi;
-    if IO_Pickle(f,LinesOfStraightLineProgram(s)) = IO_Error then 
+    if IO_Pickle(f,LinesOfStraightLineProgram(s)) = IO_Error then
         return IO_Error;
     fi;
     if IO_Pickle(f,NrInputsOfStraightLineProgram(s)) = IO_Error then
@@ -1041,7 +1041,7 @@ InstallMethod( IO_Pickle, "for a weak pointer object",
         IO_FinalizePickled();
         return IO_OK;
     else
-        if IO_Write(f,"SREF") = IO_Error then 
+        if IO_Write(f,"SREF") = IO_Error then
             IO_FinalizePickled();
             return IO_Error;
         fi;
@@ -1054,7 +1054,7 @@ InstallMethod( IO_Pickle, "for a weak pointer object",
     fi;
   end );
 
-IO_Unpicklers.WPOB := 
+IO_Unpicklers.WPOB :=
   function( f )
     local i,l,len,ob;
     len := IO_ReadSmallInt(f);
@@ -1109,7 +1109,7 @@ InstallMethod( IO_Pickle, "for a permutation group",
     return IO_OK;
   end );
 
-IO_Unpicklers.PRMG := 
+IO_Unpicklers.PRMG :=
   function(f)
     local base,g,gens,size;
     gens := IO_Unpickle(f); if gens = IO_Error then return IO_Error; fi;
@@ -1130,7 +1130,7 @@ InstallMethod( IO_Pickle, "for a matrix group",
                [Name,Size,DimensionOfMatrixGroup,FieldOfMatrixGroup],[],[]);
   end );
 
-IO_Unpicklers.MATG := 
+IO_Unpicklers.MATG :=
   function(f)
     local g,gens;
     gens := IO_Unpickle(f); if gens = IO_Error then return IO_Error; fi;

@@ -44,7 +44,7 @@ Scotland, UK
 <!--  TableOfContents  . . . . . .  generate a table of contents   -->
 <TableOfContents/>
 
-<!--  The only chapter of the book  --> 
+<!--  The only chapter of the book  -->
 <Body>
 <#Include SYSTEM "main.xml">
 </Body>
@@ -71,4 +71,4 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-  
+

@@ -1,6 +1,6 @@
 #############################################################################
 ##
-##  realrandom.gi           IO package 
+##  realrandom.gi           IO package
 ##                                                        by Max Neunhoeffer
 ##
 ##  Copyright (C) 2006-2010 by Max Neunhoeffer
@@ -10,18 +10,18 @@
 ##
 #############################################################################
 
-InstallMethod( Init, "for a real random source", 
+InstallMethod( Init, "for a real random source",
   [IsRealRandomSource,IsString], 1,
   function( r, type )
     local f;
-    if type <> "random" and type <> "urandom" then 
+    if type <> "random" and type <> "urandom" then
         Error("seed must be \"random\" or \"urandom\"");
     fi;
     if type = "random" then
         f := IO_File("/dev/random",128);  # Use smaller buffer size
     else
         f := IO_File("/dev/urandom",1024);  # Use medium buffer size
-    fi; 
+    fi;
     if f = fail then return fail; fi;
     r!.file := f;
     r!.type := type;

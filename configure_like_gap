@@ -4,7 +4,7 @@
 # Call with up to two arguments:
 #    CONFIGNAME
 # as first and optionally
-#    GAPROOTPATH 
+#    GAPROOTPATH
 # as second, where "../.." is the default.
 # This script sets a few environment variables controlling the
 # compilation and then calls ./configure

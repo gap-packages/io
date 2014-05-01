@@ -47,7 +47,7 @@ InstallMethod(BackgroundJobByFork, "for a function, a list and a record",
     local j, n;
     IO_InstallSIGCHLDHandler();
     for n in RecNames(BackgroundJobByForkOptions) do
-        if not(IsBound(opt.(n))) then 
+        if not(IsBound(opt.(n))) then
             opt.(n) := BackgroundJobByForkOptions.(n);
         fi;
     od;
@@ -184,7 +184,7 @@ InstallMethod(WaitUntilIdle, "for a background job by fork",
     fi;
     return j!.result;
   end);
- 
+
 InstallMethod(Kill, "for a background job by fork",
   [IsBackgroundJobByFork],
   function(j)
@@ -206,8 +206,8 @@ InstallMethod(ViewObj, "for a background job by fork",
     local idle;
     Print("<background job by fork pid=",j!.pid);
     idle := IsIdle(j);
-    if idle = true then 
-        Print(" currently idle>"); 
+    if idle = true then
+        Print(" currently idle>");
     elif idle = fail then
         Print(" already terminated>");
     else
@@ -273,8 +273,8 @@ InstallMethod(ParTakeFirstResultByFork, "for two lists and a record",
         return fail;
     fi;
     for n in RecNames(ParTakeFirstResultByForkOptions) do
-        if not(IsBound(opt.(n))) then 
-            opt.(n) := ParTakeFirstResultByForkOptions.(n); 
+        if not(IsBound(opt.(n))) then
+            opt.(n) := ParTakeFirstResultByForkOptions.(n);
         fi;
     od;
     n := Length(jobs);
@@ -332,8 +332,8 @@ InstallMethod(ParDoByFork, "for two lists and a record",
         return fail;
     fi;
     for n in RecNames(ParDoByForkOptions) do
-        if not(IsBound(opt.(n))) then 
-            opt.(n) := ParDoByForkOptions.(n); 
+        if not(IsBound(opt.(n))) then
+            opt.(n) := ParDoByForkOptions.(n);
         fi;
     od;
     n := Length(jobs);
@@ -352,7 +352,7 @@ InstallMethod(ParDoByFork, "for two lists and a record",
     pipes := List(jo,j->IO_GetFD(j!.childtoparent));
     results := EmptyPlist(n);
     start := IO_gettimeofday();
-    Info(InfoIO, 2, "Started ", n, " jobs..."); 
+    Info(InfoIO, 2, "Started ", n, " jobs...");
     while true do
         fds := EmptyPlist(n);
         jobnr := EmptyPlist(n);
@@ -411,8 +411,8 @@ InstallMethod(ParMapReduceByFork, "for a list, two functions and a record",
   function(l, map, reduce, opt)
     local args,i,jobs,m,n,res,res2,where;
     for n in RecNames(ParMapReduceByForkOptions) do
-        if not(IsBound(opt.(n))) then 
-            opt.(n) := ParMapReduceByForkOptions.(n); 
+        if not(IsBound(opt.(n))) then
+            opt.(n) := ParMapReduceByForkOptions.(n);
         fi;
     od;
     if not(IsBound(opt.NumberJobs)) then
@@ -465,8 +465,8 @@ InstallMethod(ParListByFork, "for a list, two functions and a record",
   function(l, map, opt)
     local args,i,jobs,m,n,res,where;
     for n in RecNames(ParListByForkOptions) do
-        if not(IsBound(opt.(n))) then 
-            opt.(n) := ParListByForkOptions.(n); 
+        if not(IsBound(opt.(n))) then
+            opt.(n) := ParListByForkOptions.(n);
         fi;
     od;
     if not(IsBound(opt.NumberJobs)) then
@@ -498,7 +498,7 @@ InstallMethod(ParListByFork, "for a list, two functions and a record",
 
 
 InstallValue(ParWorkerFarmByForkOptions,
-  rec( 
+  rec(
   ));
 
 InstallMethod(ParWorkerFarmByFork, "for a function and a record",
@@ -506,8 +506,8 @@ InstallMethod(ParWorkerFarmByFork, "for a function and a record",
   function(worker, opt)
     local f,i,j,n;
     for n in RecNames(ParWorkerFarmByForkOptions) do
-        if not(IsBound(opt.(n))) then 
-            opt.(n) := ParWorkerFarmByForkOptions.(n); 
+        if not(IsBound(opt.(n))) then
+            opt.(n) := ParWorkerFarmByForkOptions.(n);
         fi;
     od;
     if not(IsBound(opt.NumberJobs)) then
@@ -624,7 +624,7 @@ InstallMethod(DoQueues, "for a worker farm by fork",
                     args := Remove(f!.inqueue,1);
                     Submit(f!.jobs[i],args);
                     f!.whodoeswhat[i] := args;
-                fi; 
+                fi;
             fi;
         od;
     until k = 0 or block;

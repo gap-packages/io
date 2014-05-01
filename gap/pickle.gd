@@ -1,6 +1,6 @@
 #############################################################################
 ##
-##  pickle.gd           GAP 4 package IO                    
+##  pickle.gd           GAP 4 package IO
 ##                                                           Max Neunhoeffer
 ##
 ##  Copyright (C) by Max Neunhoeffer

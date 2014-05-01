@@ -1,13 +1,13 @@
 #############################################################################
 ##
-##  init.g               IO-package                           
+##  init.g               IO-package
 ##                                                           Max Neunhoeffer
 ##
 ##  Copyright (C) by Max Neunhoeffer
 ##  This file is free software, see license information at the end.
-##  
+##
 ##  Initialization of the IO package
-##  
+##
 
 ################################
 # First look after our C part: #

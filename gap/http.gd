@@ -1,12 +1,12 @@
 #############################################################################
 ##
-##  http.gd               GAP 4 package IO  
+##  http.gd               GAP 4 package IO
 ##                                                            Max Neunhoeffer
 ##
 ##  Copyright (C) 2006-2011 by Max Neunhoeffer
 ##  This file is free software, see license information at the end.
 ##
-##  This file contains declarations for the implementation of the client 
+##  This file contains declarations for the implementation of the client
 ##  side of the HTTP protocol.
 ##
 

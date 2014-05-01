@@ -10,7 +10,7 @@ f;
 IO_Read(f,2);
 f;
 IO_ReadLines(f);
-f; 
+f;
 IO_ReadLines(f);
 IO_ReadUntilEOF(f);
 IO_ReadLine(f);

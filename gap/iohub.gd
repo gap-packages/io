@@ -1,12 +1,12 @@
 #############################################################################
 ##
-##  iohub.gd               GAP 4 package IO                    
+##  iohub.gd               GAP 4 package IO
 ##                                                           Max Neunhoeffer
 ##
 ##  Copyright (C) by Max Neunhoeffer
 ##  This file is free software, see license information at the end.
 ##
-##  This file contains declarations for a generic client server framework 
+##  This file contains declarations for a generic client server framework
 ##  for GAP
 ##
 ##  Main points:

@@ -9,7 +9,7 @@ if pid < 0 then
 fi;
 if pid > 0 then   # the parent
     Print("Did fork, now waiting for child...\n");
-    
+
     a := IO_WaitPid(pid,true);
     Print("Got ",a," as result of WaitPid.\n");
 else

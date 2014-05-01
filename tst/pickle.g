@@ -3,7 +3,7 @@
 # Preparations:
 x := X(Rationals);
 InstallMethod( EQ, [ IsStraightLineProgram, IsStraightLineProgram ],
-  function(a,b) 
+  function(a,b)
     return LinesOfStraightLineProgram(a) = LinesOfStraightLineProgram(b) and
            NrInputsOfStraightLineProgram(a) = NrInputsOfStraightLineProgram(b);
   end );
@@ -178,20 +178,20 @@ if not(IsMutable(ll[vecpos+4])) then Error(19); fi;
 if not(IsGF2VectorRep(ll[vecpos+5])) then Error(20); fi;
 if IsMutable(ll[vecpos+5]) then Error(21); fi;
 if not(Is8BitMatrixRep(ll[vecpos+6])) then Error(22); fi;
-if not(IsMutable(ll[vecpos+6])) or not(IsMutable(ll[vecpos+6][1])) then 
-    Error(23); 
+if not(IsMutable(ll[vecpos+6])) or not(IsMutable(ll[vecpos+6][1])) then
+    Error(23);
 fi;
 if not(Is8BitMatrixRep(ll[vecpos+7])) then Error(24); fi;
 if IsMutable(ll[vecpos+7]) or IsMutable(ll[vecpos+7]) then Error(25); fi;
 if not(Is8BitMatrixRep(ll[vecpos+8])) then Error(26); fi;
-if not(IsMutable(ll[vecpos+8])) or not(IsMutable(ll[vecpos+8])) then 
-    Error(27); 
+if not(IsMutable(ll[vecpos+8])) or not(IsMutable(ll[vecpos+8])) then
+    Error(27);
 fi;
 if not(Is8BitMatrixRep(ll[vecpos+9])) then Error(28); fi;
 #if IsMutable(ll[vecpos+9]) or IsMutable(ll[vecpos+9][1]) then Error(29); fi;
 if not(IsGF2MatrixRep(ll[vecpos+10])) then Error(30); fi;
-if not(IsMutable(ll[vecpos+10])) or not(IsMutable(ll[vecpos+10][1])) then 
-    Error(31); 
+if not(IsMutable(ll[vecpos+10])) or not(IsMutable(ll[vecpos+10][1])) then
+    Error(31);
 fi;
 if not(IsGF2MatrixRep(ll[vecpos+11])) then Error(32); fi;
 #if IsMutable(ll[vecpos+11]) or IsMutable(ll[vecpos+11][1]) then Error(33); fi;

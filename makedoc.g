@@ -1,10 +1,10 @@
 ##
 ##  this creates the documentation, needs: GAPDoc package, latex, pdflatex,
 ##  mkindex, dvips
-##  
+##
 ##  Copyright (C) by Max Neunhoeffer
 ##  This file is free software, see license information at the end.
-##  
+##
 
 SetPackagePath("io", ".");
 PrintTo("VERSION", PackageInfo("io")[1].Version);

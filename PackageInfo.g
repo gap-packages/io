@@ -1,7 +1,7 @@
 #############################################################################
-##  
+##
 ##  PackageInfo.g for the package `IO'
-##  
+##
 
 SetPackageInfo( rec(
 
@@ -12,7 +12,7 @@ Date := "04/04/2014", # dd/mm/yyyy format
 
 ##  Information about authors and maintainers.
 Persons := [
-  rec( 
+  rec(
     LastName      := "Neunhöffer",
     FirstNames    := "Max",
     IsAuthor      := true,
@@ -30,15 +30,15 @@ Persons := [
 
 ##  Status information. Currently the following cases are recognized:
 ##    "accepted"      for successfully refereed packages
-##    "deposited"     for packages for which the GAP developers agreed 
+##    "deposited"     for packages for which the GAP developers agreed
 ##                    to distribute them with the core GAP system
-##    "dev"           for development versions of packages 
+##    "dev"           for development versions of packages
 ##    "other"         for all other packages
 ##
 # Status := "accepted",
 Status := "deposited",
 
-##  You must provide the next two entries if and only if the status is 
+##  You must provide the next two entries if and only if the status is
 ##  "accepted" because is was successfully refereed:
 # format: 'name (place)'
 # CommunicatedBy := "Mike Atkinson (St. Andrews)",
@@ -55,14 +55,14 @@ ArchiveURL     := Concatenation("https://github.com/neunhoef/io/",
                                 "/io-", ~.Version),
 ArchiveFormats := ".tar.gz .tar.bz2",
 
-##  Here you  must provide a short abstract explaining the package content 
-##  in HTML format (used on the package overview Web page) and an URL 
+##  Here you  must provide a short abstract explaining the package content
+##  in HTML format (used on the package overview Web page) and an URL
 ##  for a Webpage with more detailed information about the package
 ##  (not more than a few lines, less is ok):
 ##  Please, use '<span class="pkgname">GAP</span>' and
 ##  '<span class="pkgname">MyPKG</span>' for specifing package names.
-##  
-AbstractHTML := 
+##
+AbstractHTML :=
   "The <span class=\"pkgname\">IO</span> package, as its name suggests, \
    provides bindings for <span class=\"pkgname\">GAP</span> to the lower \
    levels of Input/Output functionality in the C library.",
@@ -92,11 +92,11 @@ AvailabilityTest := function()
   return true;
 end,
 
-##  *Optional*, but recommended: path relative to package root to a file which 
+##  *Optional*, but recommended: path relative to package root to a file which
 ##  contains as many tests of the package functionality as sensible.
 #TestFile := "tst/testall.g",
 
-##  *Optional*: Here you can list some keyword related to the topic 
+##  *Optional*: Here you can list some keyword related to the topic
 ##  of the package.
 Keywords := ["input", "output", "I/O", "C-library", "network", "http",
  "object serialisation", "unpredictable random numbers", "TCP/IP",

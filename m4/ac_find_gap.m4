@@ -6,7 +6,7 @@
 AC_DEFUN([AC_FIND_GAP],
 [
   AC_LANG_PUSH([C])
-  
+
   # Make sure CDPATH is portably set to a sensible value
   CDPATH=${ZSH_VERSION+.}:
 
@@ -26,20 +26,20 @@ AC_DEFUN([AC_FIND_GAP],
   fi
 
   ######################################
-  # Find the GAP root directory by 
-  # checking for the sysinfo.gap file 
+  # Find the GAP root directory by
+  # checking for the sysinfo.gap file
   AC_MSG_CHECKING([for GAP root directory])
   DEFAULT_GAPROOTS="../.."
-  
+
   #Allow the user to specify the location of GAP
   #
-  AC_ARG_WITH(gaproot, 
+  AC_ARG_WITH(gaproot,
     [AC_HELP_STRING([--with-gaproot=<path>], [specify root of GAP installation])],
     [DEFAULT_GAPROOTS="$withval"])
-  
+
   havesysinfo=0
   # Otherwise try likely directories
-  for GAPROOT in ${DEFAULT_GAPROOTS} 
+  for GAPROOT in ${DEFAULT_GAPROOTS}
   do
     # Convert the path to absolute
     GAPROOT=`cd $GAPROOT > /dev/null 2>&1 && pwd`
@@ -48,12 +48,12 @@ AC_DEFUN([AC_FIND_GAP],
       break
     fi
   done
-    
+
   if test "x$havesysinfo" = "x1"; then
     AC_MSG_RESULT([${GAPROOT}])
   else
     AC_MSG_RESULT([Not found])
-    
+
     echo ""
     echo "********************************************************************"
     echo "  ERROR"
@@ -66,13 +66,13 @@ AC_DEFUN([AC_FIND_GAP],
     echo "  src/ and bin/."
     echo "********************************************************************"
     echo ""
-    
+
     AC_MSG_ERROR([Unable to find GAP root directory])
   fi
-        
+
   #####################################
   # Now find the architecture
-        
+
   AC_MSG_CHECKING([for GAP architecture])
   GAPARCH="Unknown"
   . $GAPROOT/$SYSINFO
@@ -80,11 +80,11 @@ AC_DEFUN([AC_FIND_GAP],
     GAPARCH=$GAParch
   fi
 
-  AC_ARG_WITH(gaparch, 
+  AC_ARG_WITH(gaparch,
     [AC_HELP_STRING([--with-gaparch=<path>], [override GAP architecture string])],
     [GAPARCH=$withval])
   AC_MSG_RESULT([${GAPARCH}])
- 
+
   if test "x$GAPARCH" = "xUnknown" -o ! -d $GAPROOT/bin/$GAPARCH ; then
     echo ""
     echo "********************************************************************"
@@ -98,11 +98,11 @@ AC_DEFUN([AC_FIND_GAP],
     echo "  GAP installation."
     echo "********************************************************************"
     echo ""
-    
+
     AC_MSG_ERROR([Unable to find plausible GAParch information.])
-  fi  
-  
-  
+  fi
+
+
   #####################################
   # Now check for the GAP header files
 
@@ -135,7 +135,7 @@ AC_DEFUN([AC_FIND_GAP],
     echo "  in particular the files"
     echo "      <gaproot>/sysinfo.gap"
     echo "      <gaproot>/src/<includes>"
-    echo "  and <gaproot>/bin/<architecture>/bin/config.h." 
+    echo "  and <gaproot>/bin/<architecture>/bin/config.h."
     echo "  Please make sure that your GAP root directory structure"
     echo "  conforms to this layout, or give the correct GAP root using"
     echo "  --with-gaproot=<path>"
@@ -143,7 +143,7 @@ AC_DEFUN([AC_FIND_GAP],
     echo ""
     AC_MSG_ERROR([Unable to find GAP include files in /src subdirectory])
   fi
-  
+
   ARCHPATH=$GAPROOT/bin/$GAPARCH
   GAP_CPPFLAGS="-I$GAPROOT -I$ARCHPATH"
 
@@ -154,7 +154,7 @@ AC_DEFUN([AC_FIND_GAP],
   else
     AC_MSG_RESULT([not found, GAP was compiled without GMP])
   fi;
- 
+
   AC_SUBST(GAPARCH)
   AC_SUBST(GAPROOT)
   AC_SUBST(GAP_CPPFLAGS)

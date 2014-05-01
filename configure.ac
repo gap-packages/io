@@ -55,6 +55,6 @@ if test "$CYGWIN" = "yes"; then
 else
   AC_DEFINE(SYS_IS_CYGWIN32, 0, are we on CYGWIN?)
 fi
-     
+
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

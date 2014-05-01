@@ -7,7 +7,7 @@
 ##  This file is free software, see license information at the end.
 ##
 ##  This file contains functions mid level IO providing buffering and
-##  easier access from the GAP level. 
+##  easier access from the GAP level.
 ##
 
 #####################################
@@ -57,7 +57,7 @@ InstallMethod( \=, "for another object and an IO_Result",
 InstallMethod( ViewObj, "for an IO_Result",
   [ IO_Result ],
   function(r) Print(r!.val); end );
- 
+
 
 ###########################################################################
 # Now the functions to create and work with objects in the filter IsFile: #
@@ -72,8 +72,8 @@ InstallGlobalFunction(IO_WrapFD,function(fd,rbuf,wbuf)
   # wbuf can also be a string in which case fd must be -1 and we get
   # a File object that writes to that string by appending.
   local f;
-  f := rec(fd := fd, 
-           rbufsize := rbuf, 
+  f := rec(fd := fd,
+           rbufsize := rbuf,
            wbufsize := wbuf,
            closed := false);
   if f.rbufsize <> false then
@@ -231,7 +231,7 @@ InstallGlobalFunction( IO_ReadUntilEOF, function( f )
       f!.rdata := 0;
   else
       res := "";
-  fi;   
+  fi;
   # Now read on:
   if f!.fd = -1 then
       return res;
@@ -247,7 +247,7 @@ InstallGlobalFunction( IO_ReadBlock, function( f, len )
   # arguments: f ,len
   # f must be an object of type IsFile
   # len is the length to read
-  # Reads length bytes. Guarantees to return length bytes or less "" 
+  # Reads length bytes. Guarantees to return length bytes or less ""
   # indicating EOF or fail for an error. Blocks until enough data arrives.
   # This function only returns less than length bytes, if EOF is reached
   # before length bytes are read.
@@ -269,7 +269,7 @@ InstallGlobalFunction( IO_ReadBlock, function( f, len )
       od;
       return res;
   fi;
-  # read up to len bytes, using our buffer:     
+  # read up to len bytes, using our buffer:
   while Length(res) < len do
       # First empty the buffer:
       if f!.rdata > len - Length(res) then   # more data available
@@ -287,12 +287,12 @@ InstallGlobalFunction( IO_ReadBlock, function( f, len )
       if f!.fd = -1 then
           return res;
       fi;
-      if len - Length(res) > f!.rbufsize then   
+      if len - Length(res) > f!.rbufsize then
           # In this case we read the whole thing:
           bytes := IO_read(f!.fd,res,Length(res),len - Length(res));
-          if bytes = fail then 
+          if bytes = fail then
               return fail;
-          elif bytes = 0 then 
+          elif bytes = 0 then
               return res;
           fi;
       else
@@ -410,7 +410,7 @@ InstallGlobalFunction( IO_Read, function( f, len )
       if bytes = fail then return fail; fi;
       return res;
   fi;
-  # read up to len bytes, using our buffer:     
+  # read up to len bytes, using our buffer:
   # First empty the buffer:
   while true do   # will be exited
       if f!.rdata > len - Length(res) then   # more data available
@@ -428,12 +428,12 @@ InstallGlobalFunction( IO_Read, function( f, len )
       if f!.fd = -1 then
           return "";
       fi;
-      if len - Length(res) > f!.rbufsize then   
+      if len - Length(res) > f!.rbufsize then
           # In this case we read the whole thing:
           bytes := IO_read(f!.fd,res,Length(res),len - Length(res));
-          if bytes = fail then 
+          if bytes = fail then
               return fail;
-          elif bytes = 0 then 
+          elif bytes = 0 then
               return "";
           else
               return res;
@@ -513,12 +513,12 @@ InstallGlobalFunction( IO_Write, function( arg )
           while pos < Length(st) do
               # First fill the buffer:
               if Length(st) - pos + f!.wdata < f!.wbufsize then
-                  f!.wbuf{[f!.wdata+1..f!.wdata+Length(st)-pos]} := 
+                  f!.wbuf{[f!.wdata+1..f!.wdata+Length(st)-pos]} :=
                           st{[pos+1..Length(st)]};
                   f!.wdata := f!.wdata + Length(st) - pos;
                   return Length(st);
               else
-                  f!.wbuf{[f!.wdata+1..f!.wbufsize]} := 
+                  f!.wbuf{[f!.wdata+1..f!.wbufsize]} :=
                           st{[pos+1..pos+f!.wbufsize-f!.wdata]};
                   pos := pos + f!.wbufsize - f!.wdata;
                   f!.wdata := f!.wbufsize;
@@ -590,12 +590,12 @@ end );
 
 InstallGlobalFunction( IO_WriteNonBlocking,
   function( f, st, pos, len )
-    # This function tries to write data of len bytes in the string st beginning 
+    # This function tries to write data of len bytes in the string st beginning
     # at position pos+1 to f. It is guaranteed that this function does not
     # block, if IO_ReadyForWrite(f) returned true or IO_Select indicated
     # possibility to write. Therefore, it might write fewer characters
     # than requested! The function returns the number of bytes written
-    # or fail in case of an error. The function can block, if the 
+    # or fail in case of an error. The function can block, if the
     # buffer is full and the file descriptor is not ready to write.
     local bytes,pos2;
     if not(IsFile(f)) or not(IsString(st)) or not(IsInt(pos)) then
@@ -613,12 +613,12 @@ InstallGlobalFunction( IO_WriteNonBlocking,
             # First fill the buffer:
             if f!.wdata < f!.wbufsize then  # buffer not full
                 if len + f!.wdata < f!.wbufsize then
-                    f!.wbuf{[f!.wdata+1..f!.wdata+len]} := 
+                    f!.wbuf{[f!.wdata+1..f!.wdata+len]} :=
                             st{[pos+1..pos+len]};
                     f!.wdata := f!.wdata + len;
                     return len;
                 else
-                    f!.wbuf{[f!.wdata+1..f!.wbufsize]} := 
+                    f!.wbuf{[f!.wdata+1..f!.wbufsize]} :=
                             st{[pos+1..pos+f!.wbufsize-f!.wdata]};
                     bytes := f!.wbufsize - f!.wdata;
                     f!.wdata := f!.wbufsize;
@@ -634,7 +634,7 @@ InstallGlobalFunction( IO_WriteNonBlocking,
             if bytes = f!.wbufsize then
                 f!.wdata := 0;
             else
-                f!.wbuf{[1..f!.wbufsize-bytes]} 
+                f!.wbuf{[1..f!.wbufsize-bytes]}
                    := f!.wbuf{[bytes+1..f!.wbufsize]};
                 f!.wdata := f!.wdata - bytes;
             fi;
@@ -659,7 +659,7 @@ InstallGlobalFunction( IO_Flush, function( f )
   od;
   return true;
 end );
- 
+
 InstallGlobalFunction( IO_FlushNonBlocking, function( f )
   # This function is guaranteed to make some progress but also not to
   # block if IO_ReadyForWrite or IO_Select returned f to be ready for
@@ -741,7 +741,7 @@ InstallGlobalFunction( IO_ReadyForFlush,
     return true;
   end );
 
-  
+
 InstallGlobalFunction( IO_Select, function( r, w, f, e, t1, t2 )
   # Provides select functionality for file descriptors and IsFile objects.
   # The list f is for a test for flushability.
@@ -839,7 +839,7 @@ InstallGlobalFunction( IO_Select, function( r, w, f, e, t1, t2 )
   fi;
   return nrfinal;
 end );
-      
+
 
 
 # Allow access to the file descriptor:
@@ -943,9 +943,9 @@ InstallGlobalFunction( IO_Environment, function()
   od;
   return r;
 end );
-  
+
 InstallGlobalFunction( IO_MakeEnvList, function(r)
-  # Returns a list of strings for usage with execve made from the 
+  # Returns a list of strings for usage with execve made from the
   # components of r in the form "key=value".
   local k,l;
   l := [];
@@ -976,7 +976,7 @@ function(path,argv,stdinfd,stdoutfd,stderrfd)
   # It installs our signal handler
   local pid;
   IO_InstallSIGCHLDHandler();   # to be able to use IO_WaidPID
-  pid := IO_fork(); 
+  pid := IO_fork();
   if pid < 0 then return fail; fi;
   if pid = 0 then   # the child
       # First close all files
@@ -1023,10 +1023,10 @@ InstallGlobalFunction( IO_Popen, function(arg)
   if mode = "r" then
       pipe := IO_pipe(); if pipe = fail then return fail; fi;
       pid := IO_ForkExecWithFDs(path,argv,0,pipe.towrite,2);
-      if pid = fail then 
+      if pid = fail then
         IO_close(pipe.toread);
         IO_close(pipe.towrite);
-        return fail; 
+        return fail;
       fi;
       # Now the parent:
       IO_close(pipe.towrite);
@@ -1037,10 +1037,10 @@ InstallGlobalFunction( IO_Popen, function(arg)
   elif mode = "w" then
       pipe := IO_pipe(); if pipe = fail then return fail; fi;
       pid := IO_ForkExecWithFDs(path,argv,pipe.toread,1,2);
-      if pid = fail then 
+      if pid = fail then
         IO_close(pipe.toread);
         IO_close(pipe.towrite);
-        return fail; 
+        return fail;
       fi;
       # Now the parent:
       IO_close(pipe.toread);
@@ -1082,19 +1082,19 @@ InstallGlobalFunction( IO_Popen2, function(arg)
   fi;
   IO_InstallSIGCHLDHandler();   # to be able to use IO_WaidPID
   pipe := IO_pipe(); if pipe = fail then return fail; fi;
-  pipe2 := IO_pipe(); 
+  pipe2 := IO_pipe();
   if pipe2 = fail then
     IO_close(pipe.toread);
     IO_close(pipe.towrite);
     return fail;
   fi;
   pid := IO_ForkExecWithFDs(path,argv,pipe.toread,pipe2.towrite,2);
-  if pid = fail then 
+  if pid = fail then
     IO_close(pipe.toread);
     IO_close(pipe.towrite);
     IO_close(pipe2.toread);
     IO_close(pipe2.towrite);
-    return fail; 
+    return fail;
   fi;
   # Now the parent:
   IO_close(pipe.toread);
@@ -1138,13 +1138,13 @@ InstallGlobalFunction( IO_Popen3, function(arg)
   fi;
   IO_InstallSIGCHLDHandler();   # to be able to use IO_WaidPID
   pipe := IO_pipe(); if pipe = fail then return fail; fi;
-  pipe2 := IO_pipe(); 
+  pipe2 := IO_pipe();
   if pipe2 = fail then
     IO_close(pipe.toread);
     IO_close(pipe.towrite);
     return fail;
   fi;
-  pipe3 := IO_pipe(); 
+  pipe3 := IO_pipe();
   if pipe3 = fail then
     IO_close(pipe.toread);
     IO_close(pipe.towrite);
@@ -1153,14 +1153,14 @@ InstallGlobalFunction( IO_Popen3, function(arg)
     return fail;
   fi;
   pid := IO_ForkExecWithFDs(path,argv,pipe.toread,pipe2.towrite,pipe3.towrite);
-  if pid = fail then 
+  if pid = fail then
     IO_close(pipe.toread);
     IO_close(pipe.towrite);
     IO_close(pipe2.toread);
     IO_close(pipe2.towrite);
     IO_close(pipe3.toread);
     IO_close(pipe3.towrite);
-    return fail; 
+    return fail;
   fi;
   # Now the parent:
   IO_close(pipe.toread);
@@ -1187,11 +1187,11 @@ function( progs, infd, outfd, switcherror )
   # switched to the output channel. This function starts up all processes
   # and connects them with pipes. The input of the first is switched to
   # infd and the output of the last to outfd.
-  # Returns a record with the following components: "pids" is a list of 
+  # Returns a record with the following components: "pids" is a list of
   # pids if everything worked. For each process where
   # some error occurred the corresponding pid is replaced by fail.
   # "stdin" is equal to infd (or the new file descriptor if infd was "open"),
-  # "stdout" is euqal to outfd (or the new file descriptor if outfd was 
+  # "stdout" is euqal to outfd (or the new file descriptor if outfd was
   # "open").
 
   local a,b,c,i,inpipe,j,outpipe,pids,pipe,pipes,r;
@@ -1211,11 +1211,11 @@ function( progs, infd, outfd, switcherror )
       inpipe := false;
   fi;
   if outfd = "open" then
-      outpipe := IO_pipe(); 
-      if outpipe = fail then 
+      outpipe := IO_pipe();
+      if outpipe = fail then
           IO_close(inpipe.towrite);
           IO_close(inpipe.toread);
-          return fail; 
+          return fail;
       fi;
       outfd := outpipe.towrite;
   else
@@ -1320,7 +1320,7 @@ function( arg )
   else
       append := false;
   fi;
-      
+
   if append then
       fd := IO_open(filename,IO.O_WRONLY + IO.O_APPEND,
                     IO.S_IRUSR+IO.S_IWUSR+IO.S_IRGRP+IO.S_IWGRP+
@@ -1496,8 +1496,8 @@ function(cmd,args,input)
       # Now reading:
       if not(outeof) and r[1] <> fail then
           chunk := IO_Read(s.stdout,4096);
-          if chunk = "" then 
-              outeof := true; 
+          if chunk = "" then
+              outeof := true;
           elif chunk = fail then
               if inpos < Length(input) then IO_Close(s.stdin); fi;
               IO_Close(s.stdout);
@@ -1509,8 +1509,8 @@ function(cmd,args,input)
       fi;
       if not(erreof) and r[Length(r)] <> fail then
           chunk := IO_Read(s.stderr,4096);
-          if chunk = "" then 
-              erreof := true; 
+          if chunk = "" then
+              erreof := true;
           elif chunk = fail then
               if inpos < Length(input) then IO_Close(s.stdin); fi;
               IO_Close(s.stdout);
@@ -1580,7 +1580,7 @@ function(cmd,args,input)
       # Now reading:
       if not(outeof) and r[1] <> fail then
           chunk := IO_Read(s.stdout,4096);
-          if chunk = "" then 
+          if chunk = "" then
               outeof := true;
           elif chunk = fail then
               if inpos < Length(input) then IO_Close(s.stdin); fi;

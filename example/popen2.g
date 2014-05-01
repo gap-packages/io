@@ -6,7 +6,7 @@ Print("Have string of length ",Length(s),".\n");
 p := IO_Popen2("/bin/cat",[]);
 IO_SendStringBackground(p.stdin,s);
 # We want that /bin/cat terminates after the child has sent everything:
-IO_Close(p.stdin);   
+IO_Close(p.stdin);
 t := IO_ReadUntilEOF(p.stdout);
 IO_Close(p.stdout);
 Print("Have read string!\n");

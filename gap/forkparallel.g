@@ -11,7 +11,7 @@ DoChild := function( pipefd, func, arglist )
 end;
 
 DoParallelOptions := rec(
-  TimeOutSecs := false, 
+  TimeOutSecs := false,
   TimeOutuSecs := false,
 );
 

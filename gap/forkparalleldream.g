@@ -2,17 +2,17 @@ j := BackgroundJobByFork( func, args )
 IsIdle(j)               -> true or false
 HasTerminated(j)        -> true or false
 WaitUntilIdle(j)        -> returns value
-WaitUntilTerminated(j) 
+WaitUntilTerminated(j)
 Kill(j)
 GetResult(j)
 SendArguments(j,args)
 
 ParMapReduceByFork(l,mapfunc,redfunc,opt)
-  options:  
+  options:
     NumberJobs
 
 ParTakeFirstResultByFork(jobs,args,opt)
-  options:  
+  options:
     TimeOutSecs
     TimeOutuSecs
 

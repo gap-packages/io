@@ -1,13 +1,13 @@
 #############################################################################
 ##
-##  io.gd               GAP 4 package IO                    
+##  io.gd               GAP 4 package IO
 ##                                                           Max Neunhoeffer
 ##
 ##  Copyright (C) by Max Neunhoeffer
 ##  This file is free software, see license information at the end.
 ##
 ##  This file contains functions mid level IO providing buffering and
-##  easier access from the GAP level. 
+##  easier access from the GAP level.
 ##
 DeclareInfoClass("InfoIO");
 SetInfoLevel(InfoIO, 1);

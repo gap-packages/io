@@ -1,6 +1,6 @@
 #############################################################################
 ##
-##    read.g                 The IO package                  
+##    read.g                 The IO package
 ##                                                           Max Neunhoeffer
 ##
 ##  Copyright (C) by Max Neunhoeffer

@@ -2,10 +2,10 @@
 **
 *A  io.c               IO-package                            Max Neunhoeffer
 **
-**  
+**
 **  Copyright (C) by Max Neunhoeffer
 **  This file is free software, see license information at the end.
-**  
+**
 */
 
 /* Try to use as much of the GNU C library as possible: */
@@ -98,7 +98,7 @@ void __stack_chk_fail_local (void)
 
 
 /* Functions that are done:
- * open, creat, read, write, close, unlink, lseek, opendir, readdir, 
+ * open, creat, read, write, close, unlink, lseek, opendir, readdir,
  * closedir, rewinddir, telldir, seekdir, link, rename, symlink, readlink,
  * rmdir, mkdir, stat, lstat, fstat, chmod, fchmod, chown, fchown, lchown,
  * mknod, mkfifo, dup, dup2, socket, bind, connect, gethostbyname, listen,
@@ -110,9 +110,9 @@ void __stack_chk_fail_local (void)
  */
 
 /* Functions that are to do (maybe later):
- *   
+ *
  * and perhaps:
- *   socketpair, getsockname, poll, setrlimit, getrlimit, getrusage, ulimit, 
+ *   socketpair, getsockname, poll, setrlimit, getrlimit, getrusage, ulimit,
  * NOTE: There are some problems with respect to signal handling,
  *       because the code for InputOutputLocalProcess and things
  *       has a signal handler for SIGCHLD, which interferes with
@@ -120,15 +120,15 @@ void __stack_chk_fail_local (void)
  *       can be switched on and off, thereby providing support for
  *       either InputOutputLocalProcess *or* fork/exec and friends.
  * not for the moment (portability or implementation problems):
- *   remove, scandir, ioctl? (absolutely unportable, as it seems), 
- *   fcntl? (for file locking purposes), recvmsg, sendmsg, 
+ *   remove, scandir, ioctl? (absolutely unportable, as it seems),
+ *   fcntl? (for file locking purposes), recvmsg, sendmsg,
  */
 
 /***********************************************************************
  * First we have our own SIGCHLD handler. It is a copy of the one in the
- * GAP kernel, however, information about all children that are not 
+ * GAP kernel, however, information about all children that are not
  * coming from streams is stored in one data structure here, such that
- * we can read it out from GAP using IO.Wait. 
+ * we can read it out from GAP using IO.Wait.
  ***********************************************************************/
 
 #define MAXCHLDS 1024
@@ -156,12 +156,12 @@ RETSIGTYPE IO_SIGCHLDHandler( int whichsig )
                 pids[lastats++] = retcode;
                 if (lastats >= maxstats) lastats = 0;
                 if (lastats == fistats) statsfull = 1;
-            } else 
+            } else
                 Pr("#E Overflow in table of terminated processes\n",0,0);
         }
     }
   } while (retcode > 0);
-  
+
   signal(SIGCHLD, IO_SIGCHLDHandler);
 }
 
@@ -239,7 +239,7 @@ Obj FuncIO_WaitPid(Obj self,Obj pid,Obj wait)
                   pids[lastats++] = retcode;
                   if (lastats >= maxstats) lastats = 0;
                   if (lastats == fistats) statsfull = 1;
-              } else 
+              } else
                   Pr("#E Overflow in table of terminated processes\n",0,0);
           }
       }
@@ -267,7 +267,7 @@ Obj FuncIO_WaitPid(Obj self,Obj pid,Obj wait)
   /* Reinstantiate our handler: */
   signal(SIGCHLD,IO_SIGCHLDHandler);
   return tmp;
-} 
+}
 #endif
 
 Obj FuncIO_open(Obj self,Obj path,Obj flags,Obj mode)
@@ -365,7 +365,7 @@ Obj FuncIO_close(Obj self,Obj fd)
       if (res < 0) {
           SySetErrorNo();
           return Fail;
-      } else 
+      } else
           return True;
   }
 }
@@ -388,7 +388,7 @@ Obj FuncIO_lseek(Obj self,Obj fd,Obj offset,Obj whence)
   }
 }
 
-#ifdef HAVE_DIRENT_H 
+#ifdef HAVE_DIRENT_H
 static DIR *ourDIR = 0;
 static struct dirent *ourdirent;
 
@@ -448,7 +448,7 @@ Obj FuncIO_closedir(Obj self)
   if (res < 0) {
       SySetErrorNo();
       return Fail;
-  } else 
+  } else
       return True;
 }
 #endif     /* HAVE_CLOSEDIR */
@@ -837,7 +837,7 @@ Obj FuncIO_chown(Obj self,Obj path,Obj owner,Obj group)
       if (res < 0) {
           SySetErrorNo();
           return Fail;
-      } else 
+      } else
           return True;
   }
 }
@@ -855,7 +855,7 @@ Obj FuncIO_fchown(Obj self,Obj fd,Obj owner,Obj group)
       if (res < 0) {
           SySetErrorNo();
           return Fail;
-      } else 
+      } else
           return True;
   }
 }
@@ -875,7 +875,7 @@ Obj FuncIO_lchown(Obj self,Obj path,Obj owner,Obj group)
       if (res < 0) {
           SySetErrorNo();
           return Fail;
-      } else 
+      } else
           return True;
   }
 }
@@ -894,7 +894,7 @@ Obj FuncIO_mknod(Obj self,Obj path,Obj mode,Obj dev)
       if (res < 0) {
           SySetErrorNo();
           return Fail;
-      } else 
+      } else
           return True;
   }
 }
@@ -912,7 +912,7 @@ Obj FuncIO_mkfifo(Obj self,Obj path,Obj mode)
       if (res < 0) {
           SySetErrorNo();
           return Fail;
-      } else 
+      } else
           return True;
   }
 }
@@ -930,7 +930,7 @@ Obj FuncIO_dup(Obj self,Obj oldfd)
       if (res < 0) {
           SySetErrorNo();
           return Fail;
-      } else 
+      } else
           return INTOBJ_INT(res);
   }
 }
@@ -948,7 +948,7 @@ Obj FuncIO_dup2(Obj self,Obj oldfd,Obj newfd)
       if (res < 0) {
           SySetErrorNo();
           return Fail;
-      } else 
+      } else
           return True;
   }
 }
@@ -962,8 +962,8 @@ Obj FuncIO_socket(Obj self,Obj domain,Obj type,Obj protocol)
   struct protoent *pe;
 #endif
   Int proto;
-  if (!IS_INTOBJ(domain) || !IS_INTOBJ(type) || 
-      !(IS_INTOBJ(protocol) 
+  if (!IS_INTOBJ(domain) || !IS_INTOBJ(type) ||
+      !(IS_INTOBJ(protocol)
 #ifdef HAVE_GETPROTOBYNAME
         || (IS_STRING(protocol) && IS_STRING_REP(protocol))
 #endif
@@ -986,7 +986,7 @@ Obj FuncIO_socket(Obj self,Obj domain,Obj type,Obj protocol)
       if (res < 0) {
           SySetErrorNo();
           return Fail;
-      } else 
+      } else
           return INTOBJ_INT(res);
   }
 }
@@ -1006,7 +1006,7 @@ Obj FuncIO_bind(Obj self,Obj fd,Obj my_addr)
       if (res < 0) {
           SySetErrorNo();
           return Fail;
-      } else 
+      } else
           return True;
   }
 }
@@ -1027,7 +1027,7 @@ Obj FuncIO_connect(Obj self,Obj fd,Obj serv_addr)
       if (res < 0) {
           SySetErrorNo();
           return Fail;
-      } else 
+      } else
           return True;
   }
 }
@@ -1113,7 +1113,7 @@ Obj FuncIO_listen(Obj self,Obj s,Obj backlog)
       if (res < 0) {
           SySetErrorNo();
           return Fail;
-      } else 
+      } else
           return True;
   }
 }
@@ -1134,7 +1134,7 @@ Obj FuncIO_accept(Obj self,Obj fd,Obj addr)
       if (res < 0) {
           SySetErrorNo();
           return Fail;
-      } else 
+      } else
           return INTOBJ_INT(res);
   }
 }
@@ -1301,13 +1301,13 @@ Obj FuncIO_setsockopt(Obj self,Obj fd,Obj level,Obj optname, Obj optval)
   if (res < 0) {
       SySetErrorNo();
       return Fail;
-  } else 
+  } else
       return True;
 }
 #endif
 
 #ifdef HAVE_SELECT
-Obj FuncIO_select(Obj self, Obj inlist, Obj outlist, Obj exclist, 
+Obj FuncIO_select(Obj self, Obj inlist, Obj outlist, Obj exclist,
                   Obj timeoutsec, Obj timeoutusec)
 {
   fd_set infds,outfds,excfds;
@@ -1385,7 +1385,7 @@ Obj FuncIO_select(Obj self, Obj inlist, Obj outlist, Obj exclist,
         n = select(maxfd+1,&infds,&outfds,&excfds,NULL);
     } while (n == -1 && errno == EINTR);
   }
-    
+
   if (n >= 0) {
     /* Now run through the lists and call functions if ready: */
 
@@ -1674,7 +1674,7 @@ Obj FuncIO_kill(Obj self, Obj pid, Obj sig)
         return True;
 }
 #endif
-    
+
 #ifdef HAVE_GETTIMEOFDAY
 Obj FuncIO_gettimeofday( Obj self )
 {
@@ -1779,7 +1779,7 @@ Obj FuncIO_gethostname(Obj self)
 #endif
 
 
-        
+
 /*F * * * * * * * * * * * * * initialize package * * * * * * * * * * * * * * */
 
 /******************************************************************************
@@ -1787,281 +1787,281 @@ Obj FuncIO_gethostname(Obj self)
 */
 static StructGVarFunc GVarFuncs [] = {
 
-  { "IO_open", 3, "pathname, flags, mode", 
-    FuncIO_open, 
+  { "IO_open", 3, "pathname, flags, mode",
+    FuncIO_open,
     "io.c:IO_open" },
 
-  { "IO_creat", 2, "pathname, mode", 
-    FuncIO_creat, 
+  { "IO_creat", 2, "pathname, mode",
+    FuncIO_creat,
     "io.c:IO_creat" },
 
-  { "IO_read", 4, "fd, st, offset, count", 
-    FuncIO_read, 
+  { "IO_read", 4, "fd, st, offset, count",
+    FuncIO_read,
     "io.c:IO_read" },
 
-  { "IO_write", 4, "fd, st, offset, count", 
-    FuncIO_write, 
+  { "IO_write", 4, "fd, st, offset, count",
+    FuncIO_write,
     "io.c:IO_write" },
 
-  { "IO_close", 1, "fd", 
-    FuncIO_close, 
+  { "IO_close", 1, "fd",
+    FuncIO_close,
     "io.c:IO_close" },
 
-  { "IO_lseek", 3, "fd, offset, whence", 
-    FuncIO_lseek, 
+  { "IO_lseek", 3, "fd, offset, whence",
+    FuncIO_lseek,
     "io.c:IO_lseek" },
 
 #ifdef HAVE_DIRENT_H
 
 #ifdef HAVE_OPENDIR
   { "IO_opendir", 1, "name",
-    FuncIO_opendir, 
+    FuncIO_opendir,
     "io.c:IO_opendir" },
 #endif
 
 #ifdef HAVE_READDIR
   { "IO_readdir", 0, "",
-    FuncIO_readdir, 
+    FuncIO_readdir,
     "io.c:IO_readdir" },
 #endif
 
 #ifdef HAVE_REWINDDIR
   { "IO_rewinddir", 0, "",
-    FuncIO_rewinddir, 
+    FuncIO_rewinddir,
     "io.c:IO_rewinddir" },
 #endif
 
 #ifdef HAVE_CLOSEDIR
   { "IO_closedir", 0, "",
-    FuncIO_closedir, 
+    FuncIO_closedir,
     "io.c:IO_closedir" },
 #endif
 
 #ifdef HAVE_TELLDIR
   { "IO_telldir", 0, "",
-    FuncIO_telldir, 
+    FuncIO_telldir,
     "io.c:IO_telldir" },
 #endif
 
 #ifdef HAVE_SEEKDIR
   { "IO_seekdir", 1, "offset",
-    FuncIO_seekdir, 
+    FuncIO_seekdir,
     "io.c:IO_seekdir" },
 #endif
 
 #endif   /* HAVE_DIRENT_H */
 
 #ifdef HAVE_UNLINK
-  { "IO_unlink", 1, "pathname", 
-    FuncIO_unlink, 
+  { "IO_unlink", 1, "pathname",
+    FuncIO_unlink,
     "io.c:IO_unlink" },
 #endif
 
 #ifdef HAVE_LINK
-  { "IO_link", 2, "oldpath, newpath", 
-    FuncIO_link, 
+  { "IO_link", 2, "oldpath, newpath",
+    FuncIO_link,
     "io.c:IO_link" },
 #endif
 
 #ifdef HAVE_RENAME
-  { "IO_rename", 2, "oldpath, newpath", 
-    FuncIO_rename, 
+  { "IO_rename", 2, "oldpath, newpath",
+    FuncIO_rename,
     "io.c:IO_rename" },
 #endif
 
 #ifdef HAVE_SYMLINK
-  { "IO_symlink", 2, "oldpath, newpath", 
-    FuncIO_symlink, 
+  { "IO_symlink", 2, "oldpath, newpath",
+    FuncIO_symlink,
     "io.c:IO_symlink" },
 #endif
 
 #ifdef HAVE_READLINK
-  { "IO_readlink", 3, "path, buf, bufsize", 
-    FuncIO_readlink, 
+  { "IO_readlink", 3, "path, buf, bufsize",
+    FuncIO_readlink,
     "io.c:IO_readlink" },
 #endif
 
 #ifdef HAVE_MKDIR
-  { "IO_mkdir", 2, "pathname, mode", 
-    FuncIO_mkdir, 
+  { "IO_mkdir", 2, "pathname, mode",
+    FuncIO_mkdir,
     "io.c:IO_mkdir" },
 #endif
 
-  { "IO_chdir", 1, "path", 
-    FuncIO_chdir, 
+  { "IO_chdir", 1, "path",
+    FuncIO_chdir,
     "io.c:IO_chdir" },
 
 #ifdef HAVE_RMDIR
-  { "IO_rmdir", 1, "pathname", 
-    FuncIO_rmdir, 
+  { "IO_rmdir", 1, "pathname",
+    FuncIO_rmdir,
     "io.c:IO_rmdir" },
 #endif
 
 #ifdef HAVE_STAT
-  { "IO_stat", 1, "pathname", 
-    FuncIO_stat, 
+  { "IO_stat", 1, "pathname",
+    FuncIO_stat,
     "io.c:IO_stat" },
 #endif
 
 #ifdef HAVE_FSTAT
-  { "IO_fstat", 1, "fd", 
-    FuncIO_fstat, 
+  { "IO_fstat", 1, "fd",
+    FuncIO_fstat,
     "io.c:IO_fstat" },
 #endif
 
 #ifdef HAVE_LSTAT
-  { "IO_lstat", 1, "pathname", 
-    FuncIO_lstat, 
+  { "IO_lstat", 1, "pathname",
+    FuncIO_lstat,
     "io.c:IO_lstat" },
 #endif
 
 #ifdef HAVE_CHMOD
-  { "IO_chmod", 2, "path, mode", 
-    FuncIO_chmod, 
+  { "IO_chmod", 2, "path, mode",
+    FuncIO_chmod,
     "io.c:IO_chmod" },
 #endif
 
 #ifdef HAVE_FCHMOD
-  { "IO_fchmod", 2, "fd, mode", 
-    FuncIO_fchmod, 
+  { "IO_fchmod", 2, "fd, mode",
+    FuncIO_fchmod,
     "io.c:IO_fchmod" },
 #endif
 
 #ifdef HAVE_CHOWN
-  { "IO_chown", 3, "path, owner, group", 
-    FuncIO_chown, 
+  { "IO_chown", 3, "path, owner, group",
+    FuncIO_chown,
     "io.c:IO_chown" },
 #endif
 
 #ifdef HAVE_FCHOWN
-  { "IO_fchown", 3, "fd, owner, group", 
-    FuncIO_fchown, 
+  { "IO_fchown", 3, "fd, owner, group",
+    FuncIO_fchown,
     "io.c:IO_fchown" },
 #endif
 
 #ifdef HAVE_LCHOWN
-  { "IO_lchown", 3, "path, owner, group", 
-    FuncIO_lchown, 
+  { "IO_lchown", 3, "path, owner, group",
+    FuncIO_lchown,
     "io.c:IO_lchown" },
 #endif
 
 #ifdef HAVE_MKNOD
-  { "IO_mknod", 3, "path, mode, dev", 
-    FuncIO_mknod, 
+  { "IO_mknod", 3, "path, mode, dev",
+    FuncIO_mknod,
     "io.c:IO_mknod" },
 #endif
 
 #ifdef HAVE_MKFIFO
-  { "IO_mkfifo", 2, "path, mode", 
-    FuncIO_mkfifo, 
+  { "IO_mkfifo", 2, "path, mode",
+    FuncIO_mkfifo,
     "io.c:IO_mkfifo" },
 #endif
 
 #ifdef HAVE_DUP
-  { "IO_dup", 1, "oldfd", 
-    FuncIO_dup, 
+  { "IO_dup", 1, "oldfd",
+    FuncIO_dup,
     "io.c:IO_dup" },
 #endif
 
 #ifdef HAVE_DUP2
-  { "IO_dup2", 2, "oldfd, newfd", 
-    FuncIO_dup2, 
+  { "IO_dup2", 2, "oldfd, newfd",
+    FuncIO_dup2,
     "io.c:IO_dup2" },
 #endif
 
 #ifdef HAVE_SOCKET
-  { "IO_socket", 3, "domain, type, protocol", 
-    FuncIO_socket, 
+  { "IO_socket", 3, "domain, type, protocol",
+    FuncIO_socket,
     "io.c:IO_socket" },
 #endif
 
 #ifdef HAVE_BIND
-  { "IO_bind", 2, "fd, my_addr", 
-    FuncIO_bind, 
+  { "IO_bind", 2, "fd, my_addr",
+    FuncIO_bind,
     "io.c:IO_bind" },
 #endif
-  
+
 #ifdef HAVE_CONNECT
-  { "IO_connect", 2, "fd, serv_addr", 
-    FuncIO_connect, 
+  { "IO_connect", 2, "fd, serv_addr",
+    FuncIO_connect,
     "io.c:IO_connect" },
 #endif
 
 #ifdef HAVE_SOCKET
-  { "IO_make_sockaddr_in", 2, "ip, port", 
-    FuncIO_make_sockaddr_in, 
+  { "IO_make_sockaddr_in", 2, "ip, port",
+    FuncIO_make_sockaddr_in,
     "io.c:IO_make_sockaddr_in" },
 #endif
 
 #ifdef HAVE_GETHOSTBYNAME
-  { "IO_gethostbyname", 1, "name", 
-    FuncIO_gethostbyname, 
+  { "IO_gethostbyname", 1, "name",
+    FuncIO_gethostbyname,
     "io.c:IO_gethostbyname" },
 #endif
 
 #ifdef HAVE_LISTEN
-  { "IO_listen", 2, "s, backlog", 
-    FuncIO_listen, 
+  { "IO_listen", 2, "s, backlog",
+    FuncIO_listen,
     "io.c:IO_listen" },
 #endif
 
 #ifdef HAVE_ACCEPT
-  { "IO_accept", 2, "fd, addr", 
-    FuncIO_accept, 
+  { "IO_accept", 2, "fd, addr",
+    FuncIO_accept,
     "io.c:IO_accept" },
 #endif
 
 #ifdef HAVE_RECV
-  { "IO_recv", 5, "fd, st, offset, len, flags", 
-    FuncIO_recv, 
+  { "IO_recv", 5, "fd, st, offset, len, flags",
+    FuncIO_recv,
     "io.c:IO_recv" },
 #endif
 
 #ifdef HAVE_RECVFROM
-  { "IO_recvfrom", 6, "fd, st, offset, len, flags, from", 
-    FuncIO_recvfrom, 
+  { "IO_recvfrom", 6, "fd, st, offset, len, flags, from",
+    FuncIO_recvfrom,
     "io.c:IO_recvfrom" },
 #endif
 
 #ifdef HAVE_SEND
-  { "IO_send", 5, "fd, st, offset, len, flags", 
-    FuncIO_send, 
+  { "IO_send", 5, "fd, st, offset, len, flags",
+    FuncIO_send,
     "io.c:IO_send" },
 #endif
 
 #ifdef HAVE_SENDTO
-  { "IO_sendto", 6, "fd, st, offset, len, flags, to", 
-    FuncIO_sendto, 
+  { "IO_sendto", 6, "fd, st, offset, len, flags, to",
+    FuncIO_sendto,
     "io.c:IO_sendto" },
 #endif
 
 #ifdef HAVE_GETSOCKOPT
-  { "IO_getsockopt", 5, "fd, level, optname, optval, optlen", 
-    FuncIO_getsockopt, 
+  { "IO_getsockopt", 5, "fd, level, optname, optval, optlen",
+    FuncIO_getsockopt,
     "io.c:IO_getsockopt" },
 #endif
 
 #ifdef HAVE_SETSOCKOPT
-  { "IO_setsockopt", 4, "fd, level, optname, optval", 
-    FuncIO_setsockopt, 
+  { "IO_setsockopt", 4, "fd, level, optname, optval",
+    FuncIO_setsockopt,
     "io.c:IO_setsockopt" },
 #endif
 
 #ifdef HAVE_SELECT
   { "IO_select", 5, "inlist, outlist, exclist, timeoutsec, timeoutusec",
-    FuncIO_select, 
+    FuncIO_select,
     "io.c:IO_select" },
 #endif
 
 #if defined(HAVE_SIGACTION) || defined(HAVE_SIGNAL)
   { "IO_WaitPid", 2, "pid, wait",
-    FuncIO_WaitPid, 
+    FuncIO_WaitPid,
     "io.c:IO_WaitPid" },
 #endif
 
 #ifdef HAVE_FORK
   { "IO_fork", 0, "",
-    FuncIO_fork, 
+    FuncIO_fork,
     "io.c:IO_fork" },
 #endif
 
@@ -2089,7 +2089,7 @@ static StructGVarFunc GVarFuncs [] = {
   { "IO_RestoreSIGCHLDHandler", 0, "",
     FuncIO_RestoreSIGCHLDHandler,
     "io.c:IO_RestoreSIGCHLDHandler" },
-#endif 
+#endif
 
   { "IO_pipe", 0, "",
     FuncIO_pipe,
@@ -2186,10 +2186,10 @@ static Int InitLibrary ( StructInitInfo *module )
     for ( i = 0; GVarFuncs[i].name != 0;  i++ ) {
       gvar = GVarName(GVarFuncs[i].name);
       AssGVar(gvar,NewFunctionC( GVarFuncs[i].name, GVarFuncs[i].nargs,
-                                 GVarFuncs[i].args, GVarFuncs[i].handler )); 
+                                 GVarFuncs[i].args, GVarFuncs[i].handler ));
       MakeReadOnlyGVar(gvar);
     }
-    
+
     tmp = NEW_PREC(0);
     /* Constants for the flags: */
     AssPRec(tmp, RNamName("O_RDONLY"), INTOBJ_INT((Int) O_RDONLY));
@@ -2412,16 +2412,16 @@ static Int InitLibrary ( StructInitInfo *module )
 #ifdef ENOTEMPTY
     AssPRec(tmp, RNamName("ENOTEMPTY"), INTOBJ_INT((Int) ENOTEMPTY));
 #endif
-#ifdef EAFNOSUPPORT 
+#ifdef EAFNOSUPPORT
     AssPRec(tmp, RNamName("EAFNOSUPPORT"), INTOBJ_INT((Int) EAFNOSUPPORT));
 #endif
-#ifdef ENOBUGS 
+#ifdef ENOBUGS
     AssPRec(tmp, RNamName("ENOBUGS"), INTOBJ_INT((Int) ENOBUGS));
 #endif
-#ifdef EPROTONOSUPPORT 
+#ifdef EPROTONOSUPPORT
     AssPRec(tmp, RNamName("EPROTONOSUPPORT"),INTOBJ_INT((Int) EPROTONOSUPPORT));
 #endif
-#ifdef ENOTSOCK 
+#ifdef ENOTSOCK
     AssPRec(tmp, RNamName("ENOTSOCK"),INTOBJ_INT((Int) ENOTSOCK));
 #endif
 #ifdef EADDRINUSE
@@ -2445,16 +2445,16 @@ static Int InitLibrary ( StructInitInfo *module )
 #ifdef EOPNOTSUPP
     AssPRec(tmp, RNamName("EOPNOTSUPP"), INTOBJ_INT((Int) EOPNOTSUPP));
 #endif
-#ifdef EPROTO 
+#ifdef EPROTO
     AssPRec(tmp, RNamName("EPROTO"), INTOBJ_INT((Int) EPROTO));
 #endif
-#ifdef ECONNABORTED 
+#ifdef ECONNABORTED
     AssPRec(tmp, RNamName("ECONNABORTED"), INTOBJ_INT((Int) ECONNABORTED));
 #endif
-#ifdef ECHILD 
+#ifdef ECHILD
     AssPRec(tmp, RNamName("ECHILD"), INTOBJ_INT((Int) ECHILD));
 #endif
-#ifdef EWOULDBLOCK 
+#ifdef EWOULDBLOCK
     AssPRec(tmp, RNamName("EWOULDBLOCK"), INTOBJ_INT((Int) EWOULDBLOCK));
 #endif
 #ifdef HOST_NOT_FOUND
@@ -2474,397 +2474,397 @@ static Int InitLibrary ( StructInitInfo *module )
 #endif
 
     /* Constants for networking: */
-#ifdef AF_APPLETALK 
+#ifdef AF_APPLETALK
     AssPRec(tmp, RNamName("AF_APPLETALK"), INTOBJ_INT((Int) AF_APPLETALK));
 #endif
-#ifdef AF_ASH 
+#ifdef AF_ASH
     AssPRec(tmp, RNamName("AF_ASH"), INTOBJ_INT((Int) AF_ASH));
 #endif
-#ifdef AF_ATMPVC 
+#ifdef AF_ATMPVC
     AssPRec(tmp, RNamName("AF_ATMPVC"), INTOBJ_INT((Int) AF_ATMPVC));
 #endif
-#ifdef AF_ATMSVC 
+#ifdef AF_ATMSVC
     AssPRec(tmp, RNamName("AF_ATMSVC"), INTOBJ_INT((Int) AF_ATMSVC));
 #endif
-#ifdef AF_AX25 
+#ifdef AF_AX25
     AssPRec(tmp, RNamName("AF_AX25"), INTOBJ_INT((Int) AF_AX25));
 #endif
-#ifdef AF_BLUETOOTH 
+#ifdef AF_BLUETOOTH
     AssPRec(tmp, RNamName("AF_BLUETOOTH"), INTOBJ_INT((Int) AF_BLUETOOTH));
 #endif
-#ifdef AF_BRIDGE 
+#ifdef AF_BRIDGE
     AssPRec(tmp, RNamName("AF_BRIDGE"), INTOBJ_INT((Int) AF_BRIDGE));
 #endif
-#ifdef AF_DECnet 
+#ifdef AF_DECnet
     AssPRec(tmp, RNamName("AF_DECnet"), INTOBJ_INT((Int) AF_DECnet));
 #endif
-#ifdef AF_ECONET 
+#ifdef AF_ECONET
     AssPRec(tmp, RNamName("AF_ECONET"), INTOBJ_INT((Int) AF_ECONET));
 #endif
-#ifdef AF_FILE 
+#ifdef AF_FILE
     AssPRec(tmp, RNamName("AF_FILE"), INTOBJ_INT((Int) AF_FILE));
 #endif
-#ifdef AF_INET 
+#ifdef AF_INET
     AssPRec(tmp, RNamName("AF_INET"), INTOBJ_INT((Int) AF_INET));
 #endif
-#ifdef AF_INET6 
+#ifdef AF_INET6
     AssPRec(tmp, RNamName("AF_INET6"), INTOBJ_INT((Int) AF_INET6));
 #endif
-#ifdef AF_IPX 
+#ifdef AF_IPX
     AssPRec(tmp, RNamName("AF_IPX"), INTOBJ_INT((Int) AF_IPX));
 #endif
-#ifdef AF_IRDA 
+#ifdef AF_IRDA
     AssPRec(tmp, RNamName("AF_IRDA"), INTOBJ_INT((Int) AF_IRDA));
 #endif
-#ifdef AF_KEY 
+#ifdef AF_KEY
     AssPRec(tmp, RNamName("AF_KEY"), INTOBJ_INT((Int) AF_KEY));
 #endif
-#ifdef AF_LOCAL 
+#ifdef AF_LOCAL
     AssPRec(tmp, RNamName("AF_LOCAL"), INTOBJ_INT((Int) AF_LOCAL));
 #endif
-#ifdef AF_MAX 
+#ifdef AF_MAX
     AssPRec(tmp, RNamName("AF_MAX"), INTOBJ_INT((Int) AF_MAX));
 #endif
-#ifdef AF_NETBEUI 
+#ifdef AF_NETBEUI
     AssPRec(tmp, RNamName("AF_NETBEUI"), INTOBJ_INT((Int) AF_NETBEUI));
 #endif
-#ifdef AF_NETLINK 
+#ifdef AF_NETLINK
     AssPRec(tmp, RNamName("AF_NETLINK"), INTOBJ_INT((Int) AF_NETLINK));
 #endif
-#ifdef AF_NETROM 
+#ifdef AF_NETROM
     AssPRec(tmp, RNamName("AF_NETROM"), INTOBJ_INT((Int) AF_NETROM));
 #endif
-#ifdef AF_PACKET 
+#ifdef AF_PACKET
     AssPRec(tmp, RNamName("AF_PACKET"), INTOBJ_INT((Int) AF_PACKET));
 #endif
-#ifdef AF_PPPOX 
+#ifdef AF_PPPOX
     AssPRec(tmp, RNamName("AF_PPPOX"), INTOBJ_INT((Int) AF_PPPOX));
 #endif
-#ifdef AF_ROSE 
+#ifdef AF_ROSE
     AssPRec(tmp, RNamName("AF_ROSE"), INTOBJ_INT((Int) AF_ROSE));
 #endif
-#ifdef AF_ROUTE 
+#ifdef AF_ROUTE
     AssPRec(tmp, RNamName("AF_ROUTE"), INTOBJ_INT((Int) AF_ROUTE));
 #endif
-#ifdef AF_SECURITY 
+#ifdef AF_SECURITY
     AssPRec(tmp, RNamName("AF_SECURITY"), INTOBJ_INT((Int) AF_SECURITY));
 #endif
-#ifdef AF_SNA 
+#ifdef AF_SNA
     AssPRec(tmp, RNamName("AF_SNA"), INTOBJ_INT((Int) AF_SNA));
 #endif
-#ifdef AF_UNIX 
+#ifdef AF_UNIX
     AssPRec(tmp, RNamName("AF_UNIX"), INTOBJ_INT((Int) AF_UNIX));
 #endif
-#ifdef AF_UNSPEC 
+#ifdef AF_UNSPEC
     AssPRec(tmp, RNamName("AF_UNSPEC"), INTOBJ_INT((Int) AF_UNSPEC));
 #endif
-#ifdef AF_WANPIPE 
+#ifdef AF_WANPIPE
     AssPRec(tmp, RNamName("AF_WANPIPE"), INTOBJ_INT((Int) AF_WANPIPE));
 #endif
-#ifdef AF_X25 
+#ifdef AF_X25
     AssPRec(tmp, RNamName("AF_X25"), INTOBJ_INT((Int) AF_X25));
 #endif
-#ifdef PF_APPLETALK 
+#ifdef PF_APPLETALK
     AssPRec(tmp, RNamName("PF_APPLETALK"), INTOBJ_INT((Int) PF_APPLETALK));
 #endif
-#ifdef PF_ASH 
+#ifdef PF_ASH
     AssPRec(tmp, RNamName("PF_ASH"), INTOBJ_INT((Int) PF_ASH));
 #endif
-#ifdef PF_ATMPVC 
+#ifdef PF_ATMPVC
     AssPRec(tmp, RNamName("PF_ATMPVC"), INTOBJ_INT((Int) PF_ATMPVC));
 #endif
-#ifdef PF_ATMSVC 
+#ifdef PF_ATMSVC
     AssPRec(tmp, RNamName("PF_ATMSVC"), INTOBJ_INT((Int) PF_ATMSVC));
 #endif
-#ifdef PF_AX25 
+#ifdef PF_AX25
     AssPRec(tmp, RNamName("PF_AX25"), INTOBJ_INT((Int) PF_AX25));
 #endif
-#ifdef PF_BLUETOOTH 
+#ifdef PF_BLUETOOTH
     AssPRec(tmp, RNamName("PF_BLUETOOTH"), INTOBJ_INT((Int) PF_BLUETOOTH));
 #endif
-#ifdef PF_BRIDGE 
+#ifdef PF_BRIDGE
     AssPRec(tmp, RNamName("PF_BRIDGE"), INTOBJ_INT((Int) PF_BRIDGE));
 #endif
-#ifdef PF_DECnet 
+#ifdef PF_DECnet
     AssPRec(tmp, RNamName("PF_DECnet"), INTOBJ_INT((Int) PF_DECnet));
 #endif
-#ifdef PF_ECONET 
+#ifdef PF_ECONET
     AssPRec(tmp, RNamName("PF_ECONET"), INTOBJ_INT((Int) PF_ECONET));
 #endif
-#ifdef PF_FILE 
+#ifdef PF_FILE
     AssPRec(tmp, RNamName("PF_FILE"), INTOBJ_INT((Int) PF_FILE));
 #endif
-#ifdef PF_INET 
+#ifdef PF_INET
     AssPRec(tmp, RNamName("PF_INET"), INTOBJ_INT((Int) PF_INET));
 #endif
-#ifdef PF_INET6 
+#ifdef PF_INET6
     AssPRec(tmp, RNamName("PF_INET6"), INTOBJ_INT((Int) PF_INET6));
 #endif
-#ifdef PF_IPX 
+#ifdef PF_IPX
     AssPRec(tmp, RNamName("PF_IPX"), INTOBJ_INT((Int) PF_IPX));
 #endif
-#ifdef PF_IRDA 
+#ifdef PF_IRDA
     AssPRec(tmp, RNamName("PF_IRDA"), INTOBJ_INT((Int) PF_IRDA));
 #endif
-#ifdef PF_KEY 
+#ifdef PF_KEY
     AssPRec(tmp, RNamName("PF_KEY"), INTOBJ_INT((Int) PF_KEY));
 #endif
-#ifdef PF_LOCAL 
+#ifdef PF_LOCAL
     AssPRec(tmp, RNamName("PF_LOCAL"), INTOBJ_INT((Int) PF_LOCAL));
 #endif
-#ifdef PF_MAX 
+#ifdef PF_MAX
     AssPRec(tmp, RNamName("PF_MAX"), INTOBJ_INT((Int) PF_MAX));
 #endif
-#ifdef PF_NETBEUI 
+#ifdef PF_NETBEUI
     AssPRec(tmp, RNamName("PF_NETBEUI"), INTOBJ_INT((Int) PF_NETBEUI));
 #endif
-#ifdef PF_NETLINK 
+#ifdef PF_NETLINK
     AssPRec(tmp, RNamName("PF_NETLINK"), INTOBJ_INT((Int) PF_NETLINK));
 #endif
-#ifdef PF_NETROM 
+#ifdef PF_NETROM
     AssPRec(tmp, RNamName("PF_NETROM"), INTOBJ_INT((Int) PF_NETROM));
 #endif
-#ifdef PF_PACKET 
+#ifdef PF_PACKET
     AssPRec(tmp, RNamName("PF_PACKET"), INTOBJ_INT((Int) PF_PACKET));
 #endif
-#ifdef PF_PPPOX 
+#ifdef PF_PPPOX
     AssPRec(tmp, RNamName("PF_PPPOX"), INTOBJ_INT((Int) PF_PPPOX));
 #endif
-#ifdef PF_ROSE 
+#ifdef PF_ROSE
     AssPRec(tmp, RNamName("PF_ROSE"), INTOBJ_INT((Int) PF_ROSE));
 #endif
-#ifdef PF_ROUTE 
+#ifdef PF_ROUTE
     AssPRec(tmp, RNamName("PF_ROUTE"), INTOBJ_INT((Int) PF_ROUTE));
 #endif
-#ifdef PF_SECURITY 
+#ifdef PF_SECURITY
     AssPRec(tmp, RNamName("PF_SECURITY"), INTOBJ_INT((Int) PF_SECURITY));
 #endif
-#ifdef PF_SNA 
+#ifdef PF_SNA
     AssPRec(tmp, RNamName("PF_SNA"), INTOBJ_INT((Int) PF_SNA));
 #endif
-#ifdef PF_UNIX 
+#ifdef PF_UNIX
     AssPRec(tmp, RNamName("PF_UNIX"), INTOBJ_INT((Int) PF_UNIX));
 #endif
-#ifdef PF_WANPIPE 
+#ifdef PF_WANPIPE
     AssPRec(tmp, RNamName("PF_WANPIPE"), INTOBJ_INT((Int) PF_WANPIPE));
 #endif
-#ifdef PF_X25 
+#ifdef PF_X25
     AssPRec(tmp, RNamName("PF_X25"), INTOBJ_INT((Int) PF_X25));
 #endif
-#ifdef SOCK_DGRAM 
+#ifdef SOCK_DGRAM
     AssPRec(tmp, RNamName("SOCK_DGRAM"), INTOBJ_INT((Int) SOCK_DGRAM));
 #endif
-#ifdef SOCK_PACKET 
+#ifdef SOCK_PACKET
     AssPRec(tmp, RNamName("SOCK_PACKET"), INTOBJ_INT((Int) SOCK_PACKET));
 #endif
-#ifdef SOCK_RAW 
+#ifdef SOCK_RAW
     AssPRec(tmp, RNamName("SOCK_RAW"), INTOBJ_INT((Int) SOCK_RAW));
 #endif
-#ifdef SOCK_RDM 
+#ifdef SOCK_RDM
     AssPRec(tmp, RNamName("SOCK_RDM"), INTOBJ_INT((Int) SOCK_RDM));
 #endif
-#ifdef SOCK_SEQPACKET 
+#ifdef SOCK_SEQPACKET
     AssPRec(tmp, RNamName("SOCK_SEQPACKET"), INTOBJ_INT((Int) SOCK_SEQPACKET));
 #endif
-#ifdef SOCK_STREAM 
+#ifdef SOCK_STREAM
     AssPRec(tmp, RNamName("SOCK_STREAM"), INTOBJ_INT((Int) SOCK_STREAM));
 #endif
-#ifdef SOL_SOCKET 
+#ifdef SOL_SOCKET
     AssPRec(tmp, RNamName("SOL_SOCKET"), INTOBJ_INT((Int) SOL_SOCKET));
 #endif
-#ifdef IP_OPTIONS 
+#ifdef IP_OPTIONS
     AssPRec(tmp, RNamName("IP_OPTIONS"), INTOBJ_INT((Int) IP_OPTIONS));
 #endif
-#ifdef IP_PKTINFO 
+#ifdef IP_PKTINFO
     AssPRec(tmp, RNamName("IP_PKTINFO"), INTOBJ_INT((Int) IP_PKTINFO));
 #endif
-#ifdef IP_RECVTOS 
+#ifdef IP_RECVTOS
     AssPRec(tmp, RNamName("IP_RECVTOS"), INTOBJ_INT((Int) IP_RECVTOS));
 #endif
-#ifdef IP_RECVTTL 
+#ifdef IP_RECVTTL
     AssPRec(tmp, RNamName("IP_RECVTTL"), INTOBJ_INT((Int) IP_RECVTTL));
 #endif
-#ifdef IP_RECVOPTS 
+#ifdef IP_RECVOPTS
     AssPRec(tmp, RNamName("IP_RECVOPTS"), INTOBJ_INT((Int) IP_RECVOPTS));
 #endif
-#ifdef IP_RETOPTS 
+#ifdef IP_RETOPTS
     AssPRec(tmp, RNamName("IP_RETOPTS"), INTOBJ_INT((Int) IP_RETOPTS));
 #endif
-#ifdef IP_TOS 
+#ifdef IP_TOS
     AssPRec(tmp, RNamName("IP_TOS"), INTOBJ_INT((Int) IP_TOS));
 #endif
-#ifdef IP_TTL 
+#ifdef IP_TTL
     AssPRec(tmp, RNamName("IP_TTL"), INTOBJ_INT((Int) IP_TTL));
 #endif
-#ifdef IP_HDRINCL 
+#ifdef IP_HDRINCL
     AssPRec(tmp, RNamName("IP_HDRINCL"), INTOBJ_INT((Int) IP_HDRINCL));
 #endif
-#ifdef IP_RECVERR 
+#ifdef IP_RECVERR
     AssPRec(tmp, RNamName("IP_RECVERR"), INTOBJ_INT((Int) IP_RECVERR));
 #endif
-#ifdef IP_MTU_DISCOVER 
-    AssPRec(tmp, RNamName("IP_MTU_DISCOVER"), 
+#ifdef IP_MTU_DISCOVER
+    AssPRec(tmp, RNamName("IP_MTU_DISCOVER"),
                  INTOBJ_INT((Int) IP_MTU_DISCOVER));
 #endif
-#ifdef IP_MTU 
+#ifdef IP_MTU
     AssPRec(tmp, RNamName("IP_MTU"), INTOBJ_INT((Int) IP_MTU));
 #endif
-#ifdef IP_ROUTER_ALERT 
-    AssPRec(tmp, RNamName("IP_ROUTER_ALERT"), 
+#ifdef IP_ROUTER_ALERT
+    AssPRec(tmp, RNamName("IP_ROUTER_ALERT"),
                  INTOBJ_INT((Int) IP_ROUTER_ALERT));
 #endif
-#ifdef IP_MULTICAST_TTL 
-    AssPRec(tmp, RNamName("IP_MULTICAST_TTL"), 
+#ifdef IP_MULTICAST_TTL
+    AssPRec(tmp, RNamName("IP_MULTICAST_TTL"),
                  INTOBJ_INT((Int) IP_MULTICAST_TTL));
 #endif
-#ifdef IP_MULTICAST_LOOP 
-    AssPRec(tmp, RNamName("IP_MULTICAST_LOOP"), 
+#ifdef IP_MULTICAST_LOOP
+    AssPRec(tmp, RNamName("IP_MULTICAST_LOOP"),
                  INTOBJ_INT((Int) IP_MULTICAST_LOOP));
 #endif
-#ifdef IP_ADD_MEMBERSHIP 
-    AssPRec(tmp, RNamName("IP_ADD_MEMBERSHIP"), 
+#ifdef IP_ADD_MEMBERSHIP
+    AssPRec(tmp, RNamName("IP_ADD_MEMBERSHIP"),
                  INTOBJ_INT((Int) IP_ADD_MEMBERSHIP));
 #endif
-#ifdef IP_DROP_MEMBERSHIP 
+#ifdef IP_DROP_MEMBERSHIP
     AssPRec(tmp, RNamName("IP_DROP_MEMBERSHIP"),
                  INTOBJ_INT((Int)IP_DROP_MEMBERSHIP));
 #endif
-#ifdef IP_MULTICAST_IF 
+#ifdef IP_MULTICAST_IF
     AssPRec(tmp, RNamName("IP_MULTICAST_IF"),INTOBJ_INT((Int) IP_MULTICAST_IF));
 #endif
-#ifdef SO_RCVBUF 
+#ifdef SO_RCVBUF
     AssPRec(tmp, RNamName("SO_RCVBUF"), INTOBJ_INT((Int) SO_RCVBUF));
 #endif
-#ifdef SO_SNDBUF 
+#ifdef SO_SNDBUF
     AssPRec(tmp, RNamName("SO_SNDBUF"), INTOBJ_INT((Int) SO_SNDBUF));
 #endif
-#ifdef SO_SNDLOWAT 
+#ifdef SO_SNDLOWAT
     AssPRec(tmp, RNamName("SO_SNDLOWAT"), INTOBJ_INT((Int) SO_SNDLOWAT));
 #endif
-#ifdef SO_RCVLOWAT 
+#ifdef SO_RCVLOWAT
     AssPRec(tmp, RNamName("SO_RCVLOWAT"), INTOBJ_INT((Int) SO_RCVLOWAT));
 #endif
-#ifdef SO_SNDTIMEO 
+#ifdef SO_SNDTIMEO
     AssPRec(tmp, RNamName("SO_SNDTIMEO"), INTOBJ_INT((Int) SO_SNDTIMEO));
 #endif
-#ifdef SO_RCVTIMEO 
+#ifdef SO_RCVTIMEO
     AssPRec(tmp, RNamName("SO_RCVTIMEO"), INTOBJ_INT((Int) SO_RCVTIMEO));
 #endif
-#ifdef SO_REUSEADDR 
+#ifdef SO_REUSEADDR
     AssPRec(tmp, RNamName("SO_REUSEADDR"), INTOBJ_INT((Int) SO_REUSEADDR));
 #endif
-#ifdef SO_KEEPALIVE 
+#ifdef SO_KEEPALIVE
     AssPRec(tmp, RNamName("SO_KEEPALIVE"), INTOBJ_INT((Int) SO_KEEPALIVE));
 #endif
-#ifdef SO_OOBINLINE 
+#ifdef SO_OOBINLINE
     AssPRec(tmp, RNamName("SO_OOBINLINE"), INTOBJ_INT((Int) SO_OOBINLINE));
 #endif
-#ifdef SO_BSDCOMPAT 
+#ifdef SO_BSDCOMPAT
     AssPRec(tmp, RNamName("SO_BSDCOMPAT"), INTOBJ_INT((Int) SO_BSDCOMPAT));
 #endif
-#ifdef SO_PASSCRED 
+#ifdef SO_PASSCRED
     AssPRec(tmp, RNamName("SO_PASSCRED"), INTOBJ_INT((Int) SO_PASSCRED));
 #endif
-#ifdef SO_PEERCRED 
+#ifdef SO_PEERCRED
     AssPRec(tmp, RNamName("SO_PEERCRED"), INTOBJ_INT((Int) SO_PEERCRED));
 #endif
-#ifdef SO_BINDTODEVICE 
+#ifdef SO_BINDTODEVICE
     AssPRec(tmp, RNamName("SO_BINDTODEVICE"),INTOBJ_INT((Int) SO_BINDTODEVICE));
 #endif
-#ifdef SO_DEBUG 
+#ifdef SO_DEBUG
     AssPRec(tmp, RNamName("SO_DEBUG"), INTOBJ_INT((Int) SO_DEBUG));
 #endif
-#ifdef SO_TYPE 
+#ifdef SO_TYPE
     AssPRec(tmp, RNamName("SO_TYPE"), INTOBJ_INT((Int) SO_TYPE));
 #endif
-#ifdef SO_ACCEPTCONN 
+#ifdef SO_ACCEPTCONN
     AssPRec(tmp, RNamName("SO_ACCEPTCONN"), INTOBJ_INT((Int) SO_ACCEPTCONN));
 #endif
-#ifdef SO_DONTROUTE 
+#ifdef SO_DONTROUTE
     AssPRec(tmp, RNamName("SO_DONTROUTE"), INTOBJ_INT((Int) SO_DONTROUTE));
 #endif
-#ifdef SO_BROADCAST 
+#ifdef SO_BROADCAST
     AssPRec(tmp, RNamName("SO_BROADCAST"), INTOBJ_INT((Int) SO_BROADCAST));
 #endif
-#ifdef SO_LINGER 
+#ifdef SO_LINGER
     AssPRec(tmp, RNamName("SO_LINGER"), INTOBJ_INT((Int) SO_LINGER));
 #endif
-#ifdef SO_PRIORITY 
+#ifdef SO_PRIORITY
     AssPRec(tmp, RNamName("SO_PRIORITY"), INTOBJ_INT((Int) SO_PRIORITY));
 #endif
-#ifdef SO_ERROR 
+#ifdef SO_ERROR
     AssPRec(tmp, RNamName("SO_ERROR"), INTOBJ_INT((Int) SO_ERROR));
 #endif
 
-#ifdef TCP_CORK 
+#ifdef TCP_CORK
     AssPRec(tmp, RNamName("TCP_CORK"), INTOBJ_INT((Int) TCP_CORK));
 #endif
-#ifdef TCP_DEFER_ACCEPT 
+#ifdef TCP_DEFER_ACCEPT
     AssPRec(tmp,RNamName("TCP_DEFER_ACCEPT"),INTOBJ_INT((Int)TCP_DEFER_ACCEPT));
 #endif
-#ifdef TCP_INFO 
+#ifdef TCP_INFO
     AssPRec(tmp, RNamName("TCP_INFO"), INTOBJ_INT((Int) TCP_INFO));
 #endif
-#ifdef TCP_KEEPCNT 
+#ifdef TCP_KEEPCNT
     AssPRec(tmp, RNamName("TCP_KEEPCNT"), INTOBJ_INT((Int) TCP_KEEPCNT));
 #endif
-#ifdef TCP_KEEPIDLE 
+#ifdef TCP_KEEPIDLE
     AssPRec(tmp, RNamName("TCP_KEEPIDLE"), INTOBJ_INT((Int) TCP_KEEPIDLE));
 #endif
-#ifdef TCP_KEEPINTVL 
+#ifdef TCP_KEEPINTVL
     AssPRec(tmp, RNamName("TCP_KEEPINTVL"), INTOBJ_INT((Int) TCP_KEEPINTVL));
 #endif
-#ifdef TCP_LINGER2 
+#ifdef TCP_LINGER2
     AssPRec(tmp, RNamName("TCP_LINGER2"), INTOBJ_INT((Int) TCP_LINGER2));
 #endif
-#ifdef TCP_MAXSEG 
+#ifdef TCP_MAXSEG
     AssPRec(tmp, RNamName("TCP_MAXSEG"), INTOBJ_INT((Int) TCP_MAXSEG));
 #endif
-#ifdef TCP_NODELAY 
+#ifdef TCP_NODELAY
     AssPRec(tmp, RNamName("TCP_NODELAY"), INTOBJ_INT((Int) TCP_NODELAY));
 #endif
-#ifdef TCP_QUICKACK 
+#ifdef TCP_QUICKACK
     AssPRec(tmp, RNamName("TCP_QUICKACK"), INTOBJ_INT((Int) TCP_QUICKACK));
 #endif
-#ifdef TCP_SYNCNT 
+#ifdef TCP_SYNCNT
     AssPRec(tmp, RNamName("TCP_SYNCNT"), INTOBJ_INT((Int) TCP_SYNCNT));
 #endif
-#ifdef TCP_WINDOW_CLAMP 
+#ifdef TCP_WINDOW_CLAMP
     AssPRec(tmp,RNamName("TCP_WINDOW_CLAMP"),INTOBJ_INT((Int)TCP_WINDOW_CLAMP));
 #endif
-#ifdef ICMP_FILTER 
+#ifdef ICMP_FILTER
     AssPRec(tmp, RNamName("ICMP_FILTER"), INTOBJ_INT((Int) ICMP_FILTER));
 #endif
-    
+
     /* Constants for messages for recv and send: */
-#ifdef MSG_OOB 
+#ifdef MSG_OOB
     AssPRec(tmp, RNamName("MSG_OOB"), INTOBJ_INT((Int) MSG_OOB));
 #endif
-#ifdef MSG_PEEK 
+#ifdef MSG_PEEK
     AssPRec(tmp, RNamName("MSG_PEEK"), INTOBJ_INT((Int) MSG_PEEK));
 #endif
-#ifdef MSG_WAITALL 
+#ifdef MSG_WAITALL
     AssPRec(tmp, RNamName("MSG_WAITALL"), INTOBJ_INT((Int) MSG_WAITALL));
 #endif
-#ifdef MSG_TRUNC 
+#ifdef MSG_TRUNC
     AssPRec(tmp, RNamName("MSG_TRUNC"), INTOBJ_INT((Int) MSG_TRUNC));
 #endif
-#ifdef MSG_ERRQUEUE 
+#ifdef MSG_ERRQUEUE
     AssPRec(tmp, RNamName("MSG_ERRQUEUE"), INTOBJ_INT((Int) MSG_ERRQUEUE));
 #endif
-#ifdef MSG_EOR 
+#ifdef MSG_EOR
     AssPRec(tmp, RNamName("MSG_EOR"), INTOBJ_INT((Int) MSG_EOR));
 #endif
-#ifdef MSG_CTRUNC 
+#ifdef MSG_CTRUNC
     AssPRec(tmp, RNamName("MSG_CTRUNC"), INTOBJ_INT((Int) MSG_CTRUNC));
 #endif
-#ifdef MSG_OOB 
+#ifdef MSG_OOB
     AssPRec(tmp, RNamName("MSG_OOB"), INTOBJ_INT((Int) MSG_OOB));
 #endif
-#ifdef MSG_ERRQUEUE 
+#ifdef MSG_ERRQUEUE
     AssPRec(tmp, RNamName("MSG_ERRQUEUE"), INTOBJ_INT((Int) MSG_ERRQUEUE));
 #endif
-#ifdef MSG_DONTWAIT 
+#ifdef MSG_DONTWAIT
     AssPRec(tmp, RNamName("MSG_DONTWAIT"), INTOBJ_INT((Int) MSG_DONTWAIT));
 #endif
 #ifdef PIPE_BUF
@@ -3085,12 +3085,12 @@ StructInitInfo * Init__io ( void )
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *

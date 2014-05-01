@@ -32,7 +32,7 @@ X.Y (YYYY-MM-DD)
   - Use new build setup using automake/autoconf/libtool
   - Move repository to git@git.gap-system.org/io
   - Updated the documentation of IO_select
-  
+
 3.3 (2011-03-23)
   - Fixed a bug to compile on latest cygwin without warning.
   - Added IOHub functionality and documented it.
@@ -85,7 +85,7 @@ X.Y (YYYY-MM-DD)
     was never needed, return either IO_Error or unpickled object. This
     changes the semantics!
   - Pickling/Unpickling of WeakPointerObjects
-  - Pickling/Unpickling of permutation groups (including Size and base of 
+  - Pickling/Unpickling of permutation groups (including Size and base of
     StabChain)
   - Pickling/Unpickling of matrix groups (only generators and Size)
   - Pickling/Unpickling of finite fields

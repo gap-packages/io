@@ -1,6 +1,6 @@
 #############################################################################
 ##
-##  http.gi               GAP 4 package IO  
+##  http.gi               GAP 4 package IO
 ##                                                            Max Neunhoeffer
 ##
 ##  Copyright (C) by Max Neunhoeffer
@@ -19,7 +19,7 @@ InstallGlobalFunction( OpenHTTPConnection,
   function(server,port)
     local lookup,res,s;
     s := IO_socket(IO.PF_INET,IO.SOCK_STREAM,"tcp");
-    if s = fail then 
+    if s = fail then
         return rec( sock := fail,
                     errormsg := "OpenHTTPConnection: cannot create socket" );
     fi;
@@ -33,14 +33,14 @@ InstallGlobalFunction( OpenHTTPConnection,
     if res = fail then
         IO_close(s);
         return rec( sock := fail,
-                    errormsg := 
+                    errormsg :=
                       Concatenation("OpenHTTPConnection: cannot connect: ",
                                     LastSystemError().message) );
     fi;
     # Switch the socket to non-blocking mode, just to be sure!
     IO_fcntl(s,IO.F_SETFL,IO.O_NONBLOCK);
 
-    return rec( sock := IO_WrapFD(s,false,false), 
+    return rec( sock := IO_WrapFD(s,false,false),
                 errormsg := "",
                 host := lookup,
                 closed := false );
@@ -54,7 +54,7 @@ InstallGlobalFunction( FixChunkedBody,
     local chunklen,head,p,pos,q,res;
     pos := 0;
     res := [];
-    while true do   # will return eventually 
+    while true do   # will return eventually
         p := PositionSublist(st,"\r\n",pos);
         if p = fail then
             break;
@@ -73,14 +73,14 @@ InstallGlobalFunction( FixChunkedBody,
             pos := pos + chunklen + 2;    # eat up CR and LF
         fi;
     od;
-    if Length(res) > 0 then 
+    if Length(res) > 0 then
         return Concatenation(res);
     else
         return st;
     fi;
   end );
 
-  
+
 InstallGlobalFunction( HTTPRequest,
   function(conn,method,uri,header,body,target)
     # method, uri are the strings for the first line of the request
@@ -126,7 +126,7 @@ InstallGlobalFunction( HTTPRequest,
 
       while true do   # will be left by break
           lineend := Position(out,'\n',pos);
-          if lineend = fail or lineend <= pos+2 then 
+          if lineend = fail or lineend <= pos+2 then
               if lineend <> fail then pos := lineend+1; fi;
               break;   # we have seen the header
           fi;
@@ -142,7 +142,7 @@ InstallGlobalFunction( HTTPRequest,
           fi;
           pos := lineend;
       od;
-      
+
       if lineend = fail then   # incomplete or corrupt header!
           return fail;
       else
@@ -198,12 +198,12 @@ InstallGlobalFunction( HTTPRequest,
       # Changes the variable ret outside!
       ret.status := msg;
       ret.statuscode := 0;
-      if haveseenheader then 
-          ret.header := responseheader; 
+      if haveseenheader then
+          ret.header := responseheader;
       fi;
-      if IsList(out) then 
+      if IsList(out) then
           if IsStringRep(out) then
-              ret.body := out; 
+              ret.body := out;
           else
               ret.body := Concatenation(out);
           fi;
@@ -242,8 +242,8 @@ InstallGlobalFunction( HTTPRequest,
         if Length(w) > 0 and w[1] <> fail then
             byt := IO_WriteNonBlocking(conn.sock,msg,inpos,
                         Minimum(Length(msg)-inpos,65536));
-            if byt = fail and 
-               LastSystemError().number <> IO.EWOULDBLOCK then   
+            if byt = fail and
+               LastSystemError().number <> IO.EWOULDBLOCK then
                 # an error occured, probably connection broken
                 SetError("Connection broken");
                 return ret;
@@ -253,8 +253,8 @@ InstallGlobalFunction( HTTPRequest,
         # Now reading:
         if not(outeof) and r[1] <> fail then
             chunk := IO_Read(conn.sock,4096);
-            if chunk = "" or chunk = fail then 
-                outeof := true; 
+            if chunk = "" or chunk = fail then
+                outeof := true;
                 break;
             fi;
 
@@ -304,14 +304,14 @@ InstallGlobalFunction( HTTPRequest,
             fi;
         fi;
     until outeof or (haveseenheader and bodyread >= contentlength);
-  
+
     if outeof and not(haveseenheader) then
         # Obviously, the connection broke:
         SetError("Connection broken");
         return ret;
     fi;
 
-    # In the case that contentlength is infinity because it was not 
+    # In the case that contentlength is infinity because it was not
     # specified and we thus read until end of file we still report
     # success! This is some tolerance against faulty servers.
 
@@ -335,7 +335,7 @@ InstallGlobalFunction( HTTPRequest,
     fi;
     return ret;
   end );
- 
+
 InstallGlobalFunction( CloseHTTPConnection,
   function( conn )
     IO_Close(conn.sock);
@@ -397,7 +397,7 @@ InstallGlobalFunction( ReadWeb,
     # now `f' is a string containing the file.
     Read(InputTextString(f)); # read in the contents
   end);
- 
+
 ##
 ##  This program is free software: you can redistribute it and/or modify
 ##  it under the terms of the GNU General Public License as published by

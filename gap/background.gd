@@ -1,6 +1,6 @@
 #############################################################################
 ##
-##  background.gd               GAP 4 package IO                    
+##  background.gd               GAP 4 package IO
 ##                                                           Max Neunhoeffer
 ##
 ##  Copyright (C) 2006-2011 by Max Neunhoeffer
@@ -13,13 +13,13 @@
 
 BindGlobal("BackgroundJobsFamily", NewFamily("BackgroundJobsFamily"));
 
-DeclareCategory("IsBackgroundJob", 
+DeclareCategory("IsBackgroundJob",
                 IsComponentObjectRep and IsAttributeStoringRep);
 DeclareRepresentation("IsBackgroundJobByFork", IsBackgroundJob,
   ["pid", "childtoparent", "parenttochild", "result",
    "terminated"]);
 
-BindGlobal("BGJobByForkType", 
+BindGlobal("BGJobByForkType",
            NewType(BackgroundJobsFamily, IsBackgroundJobByFork));
 
 
@@ -92,13 +92,13 @@ DeclareOperation("ParListByFork",
 
 BindGlobal("WorkerFarmsFamily", NewFamily("WorkerFarmsFamily"));
 
-DeclareCategory("IsWorkerFarm", 
+DeclareCategory("IsWorkerFarm",
                 IsComponentObjectRep and IsAttributeStoringRep);
 DeclareRepresentation("IsWorkerFarmByFork", IsWorkerFarm,
   ["jobs", "inqueue", "outqueue", "whodoeswhat"]);
-   
 
-BindGlobal("WorkerFarmByForkType", 
+
+BindGlobal("WorkerFarmByForkType",
            NewType(WorkerFarmsFamily, IsWorkerFarmByFork));
 
 DeclareGlobalVariable("ParWorkerFarmByForkOptions");
@@ -118,7 +118,7 @@ DeclareOperation("Pickup", [IsWorkerFarmByFork]);
 
 # Semantics:
 #   Starts some background jobs, maintains an "in" and an "out" queue.
-#   DoQueues feeds idle jobs from the input queue and gets results 
+#   DoQueues feeds idle jobs from the input queue and gets results
 #   from them for the output queue.
 #   Kill and IsIdle work on all workers at the same time. Submit queues
 #   new jobs to the input queue and Pickup fetches all from the current

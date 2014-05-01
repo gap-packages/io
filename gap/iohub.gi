@@ -1,12 +1,12 @@
 #############################################################################
 ##
-##  iohub.gd               GAP 4 package IO                    
+##  iohub.gd               GAP 4 package IO
 ##                                                           Max Neunhoeffer
 ##
 ##  Copyright (C) by Max Neunhoeffer
 ##  This file is free software, see license information at the end.
 ##
-##  This file contains functions for a generic client server framework 
+##  This file contains functions for a generic client server framework
 ##  for GAP
 ##
 ##  Main points:
@@ -20,7 +20,7 @@ InstallMethod( IOHub, "constructor without arguments", [ ],
   function( )
     local s;
     s := rec( sock := fail, inqueue := [], outqueue := [],
-              tosend := [], torecv := [], inbuf := [], outbuf := [], 
+              tosend := [], torecv := [], inbuf := [], outbuf := [],
               connections := [], isactive := true ) ;
     Objectify(IOHubType, s);
     return s;
@@ -86,7 +86,7 @@ InstallMethod( CloseConnection, "for an IO hub and a positive integer",
 InstallMethod( ShutdownServingSocket, "for an IO hub",
   [IsIOHub],
   function(s)
-    if s!.sock <> fail then 
+    if s!.sock <> fail then
         IO_close(s!.sock);
         s!.sock := fail;
     fi;
@@ -114,13 +114,13 @@ InstallMethod( ViewObj, "for a tcp server",
             Print(" with serving socket");
         fi;
         nr := Number([1..Length(s!.connections)],
-                     i->IsBound(s!.connections[i]) and 
+                     i->IsBound(s!.connections[i]) and
                         IsBound(s!.connections[i][1]));
         if nr > 0 then
             Print(", reading from ",nr," fds");
         fi;
         nr := Number([1..Length(s!.connections)],
-                     i->IsBound(s!.connections[i]) and 
+                     i->IsBound(s!.connections[i]) and
                         IsBound(s!.connections[i][2]));
         if nr > 0 then
             Print(", writing to ",nr," fds");
@@ -153,9 +153,9 @@ InstallMethod( NewTCPConnection, "for an IO hub, an address and a port",
   function( s, address, port )
     local t;
     t := IO_socket(IO.PF_INET,IO.SOCK_STREAM,"tcp");
-    if IO_connect(t,IO_MakeIPAddressPort(address,port)) = fail then 
-        IO_close(t); 
-        return fail; 
+    if IO_connect(t,IO_MakeIPAddressPort(address,port)) = fail then
+        IO_close(t);
+        return fail;
     fi;
     return NewConnection(s,t,t);
   end );
@@ -256,7 +256,7 @@ InstallMethod( DoIO, "for an IO hub and a boolean",
     if not(s!.isactive) then return fail; fi;
 
     hadactivity := false;
-    repeat   
+    repeat
         activity := false;
         # First we check whether some output from the queue has to be sent:
         j := 1;
