@@ -58,6 +58,17 @@ InstallMethod( ViewObj, "for an IO_Result",
   [ IO_Result ],
   function(r) Print(r!.val); end );
 
+# Store a list of open files, so we can close them on GAP exit
+# To ensure all streams are flushed
+IO.OpenFiles := Set([]);
+InstallAtExit(function()
+  local file;
+  for file in IO.OpenFiles do
+      IO_Close(file);
+  od;
+end
+);
+
 
 ###########################################################################
 # Now the functions to create and work with objects in the filter IsFile: #
@@ -71,7 +82,7 @@ InstallGlobalFunction(IO_WrapFD,function(fd,rbuf,wbuf)
   # a File object that reads from that string.
   # wbuf can also be a string in which case fd must be -1 and we get
   # a File object that writes to that string by appending.
-  local f;
+  local f, fileObj;
   f := rec(fd := fd,
            rbufsize := rbuf,
            wbufsize := wbuf,
@@ -100,7 +111,9 @@ InstallGlobalFunction(IO_WrapFD,function(fd,rbuf,wbuf)
           f.wdata := Length(f.wbuf);
       fi;
   fi;
-  return Objectify(FileType,f);
+  fileObj := Objectify(FileType, f);
+  AddSet(IO.OpenFiles, fileObj);
+  return fileObj;
 end );
 
 IO.DefaultBufSize := 65536;
@@ -185,6 +198,7 @@ InstallGlobalFunction( IO_Close, function( f )
   if f!.closed then
       Error("Cannot close closed file");
   fi;
+  RemoveSet(IO.OpenFiles, f);
   # First flush if necessary:
   ret := true;
   if f!.wbufsize <> false and f!.wdata <> 0 then
