@@ -1,7 +1,7 @@
 ACLOCAL_AMFLAGS = -I m4
 
 BINARCHDIR = bin/$(GAPARCH)
-GAPINSTALLLIB = $(abs_top_srcdir)/$(BINARCHDIR)/io.so
+GAPINSTALLLIB = $(BINARCHDIR)/io.so
 
 lib_LTLIBRARIES = io.la
 
@@ -13,20 +13,24 @@ if SYS_IS_CYGWIN
 io_la_LDFLAGS += -no-undefined -version-info 0:0:0 -Wl,$(GAPROOT)/bin/$(GAPARCH)/gap.dll
 endif
 
-all-local: io.la
+all-local: $(GAPINSTALLLIB)
+
+$(GAPINSTALLLIB): io.la
 	$(mkdir_p) $(top_srcdir)/$(BINARCHDIR)
 if SYS_IS_CYGWIN
 	cp .libs/io.dll $(GAPINSTALLLIB)
 else
 	cp .libs/io.so $(GAPINSTALLLIB)
 endif
-	@echo "SUCCESS!"
+
+clean-local:
+	rm -f $(GAPINSTALLLIB)
 
 distclean-local:
 	rm -rf bin/*
 	(cd doc ; ./clean)
 
-doc:	doc/manual.six
-
-doc/manual.six: doc/*.xml PackageInfo.g
+doc:
 	($(GAPROOT)/bin/gap.sh -A makedoc.g)
+
+.PHONY: doc
