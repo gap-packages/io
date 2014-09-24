@@ -1,33 +1,46 @@
   
   
-                                [1XGAP 4 Package [5XIO[105X[101X
+                                      [1X io [101X
   
   
-                 [1XBindings for low level C library I/O routines[101X
+                [1X Bindings for low level C library I/O routines [101X
   
   
-                                 Version 4.3.1
+                                      4.4
   
   
-                                   March 2014
+                                   24/09/2014
   
   
                                  Max Neunhöffer
   
+                                    Max Horn
+  
   
   
   Max Neunhöffer
-      Email:    [7Xmailto:neunhoef@mcs.st-and.ac.uk[107X
+      Email:    [7Xmailto:max@9hoeffer.de[107X
       Homepage: [7Xhttp://www-groups.mcs.st-and.ac.uk/~neunhoef[107X
-      Address:  [33X[0;14YSchool  of  Mathematics  and Statistics Mathematical Institute
-                University of St Andrews North Haugh St Andrews, Fife KY16 9SS
-                Scotland, UK[133X
+      Address:  [33X[0;14YGustav-Freytag-Straße 40[133X
+                [33X[0;14Y50354 Hürth[133X
+                [33X[0;14YGermany[133X
+  
+  
+  Max Horn
+      Email:    [7Xmailto:max.horn@math.uni-giessen.de[107X
+      Homepage: [7Xhttp://www.quendi.de/math[107X
+      Address:  [33X[0;14YAG Algebra[133X
+                [33X[0;14YMathematisches Institut[133X
+                [33X[0;14YJustus-Liebig-Universität Gießen[133X
+                [33X[0;14YArndtstraße 2[133X
+                [33X[0;14Y35392 Gießen[133X
+                [33X[0;14YGermany[133X
   
   
   
   -------------------------------------------------------
   [1XCopyright[101X
-  [33X[0;0Y© 2005-2012 by Max Neunhöffer[133X
+  [33X[0;0Y© 2005-2014 by Max Neunhöffer[133X
   
   [33X[0;0YThis  package  may  be distributed under the terms and conditions of the GNU
   Public License Version 3 or later.[133X
@@ -151,9 +164,10 @@
       4.4-7 IO_StringFilterFile
       4.4-8 IO_FileFilterString
       4.4-9 IO_FilteredFile
-      4.4-10 IO_SendStringBackground
-      4.4-11 IO_PipeThrough
-      4.4-12 IO_PipeThroughWithError
+      4.4-10 IO_CompressedFile
+      4.4-11 IO_SendStringBackground
+      4.4-12 IO_PipeThrough
+      4.4-13 IO_PipeThroughWithError
   5 [33X[0;0YObject serialisation (Pickling)[133X
     5.1 [33X[0;0YResult objects[133X
       5.1-1 IO_Error

@@ -1,28 +1,32 @@
 name: IO
-version: 4.3.1
-date: 04/04/2014
-description: Bindings for low level C library IO
+version: 4.4
+date: 24/09/2014
+description: Bindings for low level C library I/O routines
 
 authors:
-    - name: Max Neunhoeffer
-      url: http://www-groups.mcs.st-and.ac.uk/~neunhoef/
+    - name: Max Neunhöffer
+      url: http://www-groups.mcs.st-and.ac.uk/~neunhoef
 
-GAP: ">=4.5.5"
+maintainers:
+    - name: Max Horn
+      url: http://www.quendi.de/math
+
+GAP: ">=4.7.4"
 
 needed-pkgs:
     - name: "GAPDoc"
       version: ">= 1.2"
       url: "http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc"
 
-www: http://neunhoef.github.io/io/
-readme: http://neunhoef.github.io/io/README
-packageinfo: http://neunhoef.github.io/io/PackageInfo.g
+www: http://gap-system.github.io/io/
+readme: http://gap-system.github.io/io/README
+packageinfo: http://gap-system.github.io/io/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/neunhoef/io/releases/download/v4.3.1/io-4.3.1.tar.gz
+      url: https://github.com/gap-system/io/releases/download/v4.4/io-4.4.tar.gz
     - name: .tar.bz2
-      url: https://github.com/neunhoef/io/releases/download/v4.3.1/io-4.3.1.tar.bz2
+      url: https://github.com/gap-system/io/releases/download/v4.4/io-4.4.tar.bz2
 
 abstract: The <span class="pkgname">IO</span> package, as its name suggests,    provides bindings for <span class="pkgname">GAP</span> to the lower    levels of Input/Output functionality in the C library.
 

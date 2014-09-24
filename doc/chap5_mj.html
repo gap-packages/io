@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<title>GAP (IO) - Chapter 5: Object serialisation (Pickling)</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+<script src="manual.js" type="text/javascript"></script>
+<script type="text/javascript">overwriteStyle();</script>
+</head>
+<body class="chap5"  onload="jscontent()">
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chap3_mj.html">3</a>  <a href="chap4_mj.html">4</a>  <a href="chap5_mj.html">5</a>  <a href="chap6_mj.html">6</a>  <a href="chap7_mj.html">7</a>  <a href="chap8_mj.html">8</a>  <a href="chap9_mj.html">9</a>  <a href="chap10_mj.html">10</a>  <a href="chap11_mj.html">11</a>  <a href="chapInd_mj.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap4_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap6_mj.html">[Next Chapter]</a>&nbsp;  </div>
+
+<p id="mathjaxlink" class="pcenter"><a href="chap5.html">[MathJax off]</a></p>
+<p><a id="X81BBA46880EBFC7D" name="X81BBA46880EBFC7D"></a></p>
+<div class="ChapSects"><a href="chap5_mj.html#X81BBA46880EBFC7D">5 <span class="Heading">Object serialisation (Pickling)</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap5_mj.html#X7E504814811605B7">5.1 <span class="Heading">Result objects</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5_mj.html#X86E06A128511BA25">5.1-1 IO_Error</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5_mj.html#X7887BFCF824B439B">5.1-2 IO_Nothing</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5_mj.html#X7D4D092B8401EA0F">5.1-3 IO_OK</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap5_mj.html#X7F68A8F47F87B243">5.2 <span class="Heading">Pickling and unpickling</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5_mj.html#X7E01770481297DF1">5.2-1 IO_Pickle</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5_mj.html#X8228EE63809A6DEF">5.2-2 IO_Unpickle</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5_mj.html#X844736FB80F6EE97">5.2-3 IO_ClearPickleCache</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap5_mj.html#X7B1C9A9C7D3C0312">5.3 <span class="Heading">Extending the pickling framework</span></a>
+</span>
+</div>
+</div>
+
+<h3>5 <span class="Heading">Object serialisation (Pickling)</span></h3>
+
+<p>The idea of "object serialisation" is that one wants to store nearly arbitrary <strong class="pkg">GAP</strong> objects to disk or transfer them over the network. To this end, one wants to convert them to a byte stream that is platform independent and can later be converted back to a copy of the same object in memory, be it in the same <strong class="pkg">GAP</strong> process or another one maybe even on another machine. The main problem here are the vast amount of different types occurring in <strong class="pkg">GAP</strong> and the possibly highly self-referential structure of <strong class="pkg">GAP</strong> objects.</p>
+
+<p>The <strong class="pkg">IO</strong> package contains a framework to implement object serialisation and implementations for most of the basic data types in <strong class="pkg">GAP</strong>. The framework is easily extendible to other types and takes complete care of self-references and corresponding problems. It builds upon the buffered I/O functions described in Section <a href="chap4_mj.html#X7D6A3F7178CB6169"><span class="RefLink">4</span></a>. We start by describing the user interface.</p>
+
+<p><a id="X7E504814811605B7" name="X7E504814811605B7"></a></p>
+
+<h4>5.1 <span class="Heading">Result objects</span></h4>
+
+<p>The following static objects are used to report about success or failure of the (un-)pickling operations:</p>
+
+<p><a id="X86E06A128511BA25" name="X86E06A128511BA25"></a></p>
+
+<h5>5.1-1 IO_Error</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Error</code></td><td class="tdright">( global variable )</td></tr></table></div>
+<p>This object is returned if an error occurs.</p>
+
+<p><a id="X7887BFCF824B439B" name="X7887BFCF824B439B"></a></p>
+
+<h5>5.1-2 IO_Nothing</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Nothing</code></td><td class="tdright">( global variable )</td></tr></table></div>
+<p>This object is returned when there is nothing to return, for example if an unpickler (see <code class="func">IO_Unpickle</code> (<a href="chap5_mj.html#X8228EE63809A6DEF"><span class="RefLink">5.2-2</span></a>)) encounters the end of a file.</p>
+
+<p><a id="X7D4D092B8401EA0F" name="X7D4D092B8401EA0F"></a></p>
+
+<h5>5.1-3 IO_OK</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_OK</code></td><td class="tdright">( global variable )</td></tr></table></div>
+<p>This object is returned if everything went well and there is no other canonical value to return to indicate this.</p>
+
+<p>The only thing you can do with these special values is to compare them to each other and to other objects.</p>
+
+<p><a id="X7F68A8F47F87B243" name="X7F68A8F47F87B243"></a></p>
+
+<h4>5.2 <span class="Heading">Pickling and unpickling</span></h4>
+
+<p><a id="X7E01770481297DF1" name="X7E01770481297DF1"></a></p>
+
+<h5>5.2-1 IO_Pickle</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Pickle</code>( <var class="Arg">f</var>, <var class="Arg">ob</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: <code class="code">IO_OK</code> or <code class="code">IO_Error</code></p>
+
+<p>The argument <var class="Arg">f</var> must be an open, writable <code class="code">File</code> object. The object <var class="Arg">ob</var> can be an arbitrary <strong class="pkg">GAP</strong> object. The operation "pickles" or "serialises" the object <var class="Arg">ob</var> and writes the result into the <code class="code">File</code> object <var class="Arg">f</var>. If everything is OK, the unique value <code class="code">IO_OK</code> is returned and otherwise the unique value <code class="code">IO_Error</code>. The resulting byte stream can be read again using the operation <code class="func">IO_Unpickle</code> (<a href="chap5_mj.html#X8228EE63809A6DEF"><span class="RefLink">5.2-2</span></a>) and is platform- and architecture independent. Especially the question whether a system has 32 bit or 64 bit wide words and the question of endianess does not matter.</p>
+
+<p>Note that not all of <strong class="pkg">GAP</strong>'s object types are supported but it is relatively easy to extend the system. This package supports in particular boolean values, integers, permutations, rational numbers, finite field elements, cyclotomics, strings, polynomials, rational functions, lists, records, compressed vectors and matrices over finite fields (objects are uncompressed in the byte stream but recompressed during unpickling), and straight line programs.</p>
+
+<p>Self-referential objects built from records and lists are handled correctly and are restored completely with the same self-references during unpickling.</p>
+
+<p><a id="X8228EE63809A6DEF" name="X8228EE63809A6DEF"></a></p>
+
+<h5>5.2-2 IO_Unpickle</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Unpickle</code>( <var class="Arg">f</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: <code class="code">IO_Error</code> or a <strong class="pkg">GAP</strong> object</p>
+
+<p>The argument <var class="Arg">f</var> must be an open, readable <code class="code">File</code> object. The operation reads from <var class="Arg">f</var> and "unpickles" the next object. If an error occurs, the unique value <code class="code">IO_Error</code> is returned. If the <code class="code">File</code> object is at end of file, the value <code class="code">IO_Nothing</code> is returned. Note that these two values are not picklable, because of their special meaning as return values of this operation here.</p>
+
+<p><a id="X844736FB80F6EE97" name="X844736FB80F6EE97"></a></p>
+
+<h5>5.2-3 IO_ClearPickleCache</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_ClearPickleCache</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<p>Returns: Nothing</p>
+
+<p>This function clears the "pickle cache". This cache stores all object pickled in the current recursive call to <code class="func">IO_Pickle</code> (<a href="chap5_mj.html#X7E01770481297DF1"><span class="RefLink">5.2-1</span></a>) and is necessary to handle self-references. Usually it is not necessary to call this function explicitly. Only in the rare case (that should not happen) that a pickling or unpickling operation enters a break loop which is left by the user, the pickle cache has to be cleared explicitly using this function for later calls to <code class="func">IO_Pickle</code> (<a href="chap5_mj.html#X7E01770481297DF1"><span class="RefLink">5.2-1</span></a>) and <code class="func">IO_Unpickle</code> (<a href="chap5_mj.html#X8228EE63809A6DEF"><span class="RefLink">5.2-2</span></a>) to work!</p>
+
+<p><a id="X7B1C9A9C7D3C0312" name="X7B1C9A9C7D3C0312"></a></p>
+
+<h4>5.3 <span class="Heading">Extending the pickling framework</span></h4>
+
+<p>The framework can be extended for other <strong class="pkg">GAP</strong> object types as follows:</p>
+
+<p>For pickling, a method for the operation <code class="func">IO_Pickle</code> (<a href="chap5_mj.html#X7E01770481297DF1"><span class="RefLink">5.2-1</span></a>) has to be installed which does the work. If the object to be pickled has subobjects, then the first action of the method is to call the function <code class="code">IO_AddToPickled</code> with the object as argument. This will put it into the pickle cache and take care of self-references. Arbitrary subobjects can then be pickled using recursive calls to the operation <code class="func">IO_Pickle</code> (<a href="chap5_mj.html#X7E01770481297DF1"><span class="RefLink">5.2-1</span></a>) handing down the same <code class="code">File</code> object into the recursion. The method must either return <code class="code">IO_Error</code> in case of an error or <code class="code">IO_OK</code> if everything goes well. Before returning, a method that has called <code class="code">IO_AddToPickled</code> must call the function <code class="code">IO_FinalizePickled</code> without arguments <em>under all circumstances</em>. If this call is missing, global data for the pickling procedure becomes corrupt!</p>
+
+<p>Every pickling method must first write a 4 byte magic value such that later during unpickling of the byte stream the right unpickling method can be called (see below). Then it can write arbitrary data, however, this data should be platform- and architecture independent, and it must be possible to unpickle it later without "lookahead".</p>
+
+<p>Pickling methods should usually not go into a break loop, because after leaving the user has to call <code class="func">IO_ClearPickleCache</code> (<a href="chap5_mj.html#X844736FB80F6EE97"><span class="RefLink">5.2-3</span></a>) explicitly!</p>
+
+<p>Unpickling is implemented as follows: For every 4 byte magic value there must be a function bound to that value in the record <code class="code">IO_Unpicklers</code>. If the unpickling operation <code class="func">IO_Unpickle</code> (<a href="chap5_mj.html#X8228EE63809A6DEF"><span class="RefLink">5.2-2</span></a>) encounters that magic value, it calls the corresponding unpickling function. This function just gets one <code class="code">File</code> object as argument. Since the magic value is already read, it can immediately start with reading and rebuilding the serialised object in memory. The method has to take care to restore the object including its type completely.</p>
+
+<p>If an object type has subobjects, the unpickling function has to first create a skeleton of the object without its subobjects, then call <code class="code">IO_AddToUnpickled</code> on this skeleton, <em>before</em> unpickling subobjects. If things are not done in this order, the handling of self-references down in the recursion will not work! An unpickling function that has called <code class="code">IO_AddToUnpickled</code> at the beginning has to call <code class="code">IO_FinalizeUnpickled</code> without arguments before returning <em>under all circumstances</em>! If this call is missing, global data for the unpickling procedure becomes corrupt!</p>
+
+<p>Of course, unpickling functions can recursively call <code class="func">IO_Unpickle</code> (<a href="chap5_mj.html#X8228EE63809A6DEF"><span class="RefLink">5.2-2</span></a>) to unpickle subobjects. Apart from this, unpickling functions can use arbitrary reading functions on the <code class="code">File</code> object. However, they should only read sequentially and never move the current file position pointer otherwise. An unpickling function should return the newly created object or the value <code class="code">IO_Error</code> if an error occurred. They should never go into a break loop, because after leaving the user has to call <code class="func">IO_ClearPickleCache</code> (<a href="chap5_mj.html#X844736FB80F6EE97"><span class="RefLink">5.2-3</span></a>) explicitly!</p>
+
+<p>Perhaps the best way to learn how to extend the framework is to study the code for the basic <strong class="pkg">GAP</strong> objects in the file <code class="file">pkg/io/gap/pickle.gi</code>.</p>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap4_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap6_mj.html">[Next Chapter]</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chap3_mj.html">3</a>  <a href="chap4_mj.html">4</a>  <a href="chap5_mj.html">5</a>  <a href="chap6_mj.html">6</a>  <a href="chap7_mj.html">7</a>  <a href="chap8_mj.html">8</a>  <a href="chap9_mj.html">9</a>  <a href="chap10_mj.html">10</a>  <a href="chap11_mj.html">11</a>  <a href="chapInd_mj.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

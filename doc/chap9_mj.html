@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<title>GAP (IO) - Chapter 9: I/O multiplexing</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+<script src="manual.js" type="text/javascript"></script>
+<script type="text/javascript">overwriteStyle();</script>
+</head>
+<body class="chap9"  onload="jscontent()">
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chap3_mj.html">3</a>  <a href="chap4_mj.html">4</a>  <a href="chap5_mj.html">5</a>  <a href="chap6_mj.html">6</a>  <a href="chap7_mj.html">7</a>  <a href="chap8_mj.html">8</a>  <a href="chap9_mj.html">9</a>  <a href="chap10_mj.html">10</a>  <a href="chap11_mj.html">11</a>  <a href="chapInd_mj.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap8_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap10_mj.html">[Next Chapter]</a>&nbsp;  </div>
+
+<p id="mathjaxlink" class="pcenter"><a href="chap9.html">[MathJax off]</a></p>
+<p><a id="X7A466B907B882CA0" name="X7A466B907B882CA0"></a></p>
+<div class="ChapSects"><a href="chap9_mj.html#X7A466B907B882CA0">9 <span class="Heading">I/O multiplexing</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap9_mj.html#X7DFB63A97E67C0A1">9.1 <span class="Heading">Introduction</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap9_mj.html#X853D93B47EA82379">9.2 <span class="Heading">The operations for <code class="code">IOHub</code> objects</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X83C0523D8538E866">9.2-1 IOHub</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X7D1D9A8D837ECCEB">9.2-2 NewConnection</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X8553D2E47C05797F">9.2-3 CloseConnection</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X7F7FD824866CB582">9.2-4 AttachServingSocket</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X7866F9DA8358968C">9.2-5 ShutdownServingSocket</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X84AFBD658118ABB8">9.2-6 Shutdown</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X7BE1B9FD82C9B8E0">9.2-7 AcceptNewConnection</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X85F634D4826D89F1">9.2-8 SubmitOutput</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X837629707DF9B60E">9.2-9 GetInput</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X79031BC687502CB6">9.2-10 NewTCPConnection</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X7F8C7F5782213A71">9.2-11 OutputQueue</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X7972FF1C7B59D0A4">9.2-12 InputQueue</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X810D418A802D09D1">9.2-13 DoIO</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap9_mj.html#X7A489A5D79DA9E5C">9.3 <span class="Heading"> Examples </span></a>
+</span>
+</div>
+</div>
+
+<h3>9 <span class="Heading">I/O multiplexing</span></h3>
+
+<p><a id="X7DFB63A97E67C0A1" name="X7DFB63A97E67C0A1"></a></p>
+
+<h4>9.1 <span class="Heading">Introduction</span></h4>
+
+<p>Whenever one needs to do input/output on more than one connection (file descriptor) at a time, some code is needed to organise the I/O multiplexing. Due to the single-threaded nature of the current <strong class="pkg">GAP</strong> language one has to use <code class="func">IO_select</code> (<a href="chap3_mj.html#X81CA6EE88062010E"><span class="RefLink">3.2-51</span></a>) and some buffering and queueing to organise this. This chapter describes a relative generic implementation of I/O-multiplexing using so-called <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) objects. The basic idea is that an <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) object handles lots of I/O connections at the same time and maintains a buffer for each of them. There is a very simple protocol that marks chunks of data (called "messages") and whenever a message has been received completely it is collected in the input queue of the <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>), marked with the number of the connection it came from. Rather than sending a message away in one go, one would always schedule it for sending by appending it to the output queue. The operation <code class="func">DoIO</code> (<a href="chap9_mj.html#X810D418A802D09D1"><span class="RefLink">9.2-13</span></a>), when called often enough, will then make sure that the message is sent away eventually.</p>
+
+<p><a id="X853D93B47EA82379" name="X853D93B47EA82379"></a></p>
+
+<h4>9.2 <span class="Heading">The operations for <code class="code">IOHub</code> objects</span></h4>
+
+<p>In this section, we simply describe the functions and operations to create, use and destroy <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) objects.</p>
+
+<p><a id="X83C0523D8538E866" name="X83C0523D8538E866"></a></p>
+
+<h5>9.2-1 IOHub</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IOHub</code>(  )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: an <code class="func">IOHub</code> object</p>
+
+<p>This creates a new <code class="func">IOHub</code> object at first without any open connections.</p>
+
+<p><a id="X7D1D9A8D837ECCEB" name="X7D1D9A8D837ECCEB"></a></p>
+
+<h5>9.2-2 NewConnection</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; NewConnection</code>( <var class="Arg">h</var>, <var class="Arg">i</var>, <var class="Arg">o</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: a positive integer</p>
+
+<p>This operation adds a new connection to the <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) object <var class="Arg">h</var>. The arguments <var class="Arg">i</var> and <var class="Arg">o</var> must be Unix file descriptors or <span class="SimpleMath">\(0\)</span> and <var class="Arg">i</var> must be open for reading if it is positive and <var class="Arg">o</var> must be open for writing if it is positive. It is allowed that both file descriptors are equal, but they may not both be equal to <span class="SimpleMath">\(0\)</span>. The operation returns a positive integer which is the number under which this new connection will be administrated in the <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) object. Note that this number is specific to the object <var class="Arg">h</var>.</p>
+
+<p>From the moment these file descriptors are registered with the <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) object, every subsequent call to <code class="func">DoIO</code> (<a href="chap9_mj.html#X810D418A802D09D1"><span class="RefLink">9.2-13</span></a>) will try to do input and output on them. This means in particular that the other side of this connection should be in the same initial state of the protocol. Usually this will be achieved by them being added as a new connection to a corresponding <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) object on the other side at the same time.</p>
+
+<p>See also <code class="func">NewTCPConnection</code> (<a href="chap9_mj.html#X79031BC687502CB6"><span class="RefLink">9.2-10</span></a>) below.</p>
+
+<p><a id="X8553D2E47C05797F" name="X8553D2E47C05797F"></a></p>
+
+<h5>9.2-3 CloseConnection</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; CloseConnection</code>( <var class="Arg">h</var>, <var class="Arg">nr</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: nothing</p>
+
+<p>The argument <var class="Arg">h</var> must be an <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) object and <var class="Arg">nr</var> the number of a connection which was previously returned by <code class="func">NewConnection</code> (<a href="chap9_mj.html#X7D1D9A8D837ECCEB"><span class="RefLink">9.2-2</span></a>). The corresponding connection is closed and removed from the <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>).</p>
+
+<p><a id="X7F7FD824866CB582" name="X7F7FD824866CB582"></a></p>
+
+<h5>9.2-4 AttachServingSocket</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AttachServingSocket</code>( <var class="Arg">h</var>, <var class="Arg">addr</var>, <var class="Arg">port</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: a Unix file descriptor or <code class="keyw">fail</code></p>
+
+<p>The argument <var class="Arg">h</var> must be an <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) object, <var class="Arg">addr</var> an IP address or host name as a string and <var class="Arg">port</var> a port number (see also <code class="func">IO_MakeIPAddressPort</code> (<a href="chap4_mj.html#X8568CE6684C90CE5"><span class="RefLink">4.3-6</span></a>)). This operation creates a new socket, binds it to the IP address and port and attaches it to the <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) object. From this moment on the operation <code class="func">DoIO</code> (<a href="chap9_mj.html#X810D418A802D09D1"><span class="RefLink">9.2-13</span></a>) will accept new bidirectional TCP/IP connections on that socket and add them to <var class="Arg">h</var>. The operation returns either the file descriptor of the new socket or <code class="keyw">fail</code> if an error occurred.</p>
+
+<p><a id="X7866F9DA8358968C" name="X7866F9DA8358968C"></a></p>
+
+<h5>9.2-5 ShutdownServingSocket</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ShutdownServingSocket</code>( <var class="Arg">h</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: nothing</p>
+
+<p>The argument <var class="Arg">h</var> must be an <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) object. Any server socket which was attached to <var class="Arg">h</var> is shut down, so no new connections will be accepted.</p>
+
+<p><a id="X84AFBD658118ABB8" name="X84AFBD658118ABB8"></a></p>
+
+<h5>9.2-6 Shutdown</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Shutdown</code>( <var class="Arg">h</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: nothing</p>
+
+<p>The argument <var class="Arg">h</var> must be an <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) object. All connections of <var class="Arg">h</var> will be closed using <code class="func">CloseConnection</code> (<a href="chap9_mj.html#X8553D2E47C05797F"><span class="RefLink">9.2-3</span></a>) and any serving socket will be shut down using <code class="func">ShutdownServingSocket</code> (<a href="chap9_mj.html#X7866F9DA8358968C"><span class="RefLink">9.2-5</span></a>). The <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) object will not be usable any more after this call.</p>
+
+<p><a id="X7BE1B9FD82C9B8E0" name="X7BE1B9FD82C9B8E0"></a></p>
+
+<h5>9.2-7 AcceptNewConnection</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AcceptNewConnection</code>( <var class="Arg">h</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: a positive integer or <code class="keyw">fail</code></p>
+
+<p>The argument <var class="Arg">h</var> must be an <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) object. The object <var class="Arg">h</var> must have a serving socket attached to it via <code class="func">AttachServingSocket</code> (<a href="chap9_mj.html#X7F7FD824866CB582"><span class="RefLink">9.2-4</span></a>), otherwise <code class="keyw">fail</code> is returned and nothing happens. One more connection is accepted through the serving socket. It is added as a new bidirectional TCP/IP connection to the <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) object and the new connection number is returned. Note first that this operation blocks until a new connection comes in. Note furthermore that this operation is usually called automatically in <code class="func">DoIO</code> (<a href="chap9_mj.html#X810D418A802D09D1"><span class="RefLink">9.2-13</span></a>) whenever a new connection has come in, which is reported in the internal <code class="func">IO_select</code> (<a href="chap3_mj.html#X81CA6EE88062010E"><span class="RefLink">3.2-51</span></a>) call. So usually, the client code does not have to call this operation at all.</p>
+
+<p><a id="X85F634D4826D89F1" name="X85F634D4826D89F1"></a></p>
+
+<h5>9.2-8 SubmitOutput</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SubmitOutput</code>( <var class="Arg">h</var>, <var class="Arg">nr</var>, <var class="Arg">st</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
+
+<p>The argument <var class="Arg">h</var> must be an <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) object, <var class="Arg">nr</var> must be a positive integer which is the number of an open connection of <var class="Arg">h</var> which can be used for output. The argument <var class="Arg">st</var> must be a <strong class="pkg">GAP</strong> string. This operation appends the message <var class="Arg">st</var> to the end of the output queue for the connection <var class="Arg">nr</var>. Note that at this stage no output is actually performed automatically. One has to call <code class="func">DoIO</code> (<a href="chap9_mj.html#X810D418A802D09D1"><span class="RefLink">9.2-13</span></a>) subsequently to actually send the message away.</p>
+
+<p><a id="X837629707DF9B60E" name="X837629707DF9B60E"></a></p>
+
+<h5>9.2-9 GetInput</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; GetInput</code>( <var class="Arg">h</var>, <var class="Arg">nr</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: a list of length <span class="SimpleMath">\(2\)</span></p>
+
+<p>The argument <var class="Arg">h</var> must be an <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) object, <var class="Arg">nr</var> must be an integer. If <var class="Arg">nr</var> is positive, this operation returns the earliest message which has come in from connection number <var class="Arg">nr</var> and has not yet been returned by <code class="func">GetInput</code> before. This message is then removed from the input queue. If there is no such message, then <code class="keyw">false</code> is returned. A message is returned as a plain list of length <span class="SimpleMath">\(2\)</span> where the first entry is the connection number it came from and the second entry is a string containing the message itself. If <var class="Arg">nr</var> is equal to <span class="SimpleMath">\(0\)</span> then the first message in the input queue from any connection is returned or <code class="keyw">false</code> if there is no message in the input queue.</p>
+
+<p><a id="X79031BC687502CB6" name="X79031BC687502CB6"></a></p>
+
+<h5>9.2-10 NewTCPConnection</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; NewTCPConnection</code>( <var class="Arg">h</var>, <var class="Arg">addr</var>, <var class="Arg">port</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: a connection number or <code class="keyw">fail</code></p>
+
+<p>The argument <var class="Arg">h</var> must be an <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) object, the arguments <var class="Arg">addr</var> and <var class="Arg">port</var> must be an address/port pair as used in <code class="func">IO_MakeIPAddressPort</code> (<a href="chap4_mj.html#X8568CE6684C90CE5"><span class="RefLink">4.3-6</span></a>), so <var class="Arg">address</var> can either be a host name or an IP address and <var class="Arg">port</var> is a port number. This operation opens a new TCP connection to the address and port specified, adds a new bidirectional connection to the <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) <var class="Arg">h</var> using <code class="func">NewConnection</code> (<a href="chap9_mj.html#X7D1D9A8D837ECCEB"><span class="RefLink">9.2-2</span></a>) and returns the connection number specific to the object <var class="Arg">h</var>. If anything goes wrong, <code class="keyw">fail</code> is returned.</p>
+
+<p><a id="X7F8C7F5782213A71" name="X7F8C7F5782213A71"></a></p>
+
+<h5>9.2-11 OutputQueue</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; OutputQueue</code>( <var class="Arg">h</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: a list</p>
+
+<p>The argument <var class="Arg">h</var> must be an <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) object. This returns the internal object for the output queue. Its elements are pairs where the first entry is the connection number where it is going to be sent and the second entry is the message as a string. Only modify this list if you really know what you are doing.</p>
+
+<p><a id="X7972FF1C7B59D0A4" name="X7972FF1C7B59D0A4"></a></p>
+
+<h5>9.2-12 InputQueue</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; InputQueue</code>( <var class="Arg">h</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: a list</p>
+
+<p>The argument <var class="Arg">h</var> must be an <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) object. This returns the internal object for the input queue. Its elements are pairs where the first entry is the connection number from where the message was received and the second entry is the message as a string. Only modify this list if you really know what you are doing.</p>
+
+<p><a id="X810D418A802D09D1" name="X810D418A802D09D1"></a></p>
+
+<h5>9.2-13 DoIO</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; DoIO</code>( <var class="Arg">h</var>[, <var class="Arg">block</var>] )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code> or <code class="keyw">fail</code></p>
+
+<p>The argument <var class="Arg">h</var> must be an <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) object, and the optional second argument <var class="Arg">block</var> must be <code class="keyw">true</code> or <code class="keyw">false</code>. This operation uses <code class="func">IO_select</code> (<a href="chap3_mj.html#X81CA6EE88062010E"><span class="RefLink">3.2-51</span></a>) to decide which of the file descriptors belonging to the connections of <var class="Arg">h</var> are ready to read or write. All file descriptors which are ready are served, possibly updating the input and output queues. A possible serving socket is also served accepting a new connection if there is one. The operation <code class="func">DoIO</code> loops until no more file descriptors are ready. It returns <code class="keyw">true</code> if some I/O was performed and <code class="keyw">false</code> if not. It returns <code class="keyw">fail</code> if the <code class="func">IOHub</code> (<a href="chap9_mj.html#X83C0523D8538E866"><span class="RefLink">9.2-1</span></a>) is already shut down. The second argument <var class="Arg">block</var> indicates whether or not <code class="func">DoIO</code> should block until some I/O has taken place. If this argument is omitted then <code class="keyw">false</code> (non-blocking operation) is the default.</p>
+
+<p>Note that broken connections are silently closed.</p>
+
+<p><a id="X7A489A5D79DA9E5C" name="X7A489A5D79DA9E5C"></a></p>
+
+<h4>9.3 <span class="Heading"> Examples </span></h4>
+
+<p>There is an example hash server in the file <code class="file">examples/hashserver.g</code>.</p>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap8_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap10_mj.html">[Next Chapter]</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chap3_mj.html">3</a>  <a href="chap4_mj.html">4</a>  <a href="chap5_mj.html">5</a>  <a href="chap6_mj.html">6</a>  <a href="chap7_mj.html">7</a>  <a href="chap8_mj.html">8</a>  <a href="chap9_mj.html">9</a>  <a href="chap10_mj.html">10</a>  <a href="chap11_mj.html">11</a>  <a href="chapInd_mj.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

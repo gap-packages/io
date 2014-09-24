@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<title>GAP (IO) - Contents</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+<script src="manual.js" type="text/javascript"></script>
+<script type="text/javascript">overwriteStyle();</script>
+</head>
+<body class="chap0"  onload="jscontent()">
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chap3_mj.html">3</a>  <a href="chap4_mj.html">4</a>  <a href="chap5_mj.html">5</a>  <a href="chap6_mj.html">6</a>  <a href="chap7_mj.html">7</a>  <a href="chap8_mj.html">8</a>  <a href="chap9_mj.html">9</a>  <a href="chap10_mj.html">10</a>  <a href="chap11_mj.html">11</a>  <a href="chapInd_mj.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap1_mj.html">[Next Chapter]</a>&nbsp;  </div>
+
+<p id="mathjaxlink" class="pcenter"><a href="chap0.html">[MathJax off]</a></p>
+<p><a id="X7D2C85EC87DD46E5" name="X7D2C85EC87DD46E5"></a></p>
+<div class="pcenter">
+
+<h1>io</h1>
+
+
+<h2>Bindings for low level C library I/O routines</h2>
+
+<p>
+    4.4</p>
+
+<p>
+    24/09/2014
+  </p>
+
+</div>
+<p><b>
+    Max Neunhöffer
+
+
+
+
+  </b>
+<br />Email: <span class="URL"><a href="mailto:max@9hoeffer.de">max@9hoeffer.de</a></span>
+<br />Homepage: <span class="URL"><a href="http://www-groups.mcs.st-and.ac.uk/~neunhoef">http://www-groups.mcs.st-and.ac.uk/~neunhoef</a></span>
+<br />Address: <br />Gustav-Freytag-Straße 40<br /> 50354 Hürth<br /> Germany<br />
+</p><p><b>
+    Max Horn
+
+
+
+
+  </b>
+<br />Email: <span class="URL"><a href="mailto:max.horn@math.uni-giessen.de">max.horn@math.uni-giessen.de</a></span>
+<br />Homepage: <span class="URL"><a href="http://www.quendi.de/math">http://www.quendi.de/math</a></span>
+<br />Address: <br />AG Algebra<br /> Mathematisches Institut<br /> Justus-Liebig-Universität Gießen<br /> Arndtstraße 2<br /> 35392 Gießen<br /> Germany<br />
+</p>
+
+<p><a id="X81488B807F2A1CF1" name="X81488B807F2A1CF1"></a></p>
+<h3>Copyright</h3>
+<p>© 2005-2014 by Max Neunhöffer</p>
+
+<p>This package may be distributed under the terms and conditions of the GNU Public License Version 3 or later.</p>
+
+<p><a id="X8537FEB07AF2BEC8" name="X8537FEB07AF2BEC8"></a></p>
+
+<div class="contents">
+<h3>Contents<a id="contents" name="contents"></a></h3>
+
+<div class="ContChap"><a href="chap1_mj.html#X874E1D45845007FE">1 <span class="Heading">Preface</span></a>
+</div>
+<div class="ContChap"><a href="chap2_mj.html#X87D1C7D0861CBE25">2 <span class="Heading">Installation of the <strong class="pkg">IO</strong>-package</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2_mj.html#X7FB00ED2787027A3">2.1 <span class="Heading">Recompiling the documentation</span></a>
+</span>
+</div>
+</div>
+<div class="ContChap"><a href="chap3_mj.html#X85DE7F82801DDA50">3 <span class="Heading">Functions directly available from the C library</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap3_mj.html#X85D3551379BA32FC">3.1 <span class="Heading">Differences in arguments - an overview</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap3_mj.html#X800F9F3E810A7228">3.2 <span class="Heading">The low-level functions in detail</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7E474E9787012FE4">3.2-1 IO_accept</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X791A6341852001F8">3.2-2 IO_bind</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X790139B37E87FA61">3.2-3 IO_chdir</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X83D4CB2681674FA4">3.2-4 IO_chmod</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X85C0617479E4D952">3.2-5 IO_chown</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X820DA9C97C2E80BA">3.2-6 IO_close</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X8078699B84F082A4">3.2-7 IO_closedir</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7DE9D8B387D3A3D5">3.2-8 IO_connect</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X78FCF69C7FCF3BD7">3.2-9 IO_creat</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7DAAD93A80F76681">3.2-10 IO_dup</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7F7B8FAC7ABA285B">3.2-11 IO_dup2</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7B30A7FA84692EC5">3.2-12 IO_execv</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X875D9A9E8201D461">3.2-13 IO_execve</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X818044D07C64A412">3.2-14 IO_execvp</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X843634347E88C357">3.2-15 IO_exit</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7F08E1187BDB619A">3.2-16 IO_fchmod</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X791C4B4A81059A88">3.2-17 IO_fchown</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7870647E866D29A4">3.2-18 IO_fcntl</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X86C819F37D07ECF7">3.2-19 IO_fork</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7E27748983EC7B5C">3.2-20 IO_fstat</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7DD25BDC79EE65AD">3.2-21 IO_gethostbyname</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7B7164EF8307D26B">3.2-22 IO_gethostname</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7ECF948083E38BD0">3.2-23 IO_getpid</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7EC6ABAB7AB9F40F">3.2-24 IO_getppid</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X877A161482FC1769">3.2-25 IO_getsockname</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X790213D885BAB495">3.2-26 IO_getsockopt</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7BC965198011083B">3.2-27 IO_gettimeofday</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7DC156EA86F3F356">3.2-28 IO_gmtime</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7D0439128512FBF6">3.2-29 IO_kill</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X8305F97C87FE448E">3.2-30 IO_lchown</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7E1C65EB84497185">3.2-31 IO_link</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7957063B807025C7">3.2-32 IO_listen</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7B7D3D64805F335F">3.2-33 IO_localtime</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X85C475187C824830">3.2-34 IO_lseek</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7A8C75038517A55A">3.2-35 IO_lstat</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X83D968AB84F00ABF">3.2-36 IO_mkdir</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X80BFF17A8099815F">3.2-37 IO_mkfifo</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7928F1DB8379F850">3.2-38 IO_mknod</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X8731A44E8032D9D2">3.2-39 IO_open</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X78E234797EB01883">3.2-40 IO_opendir</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7C8F0A44837BBE8C">3.2-41 IO_pipe</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X84F3D862836BF17C">3.2-42 IO_read</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X8410C6F17DE9302D">3.2-43 IO_readdir</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7943F25E7EBA9A6B">3.2-44 IO_readlink</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X78EB295E78B363B2">3.2-45 IO_recv</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X84C617887EE02EB4">3.2-46 IO_recvfrom</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X78EC95007A92AB69">3.2-47 IO_rename</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7F86DBEB7876FBA5">3.2-48 IO_rewinddir</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7FA4DD537C83A199">3.2-49 IO_rmdir</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X84A98D2380BF6574">3.2-50 IO_seekdir</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X81CA6EE88062010E">3.2-51 IO_select</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X87019FD887F55C27">3.2-52 IO_send</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X8388B0147B5745EC">3.2-53 IO_sendto</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7BE641C1784D0899">3.2-54 IO_setsockopt</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X852B16CF82B96C84">3.2-55 IO_socket</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7F7D23867B45D525">3.2-56 IO_stat</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7B0D9CEF7A3CD431">3.2-57 IO_symlink</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X81FF8B678748900B">3.2-58 IO_telldir</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X78C93B6587B478C2">3.2-59 IO_unlink</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X80737A008450184F">3.2-60 IO_WaitPid</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X84EB06707D1BD3F1">3.2-61 IO_write</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap3_mj.html#X85065AD381BD8E0F">3.3 <span class="Heading">Further C level functions</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X878007A67E806CEF">3.3-1 IO_make_sockaddr_in</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7F3E88AD7EFD52F4">3.3-2 IO_environ</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X8383E62D86BE30C6">3.3-3 IO_InstallSIGCHLDHandler</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3_mj.html#X7EEB7471816B64DF">3.3-4 IO_RestoreSIGCHLDHandler</a></span>
+</div></div>
+</div>
+<div class="ContChap"><a href="chap4_mj.html#X7D6A3F7178CB6169">4 <span class="Heading">High level functions for buffered I/O</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4_mj.html#X7F697A8884B57F27">4.1 <span class="Heading">Types and the creation of <code class="code">File</code> objects</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X80C9B80A80E3A555">4.1-1 IsFile</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X7DDB0BA6836DA208">4.1-2 IO_WrapFD</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X7EC160D07E815DBB">4.1-3 IO_File</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4_mj.html#X818FA8A37C8BBB95">4.2 <span class="Heading">Reading and writing</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X865A873E78C822B7">4.2-1 IO_ReadUntilEOF</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X7D2686ED854BEF95">4.2-2 IO_ReadBlock</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X8738708E7B9DF8DB">4.2-3 IO_ReadLine</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X81E72756806C0945">4.2-4 IO_ReadLines</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X87E0AC547835F21D">4.2-5 IO_HasData</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X84F3D862836BF17C">4.2-6 IO_Read</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X84EB06707D1BD3F1">4.2-7 IO_Write</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X83A03ACB81F53BB1">4.2-8 IO_WriteLine</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X87CE6EC17C1573AC">4.2-9 IO_WriteLines</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X7873A49F7CC7ECFB">4.2-10 IO_Flush</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X7870634278F6C69F">4.2-11 IO_WriteFlush</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X80CF240F78664DF4">4.2-12 IO_ReadyForWrite</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X84052F9886ADED0D">4.2-13 IO_WriteNonBlocking</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X7C5786E07813434B">4.2-14 IO_ReadyForFlush</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X80E977B48771D207">4.2-15 IO_FlushNonBlocking</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X820DA9C97C2E80BA">4.2-16 IO_Close</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4_mj.html#X87C3D1B984960984">4.3 <span class="Heading">Other functions</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X7F893EFC7D0C7BF2">4.3-1 IO_GetFD</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X86666C9681EA7297">4.3-2 IO_GetWBuf</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X81CA6EE88062010E">4.3-3 IO_Select</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X84B16DB878265F02">4.3-4 IO_ListDir</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X7D849D987800A0F6">4.3-5 ChangeCurrentDirectory</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X8568CE6684C90CE5">4.3-6 IO_MakeIPAddressPort</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X7F9AAE018474E1D8">4.3-7 IO_Environment</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X7CF3DB5081A91600">4.3-8 IO_MakeEnvList</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4_mj.html#X85BB2BA684485CD6">4.4 <span class="Heading">Inter process communication</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X84E91FE27A7860F3">4.4-1 IO_FindExecutable</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X7C43017E7AC5973A">4.4-2 IO_CloseAllFDs</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X7891F56386C008CE">4.4-3 IO_Popen</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X7E05CF6481CBC0A1">4.4-4 IO_Popen2</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X7975BC6D80BC71E5">4.4-5 IO_Popen3</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X813219C17FB54731">4.4-6 IO_StartPipeline</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X86D61FAE871B23E8">4.4-7 IO_StringFilterFile</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X83E765D783531845">4.4-8 IO_FileFilterString</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X801CE3708656FB00">4.4-9 IO_FilteredFile</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X7B425F3B7A68C2FB">4.4-10 IO_CompressedFile</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X7D62E9C57F1F96FB">4.4-11 IO_SendStringBackground</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X8484B0CD7836A19E">4.4-12 IO_PipeThrough</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4_mj.html#X7A9ACA3979635506">4.4-13 IO_PipeThroughWithError</a></span>
+</div></div>
+</div>
+<div class="ContChap"><a href="chap5_mj.html#X81BBA46880EBFC7D">5 <span class="Heading">Object serialisation (Pickling)</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap5_mj.html#X7E504814811605B7">5.1 <span class="Heading">Result objects</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5_mj.html#X86E06A128511BA25">5.1-1 IO_Error</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5_mj.html#X7887BFCF824B439B">5.1-2 IO_Nothing</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5_mj.html#X7D4D092B8401EA0F">5.1-3 IO_OK</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap5_mj.html#X7F68A8F47F87B243">5.2 <span class="Heading">Pickling and unpickling</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5_mj.html#X7E01770481297DF1">5.2-1 IO_Pickle</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5_mj.html#X8228EE63809A6DEF">5.2-2 IO_Unpickle</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap5_mj.html#X844736FB80F6EE97">5.2-3 IO_ClearPickleCache</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap5_mj.html#X7B1C9A9C7D3C0312">5.3 <span class="Heading">Extending the pickling framework</span></a>
+</span>
+</div>
+</div>
+<div class="ContChap"><a href="chap6_mj.html#X78A8811F7BD55ABA">6 <span class="Heading">Really random sources</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap6_mj.html#X8173135A7D187358">6.1 <span class="Heading">The functions</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap6_mj.html#X7CB0B5BC82F8FD8F">6.1-1 RandomSource</a></span>
+</div></div>
+</div>
+<div class="ContChap"><a href="chap7_mj.html#X79DA05BB7CCC1749">7 <span class="Heading">A client side implementation of the HTTP protocol</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap7_mj.html#X7E8B5F0A87F2C1F7">7.1 <span class="Heading">Functions for client side HTTP</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7_mj.html#X7B5588D5856BE6DD">7.1-1 OpenHTTPConnection</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7_mj.html#X80FF9E307BDA0659">7.1-2 HTTPRequest</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7_mj.html#X83526BF378B3D8F2">7.1-3 HTTPTimeoutForSelect</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7_mj.html#X81702FA07F2AF472">7.1-4 CloseHTTPConnection</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7_mj.html#X7DBCB0B4801E4D6D">7.1-5 SingleHTTPRequest</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7_mj.html#X78BAF7A77F6BE631">7.1-6 CheckForUpdates</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap7_mj.html#X872B174F7FFD345B">7.1-7 ReadWeb</a></span>
+</div></div>
+</div>
+<div class="ContChap"><a href="chap8_mj.html#X7E9E9B3F7B585BA7">8 <span class="Heading">Background jobs using fork</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap8_mj.html#X7CCAF66D7E7E098E">8.1 <span class="Heading">Background jobs</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X7FE0061F8484814B">8.1-1 BackgroundJobByFork</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X7B7D934583257B9A">8.1-2 IsIdle</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X86E1283D7AD05169">8.1-3 HasTerminated</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X7C139805804E6FE1">8.1-4 WaitUntilIdle</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X7F4B8B9078D0E18E">8.1-5 Pickup</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X864492F37E858197">8.1-6 Submit</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X841B3A1A7967DEA4">8.1-7 Kill</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap8_mj.html#X7AF7D78B7F6F1212">8.2 <span class="Heading">Parallel programming skeletons</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X78A59A628449960F">8.2-1 ParTakeFirstResultByFork</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X7A1F40D1841C36D2">8.2-2 ParDoByFork</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X80DA6945873DCC66">8.2-3 ParListByFork</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X7AD5D85283BC41AC">8.2-4 ParMapReduceByFork</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap8_mj.html#X7D18519B879047B3">8.3 <span class="Heading">Worker farms</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X87896E477DCB9C55">8.3-1 ParWorkerFarmByFork</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X7ED2CE687EA7FC66">8.3-2 DoQueues</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X83289405792FF902">8.3-3 Kill</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X7C4E3D5A7FE617FE">8.3-4 IsIdle</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X81773CEC8246EDF3">8.3-5 Submit</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X7878258F84138DEA">8.3-6 Pickup</a></span>
+</div></div>
+</div>
+<div class="ContChap"><a href="chap9_mj.html#X7A466B907B882CA0">9 <span class="Heading">I/O multiplexing</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap9_mj.html#X7DFB63A97E67C0A1">9.1 <span class="Heading">Introduction</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap9_mj.html#X853D93B47EA82379">9.2 <span class="Heading">The operations for <code class="code">IOHub</code> objects</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X83C0523D8538E866">9.2-1 IOHub</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X7D1D9A8D837ECCEB">9.2-2 NewConnection</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X8553D2E47C05797F">9.2-3 CloseConnection</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X7F7FD824866CB582">9.2-4 AttachServingSocket</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X7866F9DA8358968C">9.2-5 ShutdownServingSocket</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X84AFBD658118ABB8">9.2-6 Shutdown</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X7BE1B9FD82C9B8E0">9.2-7 AcceptNewConnection</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X85F634D4826D89F1">9.2-8 SubmitOutput</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X837629707DF9B60E">9.2-9 GetInput</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X79031BC687502CB6">9.2-10 NewTCPConnection</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X7F8C7F5782213A71">9.2-11 OutputQueue</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X7972FF1C7B59D0A4">9.2-12 InputQueue</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap9_mj.html#X810D418A802D09D1">9.2-13 DoIO</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap9_mj.html#X7A489A5D79DA9E5C">9.3 <span class="Heading"> Examples </span></a>
+</span>
+</div>
+</div>
+<div class="ContChap"><a href="chap10_mj.html#X7EADF566874177D8">10 <span class="Heading">Examples of usage</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap10_mj.html#X7EC25CA68794860A">10.1 <span class="Heading">Writing and reading a file</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap10_mj.html#X7AECE665813D6E4D">10.2 <span class="Heading">Using filtering programs to read and write files</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap10_mj.html#X7A8A180D7B335151">10.3 <span class="Heading">Using filters when reading or writing files sequentially</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap10_mj.html#X7BD2BF7F87573C69">10.4 <span class="Heading">Accessing a web page</span></a>
+</span>
+</div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap10_mj.html#X81BD8400832EE20B">10.5 <span class="Heading">(Un-)Pickling</span></a>
+</span>
+</div>
+</div>
+<div class="ContChap"><a href="chap11_mj.html#X861E5DF986F89AE2">11 <span class="Heading">License</span></a>
+</div>
+<div class="ContChap"><a href="chapInd_mj.html"><span class="Heading">Index</span></a></div>
+<br />
+</div>
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap1_mj.html">[Next Chapter]</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chap3_mj.html">3</a>  <a href="chap4_mj.html">4</a>  <a href="chap5_mj.html">5</a>  <a href="chap6_mj.html">6</a>  <a href="chap7_mj.html">7</a>  <a href="chap8_mj.html">8</a>  <a href="chap9_mj.html">9</a>  <a href="chap10_mj.html">10</a>  <a href="chap11_mj.html">11</a>  <a href="chapInd_mj.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

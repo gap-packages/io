@@ -27,6 +27,7 @@
   [2XIO_Close[102X  4.2-16
   [2XIO_CloseAllFDs[102X  4.4-2
   [2XIO_closedir[102X  3.2-7
+  [2XIO_CompressedFile[102X  4.4-10
   [2XIO_connect[102X  3.2-8
   [2XIO_creat[102X  3.2-9
   [2XIO_dup[102X  3.2-10
@@ -83,8 +84,8 @@
   [2XIO_opendir[102X  3.2-40
   [2XIO_Pickle[102X  5.2-1
   [2XIO_pipe[102X  3.2-41
-  [2XIO_PipeThrough[102X  4.4-11
-  [2XIO_PipeThroughWithError[102X  4.4-12
+  [2XIO_PipeThrough[102X  4.4-12
+  [2XIO_PipeThroughWithError[102X  4.4-13
   [2XIO_Popen[102X  4.4-3
   [2XIO_Popen2[102X  4.4-4
   [2XIO_Popen3[102X  4.4-5
@@ -108,7 +109,7 @@
   [2XIO_select[102X  3.2-51
   [2XIO_Select[102X  4.3-3
   [2XIO_send[102X  3.2-52
-  [2XIO_SendStringBackground[102X  4.4-10
+  [2XIO_SendStringBackground[102X  4.4-11
   [2XIO_sendto[102X  3.2-53
   [2XIO_setsockopt[102X  3.2-54
   [2XIO_socket[102X  3.2-55

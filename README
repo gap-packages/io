@@ -1,8 +1,8 @@
-     
+
      =========================================================
       README file for the `IO' GAP4 package (Max Neunhoeffer)
      =========================================================
-        
+
 To get the newest version of this GAP 4 package download the
 archive file
     io-x.x.tar.gz
@@ -10,7 +10,7 @@ or
     io-x.x.tar.bz2
 or
     io-x.x.zip
-and unpack it using 
+and unpack it using
     gunzip io-x.x.tar.gz; tar xvf io-x.x.tar
 or
     bzip2 -d io-x.x.tar.bz2; tar xvf io-x.x.tar
@@ -44,7 +44,7 @@ If you installed the package in another 'pkg' directory than the standard
 to the directory containing your 'pkg' directory to GAP's list of directories.
 This can be done by starting GAP with the '-l' command line option
 followed by the name of the directory and a semicolon. Then your directory
-is prepended to the list of directories searched. Otherwise the package 
+is prepended to the list of directories searched. Otherwise the package
 is not found by GAP. Of course, you can add this option to your GAP
 startup script.
 

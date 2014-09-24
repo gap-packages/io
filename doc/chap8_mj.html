@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<title>GAP (IO) - Chapter 8: Background jobs using fork</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+<script src="manual.js" type="text/javascript"></script>
+<script type="text/javascript">overwriteStyle();</script>
+</head>
+<body class="chap8"  onload="jscontent()">
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chap3_mj.html">3</a>  <a href="chap4_mj.html">4</a>  <a href="chap5_mj.html">5</a>  <a href="chap6_mj.html">6</a>  <a href="chap7_mj.html">7</a>  <a href="chap8_mj.html">8</a>  <a href="chap9_mj.html">9</a>  <a href="chap10_mj.html">10</a>  <a href="chap11_mj.html">11</a>  <a href="chapInd_mj.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap7_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap9_mj.html">[Next Chapter]</a>&nbsp;  </div>
+
+<p id="mathjaxlink" class="pcenter"><a href="chap8.html">[MathJax off]</a></p>
+<p><a id="X7E9E9B3F7B585BA7" name="X7E9E9B3F7B585BA7"></a></p>
+<div class="ChapSects"><a href="chap8_mj.html#X7E9E9B3F7B585BA7">8 <span class="Heading">Background jobs using fork</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap8_mj.html#X7CCAF66D7E7E098E">8.1 <span class="Heading">Background jobs</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X7FE0061F8484814B">8.1-1 BackgroundJobByFork</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X7B7D934583257B9A">8.1-2 IsIdle</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X86E1283D7AD05169">8.1-3 HasTerminated</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X7C139805804E6FE1">8.1-4 WaitUntilIdle</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X7F4B8B9078D0E18E">8.1-5 Pickup</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X864492F37E858197">8.1-6 Submit</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X841B3A1A7967DEA4">8.1-7 Kill</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap8_mj.html#X7AF7D78B7F6F1212">8.2 <span class="Heading">Parallel programming skeletons</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X78A59A628449960F">8.2-1 ParTakeFirstResultByFork</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X7A1F40D1841C36D2">8.2-2 ParDoByFork</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X80DA6945873DCC66">8.2-3 ParListByFork</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X7AD5D85283BC41AC">8.2-4 ParMapReduceByFork</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap8_mj.html#X7D18519B879047B3">8.3 <span class="Heading">Worker farms</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X87896E477DCB9C55">8.3-1 ParWorkerFarmByFork</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X7ED2CE687EA7FC66">8.3-2 DoQueues</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X83289405792FF902">8.3-3 Kill</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X7C4E3D5A7FE617FE">8.3-4 IsIdle</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X81773CEC8246EDF3">8.3-5 Submit</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X7878258F84138DEA">8.3-6 Pickup</a></span>
+</div></div>
+</div>
+
+<h3>8 <span class="Heading">Background jobs using fork</span></h3>
+
+<p>This chapter describes a way to use multi-processor or multi-core machines from within <strong class="pkg">GAP</strong>. In its current version the <strong class="pkg">GAP</strong> system is a single threaded and single process system. However, modern operating systems allow, via the <code class="code">fork</code> system call, to replicate a complete process on the same machine relatively efficiently. That is, at first after a <code class="code">fork</code> the two processes actually use the same physical memory such that not much copying needs to be done. The child process is in exactly the same state as the parent process, sharing open files, network connections and the complete status of the workspace. However, whenever a page of memory is written, it is then automatically copied using new, additional physical memory, such that it behaves like a completely separate process. This method is called "copy-on-write".</p>
+
+<p>Thus this is a method to parallelise certain computations. Note however, that from the point of time when the <code class="code">fork</code> has occurred, all further communication between the two processes has to be realised via pipes or even files.</p>
+
+<p>The operations and methods described in this chapter help to use <strong class="pkg">GAP</strong> in this way and implement certain "skeletons" of parallel programming to make these readily available in <strong class="pkg">GAP</strong>. Note that this implementation has its severe limitations and should probably eventually be replaced by a proper multi-threaded version of <strong class="pkg">GAP</strong>.</p>
+
+<p><a id="X7CCAF66D7E7E098E" name="X7CCAF66D7E7E098E"></a></p>
+
+<h4>8.1 <span class="Heading">Background jobs</span></h4>
+
+<p>One creates a background job with the following operation:</p>
+
+<p><a id="X7FE0061F8484814B" name="X7FE0061F8484814B"></a></p>
+
+<h5>8.1-1 BackgroundJobByFork</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; BackgroundJobByFork</code>( <var class="Arg">fun</var>, <var class="Arg">args</var>[, <var class="Arg">opt</var>] )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: a background job object or <code class="keyw">fail</code></p>
+
+<p>This operation creates a background job using <code class="func">IO_fork</code> (<a href="chap3_mj.html#X86C819F37D07ECF7"><span class="RefLink">3.2-19</span></a>) which starts up as an identical copy of the currently running <strong class="pkg">GAP</strong> process. In this child process the function <var class="Arg">fun</var> is called with the argument list <var class="Arg">args</var>. The third argument <var class="Arg">opt</var> must be a record for options. The operation returns either an object representing the background job or <code class="keyw">fail</code> if the startup did not work.</p>
+
+<p>This operation automatically sets up two pipes for communication with the child process. This is in particular used to report the result of the function call to <var class="Arg">fun</var> back to the parent. However, if called without the option <code class="code">TerminateImmediately</code> (see below) the child process stays alive even after the completion of <var class="Arg">fun</var> and one can submit further argument lists for subsequent calls to <var class="Arg">fun</var>. Of course, these additional argument lists will have to be sent over a pipe to the child process. A special case is if the argument <var class="Arg">args</var> is equal to <code class="keyw">fail</code>, in this case the child process is started but does not automatically call <var class="Arg">fun</var> but rather waits in an idle state until an argument list is submitted via the pipe using the <code class="func">Submit</code> (<a href="chap8_mj.html#X864492F37E858197"><span class="RefLink">8.1-6</span></a>) operation described below.</p>
+
+<p>There are two components defined which can be bound in the options record <var class="Arg">opt</var>. One is <code class="code">TerminateImmediately</code>, if this is bound to <code class="keyw">true</code> then the child process immediately terminates after the function <var class="Arg">fun</var> returns its result. In this case, no pipe for communication from parent to child is created since it would never be used. Note that in this case one can still get the result of the function <var class="Arg">fun</var> using the <code class="func">Pickup</code> (<a href="chap8_mj.html#X7F4B8B9078D0E18E"><span class="RefLink">8.1-5</span></a>) operation described below, even when the child has already terminated, since the result is first transmitted back to the parent before termination.</p>
+
+<p>The following operations are available to deal with background job objects:</p>
+
+<p><a id="X7B7D934583257B9A" name="X7B7D934583257B9A"></a></p>
+
+<h5>8.1-2 IsIdle</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsIdle</code>( <var class="Arg">job</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code>, <code class="keyw">false</code> or <code class="keyw">fail</code></p>
+
+<p>This operation checks whether or not the background job represented by the object <var class="Arg">job</var> has already finished the function call to its worker function and is now idle. If so, <code class="keyw">true</code> is returned. If it is still running and working on the worker function, <code class="keyw">false</code> is returned. If the background job has already terminated altogether, this operation returns <code class="keyw">fail</code>. Note that if a child process terminates automatically after the first completion of its worker function and sending the result, then the first call to <code class="func">IsIdle</code> after completion will return <code class="keyw">true</code> to indicate successful completion and all subsequent calls will return <code class="keyw">fail</code>.</p>
+
+<p><a id="X86E1283D7AD05169" name="X86E1283D7AD05169"></a></p>
+
+<h5>8.1-3 HasTerminated</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; HasTerminated</code>( <var class="Arg">job</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
+
+<p>This operation checks whether or not the background job represented by the object <var class="Arg">job</var> has already terminated. If so, <code class="keyw">true</code> is returned, if not, <code class="keyw">false</code> is returned.</p>
+
+<p><a id="X7C139805804E6FE1" name="X7C139805804E6FE1"></a></p>
+
+<h5>8.1-4 WaitUntilIdle</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; WaitUntilIdle</code>( <var class="Arg">job</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: the result of the worker function or <code class="keyw">fail</code></p>
+
+<p>This operation waits until the worker function of the background job <var class="Arg">job</var> has finished and the job is idle. It then returns the result of the worker function, which has automatically been transmitted to the parent process. If the child process has died before completion <code class="keyw">fail</code> is returned.</p>
+
+<p><a id="X7F4B8B9078D0E18E" name="X7F4B8B9078D0E18E"></a></p>
+
+<h5>8.1-5 Pickup</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Pickup</code>( <var class="Arg">job</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: the result of the worker function or <code class="keyw">fail</code></p>
+
+<p>This operation does the same as <code class="func">WaitUntilIdle</code> (<a href="chap8_mj.html#X7C139805804E6FE1"><span class="RefLink">8.1-4</span></a>).</p>
+
+<p><a id="X864492F37E858197" name="X864492F37E858197"></a></p>
+
+<h5>8.1-6 Submit</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Submit</code>( <var class="Arg">job</var>, <var class="Arg">args</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
+
+<p>This submits another argument list <var class="Arg">args</var> for another call to the worker function in the background job <var class="Arg">job</var>. It is an error if either the background job has already terminated or if it is still busy working on the previous argument list. That is, one must only submit another argument in a situation when <code class="func">IsIdle</code> (<a href="chap8_mj.html#X7B7D934583257B9A"><span class="RefLink">8.1-2</span></a>) would return <code class="keyw">true</code>. This is for example the case directly after a successful call to <code class="func">Pickup</code> (<a href="chap8_mj.html#X7F4B8B9078D0E18E"><span class="RefLink">8.1-5</span></a>) or i <code class="func">WaitUntilIdle</code> (<a href="chap8_mj.html#X7C139805804E6FE1"><span class="RefLink">8.1-4</span></a>) which did not return <code class="keyw">fail</code>, unless the background job was created with the <code class="code">TerminateImmediately</code> option set to <code class="keyw">true</code>.</p>
+
+<p>This operation returns immediately after submission, when the new argument list has been sent to the child process through a pipe. In particular, it does not await completion of the worker function for the new argument list.</p>
+
+<p><a id="X841B3A1A7967DEA4" name="X841B3A1A7967DEA4"></a></p>
+
+<h5>8.1-7 Kill</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Kill</code>( <var class="Arg">job</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: nothing</p>
+
+<p>This kills the background job represented by the object <var class="Arg">job</var> with immediate effect. No more results can be expected from it. Note that unless one has created the background job with the <code class="code">TerminateImmediately</code> option set to <code class="keyw">true</code> one always has to call <code class="func">Kill</code> on a background job eventually for cleanup purposes. Otherwise, the background job and the connecting pipes remain alive until the parent <strong class="pkg">GAP</strong> process terminates.</p>
+
+<p><a id="X7AF7D78B7F6F1212" name="X7AF7D78B7F6F1212"></a></p>
+
+<h4>8.2 <span class="Heading">Parallel programming skeletons</span></h4>
+
+<p>In this section we document the operations for the available skeletons. For a general description of these ideas see other sources.</p>
+
+<p><a id="X78A59A628449960F" name="X78A59A628449960F"></a></p>
+
+<h5>8.2-1 ParTakeFirstResultByFork</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ParTakeFirstResultByFork</code>( <var class="Arg">jobs</var>, <var class="Arg">args</var>[, <var class="Arg">opt</var>] )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: a list of results or <code class="keyw">fail</code></p>
+
+<p>The argument <var class="Arg">jobs</var> must be a list of <strong class="pkg">GAP</strong> functions and the argument <var class="Arg">args</var> a list of the same length containing argument lists with which the job functions can be called. This operation starts up a background job using <code class="code">fork</code> for each of the functions in <var class="Arg">jobs</var>, calls it with the corresponding argument list in <var class="Arg">args</var>. As soon as any of the background jobs finishes with a result, <code class="func">ParTakeFirstResultByFork</code> terminates all other jobs and reports the results found so far. Note that it can happen that two jobs finish "at the same time" in the sense that both results are received before all other jobs could be terminated. Therefore the result of <code class="func">ParTakeFirstResultByFork</code> is a list, in which position <span class="SimpleMath">\(i\)</span> is bound if and only if job number <span class="SimpleMath">\(i\)</span> returned a result. So in the result at least one entry is bound but it is possible that more than one entry is bound.</p>
+
+<p>You can specify an overall timeout to give up the whole computation if no job finishes by setting the <code class="code">TimeOut</code> component of the options record <var class="Arg">opt</var>. In this case you have to set it to a record with two components <code class="code">tv_sec</code> and <code class="code">tv_usec</code> which are seconds and microseconds respectively, exactly as returned by the <code class="func">IO_gettimeofday</code> (<a href="chap3_mj.html#X7BC965198011083B"><span class="RefLink">3.2-27</span></a>) function. In the case of timeout an empty list is returned.</p>
+
+<p><a id="X7A1F40D1841C36D2" name="X7A1F40D1841C36D2"></a></p>
+
+<h5>8.2-2 ParDoByFork</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ParDoByFork</code>( <var class="Arg">jobs</var>, <var class="Arg">args</var>[, <var class="Arg">opt</var>] )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: a list of results or <code class="keyw">fail</code></p>
+
+<p>The argument <var class="Arg">jobs</var> must be a list of <strong class="pkg">GAP</strong> functions and the argument <var class="Arg">args</var> a list of the same length containing argument lists with which the job functions can be called. This operation starts up a background job using <code class="code">fork</code> for each of the functions in <var class="Arg">jobs</var>, calls it with the corresponding argument list in <var class="Arg">args</var>. As soon as all of the background jobs finish with a result, <code class="func">ParDoByFork</code> reports the results found. Therefore the result of <code class="func">ParDoByFork</code> is a list, in which position <span class="SimpleMath">\(i\)</span> is bound to the result that job number <span class="SimpleMath">\(i\)</span> returned.</p>
+
+<p>You can specify an overall timeout to stop the whole computation if not all jobs finish in time by setting the <code class="code">TimeOut</code> component of the options record <var class="Arg">opt</var>. In this case you have to set it to a record with two components <code class="code">tv_sec</code> and <code class="code">tv_usec</code> which are seconds and microseconds respectively, exactly as returned by the <code class="func">IO_gettimeofday</code> (<a href="chap3_mj.html#X7BC965198011083B"><span class="RefLink">3.2-27</span></a>) function. In the case of timeout a list is returned in which the positions corresponding to those jobs that have already finished are bound to the respective results and the other positions are unbound.</p>
+
+<p><a id="X80DA6945873DCC66" name="X80DA6945873DCC66"></a></p>
+
+<h5>8.2-3 ParListByFork</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ParListByFork</code>( <var class="Arg">l</var>, <var class="Arg">worker</var>[, <var class="Arg">opt</var>] )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: a list of results or <code class="keyw">fail</code></p>
+
+<p>This is a parallel version of the <code class="func">List</code> (<a href="/Users/mhorn/Projekte/GAP/repos/doc/ref/chap21_mj.html#X7B256AE5780F140A"><span class="RefLink">Reference: Lists</span></a>) function. It applies the function <var class="Arg">worker</var> to all elements of the list <var class="Arg">l</var> and returns a list containing the results in corresponding positions. You have to specify the component <code class="code">NumberJobs</code> in the options record <var class="Arg">opt</var> which indicates how many background processes to start. You can optionally use the <code class="code">TimeOut</code> option exactly as for <code class="func">ParDoByFork</code> (<a href="chap8_mj.html#X7A1F40D1841C36D2"><span class="RefLink">8.2-2</span></a>), however, if a timeout occurs, <code class="func">ParListByFork</code> returns <code class="keyw">fail</code>.</p>
+
+<p>Note that the usefulness of this operation is relatively limited, since every individual result has to be sent back over a pipe from the child process to the parent process. Therefore this only makes sense if the computation time for the worker function dominates the communication time.</p>
+
+<p><a id="X7AD5D85283BC41AC" name="X7AD5D85283BC41AC"></a></p>
+
+<h5>8.2-4 ParMapReduceByFork</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ParMapReduceByFork</code>( <var class="Arg">l</var>, <var class="Arg">map</var>, <var class="Arg">reduce</var>[, <var class="Arg">opt</var>] )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: a value or <code class="keyw">fail</code></p>
+
+<p>This is a parallel version implementation of the classical <code class="code">MapReduce</code> pattern. It applies the function <var class="Arg">map</var> to all elements of the list <var class="Arg">l</var> and then reduces the result using the <var class="Arg">reduce</var> function which accepts two return values of <var class="Arg">map</var> and returns one of them. Thus, the final result is one return value or <code class="keyw">fail</code> if the startup of the jobs fails. You have to specify the component <code class="code">NumberJobs</code> in the options record <var class="Arg">opt</var> which indicates how many background processes to start. You can optionally use the <code class="code">TimeOut</code> option exactly as for <code class="func">ParDoByFork</code> (<a href="chap8_mj.html#X7A1F40D1841C36D2"><span class="RefLink">8.2-2</span></a>), however, if a timeout occurs, <code class="func">ParMapReduceByFork</code> returns <code class="keyw">fail</code>.</p>
+
+<p>Note that this can be very useful because quite often the cumulated computation time for all the worker function calls dominates the communication time for a single result.</p>
+
+<p>Note that the next parallel skeleton is a worker farm which is described in the following section.</p>
+
+<p><a id="X7D18519B879047B3" name="X7D18519B879047B3"></a></p>
+
+<h4>8.3 <span class="Heading">Worker farms</span></h4>
+
+<p>The parallel skeleton of a worker farm is basically nothing but a bunch of background jobs all with the same worker function and all eagerly waiting for work. The only additional concepts needed are an input and an output queue. The input queue contains argument lists and the output queue pairs of argument lists and results.</p>
+
+<p>One creates a worker farm with the following operation:</p>
+
+<p><a id="X87896E477DCB9C55" name="X87896E477DCB9C55"></a></p>
+
+<h5>8.3-1 ParWorkerFarmByFork</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ParWorkerFarmByFork</code>( <var class="Arg">fun</var>, <var class="Arg">opt</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: an object representing the worker farm or <code class="keyw">fail</code></p>
+
+<p>This operation creates a worker farm with the worker function <var class="Arg">fun</var> and sets up its input and output queue. An object representing the farm is returned unless not all jobs could be started up in which case <code class="keyw">fail</code> is returned. After startup all background jobs in the farm are idle. The only valid option in the options record <var class="Arg">opt</var> is <code class="code">NumberJobs</code> and it must be bound to the number of worker jobs in the farm, a positive integer.</p>
+
+<p>The following operations are for worker farm objects:</p>
+
+<p><a id="X7ED2CE687EA7FC66" name="X7ED2CE687EA7FC66"></a></p>
+
+<h5>8.3-2 DoQueues</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; DoQueues</code>( <var class="Arg">wf</var>, <var class="Arg">block</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: nothing</p>
+
+<p>This operation called on a worker farm object <var class="Arg">wf</var> administrates the input and output queues of the worker farm. In particular it checks whether new results are available from the workers and if so it appends them to the output queue. If jobs are idle and the input queue is non-empty, argument lists from the input queue are sent to the idle jobs and removed from the input queue.</p>
+
+<p>This operation must be called regularly to keep up the communication with the clients. It uses <code class="code">select</code> and so does not block if the boolean argument <var class="Arg">block</var> is set to <code class="keyw">false</code>. However, if larger chunks of data has to be sent or received this operation might need some time to return.</p>
+
+<p>If the boolean argument <var class="Arg">block</var> is set to true then the <code class="func">DoQueues</code> blocks until at least one job has returned a result. This can be used to wait for the termination of all tasks without burning CPU cycles in the parent job. One would repeatedly call <code class="func">DoQueues</code> with <var class="Arg">block</var> set to <code class="keyw">true</code> and after each such call check with <code class="func">IsIdle</code> (<a href="chap8_mj.html#X7C4E3D5A7FE617FE"><span class="RefLink">8.3-4</span></a>) whether all tasks are done. Note that one should no longer call <code class="func">DoQueues</code> with <var class="Arg">block</var> set to <code class="keyw">true</code> once this is the case since then it would block forever.</p>
+
+<p>This operation is called automatically by most of the following operations.</p>
+
+<p><a id="X83289405792FF902" name="X83289405792FF902"></a></p>
+
+<h5>8.3-3 Kill</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Kill</code>( <var class="Arg">wf</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: nothing</p>
+
+<p>This operation terminates all background jobs in the farm <var class="Arg">wf</var>, which cannot be used subsequently. One should always call this operation when the worker farm is no longer needed to free resources.</p>
+
+<p><a id="X7C4E3D5A7FE617FE" name="X7C4E3D5A7FE617FE"></a></p>
+
+<h5>8.3-4 IsIdle</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsIdle</code>( <var class="Arg">wf</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
+
+<p>This operation returns <code class="keyw">true</code> if all background jobs in the worker farm <var class="Arg">wf</var> are idle. This means, that all tasks which have previously been submitted using <code class="func">Submit</code> (<a href="chap8_mj.html#X81773CEC8246EDF3"><span class="RefLink">8.3-5</span></a>) have been completed and their result been appended to the output queue. The operation <code class="func">DoQueues</code> (<a href="chap8_mj.html#X7ED2CE687EA7FC66"><span class="RefLink">8.3-2</span></a>) is automatically called before the execution of <code class="func">IsIdle</code>.</p>
+
+<p><a id="X81773CEC8246EDF3" name="X81773CEC8246EDF3"></a></p>
+
+<h5>8.3-5 Submit</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Submit</code>( <var class="Arg">wg</var>, <var class="Arg">arglist</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: nothing</p>
+
+<p>This operation submits a task in the form of an argument list for the worker function to the worker farm. It is appended at the end of the input queue. The operation <code class="func">DoQueues</code> (<a href="chap8_mj.html#X7ED2CE687EA7FC66"><span class="RefLink">8.3-2</span></a>) is automatically called after the execution of <code class="func">Submit</code>, giving the farm a chance to actually send the work out to the worker background jobs.</p>
+
+<p><a id="X7878258F84138DEA" name="X7878258F84138DEA"></a></p>
+
+<h5>8.3-6 Pickup</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; Pickup</code>( <var class="Arg">wg</var>, <var class="Arg">arglist</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<p>Returns: nothing</p>
+
+<p>This operation collects all results from the output queue of the worker farm. The output queue is empty after this function returns. The results are reported as a list of pairs, each pair has the input argument list as first component and the output object as second component.</p>
+
+<p>The operation <code class="func">DoQueues</code> (<a href="chap8_mj.html#X7ED2CE687EA7FC66"><span class="RefLink">8.3-2</span></a>) is automatically called before the execution of <code class="func">Pickup</code>, giving the farm a chance to actually receive some more results from the worker background jobs.</p>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0_mj.html">[Top of Book]</a>&nbsp;  <a href="chap0_mj.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap7_mj.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap9_mj.html">[Next Chapter]</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chap3_mj.html">3</a>  <a href="chap4_mj.html">4</a>  <a href="chap5_mj.html">5</a>  <a href="chap6_mj.html">6</a>  <a href="chap7_mj.html">7</a>  <a href="chap8_mj.html">8</a>  <a href="chap9_mj.html">9</a>  <a href="chap10_mj.html">10</a>  <a href="chap11_mj.html">11</a>  <a href="chapInd_mj.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

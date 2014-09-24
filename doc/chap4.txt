@@ -622,7 +622,26 @@
   [33X[0;0YThe [10XFile[110X object will have the attribute [21X[9XProcessID[109X[121X set to the list of process
   IDs of the child processes.[133X
   
-  [1X4.4-10 IO_SendStringBackground[101X
+  [1X4.4-10 IO_CompressedFile[101X
+  
+  [29X[2XIO_CompressedFile[102X( [3Xfilename[103X[, [3Xmode[103X][, [3Xbufsize[103X] ) [32X function
+  [6XReturns:[106X  [33X[0;10Ya [10XFile[110X object or [9Xfail[109X[133X
+  
+  [33X[0;0YThis  function is a convenience wrapper around [2XIO_FilteredFile[102X ([14X4.4-9[114X) which
+  handles a number of common compressed file formats transparently, by calling
+  an external program. The arguments to this function are identical to [2XIO_File[102X
+  ([14X4.1-3[114X). If the extension to [3Xfilename[103X is one of gz, bz2 or xz, then the file
+  is   transparently   compressed/uncompressed   using   gzip,   bzip2  or  xz
+  respectively.  If  the  extension is none of these, then the command behaves
+  identically to [2XIO_File[102X ([14X4.1-3[114X).[133X
+  
+  [33X[0;0YNote  that  as this function calls [2XIO_FilteredFile[102X ([14X4.4-9[114X), it will activate
+  our SIGCHLD handler (see [2XIO_InstallSIGCHLDHandler[102X ([14X3.3-3[114X)).[133X
+  
+  [33X[0;0YWhen  compression  /  decompression is active, the [10XFile[110X object will have the
+  attribute [21X[9XProcessID[109X[121X set to the list of process IDs of the child processes.[133X
+  
+  [1X4.4-11 IO_SendStringBackground[101X
   
   [29X[2XIO_SendStringBackground[102X( [3Xf[103X, [3Xst[103X ) [32X function
   
@@ -655,7 +674,7 @@
   the  sending  of  the  data  in  the  forked off sending process, this might
   trigger doubled memory usage.[133X
   
-  [1X4.4-11 IO_PipeThrough[101X
+  [1X4.4-12 IO_PipeThrough[101X
   
   [29X[2XIO_PipeThrough[102X( [3Xcmd[103X, [3Xargs[103X, [3Xinput[103X ) [32X function
   [6XReturns:[106X  [33X[0;10Ya string or [9Xfail[109X[133X
@@ -674,7 +693,7 @@
   of  the  child  process but does not restore the original [5XGAP[105X SIGCHLD signal
   handler (see [2XIO_InstallSIGCHLDHandler[102X ([14X3.3-3[114X)).[133X
   
-  [1X4.4-12 IO_PipeThroughWithError[101X
+  [1X4.4-13 IO_PipeThroughWithError[101X
   
   [29X[2XIO_PipeThroughWithError[102X( [3Xcmd[103X, [3Xargs[103X, [3Xinput[103X ) [32X function
   [6XReturns:[106X  [33X[0;10Ya record or [9Xfail[109X[133X
