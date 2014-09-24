@@ -106,7 +106,7 @@ Keywords := ["input", "output", "I/O", "C-library", "network", "http",
 AutoDoc := rec(
     TitlePage := rec(
         Copyright := Concatenation(
-                    "&copyright; 2005-2012 by Max Neunhöffer<P/>\n",
+                    "&copyright; 2005-2014 by Max Neunhöffer<P/>\n",
                     "\n",
                     "This package may be distributed under the terms and conditions of the\n",
                     "GNU Public License Version 3 or later.\n"
