@@ -101,7 +101,18 @@ end,
 Keywords := ["input", "output", "I/O", "C-library", "network", "http",
  "object serialisation", "unpredictable random numbers", "TCP/IP",
  "inter process communication", "background jobs", "parallel skeletons",
- "I/O multiplexing" ]
+ "I/O multiplexing" ],
+
+AutoDoc := rec(
+    TitlePage := rec(
+        Copyright := Concatenation(
+                    "&copyright; 2005-2012 by Max Neunhöffer<P/>\n",
+                    "\n",
+                    "This package may be distributed under the terms and conditions of the\n",
+                    "GNU Public License Version 3 or later.\n"
+                ),
+    )
+),
 
 ));
 

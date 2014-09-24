@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is an automatically generated file. -->
+<TitlePage>
+  <Title>
+    io
+  </Title>
+  <Subtitle>
+    Bindings for low level C library I/O routines
+  </Subtitle>
+  <Version>
+    4.3.1
+  </Version>
+  <Author>
+    Max Neunhöffer<Alt Only="LaTeX"><Br/></Alt>
+<Address>
+Gustav-Freytag-Straße 40<Br/>
+50354 Hürth<Br/>
+Germany<Br/>
+</Address>
+<Email>max@9hoeffer.de</Email>
+<Homepage>http://www-groups.mcs.st-and.ac.uk/~neunhoef/</Homepage>
+
+  </Author>
+  <Date>
+    04/04/2014
+  </Date>
+  <Copyright>
+    &copyright; 2005-2012 by Max Neunhöffer<P/>
+
+This package may be distributed under the terms and conditions of the
+GNU Public License Version 3 or later.
+
+  </Copyright>
+  </TitlePage>

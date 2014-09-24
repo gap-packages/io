@@ -12,34 +12,7 @@
 -->
 
 <Book Name="IO">
-
-<TitlePage>
-    <Title>GAP 4 Package <Package>IO</Package></Title>
-    <Subtitle>Bindings for low level C library I/O routines</Subtitle>
-    <Version>
-      Version <#Include SYSTEM "../VERSION">
-    </Version>
-    <Author>Max Neunhöffer
-<Address>
-School of Mathematics and Statistics
-Mathematical Institute
-University of St Andrews
-North Haugh
-St Andrews, Fife KY16 9SS
-Scotland, UK
-</Address>
-    <Email>neunhoef@mcs.st-and.ac.uk</Email>
-    <Homepage>http://www-groups.mcs.st-and.ac.uk/&tilde;neunhoef</Homepage>
-    </Author>
-    <Date>March 2014</Date>
-
-<Copyright>
-    &copyright; 2005-2012 by Max Neunhöffer<P/>
-
-  This package may be distributed under the terms and conditions of the
-  GNU Public License Version 3 or later.
-</Copyright>
-</TitlePage>
+<#Include SYSTEM "title.xml">
 
 <!--  TableOfContents  . . . . . .  generate a table of contents   -->
 <TableOfContents/>

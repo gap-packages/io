@@ -1,19 +1,23 @@
 ##
 ##  this creates the documentation, needs: GAPDoc package, latex, pdflatex,
 ##  mkindex, dvips
-##
-##  Copyright (C) by Max Neunhoeffer
-##  This file is free software, see license information at the end.
-##
+##  
+##  Call this with GAP.
+##  
 
-SetPackagePath("io", ".");
-PrintTo("VERSION", PackageInfo("io")[1].Version);
+PACKAGE := "io";
+SetPackagePath(PACKAGE, ".");
+PrintTo("VERSION", PackageInfo(PACKAGE)[1].Version);
 
 LoadPackage("GAPDoc");
 
-MakeGAPDocDoc("doc", "io", [], "IO");
-CopyHTMLStyleFiles("doc");
-GAPDocManualLab("IO");
+if fail <> LoadPackage("AutoDoc", ">= 2014.03.27") then
+    AutoDoc(PACKAGE : scaffold := rec( MainPage := false ));
+else
+    MakeGAPDocDoc("doc", PACKAGE, [], PACKAGE, "MathJax");
+    CopyHTMLStyleFiles("doc");
+    GAPDocManualLab(PACKAGE);
+fi;
 
 QUIT;
 
