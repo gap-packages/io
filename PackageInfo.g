@@ -7,8 +7,8 @@ SetPackageInfo( rec(
 
 PackageName := "IO",
 Subtitle := "Bindings for low level C library I/O routines",
-Version := "4.3.1",
-Date := "04/04/2014", # dd/mm/yyyy format
+Version := "4.4",
+Date := "24/09/2014", # dd/mm/yyyy format
 
 ##  Information about authors and maintainers.
 Persons := [
@@ -18,7 +18,7 @@ Persons := [
     IsAuthor      := true,
     IsMaintainer  := false,
     Email         := "max@9hoeffer.de",
-    WWWHome       := "http://www-groups.mcs.st-and.ac.uk/~neunhoef/",
+    WWWHome       := "http://www-groups.mcs.st-and.ac.uk/~neunhoef",
     PostalAddress := Concatenation( [
                        "Gustav-Freytag-Straße 40\n",
                        "50354 Hürth\n",
@@ -64,10 +64,10 @@ Status := "deposited",
 # AcceptDate := "08/1999",
 #AcceptDate := "",
 
-PackageWWWHome := "http://neunhoef.github.io/io/",
+PackageWWWHome := "http://gap-system.github.io/io/",
 README_URL     := Concatenation(~.PackageWWWHome, "README"),
 PackageInfoURL := Concatenation(~.PackageWWWHome, "PackageInfo.g"),
-ArchiveURL     := Concatenation("https://github.com/neunhoef/io/",
+ArchiveURL     := Concatenation("https://github.com/gap-system/io/",
                                 "releases/download/v", ~.Version,
                                 "/io-", ~.Version),
 ArchiveFormats := ".tar.gz .tar.bz2",

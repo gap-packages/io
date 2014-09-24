@@ -1,6 +1,6 @@
 This file describes changes in the IO package.
 
-X.Y (YYYY-MM-DD)
+4.4 (2014-09-24)
   - Fix problem with IO_Pickling some very large objects
   - Add pickle support for transformations and partial
     permutations
@@ -11,6 +11,7 @@ X.Y (YYYY-MM-DD)
   - Add = and < methods for IsFile objects
   - Update Max Neunhoeffer's contact data
   - Use AutoDoc to generate title page of the manual from PackageInfo.g
+  - Add Max Horn as a maintainer
   - ...
 
 4.3.1 (2014-04-04)
