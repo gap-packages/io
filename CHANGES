@@ -7,8 +7,10 @@ X.Y (YYYY-MM-DD)
   - Try to ensure files are flushed on exit, even if they are
     not explicitly closed.
   - Ensure file buffers are flushed before GAP closes, to
-    avoid data loss when files are not Closed before exiting.
+    avoid data loss when files are not closed before exiting.
   - Add = and < methods for IsFile objects
+  - Update Max Neunhoeffer's contact data
+  - Use AutoDoc to generate title page of the manual from PackageInfo.g
   - ...
 
 4.3.1 (2014-04-04)
