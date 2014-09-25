@@ -1,5 +1,9 @@
 This file describes changes in the IO package.
 
+4.4.1 (2014-09-25)
+  - Fix the release archive (it extracted to a directory starting with
+    "IO" instead of "io")
+
 4.4 (2014-09-24)
   - Fix problem with IO_Pickling some very large objects
   - Add pickle support for transformations and partial
@@ -12,7 +16,6 @@ This file describes changes in the IO package.
   - Update Max Neunhoeffer's contact data
   - Use AutoDoc to generate title page of the manual from PackageInfo.g
   - Add Max Horn as a maintainer
-  - ...
 
 4.3.1 (2014-04-04)
   - Previous release had an invalid release date in
