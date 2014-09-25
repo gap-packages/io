@@ -1,5 +1,8 @@
 This file describes changes in the IO package.
 
+X.Y (YYYY-MM-DD)
+  - ...
+
 4.4.1 (2014-09-25)
   - Fix the release archive (it extracted to a directory starting with
     "IO" instead of "io")
