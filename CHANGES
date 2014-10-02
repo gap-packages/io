@@ -1,6 +1,7 @@
 This file describes changes in the IO package.
 
 X.Y (YYYY-MM-DD)
+  - Recompress tst/test.txt with 'gzip --no-name'
   - ...
 
 4.4.1 (2014-09-25)
