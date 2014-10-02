@@ -9,7 +9,7 @@
     Bindings for low level C library I/O routines
   </Subtitle>
   <Version>
-    4.4.1
+    4.4.2
   </Version>
   <Author>
     Max Neunhöffer<Alt Only="LaTeX"><Br/></Alt>
@@ -37,7 +37,7 @@ Germany<Br/>
 
   </Author>
   <Date>
-    25/09/2014
+    02/10/2014
   </Date>
   <Copyright>
     &copyright; 2005-2014 by Max Neunhöffer<P/>

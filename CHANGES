@@ -1,8 +1,8 @@
 This file describes changes in the IO package.
 
-X.Y (YYYY-MM-DD)
+4.4.2 (2014-10-02)
   - Recompress tst/test.txt with 'gzip --no-name'
-  - ...
+  - Fix package name in manual title ("io" -> "IO")
 
 4.4.1 (2014-09-25)
   - Fix the release archive (it extracted to a directory starting with
