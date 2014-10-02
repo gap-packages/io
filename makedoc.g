@@ -5,7 +5,7 @@
 ##  Call this with GAP.
 ##  
 
-PACKAGE := "io";
+PACKAGE := "IO";
 SetPackagePath(PACKAGE, ".");
 PrintTo("VERSION", PackageInfo(PACKAGE)[1].Version);
 
