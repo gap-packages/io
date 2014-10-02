@@ -7,8 +7,8 @@ SetPackageInfo( rec(
 
 PackageName := "IO",
 Subtitle := "Bindings for low level C library I/O routines",
-Version := "4.4.1",
-Date := "25/09/2014", # dd/mm/yyyy format
+Version := "4.4.2",
+Date := "02/10/2014", # dd/mm/yyyy format
 
 ##  Information about authors and maintainers.
 Persons := [
