@@ -557,12 +557,6 @@ InstallGlobalFunction( IO_Write, function( arg )
                   pos2 := pos2 + bytes;
               od;
               f!.wdata := 0;
-              # Perhaps we can write a big chunk:
-              if Length(st)-pos > f!.wbufsize then
-                  bytes := IO_write(f!.fd,st,pos,Length(st)-pos);
-                  if bytes = fail then return fail; fi;
-                  pos := pos + bytes;
-              fi;
           od;
           return Length(st);
       fi;
