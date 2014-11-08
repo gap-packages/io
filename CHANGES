@@ -1,5 +1,10 @@
 This file describes changes in the IO package.
 
+4.4.3 (2014-11-08)
+  - Tweak the build system to avoid potential issues when the source
+    code gets repackages by third parties (e.g. by the GAP team, when
+    creating their big package archives)
+
 4.4.2 (2014-10-02)
   - Recompress tst/test.txt with 'gzip --no-name'
   - Fix package name in manual title ("io" -> "IO")
