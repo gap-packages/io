@@ -1,5 +1,9 @@
 This file describes changes in the IO package.
 
+4.4.4 (2014-11-19)
+  - Fix a bug in the IO_Write code, which for example could cause
+    IO_WriteLine to fail for certain long string
+
 4.4.3 (2014-11-08)
   - Tweak the build system to avoid potential issues when the source
     code gets repackages by third parties (e.g. by the GAP team, when
