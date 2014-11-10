@@ -10,6 +10,7 @@ body {
   margin: 0pt;
   padding: 15pt;
   font-family: Helvetica,Verdana,Arial,sans-serif;
+  text-align: justify;
 }
 
 /* no side toc on title page, bib and index */
