@@ -558,7 +558,10 @@ InstallGlobalFunction( IO_Write, function( arg )
               od;
               f!.wdata := 0;
               # Perhaps we can write a big chunk:
-              if Length(st)-pos > f!.wbufsize then
+              # Note that IO_write can only process strings that are in
+              # IsStringRep. Other inputs will be copied into the buffer
+              # before flushing
+              if IsStringRep(st) and (Length(st)-pos > f!.wbufsize) then
                   bytes := IO_write(f!.fd,st,pos,Length(st)-pos);
                   if bytes = fail then return fail; fi;
                   pos := pos + bytes;
