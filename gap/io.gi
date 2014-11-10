@@ -520,7 +520,7 @@ InstallGlobalFunction( IO_Write, function( arg )
   if f!.closed then
       Error("Tried to write on closed file.");
   fi;
-  if Length(arg) = 2 and IsString(arg[2]) then
+  if Length(arg) = 2 and IsStringRep(arg[2]) then
       # This is the main buffered Write functionality, all else delegates here:
       st := arg[2];
       # Do we buffer?
@@ -569,10 +569,11 @@ InstallGlobalFunction( IO_Write, function( arg )
   fi;
   sumbytes := 0;
   for i in [2..Length(arg)] do
-      if IsString(arg[i]) then
+      if IsStringRep(arg[i]) then
           st := arg[i];
       else
           st := String(arg[i]);
+          ConvertToStringRep(st);
       fi;
       bytes := IO_Write(f,st);   # delegate to above
       if bytes = fail then return fail; fi;
@@ -623,7 +624,7 @@ InstallGlobalFunction( IO_WriteNonBlocking,
     # or fail in case of an error. The function can block, if the
     # buffer is full and the file descriptor is not ready to write.
     local bytes,pos2;
-    if not(IsFile(f)) or not(IsString(st)) or not(IsInt(pos)) then
+    if not(IsFile(f)) or not(IsStringRep(st)) or not(IsInt(pos)) then
         Error("Usage: IO_WriteNonBlocking( f, st, pos )");
     fi;
     if f!.closed then
