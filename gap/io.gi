@@ -1350,7 +1350,7 @@ function( arg )
   fi;
 
   if append then
-      fd := IO_open(filename,IO.O_WRONLY + IO.O_APPEND,
+      fd := IO_open(filename,IO.O_CREAT + IO.O_WRONLY + IO.O_APPEND,
                     IO.S_IRUSR+IO.S_IWUSR+IO.S_IRGRP+IO.S_IWGRP+
                     IO.S_IROTH+IO.S_IWOTH);
   else
@@ -1427,7 +1427,7 @@ function(arg)
                         IO.S_IRUSR+IO.S_IWUSR+IO.S_IRGRP+IO.S_IWGRP+
                         IO.S_IROTH+IO.S_IWOTH);
       else
-          fd := IO_open(filename,IO.O_WRONLY + IO.O_APPEND,
+          fd := IO_open(filename,IO.O_CREAT+IO.O_WRONLY + IO.O_APPEND,
                         IO.S_IRUSR+IO.S_IWUSR+IO.S_IRGRP+IO.S_IWGRP+
                         IO.S_IROTH+IO.S_IWOTH);
       fi;
