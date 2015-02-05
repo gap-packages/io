@@ -1941,7 +1941,8 @@ original &GAP; SIGCHLD signal handler
 The functions returns either <K>fail</K> if an error occurred, or otherwise
 a record with components <K>out</K> and <K>err</K> which are bound
 to strings containing the full standard output and standard error
-of the called process.
+of the called process, and <K>status</K> which is the status returned from
+the exiting process.
 </Description>
 </ManSection>
 
