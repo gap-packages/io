@@ -1,5 +1,8 @@
 # This file checks buffered I/O:
 
+# We use this to general unique filenames, for parallel testing
+basepid := String(IO_getpid());
+
 # First we create a longish string:
 st := "";
 for i in [1..100000] do
@@ -7,13 +10,14 @@ for i in [1..100000] do
     Add(st,'\n');
 od;
 
+tmpname := Concatenation("tmpfile", basepid);
 # Now we write this to a file called "tmpfile":
-f := IO_File("tmpfile","w");   # we use standard buffer size
+f := IO_File(tmpname,"w");   # we use standard buffer size
 if IO_Write(f,st) = fail then Error("write error ",1); fi;
 IO_Close(f);
 
 # Now read the same file again in different ways:
-f := IO_File("tmpfile");
+f := IO_File(tmpname);
 s := "";
 repeat
     block := IO_ReadBlock(f,1000);
@@ -26,7 +30,7 @@ if s <> st then Error("reading unsuccessful ",3); fi;
 
 # Now in principle it works, we now try nonblocking I/O on files:
 
-f := IO_File("tmpfile","w");
+f := IO_File(tmpname,"w");
 pos := 1;
 while pos <= Length(st) do
     if IO_ReadyForWrite(f) then
@@ -39,7 +43,7 @@ od;
 IO_Close(f);
 
 # Now read the same file again:
-f := IO_File("tmpfile");
+f := IO_File(tmpname);
 s := "";
 block := "non-space";
 repeat
@@ -54,13 +58,14 @@ IO_Close(f);
 
 if s <> st then Error("reading unsuccessful ",4); fi;
 
+PIPENAME := Concatenation("PIPE", basepid);
 
 # Now we want to send it over a named pipe:
-IO_mkfifo("PIPE",6*64+4*8+4);
+IO_mkfifo(PIPENAME,6*64+4*8+4);
 
 sender := function()
   local f,pos;
-  f := IO_File("PIPE","w");
+  f := IO_File(PIPENAME,"w");
   pos := 1;
   while pos <= Length(st) do
       if IO_ReadyForWrite(f) then
@@ -76,21 +81,21 @@ end;
 
 selectsender := function()
   local f,pos;
-  f := IO_File("PIPE","w");
+  f := IO_File(PIPENAME,"w");
   pos := 1;
   while pos <= Length(st) do
       if IO_Select([],[f],[],[],fail,fail) = 1 then
           bytes := IO_WriteNonBlocking(f,st,pos-1,Minimum(Length(st)-pos+1,
                                                           10000));
           pos := pos + bytes;
-          Print("Wrote ",bytes,"\n");
+          #Print("Wrote ",bytes,"\n");
       #else
       #    Print("Cannot write\n");
       fi;
   od;
   repeat
       IO_Select([],[],[f],[],fail,fail);
-      Print("Can flush\n");
+      #Print("Can flush\n");
   until IO_FlushNonBlocking(f);
   IO_Close(f);
 end;
@@ -106,7 +111,7 @@ if pid = 0 then
 fi;
 
 # Now read the same file again:
-f := IO_File("PIPE");
+f := IO_File(PIPENAME);
 s := "";
 block := "non-space";
 repeat
@@ -121,6 +126,9 @@ IO_Close(f);
 
 if s <> st then Error("reading unsuccessful ",4); fi;
 
+# Wait for the last process to finish
+IO_WaitPid(pid, true);
+
 # Let's fork to get a third process going:
 pid := IO_fork();
 
@@ -132,23 +140,24 @@ if pid = 0 then
 fi;
 
 # Now read the same file again:
-f := IO_File("PIPE");
+f := IO_File(PIPENAME,"r");
 s := "";
 block := "non-space";
 repeat
     if IO_Select([f],[],[],[],fail,fail) = 1 then
         block := IO_Read(f,10000);
         Append(s,block);
-        Print("Read ",Length(block),"\n");
+        #Print("Read ",Length(block),"\n");
     #else
-    #    Print("Cannot read\n");
+    #    Print("Cannot read!\n");
     fi;
 until block = "";
 IO_Close(f);
+IO_WaitPid(pid, true);
 
 if s <> st then Error("reading unsuccessful ",7); fi;
 
 # Cleanup:
-IO_unlink("PIPE");
-IO_unlink("tmpfile");
+IO_unlink(PIPENAME);
+IO_unlink(tmpname);
 
