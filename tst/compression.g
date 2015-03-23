@@ -2,10 +2,14 @@
 
 # This file tests we can read compressed files
 
+# We use this to general unique filenames, for parallel testing
+basepid := String(IO_getpid());
+
 LoadPackage("io");
 
 checkCompression := function(filename)
     local f, lines;
+    filename := Concatenation(basepid, filename);
     # Lets hope we can write to the current directory
     f := IO_CompressedFile(filename, "w");
 
@@ -37,6 +41,8 @@ checkCompression := function(filename)
     if IO_ReadLines(f) <> [ "xyz\n", "abc\n" ] then
       Error("Unable to read compressed file correctly: ", 6);
     fi;
+    
+    IO_Close(f);
 
     IO_unlink(filename);
 end;

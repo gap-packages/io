@@ -11,14 +11,11 @@ if r.statuscode <> 200 then
 else
     expected := Concatenation(
     "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<mixer>\n",
-    PackageInfo("io")[1].Version,
-    "\n</mixer>\n");
+    "5.0\n</mixer>\n");
 
     if r.body <> expected then
         Print("Did not find expected body. ",
               "Maybe your IO package is not current?\n");
-    else
-        Print("OK\n");
     fi;
 fi;
 

@@ -149,7 +149,7 @@ if IO_Pickle(f,l) <> IO_OK then Error(1); fi;
 if IO_Pickle(f,"End") <> IO_OK then Error(2); fi;
 IO_Close(f);
 
-Print("Bytes pickled: ",Length(s),"\n");
+# Print("Bytes pickled: ",Length(s),"\n");
 
 f := IO_WrapFD(-1,s,false);
 ll := IO_Unpickle(f);
@@ -213,5 +213,3 @@ if List(floatlist, x -> ExtRepOfObj(x)) <>
    List(pickledlist, x -> ExtRepOfObj(x)) then
     Error(36);
 fi;
-
-Print("Unpickling OK.\n");
