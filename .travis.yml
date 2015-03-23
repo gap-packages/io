@@ -1,0 +1,17 @@
+os:
+  - linux
+env:
+  - TEST_SUITE=gap
+  - TEST_SUITE=hpcgap
+language: c
+compiler:
+  - gcc
+  - clang
+branches:
+  only:
+    - master
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq libgmp3-dev
+script:
+  - ./run_tests.sh $TEST_SUITE
