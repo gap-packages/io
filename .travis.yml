@@ -17,3 +17,4 @@ addons:
       libgmp3-dev
 script:
   - ./run_tests.sh $TEST_SUITE
+  - echo FINISH
