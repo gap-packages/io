@@ -63,7 +63,10 @@ DeclareGlobalFunction( "IO_SendStringBackground" );
 DeclareGlobalFunction( "IO_PipeThroughWithError" );
 DeclareGlobalFunction( "IO_PipeThrough" );
 
-DeclareGlobalFunction( "ChangeDirectoryCurrent" );
+if not(IsBoundGlobal("ChangeDirectoryCurrent")) then
+  _IO_Defines_ChangeDirectoryCurrent := true;
+  DeclareGlobalFunction( "ChangeDirectoryCurrent" );
+fi;
 
 # This is for other packages to detect whether the I/O package ist loaded:
 BindGlobal( "IO_PackageIsLoaded", true );

@@ -1689,15 +1689,18 @@ function(cmd,args,input)
   return Concatenation(out);
 end);
 
-InstallGlobalFunction( ChangeDirectoryCurrent,
-  function( path )
-    if IO_chdir(path) then
-        GAPInfo.DirectoryCurrent := Directory(path);
-        return true;
-    else
-        return fail;
-    fi;
-  end );
+if IsBoundGlobal("_IO_Defines_ChangeDirectoryCurrent") then
+  InstallGlobalFunction( ChangeDirectoryCurrent,
+    function( path )
+      if IO_chdir(path) then
+          GAPInfo.DirectoryCurrent := Directory(path);
+          return true;
+      else
+          return fail;
+      fi;
+    end );
+  Unbind(_IO_Defines_ChangeDirectoryCurrent);
+fi;
 
 ##
 ##  This program is free software: you can redistribute it and/or modify
