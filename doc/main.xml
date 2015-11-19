@@ -1554,7 +1554,7 @@ directory, or <K>fail</K>, if an error occurred.
 </ManSection>
 
 <ManSection>
-<Func Name="ChangeCurrentDirectory" Arg="pathname"
+<Func Name="ChangeDirectoryCurrent" Arg="pathname"
       Comm="changes the current directory"/>
 <Returns> <K>true</K> on success and <K>fail</K> on failure </Returns>
 <Description>
