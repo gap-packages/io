@@ -1,5 +1,9 @@
 This file describes changes in the IO package.
 
+X.Y (YYYY-MM-DD)
+  - Move website to http://gap-packages.github.io/io/
+  - ...
+
 4.4.4 (2014-11-19)
   - Fix a bug in the IO_Write code, which for example could cause
     IO_WriteLine to fail for certain long string
