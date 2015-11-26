@@ -131,6 +131,8 @@ void __stack_chk_fail_local (void)
  * we can read it out from GAP using IO.Wait.
  ***********************************************************************/
 
+// FIXME: globals
+
 #define MAXCHLDS 1024
 /* The following arrays make a FIFO structure: */
 static int maxstats = MAXCHLDS;    /* This number must always be the same */
@@ -389,6 +391,7 @@ Obj FuncIO_lseek(Obj self,Obj fd,Obj offset,Obj whence)
 }
 
 #ifdef HAVE_DIRENT_H
+// FIXME: globals
 static DIR *ourDIR = 0;
 static struct dirent *ourdirent;
 
@@ -660,6 +663,7 @@ Obj FuncIO_rmdir(Obj self,Obj path)
 #ifndef USE_GMP
 static Obj MyObjInt_Int(Int i)
 {
+// FIXME: WTF?
     Obj n;
     Int bound = 1L << NR_SMALL_INT_BITS;
     if (i >= bound) {
@@ -686,6 +690,7 @@ static Obj MyObjInt_Int(Int i)
 #endif
 
 #ifdef HAVE_STAT
+// FIXME: globals
 static struct stat ourstatbuf;
 Obj FuncIO_stat(Obj self,Obj filename)
 {
@@ -720,6 +725,7 @@ Obj FuncIO_stat(Obj self,Obj filename)
 #endif
 
 #ifdef HAVE_FSTAT
+// FIXME: globals
 static struct stat ourfstatbuf;
 Obj FuncIO_fstat(Obj self,Obj fd)
 {
@@ -754,6 +760,7 @@ Obj FuncIO_fstat(Obj self,Obj fd)
 #endif
 
 #ifdef HAVE_LSTAT
+// FIXME: globals
 static struct stat ourlstatbuf;
 Obj FuncIO_lstat(Obj self,Obj filename)
 {
@@ -1447,6 +1454,7 @@ Obj FuncIO_fork(Obj self)
 }
 #endif
 
+// FIXME: globals
 static char *argv[1024];   /* Up to 1024 arguments */
 static char *envp[1024];   /* Up to 1024 environment entries */
 
@@ -1484,6 +1492,7 @@ Obj FuncIO_execv(Obj self,Obj path,Obj Argv)
     return Fail;
 }
 
+// FIXME: globals
 extern char **environ;
 
 Obj FuncIO_execvp(Obj self,Obj file,Obj Argv)
