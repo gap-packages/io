@@ -5,7 +5,7 @@
   [2XAcceptNewConnection[102X  9.2-7
   [2XAttachServingSocket[102X  9.2-4
   [2XBackgroundJobByFork[102X  8.1-1
-  [2XChangeCurrentDirectory[102X  4.3-5
+  [2XChangeDirectoryCurrent[102X  4.3-5
   [2XCheckForUpdates[102X  7.1-6
   [2XCloseConnection[102X  9.2-3
   [2XCloseHTTPConnection[102X  7.1-4

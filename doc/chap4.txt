@@ -381,9 +381,9 @@
   returns a list of strings that are the names of the files in that directory,
   or [9Xfail[109X, if an error occurred.[133X
   
-  [1X4.3-5 ChangeCurrentDirectory[101X
+  [1X4.3-5 ChangeDirectoryCurrent[101X
   
-  [29X[2XChangeCurrentDirectory[102X( [3Xpathname[103X ) [32X function
+  [29X[2XChangeDirectoryCurrent[102X( [3Xpathname[103X ) [32X function
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X on success and [9Xfail[109X on failure[133X
   
   [33X[0;0YChanges the current directory. Returns [9Xtrue[109X on success and [9Xfail[109X on failure.[133X
@@ -715,5 +715,6 @@
   
   [33X[0;0YThe  functions  returns  either  [9Xfail[109X  if  an error occurred, or otherwise a
   record with components [9Xout[109X and [9Xerr[109X which are bound to strings containing the
-  full standard output and standard error of the called process.[133X
+  full  standard  output  and standard error of the called process, and [9Xstatus[109X
+  which is the status returned from the exiting process.[133X
   

@@ -6,10 +6,10 @@
                 [1X Bindings for low level C library I/O routines [101X
   
   
-                                     4.4.4
+                                     4.4.5
   
   
-                                   10/11/2014
+                                   07/01/2016
   
   
                                  Max Neunhöffer
@@ -150,7 +150,7 @@
       4.3-2 IO_GetWBuf
       4.3-3 IO_Select
       4.3-4 IO_ListDir
-      4.3-5 ChangeCurrentDirectory
+      4.3-5 ChangeDirectoryCurrent
       4.3-6 IO_MakeIPAddressPort
       4.3-7 IO_Environment
       4.3-8 IO_MakeEnvList

@@ -7,8 +7,8 @@ SetPackageInfo( rec(
 
 PackageName := "IO",
 Subtitle := "Bindings for low level C library I/O routines",
-Version := "4.4.4",
-Date := "10/11/2014", # dd/mm/yyyy format
+Version := "4.4.5",
+Date := "07/01/2016", # dd/mm/yyyy format
 
 ##  Information about authors and maintainers.
 Persons := [
@@ -64,10 +64,10 @@ Status := "deposited",
 # AcceptDate := "08/1999",
 #AcceptDate := "",
 
-PackageWWWHome := "http://gap-system.github.io/io/",
+PackageWWWHome := "http://gap-packages.github.io/io/",
 README_URL     := Concatenation(~.PackageWWWHome, "README"),
 PackageInfoURL := Concatenation(~.PackageWWWHome, "PackageInfo.g"),
-ArchiveURL     := Concatenation("https://github.com/gap-system/io/",
+ArchiveURL     := Concatenation("https://github.com/gap-packages/io/",
                                 "releases/download/v", ~.Version,
                                 "/io-", ~.Version),
 ArchiveFormats := ".tar.gz .tar.bz2",

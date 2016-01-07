@@ -56,7 +56,7 @@
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X86666C9681EA7297">4.3-2 IO_GetWBuf</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X81CA6EE88062010E">4.3-3 IO_Select</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X84B16DB878265F02">4.3-4 IO_ListDir</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7D849D987800A0F6">4.3-5 ChangeCurrentDirectory</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X81DDD2E87F68E086">4.3-5 ChangeDirectoryCurrent</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X8568CE6684C90CE5">4.3-6 IO_MakeIPAddressPort</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7F9AAE018474E1D8">4.3-7 IO_Environment</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7CF3DB5081A91600">4.3-8 IO_MakeEnvList</a></span>
@@ -88,7 +88,7 @@
 
 <p>Note that considerable care has been taken to ensure that one can do I/O multiplexing with buffered I/O. That is, one always has the possibility to make sure before a read or write operation, that this read or write operation will not block. This is crucial when one wants to serve more than one I/O channel from the same (single-threaded) <strong class="pkg">GAP</strong> process. This design principle sometimes made it necessary to have more than one function for a certain operation. Those functions usually differ in a subtle way with respect to their blocking behaviour.</p>
 
-<p>One remark applies again to nearly all functions presented here: If an error is indicated by the returned value <code class="keyw">fail</code> one can use the library function <code class="func">LastSystemError</code> (<a href="/Users/mhorn/Projekte/GAP/repos/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>) to find out more about the cause of the error. This fact is not mentioned with every single function.</p>
+<p>One remark applies again to nearly all functions presented here: If an error is indicated by the returned value <code class="keyw">fail</code> one can use the library function <code class="func">LastSystemError</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>) to find out more about the cause of the error. This fact is not mentioned with every single function.</p>
 
 <p><a id="X7F697A8884B57F27" name="X7F697A8884B57F27"></a></p>
 
@@ -170,7 +170,7 @@
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_ReadLine</code>( <var class="Arg">f</var> )</td><td class="tdright">( function )</td></tr></table></div>
 <p>Returns: a string or <code class="keyw">fail</code></p>
 
-<p>This function gets exactly one argument, which must be a <code class="code">File</code> object <var class="Arg">f</var>. It reads one line of data, where the definition of line is operating system dependent. The line end character(s) are included in the result. The function returns a string with the line in case of success and <code class="keyw">fail</code> in case of an error. In the latter case, one can query the error with <code class="func">LastSystemError</code> (<a href="/Users/mhorn/Projekte/GAP/repos/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>).</p>
+<p>This function gets exactly one argument, which must be a <code class="code">File</code> object <var class="Arg">f</var>. It reads one line of data, where the definition of line is operating system dependent. The line end character(s) are included in the result. The function returns a string with the line in case of success and <code class="keyw">fail</code> in case of an error. In the latter case, one can query the error with <code class="func">LastSystemError</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>).</p>
 
 <p>Note that the reading is done via the buffer of <var class="Arg">f</var>, such that this function will be quite fast also for large amounts of data.</p>
 
@@ -183,7 +183,7 @@
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_ReadLines</code>( <var class="Arg">f</var>[, <var class="Arg">max</var>] )</td><td class="tdright">( function )</td></tr></table></div>
 <p>Returns: a list of strings or <code class="keyw">fail</code></p>
 
-<p>This function gets one or two arguments, the first of which must always be a <code class="code">File</code> object <var class="Arg">f</var>. It reads lines of data (where the definition of line is operating system dependent) either until end of file (without a second argument) or up to <var class="Arg">max</var> lines (with a second argument <var class="Arg">max</var>. A list of strings with the result is returned, if everything went well and <code class="keyw">fail</code> oterwise. In the latter case, one can query the error with <code class="func">LastSystemError</code> (<a href="/Users/mhorn/Projekte/GAP/repos/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>).</p>
+<p>This function gets one or two arguments, the first of which must always be a <code class="code">File</code> object <var class="Arg">f</var>. It reads lines of data (where the definition of line is operating system dependent) either until end of file (without a second argument) or up to <var class="Arg">max</var> lines (with a second argument <var class="Arg">max</var>. A list of strings with the result is returned, if everything went well and <code class="keyw">fail</code> oterwise. In the latter case, one can query the error with <code class="func">LastSystemError</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>).</p>
 
 <p>Note that the reading is done via the buffer of <var class="Arg">f</var>, such that this function will be quite fast also for large amounts of data.</p>
 
@@ -205,7 +205,7 @@
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Read</code>( <var class="Arg">f</var>, <var class="Arg">len</var> )</td><td class="tdright">( function )</td></tr></table></div>
 <p>Returns: a string or <code class="keyw">fail</code></p>
 
-<p>The function gets two arguments, the first of which must be a <code class="code">File</code> object <var class="Arg">f</var>. The second argument must be a positive integer. The function reads data up to <var class="Arg">len</var> bytes. A string with the result is returned, if everything went well and <code class="keyw">fail</code> otherwise. In the latter case, one can query the error with <code class="func">LastSystemError</code> (<a href="/Users/mhorn/Projekte/GAP/repos/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>).</p>
+<p>The function gets two arguments, the first of which must be a <code class="code">File</code> object <var class="Arg">f</var>. The second argument must be a positive integer. The function reads data up to <var class="Arg">len</var> bytes. A string with the result is returned, if everything went well and <code class="keyw">fail</code> otherwise. In the latter case, one can query the error with <code class="func">LastSystemError</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>).</p>
 
 <p>Note that the reading is done via the buffer of <var class="Arg">f</var>, such that this function will be quite fast also for large amounts of data.</p>
 
@@ -224,7 +224,7 @@
 
 <p>Note that the writing is done buffered. That is, the data is first written to the buffer and only really written out after the buffer is full or after the user explicitly calls <code class="func">IO_Flush</code> (<a href="chap4.html#X7873A49F7CC7ECFB"><span class="RefLink">4.2-10</span></a>) on <var class="Arg">f</var>.</p>
 
-<p>The result is either the number of bytes written in case of success or <code class="keyw">fail</code> in case of an error. In the latter case the error can be queried with <code class="func">LastSystemError</code> (<a href="/Users/mhorn/Projekte/GAP/repos/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>).</p>
+<p>The result is either the number of bytes written in case of success or <code class="keyw">fail</code> in case of an error. In the latter case the error can be queried with <code class="func">LastSystemError</code> (<a href="/Users/mhorn/Projekte/GAP/gap.github/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>).</p>
 
 <p>Note that this function blocks until all data is at least written into the buffer and might block until data can be sent again if the buffer is full.</p>
 
@@ -359,11 +359,11 @@
 
 <p>This function gets a string containing a path name as single argument and returns a list of strings that are the names of the files in that directory, or <code class="keyw">fail</code>, if an error occurred.</p>
 
-<p><a id="X7D849D987800A0F6" name="X7D849D987800A0F6"></a></p>
+<p><a id="X81DDD2E87F68E086" name="X81DDD2E87F68E086"></a></p>
 
-<h5>4.3-5 ChangeCurrentDirectory</h5>
+<h5>4.3-5 ChangeDirectoryCurrent</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ChangeCurrentDirectory</code>( <var class="Arg">pathname</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ChangeDirectoryCurrent</code>( <var class="Arg">pathname</var> )</td><td class="tdright">( function )</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> on success and <code class="keyw">fail</code> on failure</p>
 
 <p>Changes the current directory. Returns <code class="keyw">true</code> on success and <code class="keyw">fail</code> on failure.</p>
@@ -582,7 +582,7 @@
 
 <p>This function properly does <code class="func">IO_WaitPid</code> (<a href="chap3.html#X80737A008450184F"><span class="RefLink">3.2-60</span></a>) to wait for the termination of the child process but does not restore the original <strong class="pkg">GAP</strong> SIGCHLD signal handler (see <code class="func">IO_InstallSIGCHLDHandler</code> (<a href="chap3.html#X8383E62D86BE30C6"><span class="RefLink">3.3-3</span></a>)).</p>
 
-<p>The functions returns either <code class="keyw">fail</code> if an error occurred, or otherwise a record with components <code class="keyw">out</code> and <code class="keyw">err</code> which are bound to strings containing the full standard output and standard error of the called process.</p>
+<p>The functions returns either <code class="keyw">fail</code> if an error occurred, or otherwise a record with components <code class="keyw">out</code> and <code class="keyw">err</code> which are bound to strings containing the full standard output and standard error of the called process, and <code class="keyw">status</code> which is the status returned from the exiting process.</p>
 
 
 <div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap3.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap5.html">[Next Chapter]</a>&nbsp;  </div>
