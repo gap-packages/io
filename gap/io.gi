@@ -1534,7 +1534,7 @@ end );
 
 InstallGlobalFunction( IO_PipeThroughWithError,
 function(cmd,args,input)
-  local byt,chunk,err,erreof,inpos,nr,out,outeof,r,s,w;
+  local byt,chunk,err,erreof,inpos,nr,out,outeof,r,s,w,status;
 
   # Start the coprocess:
   s := IO_Popen3(cmd,args,false,false,false);
@@ -1615,9 +1615,13 @@ function(cmd,args,input)
           fi;
       fi;
   until outeof and erreof;
+  status := IO_WaitPid(s.pid, true);
+  # We have to unbind this here, as by default IO will do its own
+  # IO_WaitPid when we close stdout.
+  Unbind(s.stdout!.dowaitpid);
   IO_Close(s.stdout);
   IO_Close(s.stderr);
-  return rec( out := Concatenation(out), err := err );
+  return rec( out := Concatenation(out), err := err, status := status );
 end);
 
 InstallGlobalFunction( IO_PipeThrough,
