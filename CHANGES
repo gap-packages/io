@@ -2,7 +2,11 @@ This file describes changes in the IO package.
 
 X.Y (YYYY-MM-DD)
   - Move website to http://gap-packages.github.io/io/
-  - ...
+  - Change IO_PipeThroughWithError to also return the exit status of
+    the child process
+  - Improve test suite a little bit
+  - GAP 4.8 also provides ChangeDirectoryCurrent, so we only
+    define it if it does not already exist
 
 4.4.4 (2014-11-19)
   - Fix a bug in the IO_Write code, which for example could cause
