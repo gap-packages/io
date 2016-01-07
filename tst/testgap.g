@@ -10,3 +10,5 @@ for i in [1..50] do
      Read(Filename(d[1], f));
   od;
 od;
+
+Read(Filename(d[1], "exitcheck.g"));

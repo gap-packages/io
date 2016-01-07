@@ -59,11 +59,16 @@ InstallMethod( ViewObj, "for an IO_Result",
   function(r) Print(r!.val); end );
 
 # Store a list of open files, so we can close them on GAP exit
-# To ensure all streams are flushed
+# To ensure all streams are flushed.
+# We unbind 'dowaitpid', because at close we don't want to wait
+# for hung child processes
 IO.OpenFiles := Set([]);
 InstallAtExit(function()
   local file;
   for file in IO.OpenFiles do
+      if IsBound(file!.dowaitpid) then
+        Unbind(file!.dowaitpid);
+      fi;
       IO_Close(file);
   od;
 end
@@ -224,6 +229,7 @@ InstallGlobalFunction( IO_Close, function( f )
   if f!.fd <> -1 then
       if IO_close(f!.fd) = fail then ret := fail; fi;
   fi;
+
   if HasProcessID(f) and IsBound(f!.dowaitpid) then
       pid := ProcessID(f);
       if IsInt(pid) then pid := [pid]; fi;
