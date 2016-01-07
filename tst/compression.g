@@ -6,6 +6,7 @@
 basepid := String(IO_getpid());
 
 LoadPackage("io");
+d := DirectoriesPackageLibrary("io", "tst");
 
 checkCompression := function(filename)
     local f, lines;
@@ -50,7 +51,7 @@ end;
 # Check no compression works
 checkCompression("tmpcompfile.txt");
 
-f := IO_CompressedFile("compression.g", "r");
+f := IO_CompressedFile(Filename(d,"compression.g"), "r");
 if IO_ReadLine(f) <> "# NOTE: This test reads this first line!!\n" then
    Error("IO_CompressedFile is broken on uncompressed files: ", 7);
 fi;
@@ -59,7 +60,7 @@ IO_Close(f);
 
 # First let's check a pre-existing compressed file:
 if IO_FindExecutable("gzip") <> fail then
-    f := IO_CompressedFile("test.txt.gz", "r");
+    f := IO_CompressedFile(Filename(d,"test.txt.gz"), "r");
 
     lines := IO_ReadLines(f);
 
