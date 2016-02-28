@@ -44,3 +44,6 @@
 
 /io.la
 /src/io_la-io.lo
+
+/tmp/
+/gh-pages/
