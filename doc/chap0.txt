@@ -6,10 +6,10 @@
                 [1X Bindings for low level C library I/O routines [101X
   
   
-                                     4.4.5
+                                     4.4.6
   
   
-                                   07/01/2016
+                                   08/03/2016
   
   
                                  Max Neunhöffer
@@ -95,29 +95,31 @@
       3.2-36 IO_mkdir
       3.2-37 IO_mkfifo
       3.2-38 IO_mknod
-      3.2-39 IO_open
-      3.2-40 IO_opendir
-      3.2-41 IO_pipe
-      3.2-42 IO_read
-      3.2-43 IO_readdir
-      3.2-44 IO_readlink
-      3.2-45 IO_recv
-      3.2-46 IO_recvfrom
-      3.2-47 IO_rename
-      3.2-48 IO_rewinddir
-      3.2-49 IO_rmdir
-      3.2-50 IO_seekdir
-      3.2-51 IO_select
-      3.2-52 IO_send
-      3.2-53 IO_sendto
-      3.2-54 IO_setsockopt
-      3.2-55 IO_socket
-      3.2-56 IO_stat
-      3.2-57 IO_symlink
-      3.2-58 IO_telldir
-      3.2-59 IO_unlink
-      3.2-60 IO_WaitPid
-      3.2-61 IO_write
+      3.2-39 IO_mkstemp
+      3.2-40 IO_mkdtemp
+      3.2-41 IO_open
+      3.2-42 IO_opendir
+      3.2-43 IO_pipe
+      3.2-44 IO_read
+      3.2-45 IO_readdir
+      3.2-46 IO_readlink
+      3.2-47 IO_recv
+      3.2-48 IO_recvfrom
+      3.2-49 IO_rename
+      3.2-50 IO_rewinddir
+      3.2-51 IO_rmdir
+      3.2-52 IO_seekdir
+      3.2-53 IO_select
+      3.2-54 IO_send
+      3.2-55 IO_sendto
+      3.2-56 IO_setsockopt
+      3.2-57 IO_socket
+      3.2-58 IO_stat
+      3.2-59 IO_symlink
+      3.2-60 IO_telldir
+      3.2-61 IO_unlink
+      3.2-62 IO_WaitPid
+      3.2-63 IO_write
     3.3 [33X[0;0YFurther C level functions[133X
       3.3-1 IO_make_sockaddr_in
       3.3-2 IO_environ
