@@ -101,7 +101,8 @@ void __stack_chk_fail_local (void)
  * open, creat, read, write, close, unlink, lseek, opendir, readdir,
  * closedir, rewinddir, telldir, seekdir, link, rename, symlink, readlink,
  * rmdir, mkdir, stat, lstat, fstat, chmod, fchmod, chown, fchown, lchown,
- * mknod, mkfifo, dup, dup2, socket, bind, connect, gethostbyname, listen,
+ * mknod, mkstemp, mkdtemp, mkfifo, dup, dup2, socket, bind, connect,
+ * gethostbyname, listen,
  * accept, recv, recvfrom, send, sendto, getsockopt, setsockopt, select,
  * fork, execv, execvp, execve, pipe, exit, getsockname, gethostname,
  *
@@ -904,6 +905,48 @@ Obj FuncIO_mknod(Obj self,Obj path,Obj mode,Obj dev)
       } else
           return True;
   }
+}
+#endif
+
+#ifdef HAVE_MKSTEMP
+Obj FuncIO_mkstemp(Obj self,Obj template)
+{
+    Int fd;
+    if (!IS_STRING(template) || !IS_STRING_REP(template)) {
+        SyClearErrorNo();
+        return Fail;
+
+    } else {
+        fd = mkstemp((char *) CHARS_STRING(template));
+        if (fd < 0) {
+            SySetErrorNo();
+            return Fail;
+        } else {
+            return INTOBJ_INT(fd);
+        }
+    }
+}
+#endif
+
+#ifdef HAVE_MKDTEMP
+Obj FuncIO_mkdtemp(Obj self,Obj template)
+{
+    Obj res;
+    char *r;
+
+    if (!IS_STRING(template) || !IS_STRING_REP(template)) {
+        SyClearErrorNo();
+        return Fail;
+    } else {
+        r = mkdtemp((char *) CHARS_STRING(template));
+        if (r == NULL) {
+            SySetErrorNo();
+            return Fail;
+        } else {
+            C_NEW_STRING(res, strlen(r), r);
+            return res;
+        }
+    }
 }
 #endif
 
@@ -1958,6 +2001,18 @@ static StructGVarFunc GVarFuncs [] = {
   { "IO_mknod", 3, "path, mode, dev",
     FuncIO_mknod,
     "io.c:IO_mknod" },
+#endif
+
+#ifdef HAVE_MKSTEMP
+  { "IO_mkstemp", 1, "template",
+    FuncIO_mkstemp,
+    "io.c:IO_mkstemp" },
+#endif
+
+#ifdef HAVE_MKDTEMP
+  { "IO_mkdtemp", 1, "template",
+    FuncIO_mkdtemp,
+    "io.c:IO_mkstemp" },
 #endif
 
 #ifdef HAVE_MKFIFO
