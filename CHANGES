@@ -1,5 +1,10 @@
 This file describes changes in the IO package.
 
+4.4.6 (2016-03-08)
+  - Remove support for (un)pickling SuPeRfail
+  - Add wrappers for mkstemp and mkdtemp
+  - Some maintenance changes
+
 4.4.5 (2016-01-07)
   - Move website to http://gap-packages.github.io/io/
   - Change IO_PipeThroughWithError to also return the exit status of
