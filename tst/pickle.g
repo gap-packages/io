@@ -28,7 +28,6 @@ l := [
 false,
 true,
 fail,
-SuPeRfail,
 0,
 -1,
 1,

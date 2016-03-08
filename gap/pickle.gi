@@ -356,7 +356,6 @@ InstallMethod( IO_Pickle, "for a boolean",
     if b = false then val := "FALS";
     elif b = true then val := "TRUE";
     elif b = fail then val := "FAIL";
-    elif b = SuPeRfail then val := "SPRF";
     else
         Error("Unknown boolean value");
     fi;
@@ -370,7 +369,11 @@ InstallMethod( IO_Pickle, "for a boolean",
 IO_Unpicklers.FALS := false;
 IO_Unpicklers.TRUE := true;
 IO_Unpicklers.FAIL := fail;
-IO_Unpicklers.SPRF := SuPeRfail;
+IO_Unpicklers.SPRF :=
+  function( f )
+    Info(InfoWarning, 1, "unpickling deprecated 'SuPeRfail' value");
+    return "SuPeRfail";
+  end;
 
 InstallMethod( IO_Pickle, "for a permutation",
   [ IsFile, IsPerm ],

@@ -69,7 +69,6 @@ BindGlobal ("IO_Unpicklers", rec() );
 # RSGA  a GAP random source
 # RSMT  a Mersenne twister random source
 # RSRE  a really random source
-# SPRF  SuPeRfail
 # SREF  a self-reference
 # TRAN  a transformation
 # TRUE  true
