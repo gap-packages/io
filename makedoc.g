@@ -9,5 +9,3 @@ fi;
 
 AutoDoc(rec( scaffold := rec( MainPage := false )));
 PrintTo("VERSION", GAPInfo.PackageInfoCurrent.Version);
-
-QUIT;

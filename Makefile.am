@@ -31,6 +31,6 @@ distclean-local:
 	(cd doc ; ./clean)
 
 doc:
-	($(GAPROOT)/bin/gap.sh -A makedoc.g)
+	(echo 'Read("makedoc.g");' | $(GAPROOT)/bin/gap.sh -A -q)
 
 .PHONY: doc
