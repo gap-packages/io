@@ -2649,6 +2649,8 @@ dominates the communication time for a single result.
 </Description>
 </ManSection>
 
+<#Include Label="IO_CallWithTimeout"/>
+
 Note that the next parallel skeleton is a worker farm which
 is described in the following section.
 </Section>
