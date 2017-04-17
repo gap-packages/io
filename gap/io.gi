@@ -132,11 +132,11 @@ InstallGlobalFunction(IO_File, function( arg )
   #   "a" : open for appending
   local fd,filename,mode,bufsize;
   if Length(arg) = 1 then
-      filename := arg[1];
+      filename := UserHomeExpand(arg[1]);
       mode := "r";
       bufsize := IO.DefaultBufSize;
   elif Length(arg) = 2 then
-      filename := arg[1];
+      filename := UserHomeExpand(arg[1]);
       if IsString(arg[2]) then
           mode := arg[2];
           bufsize := IO.DefaultBufSize;
@@ -145,7 +145,7 @@ InstallGlobalFunction(IO_File, function( arg )
           bufsize := arg[2];
       fi;
   elif Length(arg) = 3 then
-      filename := arg[1];
+      filename := UserHomeExpand(arg[1]);
       mode := arg[2];
       bufsize := arg[3];
   else
@@ -894,7 +894,7 @@ end );
 InstallGlobalFunction( IO_ListDir, function( dirname )
   local f,l,res;
   l := [];
-  res := IO_opendir( dirname );
+  res := IO_opendir( UserHomeExpand(dirname) );
   if res = fail then
       return fail;
   fi;
@@ -1039,7 +1039,7 @@ InstallGlobalFunction( IO_Popen, function(arg)
       Print("Usage: IO_Popen(path,arg,mode,[bufsize])\n");
       return;
   fi;
-  path := arg[1];
+  path := UserHomeExpand(arg[1]);
   argv := arg[2];
   mode := arg[3];
   if Length(arg) > 3 then
@@ -1099,7 +1099,7 @@ InstallGlobalFunction( IO_Popen2, function(arg)
       Print("Usage: IO_Popen2(path,argv,[rbufsize,wbufsize])\n");
       return;
   fi;
-  path := arg[1];
+  path := UserHomeExpand(arg[1]);
   argv := arg[2];
   if Length(arg) > 3 then
       rbufsize := arg[3];
@@ -1153,7 +1153,7 @@ InstallGlobalFunction( IO_Popen3, function(arg)
       Print("Usage: IO_Popen3(path,argv,[rbufsize,wbufsize,ebufsize])\n");
       return;
   fi;
-  path := arg[1];
+  path := UserHomeExpand(arg[1]);
   argv := arg[2];
   if Length(arg) > 4 then
       rbufsize := arg[3];
@@ -1321,7 +1321,7 @@ end );
 InstallGlobalFunction( IO_StringFilterFile,
 function( progs, filename )
   local f,fd,i,r,s;
-  fd := IO_open(filename,0,IO.O_RDONLY);
+  fd := IO_open(UserHomeExpand(filename),0,IO.O_RDONLY);
   if fd = fail then return fail; fi;
   r := IO_StartPipeline(progs, fd, "open", false);
   if r = fail or fail in r.pids then
@@ -1344,7 +1344,7 @@ function( arg )
       Error("Usage: IO_FileFilterString( filename, progs, st [,append]");
       return fail;
   fi;
-  filename := arg[1];
+  filename := UserHomeExpand(arg[1]);
   progs := arg[2];
   st := arg[3];
   if Length(arg) > 3 then
@@ -1385,12 +1385,12 @@ function(arg)
   local bufsize,f,fd,filename,mode,progs,r;
   if Length(arg) = 2 then
       progs := arg[1];
-      filename := arg[2];
+      filename := UserHomeExpand(arg[2]);
       mode := "r";
       bufsize := IO.DefaultBufSize;
   elif Length(arg) = 3 then
       progs := arg[1];
-      filename := arg[2];
+      filename := UserHomeExpand(arg[2]);
       if IsString(arg[3]) then
           mode := arg[3];
           bufsize := IO.DefaultBufSize;
@@ -1400,14 +1400,14 @@ function(arg)
       fi;
   elif Length(arg) = 4 then
       progs := arg[1];
-      filename := arg[2];
+      filename := UserHomeExpand(arg[2]);
       mode := arg[3];
       bufsize := arg[4];
   else
       Error("IO: Usage: IO_FilteredFile( progs,filename [,mode][,bufsize] )\n",
             "with IsString(filename)");
   fi;
-  if not(IsString(filename)) and not(IsString(mode)) then
+  if not(IsString(mode)) then
       Error("IO: Usage: IO_FilteredFile( progs, filename [,mode][,bufsize] )\n",
             "with IsString(filename)");
   fi;
@@ -1454,11 +1454,11 @@ function(arg)
   # mode and bufsize as in IO_File
   local bufsize,f,fd,filename,mode,r,ext,splitname,extension,compressor,file;
   if Length(arg) = 1 then
-      filename := arg[1];
+      filename := UserHomeExpand(arg[1]);
       mode := "r";
       bufsize := IO.DefaultBufSize;
   elif Length(arg) = 2 then
-      filename := arg[1];
+      filename := UserHomeExpand(arg[1]);
       if IsString(arg[2]) then
           mode := arg[2];
           bufsize := IO.DefaultBufSize;
@@ -1467,14 +1467,14 @@ function(arg)
           bufsize := arg[2];
       fi;
   elif Length(arg) = 3 then
-      filename := arg[1];
+      filename := UserHomeExpand(arg[1]);
       mode := arg[2];
       bufsize := arg[3];
   else
       Error("IO: Usage: IO_CompressedFile( filename [,mode][,bufsize] )\n",
             "with IsString(filename)");
   fi;
-  if not(IsString(filename)) and not(IsString(mode)) then
+  if not(IsString(mode)) then
       Error("IO: Usage: IO_CompressedFile( filename [,mode][,bufsize] )\n",
             "with IsString(filename)");
   fi;
