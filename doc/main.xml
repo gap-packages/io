@@ -3134,7 +3134,7 @@ is an example:
 <Log>
 gap> r := SingleHTTPRequest("www.math.rwth-aachen.de",80,"GET",
 >              "/~Max.Neunhoeffer/index.html",rec(),false,false);;
-gap> RecFields(r);
+gap> RecNames(r);
 [ "protoversion", "statuscode", "status", "header", "body", "closed" ]
 gap> r.status;
 "OK"

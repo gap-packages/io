@@ -981,7 +981,7 @@ InstallGlobalFunction( IO_MakeEnvList, function(r)
   # components of r in the form "key=value".
   local k,l;
   l := [];
-  for k in RecFields(r) do
+  for k in RecNames(r) do
     Add(l,Concatenation(k,"=",r.(k)));
   od;
   return l;
