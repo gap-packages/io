@@ -1,5 +1,8 @@
 This file describes changes in the IO package.
 
+4.x.y (YYYY-MM-DD)
+  - Fix error handling in ChangeDirectoryCurrent
+
 4.4.6 (2016-03-08)
   - Remove support for (un)pickling SuPeRfail
   - Add wrappers for mkstemp and mkdtemp

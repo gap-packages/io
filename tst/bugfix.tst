@@ -45,3 +45,10 @@ gap> IO_WriteNonBlocking(f, s2, 1, 2^17+1);
 131073
 gap> IO_Close(f);
 true
+
+# Using ChangeDirectoryCurrent on invalid path should
+# return fail, not trigger an internal error
+gap> IO_chdir("/foo/bar/this_dir_hopefuly does not EXIST");
+fail
+gap> ChangeDirectoryCurrent("/foo/bar/this_dir_hopefuly does not EXIST");
+fail
