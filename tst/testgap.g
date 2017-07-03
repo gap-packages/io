@@ -8,6 +8,7 @@ files := ["buffered.g", "compression.g", "http.g", "pickle.g"];
 for i in [1..50] do
   Print("Iteration #", i, "\n");
   for f in files do
+    Print("Info:", i, ":", f, "\n");
      Read(Filename(d[1], f));
   od;
 od;
