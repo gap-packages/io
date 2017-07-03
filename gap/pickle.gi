@@ -28,7 +28,7 @@ InstallGlobalFunction( IO_AddToPickled,
   function( ob )
     local id,pos;
     IO_PICKLECACHE.depth := IO_PICKLECACHE.depth + 1;
-    id := IO_MasterPointerNumber(ob);
+    id := MASTER_POINTER_NUMBER(ob);
     pos := PositionSorted( IO_PICKLECACHE.ids, id );
     if pos <= Length(IO_PICKLECACHE.ids) and IO_PICKLECACHE.ids[pos] = id then
         return IO_PICKLECACHE.nrs[pos];
@@ -36,7 +36,7 @@ InstallGlobalFunction( IO_AddToPickled,
         Add(IO_PICKLECACHE.ids,id,pos);
         Add(IO_PICKLECACHE.nrs,Length(IO_PICKLECACHE.ids),pos);
         # Store a reference here so the result of
-        # IO_MasterPointerNumber will not get reused by another object.
+        # MASTER_POINTER_NUMBER will not get reused by another object.
         Add(IO_PICKLECACHE.obs,ob);
         return false;
     fi;
@@ -45,7 +45,7 @@ InstallGlobalFunction( IO_AddToPickled,
 InstallGlobalFunction( IO_IsAlreadyPickled,
   function( ob )
     local id,pos;
-    id := IO_MasterPointerNumber(ob);
+    id := MASTER_POINTER_NUMBER(ob);
     pos := PositionSorted( IO_PICKLECACHE.ids, id );
     if pos <= Length(IO_PICKLECACHE.ids) and IO_PICKLECACHE.ids[pos] = id then
         return IO_PICKLECACHE.nrs[pos];

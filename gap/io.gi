@@ -180,11 +180,11 @@ end );
 # We use the fact that Files objects can't be copied (as they contain the cache)
 InstallMethod( \=, "for two IsFile objects",
   [ IsFile, IsFile ],
-  function(a,b) return IO_MasterPointerNumber(a) < IO_MasterPointerNumber(b); end );
+  function(a,b) return MASTER_POINTER_NUMBER(a) < MASTER_POINTER_NUMBER(b); end );
 
 InstallMethod( \<, "for two IsFile objects",
   [ IsFile, IsFile ],
-  function(a,b) return IO_MasterPointerNumber(a) < IO_MasterPointerNumber(b); end );
+  function(a,b) return MASTER_POINTER_NUMBER(a) < MASTER_POINTER_NUMBER(b); end );
 
 # A nice View method:
 InstallMethod( ViewObj, "for IsFile objects", [IsFile],

@@ -6,7 +6,7 @@ StdGlobalVarsIO := Set(
   "IO_FlushNonBlocking", "IO_GenericObjectPickler",
   "IO_GenericObjectUnpickler", "IO_GetFD", "IO_GetWBuf", "IO_HasData",
   "IO_InstallSIGCHLDHandler", "IO_ListDir", "IO_MakeEnvList",
-  "IO_MakeIPAddressPort", "IO_MasterPointerNumber", "IO_Nothing", "IO_OK",
+  "IO_MakeIPAddressPort", "IO_Nothing", "IO_OK",
   "IO_PICKLECACHE", "IO_Pickle", "IO_PickleByString", "IO_PipeThrough",
   "IO_PipeThroughWithError", "IO_Popen", "IO_Popen2", "IO_Popen3", "IO_Read",
   "IO_ReadAttribute", "IO_ReadBlock", "IO_ReadLine", "IO_ReadLines",
