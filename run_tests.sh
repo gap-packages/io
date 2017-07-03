@@ -1,41 +1,51 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-# Maybe there's a better way to do this
 set -e
 
 mkdir tmp
 cd tmp
 
-case $1 in
-    gap)
-        git clone --depth=50 https://github.com/gap-system/gap.git gap
-        cd gap  
-        ./configure --with-gmp=system
-        make
-        mkdir pkg
-        cd pkg
-        wget ftp://ftp.gap-system.org/pub/gap/gap47/tar.gz/packages/GAPDoc-1.5.1.tar.gz
-        tar xvzf GAPDoc-1.5.1.tar.gz 2> /dev/null
-        ln -s ../../.. io
-        cd io
-        sh autogen.sh
-        ./configure
-        make
-        cd ../..
-        ;;
-    hpcgap)
-        git clone --depth=50 -b hpcgap-default https://github.com/gap-system/gap.git gap
-        cd gap
-        git clone --depth=50 https://github.com/gap-system/ward extern/ward
-        ./make.hpc WARD="extern/ward" ZMQ=no GMP=system
-        cd pkg
-        ln -s ../../.. io
-        cd io
-        sh autogen.sh
-        ./configure CFLAGS="`cat ../io/tmp/gap/build/cflags`"
-        make
-        cd ../..
-    ;;
-esac
-echo "Read(\"pkg/io/tst/testall.g\"); quit;" | sh bin/gap.sh | tee testlog.txt | grep --colour=always -E "########> Diff|$"
-( ! grep "########> Diff" testlog.txt )
+# configure and make GAP
+git clone --depth=1 https://github.com/gap-system/gap.git gap
+cd gap
+GAPROOT=`pwd`
+./autogen.sh
+
+if [[ $1 == hpcgap ]]
+then
+    # for HPC-GAP we install ward
+    git clone https://github.com/gap-system/ward
+    cd ward
+    CFLAGS= LDFLAGS= ./build.sh
+    cd ..
+    CONFIGFLAGS="$CONFIGFLAGS --enable-hpcgap"
+fi
+
+# configure and make GAP
+./configure $CONFIGFLAGS
+make -j4
+
+# download packages; instruct wget to retry several times if the
+# connection is refused, to work around intermittent failures
+make bootstrap-pkg-full WGET="wget -N --no-check-certificate --tries=5 --waitretry=5 --retry-connrefused"
+
+if [[ $1 == hpcgap ]]
+then
+  # FIXME/HACK: Add flags so that Boehm GC and libatomic headers are found
+  CPPFLAGS="-I$GAPROOT/extern/install/gc/include -I$GAPROOT/extern/install/libatomic_ops/include $CPPFLAGS"
+  export CPPFLAGS
+fi
+
+
+# Build this package (IO)
+cd pkg
+rm -rf io*
+ln -s ../../.. io
+cd io
+sh autogen.sh
+./configure
+make
+cd ../..
+
+# Run actual tests
+echo "Read(\"pkg/io/tst/testall.g\"); QUIT_GAP(0);" | sh bin/gap.sh --quitonbreak -q
