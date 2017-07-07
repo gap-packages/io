@@ -346,6 +346,9 @@ Obj FuncIO_WaitPid(Obj self,Obj pid,Obj wait)
   tmp = NEW_PREC(0);
   AssPRec(tmp,RNamName("pid"),INTOBJ_INT(pids[pos]));
   AssPRec(tmp,RNamName("status"),INTOBJ_INT(stats[pos]));
+  AssPRec(tmp,RNamName("WIFEXITED"), INTOBJ_INT(WIFEXITED(stats[pos])));
+  AssPRec(tmp,RNamName("WEXITSTATUS"), INTOBJ_INT(WEXITSTATUS(stats[pos])));
+
   /* Dequeue element: */
   removeSignaledPidByPos(pos);
   /* Reinstantiate our handler: */
