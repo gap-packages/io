@@ -997,7 +997,6 @@ InstallGlobalFunction( IO_CloseAllFDs, function(exceptions)
       IO_close(i);
     fi;
   od;
-  return;
 end );
 
 InstallGlobalFunction( IO_ForkExecWithFDs,
@@ -1036,8 +1035,7 @@ InstallGlobalFunction( IO_Popen, function(arg)
   # The File object will have the Attribute "ProcessID" set to the process ID.
   local path,argv,mode,bufsize,fil,pid,pipe;
   if Length(arg) < 3 then
-      Print("Usage: IO_Popen(path,arg,mode,[bufsize])\n");
-      return;
+      Error("Usage: IO_Popen(path,arg,mode,[bufsize])");
   fi;
   path := arg[1];
   argv := arg[2];
@@ -1096,8 +1094,7 @@ InstallGlobalFunction( IO_Popen2, function(arg)
   # The process will usually die, when one of the pipes is closed.
   local path,argv,rbufsize,wbufsize,pid,pipe,pipe2,stdin,stdout;
   if Length(arg) < 2 then
-      Print("Usage: IO_Popen2(path,argv,[rbufsize,wbufsize])\n");
-      return;
+      Error("Usage: IO_Popen2(path,argv,[rbufsize,wbufsize])");
   fi;
   path := arg[1];
   argv := arg[2];
@@ -1150,8 +1147,7 @@ InstallGlobalFunction( IO_Popen3, function(arg)
   local path,argv,rbufsize,wbufsize,ebufsize,pid,pipe,pipe2,pipe3,
         stderr,stdin,stdout;
   if Length(arg) < 2 then
-      Print("Usage: IO_Popen3(path,argv,[rbufsize,wbufsize,ebufsize])\n");
-      return;
+      Error("Usage: IO_Popen3(path,argv,[rbufsize,wbufsize,ebufsize])");
   fi;
   path := arg[1];
   argv := arg[2];
