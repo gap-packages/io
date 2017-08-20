@@ -30,7 +30,7 @@ with   <C>LoadPackage("IO");</C>   before  its   functions   become
 available.<P/>
 
 For bug reports, feature requests and suggestions, please use our
-<URL Text="issue tracker">https://github.com/neunhoef/io/issues</URL>.
+<URL Text="issue tracker">https://github.com/gap-packages/io/issues</URL>.
 
 </Chapter>
 
