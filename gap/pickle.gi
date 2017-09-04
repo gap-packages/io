@@ -1224,6 +1224,95 @@ IO_Unpicklers.FFIE :=
     return GF(p,d);
   end;
 
+InstallMethod( IO_Pickle, "for a character table",
+    [ IsFile, IsCharacterTable ],
+    function( f, tbl )
+    local irr, ccl, cclg, g;
+
+    if HasIrr( tbl ) then
+      irr:= List( Irr( tbl ), ValuesOfClassFunction );
+    else
+      irr:= fail;
+    fi;
+
+    ccl:= fail;
+    cclg:= fail;
+    if HasConjugacyClasses( tbl ) then
+      ccl:= List( ConjugacyClasses( tbl ), Representative );
+    fi;
+    if HasUnderlyingGroup( tbl ) then
+      g:= UnderlyingGroup( tbl );
+      if HasConjugacyClasses( g ) then
+        cclg:= List( ConjugacyClasses( g ), Representative );
+      fi;
+    fi;
+
+    return IO_GenericObjectPickler( f, "CTBL",
+               [ irr, UnderlyingCharacteristic( tbl ), ccl, cclg ], tbl,
+               [ AutomorphismsOfTable, CharacterDegrees, CharacterNames,
+                 CharacterParameters, ClassNames, ClassParameters,
+                 ClassPermutation, ComputedClassFusions, ComputedPowerMaps,
+                 FactorsOfDirectProduct, IdentificationOfConjugacyClasses,
+                 Identifier, InfoText, NamesOfFusionSources,
+                 OrdersClassRepresentatives, OrdinaryCharacterTable,
+                 SizesCentralizers, SizesConjugacyClasses,
+                 SourceOfIsoclinicTable, UnderlyingGroup ],
+               [ IsLibraryCharacterTableRep ],
+               [] );
+    end );
+
+IO_Unpicklers.CTBL:= function( f )
+    local irr, p, ccl, cclg, tbl, g;
+
+    irr:= IO_Unpickle( f );
+    if irr = IO_Error then
+      return IO_Error;
+    fi;
+    p:= IO_Unpickle( f );
+    if p = IO_Error then
+      return IO_Error;
+    fi;
+    ccl:= IO_Unpickle( f );
+    if ccl = IO_Error then
+      return IO_Error;
+    fi;
+    cclg:= IO_Unpickle( f );
+    if cclg = IO_Error then
+      return IO_Error;
+    fi;
+    tbl:= rec( UnderlyingCharacteristic:= p );
+    ConvertToLibraryCharacterTableNC( tbl );
+
+    IO_GenericObjectUnpickler( f, tbl,
+         [ AutomorphismsOfTable, CharacterDegrees, CharacterNames,
+           CharacterParameters, ClassNames, ClassParameters,
+           ClassPermutation, ComputedClassFusions, ComputedPowerMaps,
+           FactorsOfDirectProduct, IdentificationOfConjugacyClasses,
+           Identifier, InfoText, NamesOfFusionSources,
+           OrdersClassRepresentatives, OrdinaryCharacterTable,
+           SizesCentralizers, SizesConjugacyClasses,
+           SourceOfIsoclinicTable, UnderlyingGroup ],
+         [ IsLibraryCharacterTableRep ] );
+
+    if HasUnderlyingGroup( tbl ) then
+      g:= UnderlyingGroup( tbl );
+      if ccl <> fail then
+        SetConjugacyClasses( tbl, List( ccl, x -> ConjugacyClass( g, x ) ) );
+      fi;
+      if cclg <> fail then
+        SetConjugacyClasses( g, List( cclg, x -> ConjugacyClass( g, x ) ) );
+      fi;
+    fi;
+
+    # Do not set this earlier,
+    # because it may trigger the computation of conjugacy classes.
+    if irr <> fail then
+      SetIrr( tbl, List( irr, x -> Character( tbl, x ) ) );
+    fi;
+
+    return tbl;
+  end;
+
 ##
 ##  This program is free software: you can redistribute it and/or modify
 ##  it under the terms of the GNU General Public License as published by

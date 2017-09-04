@@ -220,3 +220,17 @@ elif not IsRangeRep( rng ) then
   Error( 38 );
 fi;
 
+g:= SymmetricGroup( 6 );;  tbl:= CharacterTable( g );;  Irr( tbl );;
+tbl2:= IO_Unpickle( IO_Pickle( tbl ) );;
+if not ( HasIrr( tbl ) and HasIrr( tbl2 ) ) then
+  Error( 39 );
+elif Irr( tbl ) <> Irr( tbl2 ) then
+  Error( 40 );
+elif not ( HasConjugacyClasses( UnderlyingGroup( tbl ) )
+           and HasConjugacyClasses( UnderlyingGroup( tbl2 ) ) ) then
+  Error( 41 );
+elif ConjugacyClasses( UnderlyingGroup( tbl ) )
+     <> ConjugacyClasses( UnderlyingGroup( tbl2 ) ) then
+  Error( 42 );
+fi;
+
