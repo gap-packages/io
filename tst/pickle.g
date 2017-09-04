@@ -212,3 +212,11 @@ if List(floatlist, x -> ExtRepOfObj(x)) <>
    List(pickledlist, x -> ExtRepOfObj(x)) then
     Error(36);
 fi;
+
+rng:= IO_Unpickle( IO_Pickle( [ 1 .. 1000 ] ) );;
+if rng <> [ 1 .. 1000 ] then
+  Error( 37 );
+elif not IsRangeRep( rng ) then
+  Error( 38 );
+fi;
+

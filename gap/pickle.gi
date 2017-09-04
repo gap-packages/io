@@ -661,6 +661,68 @@ IO_Unpicklers.SREF :=
     return IO_PICKLECACHE.obs[nr];
   end;
 
+InstallMethod( IO_Pickle, "for a range",
+  [ IsFile, IsList and IsRangeRep ],
+  function( f, rng )
+    local tag;
+
+    # Do not deal with empty or trivial ranges
+    # (if they ever get the filters in question,
+    # note that 'ConvertToRangeRep' does not set it).
+    if Length( rng ) < 2 then
+      TryNextMethod();
+    fi;
+
+    if IsMutable( rng ) then
+      tag:= "MRNG";
+    else
+      tag:= "IRNG";
+    fi;
+
+    if IO_Write( f, tag ) = fail then
+      return IO_Error;
+    elif IO_WriteSmallInt( f, rng[1] ) = IO_Error then
+      return IO_Error;
+    elif IO_WriteSmallInt( f, rng[2] ) = IO_Error then
+      return IO_Error;
+    elif IO_WriteSmallInt( f, rng[ Length( rng ) ] ) = IO_Error then
+      return IO_Error;
+    fi;
+
+    return IO_OK;
+  end );
+
+IO_Unpicklers.MRNG:= function( f )
+    local first, second, last;
+
+    first:= IO_ReadSmallInt( f );
+    if first = IO_Error then
+      return IO_Error;
+    fi;
+    second:= IO_ReadSmallInt( f );
+    if second = IO_Error then
+      return IO_Error;
+    fi;
+    last:= IO_ReadSmallInt( f );
+    if last = IO_Error then
+      return IO_Error;
+    fi;
+
+    return [ first, second .. last ];
+  end;
+
+IO_Unpicklers.IRNG:= function( f )
+    local l;
+
+    l:= IO_Unpicklers.MRNG( f );
+    if l = IO_Error then
+      return IO_Error;
+    fi;
+    MakeImmutable( l );
+
+    return l;
+  end;
+
 InstallMethod( IO_Pickle, "for a record",
   [ IsFile, IsRecord ],
   function( f, r )

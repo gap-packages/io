@@ -51,6 +51,7 @@ BindGlobal ("IO_Unpicklers", rec() );
 # ILIS  an immutable list
 # INTG  an integer
 # IREC  an immutable record
+# IRNG  an immutable range
 # ISTR  an immutable string
 # MF2M  a mutable compressed GF2 matrix
 # MF2V  a mutable compressed GF2 vector
@@ -58,6 +59,7 @@ BindGlobal ("IO_Unpicklers", rec() );
 # MF8V  a mutable compressed 8Bit vector
 # MLIS  a mutable list
 # MREC  a mutable record
+# MRNG  a mutable range
 # MSTR  a mutable string
 # OPER  a GAP operation, only its name is pickled
 # PERM  a permutation
