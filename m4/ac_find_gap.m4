@@ -145,7 +145,7 @@ AC_DEFUN([AC_FIND_GAP],
   fi
 
   ARCHPATH=$GAPROOT/bin/$GAPARCH
-  GAP_CPPFLAGS="-I$GAPROOT -I$ARCHPATH"
+  GAP_CPPFLAGS="-I$GAPROOT -I$GAPROOT/src -I$ARCHPATH"
 
   AC_MSG_CHECKING([for GAP's gmp.h location])
   if test -r "$ARCHPATH/extern/gmp/include/gmp.h"; then
