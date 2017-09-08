@@ -1,7 +1,10 @@
 This file describes changes in the IO package.
 
 4.x.y (YYYY-MM-DD)
+  - Add support for (un)pickling ranges and character tables
+    (contributed by Thomas Breuer)
   - Fix error handling in ChangeDirectoryCurrent
+  - Fix link to issue tracker in the manual
 
 4.4.6 (2016-03-08)
   - Remove support for (un)pickling SuPeRfail
