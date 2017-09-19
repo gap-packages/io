@@ -47,14 +47,16 @@ PrintPackageList := function(stream, pkgs)
 end;
 
 GeneratePackageYML:=function(pkg)
-    local stream, authors, maintainers, formats, f;
+    local stream, authors, maintainers, contributors, formats, f, tmp;
+
     stream := OutputTextFile("_data/package.yml", false);
     SetPrintFormattingStatus(stream, false);
     
     AppendTo(stream, "name: ", pkg.PackageName, "\n");
     AppendTo(stream, "version: ", pkg.Version, "\n");
     AppendTo(stream, "date: ", pkg.Date, "\n"); # TODO: convert to ISO 8601?
-    AppendTo(stream, "description: ", pkg.Subtitle, "\n");
+    AppendTo(stream, "description: |\n");
+    AppendTo(stream, "    ", pkg.Subtitle, "\n");
     AppendTo(stream, "\n");
 
     authors := Filtered(pkg.Persons, p -> p.IsAuthor);
@@ -67,6 +69,12 @@ GeneratePackageYML:=function(pkg)
     if Length(maintainers) > 0 then
         AppendTo(stream, "maintainers:\n");
         PrintPeopleList(stream, maintainers);
+    fi;
+
+    contributors := Filtered(pkg.Persons, p -> not p.IsMaintainer and not p.IsAuthor);
+    if Length(contributors) > 0 then
+        AppendTo(stream, "contributors:\n");
+        PrintPeopleList(stream, contributors);
     fi;
 
     if IsBound(pkg.Dependencies.GAP) then
@@ -86,7 +94,9 @@ GeneratePackageYML:=function(pkg)
     fi;
 
     AppendTo(stream, "www: ", pkg.PackageWWWHome, "\n");
-    AppendTo(stream, "readme: ", pkg.README_URL, "\n");
+    tmp := SplitString(pkg.README_URL,"/");
+    tmp := tmp[Length(tmp)];  # extract README filename (typically "README" or "README.md")
+    AppendTo(stream, "readme: ", tmp, "\n");
     AppendTo(stream, "packageinfo: ", pkg.PackageInfoURL, "\n");
     if IsBound(pkg.GithubWWW) then
         AppendTo(stream, "github: ", pkg.GithubWWW, "\n");
@@ -103,7 +113,8 @@ GeneratePackageYML:=function(pkg)
         AppendTo(stream, "\n");
     fi;
 
-    AppendTo(stream, "abstract: ", pkg.AbstractHTML, "\n\n");
+    AppendTo(stream, "abstract: |\n");
+    AppendTo(stream, "    ", pkg.AbstractHTML, "\n\n");
 
     AppendTo(stream, "status: ", pkg.Status, "\n");
     AppendTo(stream, "doc-html: ", pkg.PackageDoc.HTMLStart, "\n");

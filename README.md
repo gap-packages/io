@@ -14,24 +14,37 @@ following these instructions.
 
 1. Go into your clone of your package repository.
 
-2. In there, create a fresh clone of your package in a subdirectory `gh-pages`:
+2. Setup a `gh-pages` branch in a `gh-pages` subdirectory.
 
-   ```
-   git clone https://github.com/USERNAME/REPOSITORY gh-pages
-   ```
+   Users with a recent enough git version (recommended is >= 2.11)
+   can do this using a "worktree", via the following commands:
 
-3. Change into the fresh clone and add a new remote pointing to the
-   [GitHubPagesForGAP repository](https://github.com/fingolfin/GitHubPagesForGAP):
-
-   ```
-   cd gh-pages
-   git remote add gh-gap https://github.com/fingolfin/GitHubPagesForGAP
+   ```sh
+   # Add a new remote pointing to the GitHubPagesForGAP repository
+   git remote add gh-gap https://github.com/gap-system/GitHubPagesForGAP
    git fetch gh-gap
+
+   # Create a fresh gh-pages branch from the new remote
+   git branch gh-pages gh-gap/gh-pages --no-track
+
+   # Create a new worktree and change into it
+   git worktree add gh-pages gh-pages
+   cd gh-pages
    ```
 
-4. Create a fresh gh-pages branch from the new remote:
+   Everybody else should instead do the following, with the URL
+   in the initial clone command suitably adjusted:
 
-   ```
+   ```sh
+   # Create a fresh clone of your repository, and change into it
+   git clone https://github.com/USERNAME/REPOSITORY gh-pages
+   cd gh-pages
+
+   # Add a new remote pointing to the GitHubPagesForGAP repository
+   git remote add gh-gap https://github.com/gap-system/GitHubPagesForGAP
+   git fetch gh-gap
+
+   # Create a fresh gh-pages branch from the new remote
    git checkout -b gh-pages gh-gap/gh-pages --no-track
    ```
 
@@ -60,7 +73,7 @@ following these instructions.
    ```
 
 That's it. You can now see your new package website under
-http://USERNAME.github.io/REPOSITORY/ (of course after
+https://USERNAME.github.io/REPOSITORY/ (of course after
 adjusting USERNAME and REPOSITORY suitably).
 
 
@@ -130,7 +143,7 @@ it manually. The steps for doing it are quite similar to the above:
    ```
 
 A few seconds after you have done this, your changes will be online
-under http://USERNAME.github.io/REPOSITORY/ .
+under https://USERNAME.github.io/REPOSITORY/ .
 
 
 ## Updating to a newer version of GitHubPagesForGAP
@@ -144,55 +157,66 @@ much you tweaked the site after initially cloning GitHubPagesForGAP.
    Make sure that there are no uncommitted changes, as they will be lost
    when following these instructions.
 
-2. Fetch changes made to GitHubPagesForGAP.
+2. Make sure the `gh-gap` remote exists and has the correct URL. If in doubt,
+   just re-add it:
    ```
-   git fetch gh-gap
+   git remote remove gh-gap
+   git remote add gh-gap https://github.com/gap-system/GitHubPagesForGAP
    ```
 
-3. Attempt to merge these changes. This may produce multiple merge conflicts,
-   so ideally, you should be familiar with dealing with such merge conflicts.
+3. Attempt to merge the latest GitHubPagesForGAP.
    ```
    git pull gh-gap gh-pages
    ```
-   If at any point you don't know how to continue, you can abort the merge
-   process and revert to the original state by issuing this command:
+
+4. If this produced no errors and just worked, skip to the next step.
+   But it is quite likely that you will have conflicts in the file
+   `_data/package.yml`, or in your `README` or `PackageInfo.g` files.
+   These can usually be resolved by entering this:
+   ```
+   cp ../PackageInfo.g ../README* .
+   gap update.g
+   git add PackageInfo.g README* _data/package.yml
+   ```
+   If you are lucky, these were the only conflicts (check with `git status`).
+   If no merge conflicts remain, finish with this command:
+   ```
+   git commit -m "Merge gh-gap/gh-pages"
+   ```
+   If you still have merge conflicts, and don't know how to resolve them, or
+   get stuck some other way, you can abort the merge process and revert to the
+   original state by issuing this command:
    ```
    git merge --abort
    ```
 
-4. This may produce merge conflicts. Most likely you will have conflicts in
-   the file `_data/package.yml`, but these are easy to resolve as follows:
-   ```
-   gap update.g
-   git add _data/package.yml
-   ```
-   If you are lucky, this is the only conflict (check with `git status`).
-
+5. You should be done now. Don't forget to push your changes if you want them
+   to become public.
 
 
 ## Packages using GitHubPagesForGAP
 Packages using GitHubPagesForGAP include the following:
 
-* https://gap-packages.github.io/anupq
-* https://gap-packages.github.io/cvec
-* https://gap-packages.github.io/genss
-* https://gap-packages.github.io/io
-* https://gap-packages.github.io/NormalizInterface
-* https://gap-packages.github.io/nq
-* https://gap-packages.github.io/orb
-* https://gap-packages.github.io/polenta
-* https://gap-packages.github.io/recog
-* https://gap-packages.github.io/recogbase
-* https://gap-packages.github.io/SingularInterface
+* <https://gap-packages.github.io/anupq>
+* <https://gap-packages.github.io/cvec>
+* <https://gap-packages.github.io/genss>
+* <https://gap-packages.github.io/io>
+* <https://gap-packages.github.io/NormalizInterface>
+* <https://gap-packages.github.io/nq>
+* <https://gap-packages.github.io/orb>
+* <https://gap-packages.github.io/polenta>
+* <https://gap-packages.github.io/recog>
+* <https://gap-packages.github.io/recogbase>
+* <https://gap-packages.github.io/SingularInterface>
 
 
 ## Contact
 
 Please submit bug reports, suggestions for improvements and patches via
-the [issue tracker](https://github.com/fingolfin/GitHubPagesForGAP/issues).
+the [issue tracker](https://github.com/gap-system/GitHubPagesForGAP/issues).
 
 You can also contact me directly via [email](max@quendi.de).
 
 Copyright (c) 2013-2016 Max Horn
 
-[ReleaseTools]: https://github.com/fingolfin/ReleaseTools
+[ReleaseTools]: https://github.com/gap-system/ReleaseTools
