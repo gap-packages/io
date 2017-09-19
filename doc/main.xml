@@ -1681,12 +1681,12 @@ In the first case, the standard output of the
 child process will be the writing end of a pipe. A <C>File</C> object
 for reading connected to the reading end of the pipe is returned. The
 standard input and standard error of the child process will be the same
-than the calling &GAP; process. <P/>
+as in the calling &GAP; process. <P/>
 
 In the second case, the standard input of the child process will be the
 reading end of a pipe. A <C>File</C> object for writing connected to the
 writing end of the pipe is returned. The standard output and standard error
-of the child process will be the same than the calling &GAP; process. <P/>
+of the child process will be the same as in the calling &GAP; process. <P/>
 
 In case of an error, <K>fail</K> is returned. <P/>
 
@@ -1711,7 +1711,7 @@ In either case the <C>File</C> object will have the attribute
 The argument <A>path</A> must refer to an executable file in the sense
 of <Ref Func="IO_FindExecutable"/>. <P/>
 
-A new child process is started using the executable in <A>path</A>
+A new child process is started using the executable in <A>path</A>.
 The standard input and standard output of it
 are pipes. The writing end of the input pipe and the reading end of the
 output pipe are returned as <C>File</C> objects bound to two components
