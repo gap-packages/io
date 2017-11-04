@@ -12,6 +12,7 @@
 #define _GNU_SOURCE
 
 #include "src/compiled.h"          /* GAP headers                */
+#include "src/iostream.h"          /* Signal Handling            */
 
 #undef PACKAGE
 #undef PACKAGE_BUGREPORT
@@ -144,16 +145,15 @@ static int lastats = 0;            /* First unused entry */
 static int statsfull = 0;          /* Flag, whether stats FIFO full */
 static RETSIGTYPE (*oldhandler)(int whichsig) = 0;  /* the old handler */
 
-#ifdef HAVE_SIGNAL
-RETSIGTYPE IO_SIGCHLDHandler( int whichsig )
+static void IO_HandleChildSignal(int retcode, int status)
 {
-  int retcode,status;
-  /* We collect information about our child processes that have
-     terminated: */
-  do {
-    retcode = waitpid(-1, &status, WNOHANG);
-    if (retcode > 0) {   /* One of our child processes terminated */
+   if (retcode > 0) {   /* One of our child processes terminated */
         if (WIFEXITED(status) || WIFSIGNALED(status)) {
+#ifdef GAP_HasCheckChildStatusChanged
+            if (!CheckChildStatusChanged(retcode, status)) {
+                // GAP has dealt with the signal
+            } else
+#endif
             if (!statsfull) {
                 stats[lastats] = status;
                 pids[lastats++] = retcode;
@@ -163,6 +163,17 @@ RETSIGTYPE IO_SIGCHLDHandler( int whichsig )
                 Pr("#E Overflow in table of terminated processes\n",0,0);
         }
     }
+}
+
+#ifdef HAVE_SIGNAL
+RETSIGTYPE IO_SIGCHLDHandler( int whichsig )
+{
+  int retcode,status;
+  /* We collect information about our child processes that have
+     terminated: */
+  do {
+    retcode = waitpid(-1, &status, WNOHANG);
+    IO_HandleChildSignal(retcode, status);
   } while (retcode > 0);
 
   signal(SIGCHLD, IO_SIGCHLDHandler);
@@ -234,18 +245,7 @@ Obj FuncIO_WaitPid(Obj self,Obj pid,Obj wait)
           retcode = waitpid(-1, &status, 0);
       else
           retcode = waitpid(-1, &status, WNOHANG);
-      if (retcode > 0) {   /* One of our child processes terminated */
-          if (WIFEXITED(status) || WIFSIGNALED(status)) {
-              /* Append it to the queue: */
-              if (!statsfull) {
-                  stats[lastats] = status;
-                  pids[lastats++] = retcode;
-                  if (lastats >= maxstats) lastats = 0;
-                  if (lastats == fistats) statsfull = 1;
-              } else
-                  Pr("#E Overflow in table of terminated processes\n",0,0);
-          }
-      }
+      IO_HandleChildSignal(retcode, status);
       reallytried = 1;  /* Do not try again. */
   } while (1);  /* Left by break */
   tmp = NEW_PREC(0);
