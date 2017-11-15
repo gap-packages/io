@@ -150,7 +150,7 @@ static void IO_HandleChildSignal(int retcode, int status)
    if (retcode > 0) {   /* One of our child processes terminated */
         if (WIFEXITED(status) || WIFSIGNALED(status)) {
 #ifdef GAP_HasCheckChildStatusChanged
-            if (!CheckChildStatusChanged(retcode, status)) {
+            if (CheckChildStatusChanged(retcode, status)) {
                 // GAP has dealt with the signal
             } else
 #endif
