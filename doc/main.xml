@@ -539,15 +539,11 @@ For details see <Q><C>man 2 fchown</C></Q>.
 <Returns> an integer or <K>fail</K> </Returns>
 <Description>
 Forks off a child process, which is an identical copy.
-For details see <Q><C>man 2 fork</C></Q>. Note that if you want to use the
+For details see <Q><C>man 2 fork</C></Q>.
+Note that <Ref Func="IO_fork"/> activates our SIGCHLD handler (see <Ref
+Func="IO_InstallSIGCHLDHandler"/>). Note that you must use the
 <Ref Func="IO_WaitPid"/> function to wait or check for the termination of
-child processes, you have to activate the SIGCHLD handler for this
-package beforehand by using the function <Ref
-Func="IO_InstallSIGCHLDHandler"/>. Note further that after that you cannot use
-the function <Ref Func="InputOutputLocalProcess" BookName="ref"/>
-any more, since its SIGCHLD handler does not work any more. To switch
-back to that functionality use the function <Ref
-Func="IO_RestoreSIGCHLDHandler"/>.
+child processes.
 </Description>
 </ManSection>
 
@@ -1094,7 +1090,10 @@ as a list of strings of the form <Q>key=value</Q>.
 Installs our SIGCHLD handler. This functions works as an idempotent. That
 is, calling it twice does exactly the same as calling it once. It returns
 <K>true</K> when it is called for the first time since then a pointer to
-the old signal handler is stored in a global variable.
+the old signal handler is stored in a global variable. This function is
+automatically called by any function which creates new processes,
+so never needs to be called unless the handler was explictly disabled with
+<Ref Func="IO_RestoreSIGCHLDHandler"/>
 See <Ref Func="IO_fork"/>.
 </Description>
 </ManSection>
