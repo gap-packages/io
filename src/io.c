@@ -115,12 +115,6 @@ void __stack_chk_fail_local (void)
  *
  * and perhaps:
  *   socketpair, getsockname, poll, setrlimit, getrlimit, getrusage, ulimit,
- * NOTE: There are some problems with respect to signal handling,
- *       because the code for InputOutputLocalProcess and things
- *       has a signal handler for SIGCHLD, which interferes with
- *       things. This is solved in the sense that our SIGCHLD handler
- *       can be switched on and off, thereby providing support for
- *       either InputOutputLocalProcess *or* fork/exec and friends.
  * not for the moment (portability or implementation problems):
  *   remove, scandir, ioctl? (absolutely unportable, as it seems),
  *   fcntl? (for file locking purposes), recvmsg, sendmsg,
@@ -1451,6 +1445,7 @@ Obj FuncIO_select(Obj self, Obj inlist, Obj outlist, Obj exclist,
 Obj FuncIO_fork(Obj self)
 {
   int res;
+  FuncIO_InstallSIGCHLDHandler(0);
   res = fork();
   if (res == -1) {
       SySetErrorNo();
