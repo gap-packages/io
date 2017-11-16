@@ -1,7 +1,6 @@
 # An example using fork:
 
 LoadPackage("io");
-IO_InstallSIGCHLDHandler();    # install correct signal handler
 
 pid := IO_fork();
 if pid < 0 then

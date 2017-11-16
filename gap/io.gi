@@ -1006,7 +1006,6 @@ function(path,argv,stdinfd,stdoutfd,stderrfd)
   # standard output and standard error of the child process respectively.
   # It installs our signal handler
   local pid;
-  IO_InstallSIGCHLDHandler();   # to be able to use IO_WaidPID
   pid := IO_fork();
   if pid < 0 then return fail; fi;
   if pid = 0 then   # the child
@@ -1049,7 +1048,6 @@ InstallGlobalFunction( IO_Popen, function(arg)
   if path = fail then
       Error("Popen: <path> must refer to an executable file.");
   fi;
-  IO_InstallSIGCHLDHandler();   # to be able to use IO_WaidPID
   if mode = "r" then
       pipe := IO_pipe(); if pipe = fail then return fail; fi;
       pid := IO_ForkExecWithFDs(path,argv,0,pipe.towrite,2);
@@ -1109,7 +1107,6 @@ InstallGlobalFunction( IO_Popen2, function(arg)
   if path = fail then
       Error("Popen2: <path> must refer to an executable file.");
   fi;
-  IO_InstallSIGCHLDHandler();   # to be able to use IO_WaidPID
   pipe := IO_pipe(); if pipe = fail then return fail; fi;
   pipe2 := IO_pipe();
   if pipe2 = fail then
@@ -1164,7 +1161,6 @@ InstallGlobalFunction( IO_Popen3, function(arg)
   if path = fail then
       Error("Popen3: <path> must refer to an executable file.");
   fi;
-  IO_InstallSIGCHLDHandler();   # to be able to use IO_WaidPID
   pipe := IO_pipe(); if pipe = fail then return fail; fi;
   pipe2 := IO_pipe();
   if pipe2 = fail then
@@ -1267,7 +1263,6 @@ function( progs, infd, outfd, switcherror )
       Add(pipes,pipe);
   od;
 
-  IO_InstallSIGCHLDHandler();   # to be able to use IO_WaidPID
 
   pids := 0*[1..Length(progs)];
   for i in [1..Length(progs)] do
