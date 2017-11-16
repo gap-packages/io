@@ -1,10 +1,13 @@
 This file describes changes in the IO package.
 
-4.x.y (YYYY-MM-DD)
+4.5.0 (2017-11-15)
   - Add support for (un)pickling ranges and character tables
     (contributed by Thomas Breuer)
+  - Compatible with GAP 4.9
   - Fix error handling in ChangeDirectoryCurrent
   - Fix link to issue tracker in the manual
+  - Fix building the documentation on case sensitive file systems
+  - Remove undocumented function IO_MasterPointerNumber
 
 4.4.6 (2016-03-08)
   - Remove support for (un)pickling SuPeRfail
