@@ -1,5 +1,4 @@
 LoadPackage("IO");
-IO_InstallSIGCHLDHandler();
 d := DirectoriesPackageLibrary("IO", "tst");
 
 # Too many things in this directory, we'll just list the tests we want to run
