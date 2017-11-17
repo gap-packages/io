@@ -21,4 +21,4 @@ y1 := IO_Popen(sleep, ["3600"],"r");
 y2 := IO_Popen(sleep, ["3600"],"w");
 y3 := IO_Popen2(sleep, ["3600"]);
 y4 := IO_Popen3(sleep, ["3600"]);
-Print("trying to exit...");
+Print("trying to exit...\n");
