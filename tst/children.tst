@@ -1,6 +1,13 @@
+# the check.pl script only exists in GAP 4.9 and later
 gap> d := DirectoryCurrent();;
 gap> scriptdir := DirectoriesLibrary( "tst/teststandard/processes/" );;
-gap> checkpl := Filename(scriptdir, "check.pl");;
+gap> if scriptdir <> fail then
+>   checkpl := Filename(scriptdir, "check.pl");
+> else
+>   checkpl := fail;
+> fi;
+
+#
 gap> runChild := function(ms, ignoresignals, useio)
 >    local signal;
 >    if ignoresignals then signal := "1"; else signal := "0"; fi;
