@@ -23,7 +23,6 @@ DoParallelByFork := function(jobs,opt)
                           "jobs is [func,arglist{,func,arglist})"));
       return fail;
   fi;
-  IO_InstallSIGCHLDHandler();
   for n in RecNames(DoParallelOptions) do
       if not(IsBound(opt.(n))) then opt.(n) := DoParallelOptions.(n); fi;
   od;

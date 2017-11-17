@@ -45,7 +45,6 @@ InstallMethod(BackgroundJobByFork, "for a function, a list and a record",
   [IsFunction, IsObject, IsRecord],
   function(fun, args, opt)
     local j, n;
-    IO_InstallSIGCHLDHandler();
     for n in RecNames(BackgroundJobByForkOptions) do
         if not(IsBound(opt.(n))) then
             opt.(n) := BackgroundJobByForkOptions.(n);
