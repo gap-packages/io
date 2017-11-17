@@ -543,7 +543,7 @@ For details see <Q><C>man 2 fork</C></Q>.
 Note that <Ref Func="IO_fork"/> activates our SIGCHLD handler (see <Ref
 Func="IO_InstallSIGCHLDHandler"/>). Note that you must use the
 <Ref Func="IO_WaitPid"/> function to wait or check for the termination of
-child processes.
+child processes, or call <Ref Func="IO_IgnorePid"/> to ignore the child. 
 </Description>
 </ManSection>
 
@@ -1033,7 +1033,21 @@ describing PID and exit status. The second argument <A>wait</A> must
 be either <K>true</K> or <K>false</K>. In the first case, the call
 blocks until new information about a terminated child process is
 available. In the second case no such waiting is performed, the
-call returns immediately. See <Ref Func="IO_fork"/>.
+call returns immediately. See <Ref Func="IO_fork"/>. If you do not
+care about the return value of the process, call
+<Ref Func="IO_IgnorePid"/>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO_IgnorePid" Arg="pid"
+      Comm="Disown a child process."/>
+<Returns> Nothing </Returns>
+<Description>
+Disowns a child process. This means there is no need to call
+<Ref Func="IO_WaitPid"/>. Calling <Ref Func="IO_WaitPid"/> on
+a pid which was previously passed to <Ref Func="IO_IgnorePid"/>
+may cause an infinite loop.F
 </Description>
 </ManSection>
 
@@ -1804,7 +1818,8 @@ Note that the SIGCHLD handler of the <Package>IO</Package> package is installed
 by this function (see <Ref Func="IO_InstallSIGCHLDHandler"/>) and that it
 lies in the responsibility of the caller to use <Ref Func="IO_WaitPid"/>
 to ask for the status information of all child processes after their
-termination.
+termination, or call <Ref Func="IO_IgnorePid"/> to ignore the return value
+of a process.
 </Description>
 </ManSection>
 
