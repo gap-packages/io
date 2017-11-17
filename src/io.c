@@ -137,6 +137,57 @@ static int pids[MAXCHLDS];         /* and this number! */
 static int fistats = 0;            /* First used entry */
 static int lastats = 0;            /* First unused entry */
 static int statsfull = 0;          /* Flag, whether stats FIFO full */
+
+
+// This function must only be called while IO's signal handler is disabled!
+static int findSignaledPid(int pidc)
+{
+    if (fistats == lastats && !statsfull) /* queue empty */
+        return -1;
+
+    int pos = fistats;
+    while (pids[pos] != pidc)
+    {
+        pos++;
+        if (pos >= maxstats) pos = 0;
+        if (pos == lastats) {
+            pos = -1;  /* None found */
+            break;
+        }
+    }
+    return pos;
+}
+
+// This function must only be called while IO's signal handler is disabled!
+static void removeSignaledPidByPos(int pos)
+{
+    if (fistats == lastats && !statsfull) /* queue empty */
+        return;
+
+    int newpos;
+    if (pos == fistats) {  /* this is the easy case: */
+        fistats++;
+        if (fistats >= maxstats) fistats = 0;
+    } else {  /* The more difficult case: */
+        do {
+            newpos = pos+1;
+            if (newpos >= maxstats) newpos = 0;
+            if (newpos == lastats) break;
+            stats[pos] = stats[newpos];
+            pids[pos] = pids[newpos];
+            pos = newpos;
+        } while(1);
+        lastats = pos;
+    }
+    statsfull = 0;
+}
+
+/* This does not have to be the same size as the array above */
+static int ignoredpids[MAXCHLDS];
+static int ignoredpidslen;
+
+static int IO_CheckForIgnoredPid( int pid );
+
 static RETSIGTYPE (*oldhandler)(int whichsig) = 0;  /* the old handler */
 
 static void IO_HandleChildSignal(int retcode, int status)
@@ -148,6 +199,9 @@ static void IO_HandleChildSignal(int retcode, int status)
                 // GAP has dealt with the signal
             } else
 #endif
+            if (IO_CheckForIgnoredPid(retcode)) {
+                // Previously registered with IO_IgnorePid
+            } else
             if (!statsfull) {
                 stats[lastats] = status;
                 pids[lastats++] = retcode;
@@ -196,10 +250,67 @@ Obj FuncIO_RestoreSIGCHLDHandler( Obj self )
   }
 }
 
+// The following function checks if a PID is marked as ignored.
+// Returns 1 if the PID was ignored, 0 otherwise.
+// This function must only be called while IO's signal handler is disabled!
+static int IO_CheckForIgnoredPid( int pid )
+{
+    int i;
+    // Make sure a new signal doesn't come in while looking at array
+    int found = 0;
+    for(i = 0; i < ignoredpidslen; ++i) {
+        if (ignoredpids[i] == pid) {
+            ignoredpids[i] = ignoredpids[ignoredpidslen - 1];
+            ignoredpidslen--;
+            found = 1;
+            break;
+        }
+    }
+    return found;
+}
+
+Obj FuncIO_IgnorePid(Obj self, Obj pid)
+{
+    Int pidc;
+    int pos;
+    if (!IS_INTOBJ(pid)) {
+        return Fail;
+    }
+    pidc = INT_INTOBJ(pid);
+
+    if (pidc < 0) {
+        return Fail;
+    }
+
+    // Make sure a new signal doesn't come in while we are changing array
+    signal(SIGCHLD, SIG_DFL);
+
+    pos = findSignaledPid(pidc);
+    if (pos != -1)
+    {
+        // This PID has already finished
+        removeSignaledPidByPos(pos);
+        signal(SIGCHLD,IO_SIGCHLDHandler);
+        return True;
+    }
+
+    if (ignoredpidslen < MAXCHLDS - 1) {
+        ignoredpids[ignoredpidslen] = pidc;
+        ignoredpidslen++;
+        signal(SIGCHLD,IO_SIGCHLDHandler);
+    }
+    else {
+        Pr("#E Overflow in table of ignored processes",0,0);
+        signal(SIGCHLD,IO_SIGCHLDHandler);
+        return Fail;
+    }
+    return True;
+}
+
 Obj FuncIO_WaitPid(Obj self,Obj pid,Obj wait)
 {
   Int pidc;
-  int pos,newpos;
+  int pos;
   Obj tmp;
   int retcode,status;
   int reallytried;
@@ -217,16 +328,7 @@ Obj FuncIO_WaitPid(Obj self,Obj pid,Obj wait)
       else if (pidc == -1)  /* queue not empty and any entry welcome */
           pos = fistats;
       else {  /* Queue nonempty, so look for matching entry: */
-          pos = fistats;
-          do {
-              if (pids[pos] == pidc) break;
-              pos++;
-              if (pos >= maxstats) pos = 0;
-              if (pos == lastats) {
-                  pos = -1;  /* None found */
-                  break;
-              }
-          } while (1);
+          pos = findSignaledPid(pidc);
       }
       if (pos != -1) break;  /* we found something! */
       if (reallytried && wait != True) {
@@ -246,21 +348,7 @@ Obj FuncIO_WaitPid(Obj self,Obj pid,Obj wait)
   AssPRec(tmp,RNamName("pid"),INTOBJ_INT(pids[pos]));
   AssPRec(tmp,RNamName("status"),INTOBJ_INT(stats[pos]));
   /* Dequeue element: */
-  if (pos == fistats) {  /* this is the easy case: */
-      fistats++;
-      if (fistats >= maxstats) fistats = 0;
-  } else {  /* The more difficult case: */
-      do {
-          newpos = pos+1;
-          if (newpos >= maxstats) newpos = 0;
-          if (newpos == lastats) break;
-          stats[pos] = stats[newpos];
-          pids[pos] = pids[newpos];
-          pos = newpos;
-      } while(1);
-      lastats = pos;
-  }
-  statsfull = 0;
+  removeSignaledPidByPos(pos);
   /* Reinstantiate our handler: */
   signal(SIGCHLD,IO_SIGCHLDHandler);
   return tmp;
@@ -2063,6 +2151,10 @@ static StructGVarFunc GVarFuncs [] = {
     FuncIO_select,
     "io.c:IO_select" },
 #endif
+
+  { "IO_IgnorePid", 1, "pid",
+    FuncIO_IgnorePid,
+    "io.c:IO_IgnorePid" },
 
 #if defined(HAVE_SIGACTION) || defined(HAVE_SIGNAL)
   { "IO_WaitPid", 2, "pid, wait",

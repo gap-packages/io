@@ -1526,6 +1526,7 @@ InstallGlobalFunction( IO_SendStringBackground, function(f,st)
       IO_Close(f);
       IO_exit(0);
   fi;
+  IO_IgnorePid(pid);
   return true;
 end );
 
