@@ -1,4 +1,4 @@
-gap> d := DirectoryCurrent();;
+gap> dir := DirectoryCurrent();;
 gap> scriptdir := DirectoriesLibrary( "tst/teststandard/processes/" );;
 gap> checkpl := Filename(scriptdir, "check.pl");;
 gap> runChild := function(ms, ignoresignals, useio)
@@ -7,7 +7,7 @@ gap> runChild := function(ms, ignoresignals, useio)
 >    if useio then
 >      return IO_Popen(checkpl, [String(time), signal], "r");
 >    else
->      return InputOutputLocalProcess(d, checkpl, [ String(time), signal]);
+>      return InputOutputLocalProcess(dir, checkpl, [ String(time), signal]);
 >    fi;
 >  end;;
 
