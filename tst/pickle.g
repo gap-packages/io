@@ -21,6 +21,13 @@ InstallMethod( String,
       String(Characteristic( x )), ")" );
     end );
 
+# HACK" for GAP before 4.9. avoid warning about
+# "computing Conway polynomial".
+old:=InfoLevel(InfoWarning);
+SetInfoLevel(InfoWarning, 0);
+Z(65537^2);
+SetInfoLevel(InfoWarning, old);
+
 
 # Build up a variety of different GAP objects in a list:
 l := [
