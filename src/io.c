@@ -653,10 +653,9 @@ Obj FuncIO_rmdir(Obj self,Obj path)
 
 
 #ifdef HAVE_STAT
-// FIXME: globals
-static struct stat ourstatbuf;
 Obj FuncIO_stat(Obj self,Obj filename)
 {
+  struct stat ourstatbuf;
   Int res;
   Obj rec;
   if (!IS_STRING(filename) || !IS_STRING_REP(filename)) {
@@ -688,10 +687,9 @@ Obj FuncIO_stat(Obj self,Obj filename)
 #endif
 
 #ifdef HAVE_FSTAT
-// FIXME: globals
-static struct stat ourfstatbuf;
 Obj FuncIO_fstat(Obj self,Obj fd)
 {
+  struct stat ourfstatbuf;
   Int res;
   Obj rec;
   if (!IS_INTOBJ(fd)) {
@@ -723,10 +721,9 @@ Obj FuncIO_fstat(Obj self,Obj fd)
 #endif
 
 #ifdef HAVE_LSTAT
-// FIXME: globals
-static struct stat ourlstatbuf;
 Obj FuncIO_lstat(Obj self,Obj filename)
 {
+  struct stat ourlstatbuf;
   Int res;
   Obj rec;
   if (!IS_STRING(filename) || !IS_STRING_REP(filename)) {
@@ -1460,13 +1457,11 @@ Obj FuncIO_fork(Obj self)
 }
 #endif
 
-// FIXME: globals
-static char *argv[1024];   /* Up to 1024 arguments */
-static char *envp[1024];   /* Up to 1024 environment entries */
-
 Obj FuncIO_execv(Obj self,Obj path,Obj Argv)
 {
     int argc;
+    char *argv[1024];   /* Up to 1024 arguments */
+    char *envp[1024];   /* Up to 1024 environment entries */
     int i;
     Obj tmp;
 
@@ -1498,12 +1493,11 @@ Obj FuncIO_execv(Obj self,Obj path,Obj Argv)
     return Fail;
 }
 
-// FIXME: globals
-extern char **environ;
-
 Obj FuncIO_execvp(Obj self,Obj file,Obj Argv)
 {
     int argc;
+    char *argv[1024];   /* Up to 1024 arguments */
+    char *envp[1024];   /* Up to 1024 environment entries */
     int i;
     Obj tmp;
 
@@ -1538,6 +1532,8 @@ Obj FuncIO_execvp(Obj self,Obj file,Obj Argv)
 Obj FuncIO_execve(Obj self,Obj path,Obj Argv,Obj Envp)
 {
     int argc;
+    char *argv[1024];   /* Up to 1024 arguments */
+    char *envp[1024];   /* Up to 1024 environment entries */
     int i;
     Obj tmp;
 
@@ -1583,6 +1579,8 @@ Obj FuncIO_execve(Obj self,Obj path,Obj Argv,Obj Envp)
     /* This will never happen: */
     return Fail;
 }
+
+extern char **environ;
 
 Obj FuncIO_environ(Obj self)
 {
