@@ -131,7 +131,6 @@ void __stack_chk_fail_local (void)
 
 #define MAXCHLDS 1024
 /* The following arrays make a FIFO structure: */
-static int maxstats = MAXCHLDS;    /* This number must always be the same */
 static int stats[MAXCHLDS];        /* than this number */
 static int pids[MAXCHLDS];         /* and this number! */
 static int fistats = 0;            /* First used entry */
@@ -149,7 +148,7 @@ static int findSignaledPid(int pidc)
     while (pids[pos] != pidc)
     {
         pos++;
-        if (pos >= maxstats) pos = 0;
+        if (pos >= MAXCHLDS) pos = 0;
         if (pos == lastats) {
             pos = -1;  /* None found */
             break;
@@ -167,11 +166,11 @@ static void removeSignaledPidByPos(int pos)
     int newpos;
     if (pos == fistats) {  /* this is the easy case: */
         fistats++;
-        if (fistats >= maxstats) fistats = 0;
+        if (fistats >= MAXCHLDS) fistats = 0;
     } else {  /* The more difficult case: */
         do {
             newpos = pos+1;
-            if (newpos >= maxstats) newpos = 0;
+            if (newpos >= MAXCHLDS) newpos = 0;
             if (newpos == lastats) break;
             stats[pos] = stats[newpos];
             pids[pos] = pids[newpos];
@@ -205,7 +204,7 @@ static void IO_HandleChildSignal(int retcode, int status)
             if (!statsfull) {
                 stats[lastats] = status;
                 pids[lastats++] = retcode;
-                if (lastats >= maxstats) lastats = 0;
+                if (lastats >= MAXCHLDS) lastats = 0;
                 if (lastats == fistats) statsfull = 1;
             } else
                 Pr("#E Overflow in table of terminated processes\n",0,0);
