@@ -1,9 +1,12 @@
 This file describes changes in the IO package.
 
-4.5.0 (2017-11-15)
+4.5.0 (2017-11-20)
+  - Compatible with GAP 4.9
   - Add support for (un)pickling ranges and character tables
     (contributed by Thomas Breuer)
-  - Compatible with GAP 4.9
+  - Add automatic call to InstallSIGCHLDHandler() when IO_Fork is used
+    directly or indirectly. As a consequence, code directly calling
+    IO_fork must now always call IO_WaitPid or the new IO_IgnorePid
   - Fix error handling in ChangeDirectoryCurrent
   - Fix link to issue tracker in the manual
   - Fix building the documentation on case sensitive file systems
