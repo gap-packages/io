@@ -1448,12 +1448,7 @@ Obj FuncIO_fork(Obj self)
       SySetErrorNo();
       return Fail;
   }
-  if (res != 0) {   /* we are the parent */
-      return INTOBJ_INT(res);
-  } else {
-      /* we are the child */
-      return INTOBJ_INT(0);
-  }
+  return INTOBJ_INT(res);
 }
 #endif
 
