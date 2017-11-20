@@ -6,10 +6,10 @@
                 [1X Bindings for low level C library I/O routines [101X
   
   
-                                     4.4.6
+                                     4.5.0
   
   
-                                   08/03/2016
+                                20 November 2017
   
   
                                  Max Neunhöffer
@@ -119,7 +119,8 @@
       3.2-60 IO_telldir
       3.2-61 IO_unlink
       3.2-62 IO_WaitPid
-      3.2-63 IO_write
+      3.2-63 IO_IgnorePid
+      3.2-64 IO_write
     3.3 [33X[0;0YFurther C level functions[133X
       3.3-1 IO_make_sockaddr_in
       3.3-2 IO_environ

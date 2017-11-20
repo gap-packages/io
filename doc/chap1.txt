@@ -16,5 +16,5 @@
   functions become available.[133X
   
   [33X[0;0YFor  bug  reports,  feature  requests  and suggestions, please use our issue
-  tracker ([7Xhttps://github.com/neunhoef/io/issues[107X).[133X
+  tracker ([7Xhttps://github.com/gap-packages/io/issues[107X).[133X
   

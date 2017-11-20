@@ -1,222 +1,64 @@
-# GitHubPagesForGAP
+# README file for the IO GAP4 package
 
-This repository can be used to quickly set up a website hosted by
-[GitHub](https://github.com/) for GAP packages using a GitHub repository.
-Specifically, this uses [GitHub pages](https://pages.github.com/)
-by adding a `gh-pages` branch to your package repository which
-contains data generated from the `PackageInfo.g` file of your package.
+To get the newest version of this GAP 4 package download the
+archive file
 
-## Initial setup
+    io-x.x.tar.gz
 
-The following instructions assume you do not already have a `gh-pages`
-branch in your repository. If you do have one, you should delete it before
-following these instructions.
+and unpack it using
 
-1. Go into your clone of your package repository.
+    gunzip io-x.x.tar.gz; tar xvf io-x.x.tar
 
-2. Setup a `gh-pages` branch in a `gh-pages` subdirectory.
+Do this in a directory called `pkg`, preferably (but not necessarily)
+in the `pkg` subdirectory of your GAP 4 installation. It creates a
+subdirectory called `io`.
 
-   Users with a recent enough git version (recommended is >= 2.11)
-   can do this using a "worktree", via the following commands:
+To install this package do
 
-   ```sh
-   # Add a new remote pointing to the GitHubPagesForGAP repository
-   git remote add gh-gap https://github.com/gap-system/GitHubPagesForGAP
-   git fetch gh-gap
+    cd io
+    ./configure
 
-   # Create a fresh gh-pages branch from the new remote
-   git branch gh-pages gh-gap/gh-pages --no-track
+If you installed io in another directory than the usual `pkg`
+subdirectory, do
 
-   # Create a new worktree and change into it
-   git worktree add gh-pages gh-pages
-   cd gh-pages
-   ```
+    ./configure --with-gaproot=path
 
-   Everybody else should instead do the following, with the URL
-   in the initial clone command suitably adjusted:
+where `path` is a path to the main GAP root directory.
+See
 
-   ```sh
-   # Create a fresh clone of your repository, and change into it
-   git clone https://github.com/USERNAME/REPOSITORY gh-pages
-   cd gh-pages
+    ./configure --help
 
-   # Add a new remote pointing to the GitHubPagesForGAP repository
-   git remote add gh-gap https://github.com/gap-system/GitHubPagesForGAP
-   git fetch gh-gap
+for further options.
 
-   # Create a fresh gh-pages branch from the new remote
-   git checkout -b gh-pages gh-gap/gh-pages --no-track
-   ```
+Afterwards call `make` to compile a binary file.
 
-5. Add in copies of your PackageInfo.g, README and manual:
+The package willnot work without this step.
 
-   ```
-   cp -f ../PackageInfo.g ../README .
-   cp -f ../doc/*.{css,html,js,txt} doc/
-   ```
+If you installed the package in another `pkg` directory than the standard
+`pkg` directory in your GAP 4 installation, then you have to add the path
+to the directory containing your `pkg` directory to GAP's list of directories.
+This can be done by starting GAP with the `-l` command line option
+followed by the name of the directory and a semicolon. Then your directory
+is prepended to the list of directories searched. Otherwise the package
+is not found by GAP. Of course, you can add this option to your GAP
+startup script.
 
-6. Now run the `update.g` GAP script. This extracts data from your
-   `PackageInfo.g` file and puts that data into `_data/package.yml`.
-   From this, the website template can populate the web pages with
-   some sensible default values.
+If you installed GAP on several architectures, you must execute the
+configure/make step for each of the architectures. You can either
+do this immediately after configuring and compiling GAP itself on
+this architecture, or alternatively (when using version 4.5 of GAP or
+newer) set the environment variable "CONFIGNAME" to the name of the
+configuration you used when compiling GAP before running "./configure".
+Note however that your compiler choice and flags (environment variables
+"CC" and "CFLAGS" need to be chosen to match the setup of the original
+GAP compilation. For example you have to specify 32-bit or 64-bit mode
+correctly!
 
-   ```
-   gap update.g
-   ```
+----------------------------------------------------------------------------
 
-7. Commit and push everything.
+Recompiling the documentation is possible by the command `gap makedoc.g`
+in the IO directory. But this should not be necessary.
 
-   ```
-   git add PackageInfo.g README doc/ _data/package.yml
-   git commit -m "Setup gh-pages based on GitHubPagesForGAP"
-   git push --set-upstream origin gh-pages
-   ```
+For bug reports, feature requests and suggestions, please refer to
 
-That's it. You can now see your new package website under
-https://USERNAME.github.io/REPOSITORY/ (of course after
-adjusting USERNAME and REPOSITORY suitably).
-
-
-## Adjusting the content and layout
-
-GitHubPagesForGAP tries to automatically provide good defaults for
-most packages. However, you can tweak everything about it:
-
-* To adjust the page layout, edit the files `stylesheets/styles.css`
-and `_layouts/default.html`.
-
-* To adjust the content of the front page, edit `index.md` (resp.
-  for the content of the sidebar, edit `_layouts/default.html`
-
-* You can also add additional pages, in various formats (HTML,
-Markdown, Textile, ...).
-
-For details, please consult the [Jekyll](http://jekyllrb.com/)
-manual.
-
-
-## Testing the site locally
-
-If you would like to test your site on your own machine, without
-uploading it to GitHub (where it is visible to the public), you can do
-so by installing [Jekyll](http://jekyllrb.com/), the static web site
-generator used by GitHub to power GitHub Pages.
-
-Once you have installed Jekyll as described on its homepage, you can
-test the website locally as follows:
-
-1. Go to the `gh-pages` directory we created above.
-
-2. Run jekyll (this launches a tiny web server on your machine):
-
-   ```
-   jekyll serve -w
-   ```
-
-3. Visit the URL http://localhost:4000 in a web browser.
-
-
-## Updating after you made a release
-
-Whenever you make a release of your package (and perhaps more often than
-that), you will want to update your website. The easiest way is to use
-the `release` script from the [ReleaseTools][]. However, you can also do
-it manually. The steps for doing it are quite similar to the above:
-
-1. Go to the `gh-pages` directory we created above.
-
-2. Add in copies of your PackageInfo.g, README and manual:
-
-   ```
-   cp -f ../PackageInfo.g ../README .
-   cp -f ../doc/*.{css,html,js,txt} doc/
-   ```
-
-3. Now run the `update.g` GAP script.
-
-4. Commit and push the work we have just done.
-
-   ```
-   git add PackageInfo.g README doc/ _data/package.yml
-   git commit -m "Update web pages"
-   git push
-   ```
-
-A few seconds after you have done this, your changes will be online
-under https://USERNAME.github.io/REPOSITORY/ .
-
-
-## Updating to a newer version of GitHubPagesForGAP
-
-Normally you should not have to ever do this. However, if you really want to,
-you can attempt to update to the most recent version of GitHubPagesForGAP via
-the following instructions. The difficulty of such an update depends on how
-much you tweaked the site after initially cloning GitHubPagesForGAP.
-
-1. Go to the `gh-pages` directory we created above.
-   Make sure that there are no uncommitted changes, as they will be lost
-   when following these instructions.
-
-2. Make sure the `gh-gap` remote exists and has the correct URL. If in doubt,
-   just re-add it:
-   ```
-   git remote remove gh-gap
-   git remote add gh-gap https://github.com/gap-system/GitHubPagesForGAP
-   ```
-
-3. Attempt to merge the latest GitHubPagesForGAP.
-   ```
-   git pull gh-gap gh-pages
-   ```
-
-4. If this produced no errors and just worked, skip to the next step.
-   But it is quite likely that you will have conflicts in the file
-   `_data/package.yml`, or in your `README` or `PackageInfo.g` files.
-   These can usually be resolved by entering this:
-   ```
-   cp ../PackageInfo.g ../README* .
-   gap update.g
-   git add PackageInfo.g README* _data/package.yml
-   ```
-   If you are lucky, these were the only conflicts (check with `git status`).
-   If no merge conflicts remain, finish with this command:
-   ```
-   git commit -m "Merge gh-gap/gh-pages"
-   ```
-   If you still have merge conflicts, and don't know how to resolve them, or
-   get stuck some other way, you can abort the merge process and revert to the
-   original state by issuing this command:
-   ```
-   git merge --abort
-   ```
-
-5. You should be done now. Don't forget to push your changes if you want them
-   to become public.
-
-
-## Packages using GitHubPagesForGAP
-Packages using GitHubPagesForGAP include the following:
-
-* <https://gap-packages.github.io/anupq>
-* <https://gap-packages.github.io/cvec>
-* <https://gap-packages.github.io/genss>
-* <https://gap-packages.github.io/io>
-* <https://gap-packages.github.io/NormalizInterface>
-* <https://gap-packages.github.io/nq>
-* <https://gap-packages.github.io/orb>
-* <https://gap-packages.github.io/polenta>
-* <https://gap-packages.github.io/recog>
-* <https://gap-packages.github.io/recogbase>
-* <https://gap-packages.github.io/SingularInterface>
-
-
-## Contact
-
-Please submit bug reports, suggestions for improvements and patches via
-the [issue tracker](https://github.com/gap-system/GitHubPagesForGAP/issues).
-
-You can also contact me directly via [email](max@quendi.de).
-
-Copyright (c) 2013-2016 Max Horn
-
-[ReleaseTools]: https://github.com/gap-system/ReleaseTools
+   <https://github.com/gap-packages/io/issues>

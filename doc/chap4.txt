@@ -467,12 +467,12 @@
   [33X[0;0YIn  the  first  case,  the  standard output of the child process will be the
   writing  end  of  a pipe. A [10XFile[110X object for reading connected to the reading
   end  of  the  pipe is returned. The standard input and standard error of the
-  child process will be the same than the calling [5XGAP[105X process.[133X
+  child process will be the same as in the calling [5XGAP[105X process.[133X
   
   [33X[0;0YIn  the  second  case,  the  standard input of the child process will be the
   reading  end  of  a pipe. A [10XFile[110X object for writing connected to the writing
   end  of  the pipe is returned. The standard output and standard error of the
-  child process will be the same than the calling [5XGAP[105X process.[133X
+  child process will be the same as in the calling [5XGAP[105X process.[133X
   
   [33X[0;0YIn case of an error, [9Xfail[109X is returned.[133X
   
@@ -495,7 +495,7 @@
   [33X[0;0YThe  argument  [3Xpath[103X  must  refer  to  an  executable  file  in  the sense of
   [2XIO_FindExecutable[102X ([14X4.4-1[114X).[133X
   
-  [33X[0;0YA  new  child  process  is started using the executable in [3Xpath[103X The standard
+  [33X[0;0YA  new  child  process is started using the executable in [3Xpath[103X. The standard
   input and standard output of it are pipes. The writing end of the input pipe
   and the reading end of the output pipe are returned as [10XFile[110X objects bound to
   two  components [21X[10Xstdin[110X[121X and [21X[10Xstdout[110X[121X (resp.) of the returned record. This means,
@@ -576,7 +576,8 @@
   [33X[0;0YNote  that  the  SIGCHLD  handler  of  the  [5XIO[105X  package is installed by this
   function  (see  [2XIO_InstallSIGCHLDHandler[102X  ([14X3.3-3[114X))  and  that it lies in the
   responsibility  of  the  caller  to  use  [2XIO_WaitPid[102X ([14X3.2-62[114X) to ask for the
-  status information of all child processes after their termination.[133X
+  status  information  of all child processes after their termination, or call
+  [2XIO_IgnorePid[102X ([14X3.2-63[114X) to ignore the return value of a process.[133X
   
   [1X4.4-7 IO_StringFilterFile[101X
   

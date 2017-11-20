@@ -248,14 +248,10 @@
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YForks off a child process, which is an identical copy. For details see [21X[10Xman 2
-  fork[110X[121X.  Note that if you want to use the [2XIO_WaitPid[102X ([14X3.2-62[114X) function to wait
-  or  check  for  the termination of child processes, you have to activate the
-  SIGCHLD   handler   for  this  package  beforehand  by  using  the  function
-  [2XIO_InstallSIGCHLDHandler[102X  ([14X3.3-3[114X).  Note  further that after that you cannot
-  use       the       function       [2XInputOutputLocalProcess[102X       ([14XReference:
-  InputOutputLocalProcess[114X)  any  more, since its SIGCHLD handler does not work
-  any   more.   To   switch  back  to  that  functionality  use  the  function
-  [2XIO_RestoreSIGCHLDHandler[102X ([14X3.3-4[114X).[133X
+  fork[110X[121X.    Note    that   [2XIO_fork[102X   activates   our   SIGCHLD   handler   (see
+  [2XIO_InstallSIGCHLDHandler[102X  ([14X3.3-3[114X)).  Note  that  you must use the [2XIO_WaitPid[102X
+  ([14X3.2-62[114X)  function  to wait or check for the termination of child processes,
+  or call [2XIO_IgnorePid[102X ([14X3.2-63[114X) to ignore the child.[133X
   
   [1X3.2-20 IO_fstat[101X
   
@@ -624,9 +620,19 @@
   [3Xwait[103X  must be either [9Xtrue[109X or [9Xfalse[109X. In the first case, the call blocks until
   new information about a terminated child process is available. In the second
   case no such waiting is performed, the call returns immediately. See [2XIO_fork[102X
-  ([14X3.2-19[114X).[133X
+  ([14X3.2-19[114X).  If  you  do  not care about the return value of the process, call
+  [2XIO_IgnorePid[102X ([14X3.2-63[114X).[133X
   
-  [1X3.2-63 IO_write[101X
+  [1X3.2-63 IO_IgnorePid[101X
+  
+  [29X[2XIO_IgnorePid[102X( [3Xpid[103X ) [32X function
+  [6XReturns:[106X  [33X[0;10YNothing[133X
+  
+  [33X[0;0YDisowns  a  child  process.  This  means there is no need to call [2XIO_WaitPid[102X
+  ([14X3.2-62[114X).  Calling  [2XIO_WaitPid[102X ([14X3.2-62[114X) on a pid which was previously passed
+  to [2XIO_IgnorePid[102X may cause an infinite loop.F[133X
+  
+  [1X3.2-64 IO_write[101X
   
   [29X[2XIO_write[102X( [3Xfd[103X, [3Xst[103X, [3Xoffset[103X, [3Xcount[103X ) [32X function
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
@@ -669,7 +675,10 @@
   [33X[0;0YInstalls  our  SIGCHLD  handler. This functions works as an idempotent. That
   is,  calling  it  twice does exactly the same as calling it once. It returns
   [9Xtrue[109X  when  it  is called for the first time since then a pointer to the old
-  signal handler is stored in a global variable. See [2XIO_fork[102X ([14X3.2-19[114X).[133X
+  signal   handler   is   stored  in  a  global  variable.  This  function  is
+  automatically  called  by any function which creates new processes, so never
+  needs   to  be  called  unless  the  handler  was  explictly  disabled  with
+  [2XIO_RestoreSIGCHLDHandler[102X ([14X3.3-4[114X) See [2XIO_fork[102X ([14X3.2-19[114X).[133X
   
   [1X3.3-4 IO_RestoreSIGCHLDHandler[101X
   

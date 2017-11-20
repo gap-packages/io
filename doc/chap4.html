@@ -22,7 +22,7 @@
 <p id="mathjaxlink" class="pcenter"><a href="chap4_mj.html">[MathJax on]</a></p>
 <p><a id="X7D6A3F7178CB6169" name="X7D6A3F7178CB6169"></a></p>
 <div class="ChapSects"><a href="chap4.html#X7D6A3F7178CB6169">4 <span class="Heading">High level functions for buffered I/O</span></a>
-<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4.html#X7F697A8884B57F27">4.1 <span class="Heading">Types and the creation of <code class="code">File</code> objects</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap4.html#X83C42F7778B704C7">4.1 <span class="Heading">Types and the creation of <code class="code">File</code> objects</span></a>
 </span>
 <div class="ContSSBlock">
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X80C9B80A80E3A555">4.1-1 IsFile</a></span>
@@ -90,7 +90,7 @@
 
 <p>One remark applies again to nearly all functions presented here: If an error is indicated by the returned value <code class="keyw">fail</code> one can use the library function <code class="func">LastSystemError</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>) to find out more about the cause of the error. This fact is not mentioned with every single function.</p>
 
-<p><a id="X7F697A8884B57F27" name="X7F697A8884B57F27"></a></p>
+<p><a id="X83C42F7778B704C7" name="X83C42F7778B704C7"></a></p>
 
 <h4>4.1 <span class="Heading">Types and the creation of <code class="code">File</code> objects</span></h4>
 
@@ -432,9 +432,9 @@
 
 <p>Starts a child process using the executable in <var class="Arg">path</var> with either stdout or stdin being a pipe. The argument <var class="Arg">mode</var> must be either the string "<code class="code">r</code>" or the string "<code class="code">w</code>".</p>
 
-<p>In the first case, the standard output of the child process will be the writing end of a pipe. A <code class="code">File</code> object for reading connected to the reading end of the pipe is returned. The standard input and standard error of the child process will be the same than the calling <strong class="pkg">GAP</strong> process.</p>
+<p>In the first case, the standard output of the child process will be the writing end of a pipe. A <code class="code">File</code> object for reading connected to the reading end of the pipe is returned. The standard input and standard error of the child process will be the same as in the calling <strong class="pkg">GAP</strong> process.</p>
 
-<p>In the second case, the standard input of the child process will be the reading end of a pipe. A <code class="code">File</code> object for writing connected to the writing end of the pipe is returned. The standard output and standard error of the child process will be the same than the calling <strong class="pkg">GAP</strong> process.</p>
+<p>In the second case, the standard input of the child process will be the reading end of a pipe. A <code class="code">File</code> object for writing connected to the writing end of the pipe is returned. The standard output and standard error of the child process will be the same as in the calling <strong class="pkg">GAP</strong> process.</p>
 
 <p>In case of an error, <code class="keyw">fail</code> is returned.</p>
 
@@ -453,7 +453,7 @@
 
 <p>The argument <var class="Arg">path</var> must refer to an executable file in the sense of <code class="func">IO_FindExecutable</code> (<a href="chap4.html#X84E91FE27A7860F3"><span class="RefLink">4.4-1</span></a>).</p>
 
-<p>A new child process is started using the executable in <var class="Arg">path</var> The standard input and standard output of it are pipes. The writing end of the input pipe and the reading end of the output pipe are returned as <code class="code">File</code> objects bound to two components "<code class="code">stdin</code>" and "<code class="code">stdout</code>" (resp.) of the returned record. This means, you have to <em>write</em> to "<code class="code">stdin</code>" and <em>read</em> from "<code class="code">stdout</code>" in the calling <strong class="pkg">GAP</strong> process. The standard error of the child process will be the same as the one of the calling <strong class="pkg">GAP</strong> process.</p>
+<p>A new child process is started using the executable in <var class="Arg">path</var>. The standard input and standard output of it are pipes. The writing end of the input pipe and the reading end of the output pipe are returned as <code class="code">File</code> objects bound to two components "<code class="code">stdin</code>" and "<code class="code">stdout</code>" (resp.) of the returned record. This means, you have to <em>write</em> to "<code class="code">stdin</code>" and <em>read</em> from "<code class="code">stdout</code>" in the calling <strong class="pkg">GAP</strong> process. The standard error of the child process will be the same as the one of the calling <strong class="pkg">GAP</strong> process.</p>
 
 <p>Returns <code class="keyw">fail</code> if an error occurred.</p>
 
@@ -495,7 +495,7 @@
 
 <p>Returns a record with the following components: <code class="keyw">pids</code> is a list of process ids if everything worked. For each process for which some error occurred the corresponding pid is replaced by <code class="keyw">fail</code>. The <code class="keyw">stdin</code> component is equal to <code class="keyw">false</code>, or to the file descriptor of the writing end of the newly created pipe which is connected to the standard input of the first of the new processes if <var class="Arg">infd</var> was "<code class="keyw">open</code>". The <code class="keyw">stdout</code> component is equal to <code class="keyw">false</code> or to the file descriptor of the reading end of the newly created pipe which is connected to the standard output of the last of the new processes if <var class="Arg">outfd</var> was "<code class="keyw">open</code>".</p>
 
-<p>Note that the SIGCHLD handler of the <strong class="pkg">IO</strong> package is installed by this function (see <code class="func">IO_InstallSIGCHLDHandler</code> (<a href="chap3.html#X8383E62D86BE30C6"><span class="RefLink">3.3-3</span></a>)) and that it lies in the responsibility of the caller to use <code class="func">IO_WaitPid</code> (<a href="chap3.html#X80737A008450184F"><span class="RefLink">3.2-62</span></a>) to ask for the status information of all child processes after their termination.</p>
+<p>Note that the SIGCHLD handler of the <strong class="pkg">IO</strong> package is installed by this function (see <code class="func">IO_InstallSIGCHLDHandler</code> (<a href="chap3.html#X8383E62D86BE30C6"><span class="RefLink">3.3-3</span></a>)) and that it lies in the responsibility of the caller to use <code class="func">IO_WaitPid</code> (<a href="chap3.html#X80737A008450184F"><span class="RefLink">3.2-62</span></a>) to ask for the status information of all child processes after their termination, or call <code class="func">IO_IgnorePid</code> (<a href="chap3.html#X84295FC77CCB1066"><span class="RefLink">3.2-63</span></a>) to ignore the return value of a process.</p>
 
 <p><a id="X86D61FAE871B23E8" name="X86D61FAE871B23E8"></a></p>
 

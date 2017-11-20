@@ -156,7 +156,7 @@ true
 <div class="example"><pre>
 <span class="GAPprompt">gap&gt;</span> <span class="GAPinput">r := SingleHTTPRequest("www.math.rwth-aachen.de",80,"GET",</span>
 <span class="GAPprompt">&gt;</span> <span class="GAPinput">             "/~Max.Neunhoeffer/index.html",rec(),false,false);;</span>
-<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">RecFields(r);</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">RecNames(r);</span>
 [ "protoversion", "statuscode", "status", "header", "body", "closed" ]
 <span class="GAPprompt">gap&gt;</span> <span class="GAPinput">r.status;</span>
 "OK"

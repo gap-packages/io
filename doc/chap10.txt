@@ -127,7 +127,7 @@
   [4X[32X  Example  [32X[104X
     [4X[25Xgap>[125X [27Xr := SingleHTTPRequest("www.math.rwth-aachen.de",80,"GET",[127X[104X
     [4X[25X>[125X [27X             "/~Max.Neunhoeffer/index.html",rec(),false,false);;[127X[104X
-    [4X[25Xgap>[125X [27XRecFields(r);[127X[104X
+    [4X[25Xgap>[125X [27XRecNames(r);[127X[104X
     [4X[28X[ "protoversion", "statuscode", "status", "header", "body", "closed" ][128X[104X
     [4X[25Xgap>[125X [27Xr.status;[127X[104X
     [4X[28X"OK"[128X[104X
