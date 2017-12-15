@@ -103,6 +103,12 @@ AC_DEFUN([AC_FIND_GAP],
   fi
 
 
+  AC_MSG_CHECKING([for GAP >= 4.9])
+  # test if this GAP >= 4.9
+  if test "x$GAP_CPPFLAGS" != x; then
+    AC_MSG_RESULT([yes])
+  else
+    AC_MSG_RESULT([no])
   #####################################
   # Now check for the GAP header files
 
@@ -153,11 +159,14 @@ AC_DEFUN([AC_FIND_GAP],
     AC_MSG_RESULT([$ARCHPATH/extern/gmp/include/gmp.h])
   else
     AC_MSG_RESULT([not found, GAP was compiled without its own GMP])
-  fi;
+  fi
+  fi
 
   AC_SUBST(GAPARCH)
   AC_SUBST(GAPROOT)
   AC_SUBST(GAP_CPPFLAGS)
+  AC_SUBST(GAP_LDLAGS)
+  AC_SUBST(GAP_LIBS)
 
   AC_LANG_POP([C])
 ])
