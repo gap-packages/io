@@ -1,8 +1,11 @@
-dist: trusty
 language: c
 env:
   global:
+    - GAPROOT=gaproot
     - COVDIR=coverage
+      # override default GAP_PKGS_TO_BUILD value, so that
+      # the bundled IO package is *not* compiled
+    - GAP_PKGS_TO_BUILD="profiling"
 
 addons:
   apt_packages:
@@ -17,8 +20,8 @@ matrix:
   include:
     - env: ABI=64
     - env: ABI=32
-    - env: GAPBRANCH="stable-4.8"
-    - env: HPCGAP=yes
+    #- env: GAPBRANCH="stable-4.8"
+    - env: HPCGAP=yes GAP_PKGS_TO_BUILD="" NO_COVERAGE=1
 
 branches:
   only:
