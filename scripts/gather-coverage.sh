@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 set -ex
 
-GAP="$GAPROOT/bin/gap.sh --quitonbreak -q"
+# If we don't care about code coverage, do nothing
+if [[ -n $NO_COVERAGE ]]; then
+    exit 0
+fi
+
+GAP="$GAPROOT/bin/gap.sh -l $PWD; --quitonbreak -q"
 
 # generate library coverage reports
 $GAP -a 500M -m 500M -q <<GAPInput
@@ -15,7 +20,7 @@ for f in DirectoryContents(d) do
     if f in [".", ".."] then continue; fi;
     Add(covs, Filename(d, f));
 od;
-Print("Merging coverage results\n");
+Print("Merging coverage results from ", covs, "\n");
 r := MergeLineByLineProfiles(covs);;
 Print("Outputting JSON\n");
 OutputJsonCoverage(r, "gap-coverage.json");;
