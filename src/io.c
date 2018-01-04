@@ -2046,7 +2046,7 @@ static StructGVarFunc GVarFuncs [] = {
 #ifdef HAVE_MKDTEMP
   { "IO_mkdtemp", 1, "template",
     FuncIO_mkdtemp,
-    "io.c:IO_mkstemp" },
+    "io.c:IO_mkdtemp" },
 #endif
 
 #ifdef HAVE_MKFIFO
