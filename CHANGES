@@ -1,5 +1,10 @@
 This file describes changes in the IO package.
 
+4.5.1 (2018-01-10)
+  - Fix a bug which could break usage IO_mkstemp or IO_mkdtemp in
+    a loaded GAP workspace
+  - Improve integration with GAP 4.9 build system
+
 4.5.0 (2017-11-20)
   - Compatible with GAP 4.9
   - Add support for (un)pickling ranges and character tables
