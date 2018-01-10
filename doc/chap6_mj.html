@@ -44,7 +44,7 @@
 
 <h5>6.1-1 RandomSource</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; RandomSource</code>( <var class="Arg">r</var>, <var class="Arg">dev</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; RandomSource</code>( <var class="Arg">r</var>, <var class="Arg">dev</var> )</td><td class="tdright">(&nbsp;method&nbsp;)</td></tr></table></div>
 <p>Returns: a real random source object or <code class="code">fail</code></p>
 
 <p>The first argument <var class="Arg">r</var> must be the <strong class="pkg">GAP</strong> filter <code class="code">IsRealRandomSource</code> and the second either the string <code class="file">random</code> or the string <code class="file">urandom</code>. A real random source object is created that draws its random numbers from the kernel devices <code class="file">/dev/random</code> and <code class="file">/dev/urandom</code> respectively. Whereas <code class="file">/dev/urandom</code> always provides random numbers of not guaranteed "quality", the device <code class="file">/dev/random</code> measures its entropy and produces guaranteed unpredictable numbers. However, it might block until enough "random" events (like mouse movements) have been accumulated.</p>

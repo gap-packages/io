@@ -33,7 +33,7 @@
   
   [1X4.1-1 IsFile[101X
   
-  [29X[2XIsFile[102X( [3Xo[103X ) [32X Category
+  [33X[1;0Y[29X[2XIsFile[102X( [3Xo[103X ) [32X Category[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
   
   [33X[0;0YThe category of [10XFile[110X objects.[133X
@@ -42,7 +42,7 @@
   
   [1X4.1-2 IO_WrapFD[101X
   
-  [29X[2XIO_WrapFD[102X( [3Xfd[103X, [3Xrbufsize[103X, [3Xwbufsize[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_WrapFD[102X( [3Xfd[103X, [3Xrbufsize[103X, [3Xwbufsize[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya [10XFile[110X object[133X
   
   [33X[0;0YThe  argument  [3Xfd[103X  must  be  a  file descriptor (i.e. an integer) or -1 (see
@@ -65,9 +65,9 @@
   
   [1X4.1-3 IO_File[101X
   
-  [29X[2XIO_File[102X( [3Xfilename[103X[, [3Xmode[103X] ) [32X function
-  [29X[2XIO_File[102X( [3Xfilename[103X[, [3Xbufsize[103X] ) [32X function
-  [29X[2XIO_File[102X( [3Xfilename[103X, [3Xmode[103X, [3Xbufsize[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_File[102X( [3Xfilename[103X[, [3Xmode[103X] ) [32X function[133X
+  [33X[1;0Y[29X[2XIO_File[102X( [3Xfilename[103X[, [3Xbufsize[103X] ) [32X function[133X
+  [33X[1;0Y[29X[2XIO_File[102X( [3Xfilename[103X, [3Xmode[103X, [3Xbufsize[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya [10XFile[110X object or [9Xfail[109X[133X
   
   [33X[0;0YThe  argument [3Xfilename[103X must be a string specifying the path name of the file
@@ -95,7 +95,7 @@
   
   [1X4.2-1 IO_ReadUntilEOF[101X
   
-  [29X[2XIO_ReadUntilEOF[102X( [3Xf[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_ReadUntilEOF[102X( [3Xf[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya string or [9Xfail[109X[133X
   
   [33X[0;0YThis function reads all data from the file [3Xf[103X until the end of file. The data
@@ -106,7 +106,7 @@
   
   [1X4.2-2 IO_ReadBlock[101X
   
-  [29X[2XIO_ReadBlock[102X( [3Xf[103X, [3Xlen[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_ReadBlock[102X( [3Xf[103X, [3Xlen[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya string or [9Xfail[109X[133X
   
   [33X[0;0YThis function gets two arguments, the first argument [3Xf[103X must be a [10XFile[110X object
@@ -121,7 +121,7 @@
   
   [1X4.2-3 IO_ReadLine[101X
   
-  [29X[2XIO_ReadLine[102X( [3Xf[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_ReadLine[102X( [3Xf[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya string or [9Xfail[109X[133X
   
   [33X[0;0YThis  function  gets exactly one argument, which must be a [10XFile[110X object [3Xf[103X. It
@@ -141,7 +141,7 @@
   
   [1X4.2-4 IO_ReadLines[101X
   
-  [29X[2XIO_ReadLines[102X( [3Xf[103X[, [3Xmax[103X] ) [32X function
+  [33X[1;0Y[29X[2XIO_ReadLines[102X( [3Xf[103X[, [3Xmax[103X] ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya list of strings or [9Xfail[109X[133X
   
   [33X[0;0YThis function gets one or two arguments, the first of which must always be a
@@ -161,7 +161,7 @@
   
   [1X4.2-5 IO_HasData[101X
   
-  [29X[2XIO_HasData[102X( [3Xf[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_HasData[102X( [3Xf[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
   
   [33X[0;0YThis  function  takes one argument [3Xf[103X which must be a [10XFile[110X object. It returns
@@ -172,7 +172,7 @@
   
   [1X4.2-6 IO_Read[101X
   
-  [29X[2XIO_Read[102X( [3Xf[103X, [3Xlen[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_Read[102X( [3Xf[103X, [3Xlen[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya string or [9Xfail[109X[133X
   
   [33X[0;0YThe function gets two arguments, the first of which must be a [10XFile[110X object [3Xf[103X.
@@ -194,7 +194,7 @@
   
   [1X4.2-7 IO_Write[101X
   
-  [29X[2XIO_Write[102X( [3Xf[103X[, [3Xthings[103X, [3X...[103X] ) [32X function
+  [33X[1;0Y[29X[2XIO_Write[102X( [3Xf[103X[, [3Xthings[103X, [3X...[103X] ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YThis  function  can get an arbitrary number of arguments, the first of which
@@ -215,7 +215,7 @@
   
   [1X4.2-8 IO_WriteLine[101X
   
-  [29X[2XIO_WriteLine[102X( [3Xf[103X, [3Xline[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_WriteLine[102X( [3Xf[103X, [3Xline[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YBehaves like [2XIO_Write[102X ([14X4.2-7[114X) but works on a single string [3Xline[103X and sends an
@@ -226,7 +226,7 @@
   
   [1X4.2-9 IO_WriteLines[101X
   
-  [29X[2XIO_WriteLines[102X( [3Xf[103X, [3Xlist[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_WriteLines[102X( [3Xf[103X, [3Xlist[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YBehaves  like [2XIO_Write[102X ([14X4.2-7[114X) but works on a list of strings [3Xlist[103X and sends
@@ -237,7 +237,7 @@
   
   [1X4.2-10 IO_Flush[101X
   
-  [29X[2XIO_Flush[102X( [3Xf[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_Flush[102X( [3Xf[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
   
   [33X[0;0YThis  function  gets  one argument [3Xf[103X, which must be a [10XFile[110X object. It writes
@@ -255,7 +255,7 @@
   
   [1X4.2-11 IO_WriteFlush[101X
   
-  [29X[2XIO_WriteFlush[102X( [3Xf[103X[, [3Xthings[103X] ) [32X function
+  [33X[1;0Y[29X[2XIO_WriteFlush[102X( [3Xf[103X[, [3Xthings[103X] ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YThis  function  behaves like [2XIO_Write[102X ([14X4.2-7[114X) followed by a call to [2XIO_Flush[102X
@@ -264,7 +264,7 @@
   
   [1X4.2-12 IO_ReadyForWrite[101X
   
-  [29X[2XIO_ReadyForWrite[102X( [3Xf[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_ReadyForWrite[102X( [3Xf[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
   
   [33X[0;0YThis  function  takes one argument [3Xf[103X which must be a [10XFile[110X object. It returns
@@ -274,7 +274,7 @@
   
   [1X4.2-13 IO_WriteNonBlocking[101X
   
-  [29X[2XIO_WriteNonBlocking[102X( [3Xf[103X, [3Xst[103X, [3Xpos[103X, [3Xlen[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_WriteNonBlocking[102X( [3Xf[103X, [3Xst[103X, [3Xpos[103X, [3Xlen[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YThis  function  takes four arguments. The first one [3Xf[103X must be a [10XFile[110X object,
@@ -289,7 +289,7 @@
   
   [1X4.2-14 IO_ReadyForFlush[101X
   
-  [29X[2XIO_ReadyForFlush[102X( [3Xf[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_ReadyForFlush[102X( [3Xf[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
   
   [33X[0;0YThis  function  takes one argument [3Xf[103X which must be a [10XFile[110X object. It returns
@@ -301,7 +301,7 @@
   
   [1X4.2-15 IO_FlushNonBlocking[101X
   
-  [29X[2XIO_FlushNonBlocking[102X( [3Xf[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_FlushNonBlocking[102X( [3Xf[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X, [9Xfalse[109X, or [9Xfail[109X[133X
   
   [33X[0;0YThis  function takes one argument [3Xf[103X which must be a [10XFile[110X object. It tries to
@@ -314,7 +314,7 @@
   
   [1X4.2-16 IO_Close[101X
   
-  [29X[2XIO_Close[102X( [3Xf[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_Close[102X( [3Xf[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
   
   [33X[0;0YThis  function  closes the [10XFile[110X object [3Xf[103X after writing all data in the write
@@ -328,7 +328,7 @@
   
   [1X4.3-1 IO_GetFD[101X
   
-  [29X[2XIO_GetFD[102X( [3Xf[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_GetFD[102X( [3Xf[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer[133X
   
   [33X[0;0YThis  function  returns  the  real  file  descriptor that is behind the [10XFile[110X
@@ -336,7 +336,7 @@
   
   [1X4.3-2 IO_GetWBuf[101X
   
-  [29X[2XIO_GetWBuf[102X( [3Xf[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_GetWBuf[102X( [3Xf[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya string or [9Xfalse[109X[133X
   
   [33X[0;0YThis  function  gets  one argument [3Xf[103X which must be a [10XFile[110X object and returns
@@ -347,7 +347,7 @@
   
   [1X4.3-3 IO_Select[101X
   
-  [29X[2XIO_Select[102X( [3Xr[103X, [3Xw[103X, [3Xf[103X, [3Xe[103X, [3Xt1[103X, [3Xt2[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_Select[102X( [3Xr[103X, [3Xw[103X, [3Xf[103X, [3Xe[103X, [3Xt1[103X, [3Xt2[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YThis  function  is  the  corresponding  function  to  [2XIO_select[102X ([14X3.2-53[114X) for
@@ -374,7 +374,7 @@
   
   [1X4.3-4 IO_ListDir[101X
   
-  [29X[2XIO_ListDir[102X( [3Xpathname[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_ListDir[102X( [3Xpathname[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya list of strings or [9Xfail[109X[133X
   
   [33X[0;0YThis  function  gets  a string containing a path name as single argument and
@@ -383,7 +383,7 @@
   
   [1X4.3-5 ChangeDirectoryCurrent[101X
   
-  [29X[2XChangeDirectoryCurrent[102X( [3Xpathname[103X ) [32X function
+  [33X[1;0Y[29X[2XChangeDirectoryCurrent[102X( [3Xpathname[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X on success and [9Xfail[109X on failure[133X
   
   [33X[0;0YChanges the current directory. Returns [9Xtrue[109X on success and [9Xfail[109X on failure.[133X
@@ -395,7 +395,7 @@
   
   [1X4.3-6 IO_MakeIPAddressPort[101X
   
-  [29X[2XIO_MakeIPAddressPort[102X( [3Xipstring[103X, [3Xportnr[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_MakeIPAddressPort[102X( [3Xipstring[103X, [3Xportnr[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya string[133X
   
   [33X[0;0YThis  function  gets  a  string  [3Xipstring[103X  containing  an  IP address in dot
@@ -408,7 +408,7 @@
   
   [1X4.3-7 IO_Environment[101X
   
-  [29X[2XIO_Environment[102X(  ) [32X function
+  [33X[1;0Y[29X[2XIO_Environment[102X(  ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya record or [9Xfail[109X[133X
   
   [33X[0;0YTakes  no  arguments,  uses  [2XIO_environ[102X  ([14X3.3-2[114X)  to get the environment and
@@ -420,7 +420,7 @@
   
   [1X4.3-8 IO_MakeEnvList[101X
   
-  [29X[2XIO_MakeEnvList[102X( [3Xr[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_MakeEnvList[102X( [3Xr[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya list of strings[133X
   
   [33X[0;0YTakes  a  record  as  returned by [2XIO_Environment[102X ([14X4.3-7[114X) and turns it into a
@@ -431,7 +431,7 @@
   
   [1X4.4-1 IO_FindExecutable[101X
   
-  [29X[2XIO_FindExecutable[102X( [3Xpath[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_FindExecutable[102X( [3Xpath[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xfail[109X or the path to an executable[133X
   
   [33X[0;0YIf  the path name [3Xpath[103X contains a slash, this function simply checks whether
@@ -446,7 +446,7 @@
   
   [1X4.4-2 IO_CloseAllFDs[101X
   
-  [29X[2XIO_CloseAllFDs[102X( [3Xexceptions[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_CloseAllFDs[102X( [3Xexceptions[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ynothing[133X
   
   [33X[0;0YCloses all file descriptors except those listed in [3Xexceptions[103X, which must be
@@ -454,7 +454,7 @@
   
   [1X4.4-3 IO_Popen[101X
   
-  [29X[2XIO_Popen[102X( [3Xpath[103X, [3Xargv[103X, [3Xmode[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_Popen[102X( [3Xpath[103X, [3Xargv[103X, [3Xmode[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya [10XFile[110X object or [9Xfail[109X[133X
   
   [33X[0;0YThe  argument  [3Xpath[103X  must  refer  to  an  executable  file  in  the sense of
@@ -489,7 +489,7 @@
   
   [1X4.4-4 IO_Popen2[101X
   
-  [29X[2XIO_Popen2[102X( [3Xpath[103X, [3Xargv[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_Popen2[102X( [3Xpath[103X, [3Xargv[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya record or [9Xfail[109X[133X
   
   [33X[0;0YThe  argument  [3Xpath[103X  must  refer  to  an  executable  file  in  the sense of
@@ -519,7 +519,7 @@
   
   [1X4.4-5 IO_Popen3[101X
   
-  [29X[2XIO_Popen3[102X( [3Xpath[103X, [3Xargv[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_Popen3[102X( [3Xpath[103X, [3Xargv[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya record or [9Xfail[109X[133X
   
   [33X[0;0YThe  argument  [3Xpath[103X  must  refer  to  an  executable  file  in  the sense of
@@ -549,7 +549,7 @@
   
   [1X4.4-6 IO_StartPipeline[101X
   
-  [29X[2XIO_StartPipeline[102X( [3Xprogs[103X, [3Xinfd[103X, [3Xoutfd[103X, [3Xswitcherror[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_StartPipeline[102X( [3Xprogs[103X, [3Xinfd[103X, [3Xoutfd[103X, [3Xswitcherror[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya record or [9Xfail[109X[133X
   
   [33X[0;0YThe  argument  [3Xprogs[103X  is a list of pairs, the first entry being a path to an
@@ -581,7 +581,7 @@
   
   [1X4.4-7 IO_StringFilterFile[101X
   
-  [29X[2XIO_StringFilterFile[102X( [3Xprogs[103X, [3Xfilename[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_StringFilterFile[102X( [3Xprogs[103X, [3Xfilename[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya string or [9Xfail[109X[133X
   
   [33X[0;0YReads the file with the name [3Xfilename[103X, however, a pipeline is created by the
@@ -591,7 +591,7 @@
   
   [1X4.4-8 IO_FileFilterString[101X
   
-  [29X[2XIO_FileFilterString[102X( [3Xfilename[103X, [3Xprogs[103X, [3Xst[103X[, [3Xappend[103X] ) [32X function
+  [33X[1;0Y[29X[2XIO_FileFilterString[102X( [3Xfilename[103X, [3Xprogs[103X, [3Xst[103X[, [3Xappend[103X] ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya string or [9Xfail[109X[133X
   
   [33X[0;0YWrites  the  content  of  the  string [3Xst[103X to the file with the name [3Xfilename[103X,
@@ -603,7 +603,7 @@
   
   [1X4.4-9 IO_FilteredFile[101X
   
-  [29X[2XIO_FilteredFile[102X( [3Xprogs[103X, [3Xfilename[103X[, [3Xmode[103X][, [3Xbufsize[103X] ) [32X function
+  [33X[1;0Y[29X[2XIO_FilteredFile[102X( [3Xprogs[103X, [3Xfilename[103X[, [3Xmode[103X][, [3Xbufsize[103X] ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya [10XFile[110X object or [9Xfail[109X[133X
   
   [33X[0;0YThis  function is similar to [2XIO_File[102X ([14X4.1-3[114X) and behaves nearly identically.
@@ -625,7 +625,7 @@
   
   [1X4.4-10 IO_CompressedFile[101X
   
-  [29X[2XIO_CompressedFile[102X( [3Xfilename[103X[, [3Xmode[103X][, [3Xbufsize[103X] ) [32X function
+  [33X[1;0Y[29X[2XIO_CompressedFile[102X( [3Xfilename[103X[, [3Xmode[103X][, [3Xbufsize[103X] ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya [10XFile[110X object or [9Xfail[109X[133X
   
   [33X[0;0YThis  function is a convenience wrapper around [2XIO_FilteredFile[102X ([14X4.4-9[114X) which
@@ -644,7 +644,7 @@
   
   [1X4.4-11 IO_SendStringBackground[101X
   
-  [29X[2XIO_SendStringBackground[102X( [3Xf[103X, [3Xst[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_SendStringBackground[102X( [3Xf[103X, [3Xst[103X ) [32X function[133X
   
   [33X[0;0YThis  functions  uses  [2XIO_Write[102X  ([14X4.2-7[114X) to write the whole string [3Xst[103X to the
   [10XFile[110X  object  [3Xf[103X.  However,  this  is  done  by  forking  off a child process
@@ -677,7 +677,7 @@
   
   [1X4.4-12 IO_PipeThrough[101X
   
-  [29X[2XIO_PipeThrough[102X( [3Xcmd[103X, [3Xargs[103X, [3Xinput[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_PipeThrough[102X( [3Xcmd[103X, [3Xargs[103X, [3Xinput[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya string or [9Xfail[109X[133X
   
   [33X[0;0YStarts  the  process  with the executable given by the file name [3Xcmd[103X (in the
@@ -696,7 +696,7 @@
   
   [1X4.4-13 IO_PipeThroughWithError[101X
   
-  [29X[2XIO_PipeThroughWithError[102X( [3Xcmd[103X, [3Xargs[103X, [3Xinput[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_PipeThroughWithError[102X( [3Xcmd[103X, [3Xargs[103X, [3Xinput[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya record or [9Xfail[109X[133X
   
   [33X[0;0YStarts  the  process  with the executable given by the file name [3Xcmd[103X (in the

@@ -162,7 +162,7 @@
 
 <h5>3.2-1 IO_accept</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_accept</code>( <var class="Arg">fd</var>, <var class="Arg">addr</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_accept</code>( <var class="Arg">fd</var>, <var class="Arg">addr</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: an integer or <code class="keyw">fail</code></p>
 
 <p>Accepts an incoming network connection. For details see "<code class="code">man 2 accept</code>". The argument <var class="Arg">addr</var> can be made with <code class="func">IO_make_sockaddr_in</code> (<a href="chap3_mj.html#X878007A67E806CEF"><span class="RefLink">3.3-1</span></a>) and contains its length such that no third argument is necessary.</p>
@@ -171,7 +171,7 @@
 
 <h5>3.2-2 IO_bind</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_bind</code>( <var class="Arg">fd</var>, <var class="Arg">my_addr</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_bind</code>( <var class="Arg">fd</var>, <var class="Arg">my_addr</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: an integer or <code class="keyw">fail</code></p>
 
 <p>Binds a local address to a socket. For details see "<code class="code">man 2 bind</code>". The argument <var class="Arg">my_addr</var> can be made with <code class="func">IO_make_sockaddr_in</code> (<a href="chap3_mj.html#X878007A67E806CEF"><span class="RefLink">3.3-1</span></a>) and contains its length such that no third argument is necessary.</p>
@@ -180,7 +180,7 @@
 
 <h5>3.2-3 IO_chdir</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_chdir</code>( <var class="Arg">path</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_chdir</code>( <var class="Arg">path</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
 
 <p>Changes the current working directory. For details see "<code class="code">man 2 chdir</code>".</p>
@@ -189,7 +189,7 @@
 
 <h5>3.2-4 IO_chmod</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_chmod</code>( <var class="Arg">pathname</var>, <var class="Arg">mode</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_chmod</code>( <var class="Arg">pathname</var>, <var class="Arg">mode</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
 
 <p>Changes the mode of a file. For details see "<code class="code">man 2 chmod</code>".</p>
@@ -198,7 +198,7 @@
 
 <h5>3.2-5 IO_chown</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_chown</code>( <var class="Arg">path</var>, <var class="Arg">owner</var>, <var class="Arg">group</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_chown</code>( <var class="Arg">path</var>, <var class="Arg">owner</var>, <var class="Arg">group</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
 
 <p>Sets owner and/or group of file. For details see "<code class="code">man 2 chown</code>".</p>
@@ -207,7 +207,7 @@
 
 <h5>3.2-6 IO_close</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_close</code>( <var class="Arg">fd</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_close</code>( <var class="Arg">fd</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
 
 <p>Closes a file descriptor. For details see "<code class="code">man 2 close</code>".</p>
@@ -216,7 +216,7 @@
 
 <h5>3.2-7 IO_closedir</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_closedir</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_closedir</code>(  )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
 
 <p>Closes a directory. For details see "<code class="code">man 3 closedir</code>". Has no arguments, because we only have one <code class="code">DIR</code> struct in the C part.</p>
@@ -225,7 +225,7 @@
 
 <h5>3.2-8 IO_connect</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_connect</code>( <var class="Arg">fd</var>, <var class="Arg">serv_addr</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_connect</code>( <var class="Arg">fd</var>, <var class="Arg">serv_addr</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
 
 <p>Connects to a remote socket. For details see "<code class="code">man 2 connect</code>". The argument <var class="Arg">serv_addr</var> can be made with <code class="func">IO_make_sockaddr_in</code> (<a href="chap3_mj.html#X878007A67E806CEF"><span class="RefLink">3.3-1</span></a>) and contains its length such that no third argument is necessary.</p>
@@ -234,7 +234,7 @@
 
 <h5>3.2-9 IO_creat</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_creat</code>( <var class="Arg">pathname</var>, <var class="Arg">mode</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_creat</code>( <var class="Arg">pathname</var>, <var class="Arg">mode</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: an integer or <code class="keyw">fail</code></p>
 
 <p>Creates a new file. For details see "<code class="code">man 2 creat</code>".</p>
@@ -243,7 +243,7 @@
 
 <h5>3.2-10 IO_dup</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_dup</code>( <var class="Arg">oldfd</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_dup</code>( <var class="Arg">oldfd</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: an integer or <code class="keyw">fail</code></p>
 
 <p>Duplicates a file descriptor. For details see "<code class="code">man 2 dup</code>".</p>
@@ -252,7 +252,7 @@
 
 <h5>3.2-11 IO_dup2</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_dup2</code>( <var class="Arg">oldfd</var>, <var class="Arg">newfd</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_dup2</code>( <var class="Arg">oldfd</var>, <var class="Arg">newfd</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
 
 <p>Duplicates a file descriptor to a new one. For details see "<code class="code">man 2 dup2</code>".</p>
@@ -261,7 +261,7 @@
 
 <h5>3.2-12 IO_execv</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_execv</code>( <var class="Arg">path</var>, <var class="Arg">argv</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_execv</code>( <var class="Arg">path</var>, <var class="Arg">argv</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">fail</code> or does not return</p>
 
 <p>Replaces the process with another process. For details see "<code class="code">man 3 execv</code>". The argument <var class="Arg">argv</var> is a list of strings. The called program does not have to be the first argument in this list.</p>
@@ -270,7 +270,7 @@
 
 <h5>3.2-13 IO_execve</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_execve</code>( <var class="Arg">path</var>, <var class="Arg">argv</var>, <var class="Arg">envp</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_execve</code>( <var class="Arg">path</var>, <var class="Arg">argv</var>, <var class="Arg">envp</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">fail</code> or does not return</p>
 
 <p>Replaces the process with another process. For details see "<code class="code">man 3 execve</code>". The arguments <var class="Arg">argv</var> and <var class="Arg">envp</var> are both lists of strings. The called program does not have to be the first argument in <var class="Arg">argv</var>. The list <var class="Arg">envp</var> can be made with <code class="func">IO_MakeEnvList</code> (<a href="chap4_mj.html#X7CF3DB5081A91600"><span class="RefLink">4.3-8</span></a>) from a record acquired from <code class="func">IO_Environment</code> (<a href="chap4_mj.html#X7F9AAE018474E1D8"><span class="RefLink">4.3-7</span></a>) and modified later.</p>
@@ -279,7 +279,7 @@
 
 <h5>3.2-14 IO_execvp</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_execvp</code>( <var class="Arg">path</var>, <var class="Arg">argv</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_execvp</code>( <var class="Arg">path</var>, <var class="Arg">argv</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">fail</code> or does not return</p>
 
 <p>Replaces the process with another process. For details see "<code class="code">man 3 execvp</code>". The argument <var class="Arg">argv</var> is a list of strings. The called program does not have to be the first argument in this list.</p>
@@ -288,14 +288,14 @@
 
 <h5>3.2-15 IO_exit</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_exit</code>( <var class="Arg">status</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_exit</code>( <var class="Arg">status</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Stops process immediately with return code <var class="Arg">status</var>. For details see "<code class="code">man 2 exit</code>". The argument <var class="Arg">status</var> must be an integer. Does not return.</p>
 
 <p><a id="X7F08E1187BDB619A" name="X7F08E1187BDB619A"></a></p>
 
 <h5>3.2-16 IO_fchmod</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_fchmod</code>( <var class="Arg">fd</var>, <var class="Arg">mode</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_fchmod</code>( <var class="Arg">fd</var>, <var class="Arg">mode</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
 
 <p>Changes mode of an opened file. For details see "<code class="code">man 2 fchmod</code>".</p>
@@ -304,7 +304,7 @@
 
 <h5>3.2-17 IO_fchown</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_fchown</code>( <var class="Arg">fd</var>, <var class="Arg">owner</var>, <var class="Arg">group</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_fchown</code>( <var class="Arg">fd</var>, <var class="Arg">owner</var>, <var class="Arg">group</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
 
 <p>Changes owner and/or group of an opened file. For details see "<code class="code">man 2 fchown</code>".</p>
@@ -313,7 +313,7 @@
 
 <h5>3.2-18 IO_fcntl</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_fcntl</code>( <var class="Arg">fd</var>, <var class="Arg">cmd</var>, <var class="Arg">arg</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_fcntl</code>( <var class="Arg">fd</var>, <var class="Arg">cmd</var>, <var class="Arg">arg</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: an integer or <code class="keyw">fail</code></p>
 
 <p>Does various things to control the behaviour of a file descriptor. For details see "<code class="code">man 2 fcntl</code>".</p>
@@ -322,7 +322,7 @@
 
 <h5>3.2-19 IO_fork</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_fork</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_fork</code>(  )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: an integer or <code class="keyw">fail</code></p>
 
 <p>Forks off a child process, which is an identical copy. For details see "<code class="code">man 2 fork</code>". Note that <code class="func">IO_fork</code> activates our SIGCHLD handler (see <code class="func">IO_InstallSIGCHLDHandler</code> (<a href="chap3_mj.html#X8383E62D86BE30C6"><span class="RefLink">3.3-3</span></a>)). Note that you must use the <code class="func">IO_WaitPid</code> (<a href="chap3_mj.html#X80737A008450184F"><span class="RefLink">3.2-62</span></a>) function to wait or check for the termination of child processes, or call <code class="func">IO_IgnorePid</code> (<a href="chap3_mj.html#X84295FC77CCB1066"><span class="RefLink">3.2-63</span></a>) to ignore the child.</p>
@@ -331,7 +331,7 @@
 
 <h5>3.2-20 IO_fstat</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_fstat</code>( <var class="Arg">fd</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_fstat</code>( <var class="Arg">fd</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: a record or <code class="keyw">fail</code></p>
 
 <p>Returns the file meta data for an opened file. For details see "<code class="code">man 2 fstat</code>". A <strong class="pkg">GAP</strong> record is returned with the same entries than a <code class="code">struct stat</code>.</p>
@@ -340,7 +340,7 @@
 
 <h5>3.2-21 IO_gethostbyname</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_gethostbyname</code>( <var class="Arg">name</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_gethostbyname</code>( <var class="Arg">name</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: a record or <code class="keyw">fail</code></p>
 
 <p>Return host information by name. For details see "<code class="code">man 3 gethostbyname</code>". A <strong class="pkg">GAP</strong> record is returned with all the relevant information about the host.</p>
@@ -349,7 +349,7 @@
 
 <h5>3.2-22 IO_gethostname</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_gethostname</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_gethostname</code>(  )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: a string or <code class="keyw">fail</code></p>
 
 <p>Return host name. For details see "<code class="code">man 3 gethostname</code>".</p>
@@ -358,7 +358,7 @@
 
 <h5>3.2-23 IO_getpid</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_getpid</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_getpid</code>(  )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: an integer</p>
 
 <p>Returns the process ID of the current process as an integer. For details see "<code class="code">man 2 getpid</code>".</p>
@@ -367,7 +367,7 @@
 
 <h5>3.2-24 IO_getppid</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_getppid</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_getppid</code>(  )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: an integer</p>
 
 <p>Returns the process ID of the parent of the current process as an integer. For details see "<code class="code">man 2 getppid</code>".</p>
@@ -376,7 +376,7 @@
 
 <h5>3.2-25 IO_getsockname</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_getsockname</code>( <var class="Arg">fd</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_getsockname</code>( <var class="Arg">fd</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: a string or <code class="keyw">fail</code></p>
 
 <p>Get a socket name. For details see "<code class="code">man 2 getsockname</code>".</p>
@@ -385,7 +385,7 @@
 
 <h5>3.2-26 IO_getsockopt</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_getsockopt</code>( <var class="Arg">fd</var>, <var class="Arg">level</var>, <var class="Arg">optname</var>, <var class="Arg">optval</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_getsockopt</code>( <var class="Arg">fd</var>, <var class="Arg">level</var>, <var class="Arg">optname</var>, <var class="Arg">optval</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
 
 <p>Get a socket option. For details see "<code class="code">man 2 getsockopt</code>". Note that the argument <var class="Arg">optval</var> carries its length around, such that no 5th argument is necessary.</p>
@@ -394,7 +394,7 @@
 
 <h5>3.2-27 IO_gettimeofday</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_gettimeofday</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_gettimeofday</code>(  )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: A record with components <code class="code">tv_sec</code> and <code class="code">tv_usec</code></p>
 
 <p>This returns the time elapsed since 1.1.1970, 0:00 GMT. The component <code class="code">tv_sec</code> contains the number of full seconds and the number <code class="code">tv_usec</code> the additional microseconds.</p>
@@ -403,7 +403,7 @@
 
 <h5>3.2-28 IO_gmtime</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_gmtime</code>( <var class="Arg">seconds</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_gmtime</code>( <var class="Arg">seconds</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: A record</p>
 
 <p>The argument is the number of seconds that have elapsed since 1.1.1970, 0:00 GMT. The result is a record with the current Greenwich mean time broken down into date and time as in the C-library function <code class="code">gmtime</code>.</p>
@@ -412,7 +412,7 @@
 
 <h5>3.2-29 IO_kill</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_kill</code>( <var class="Arg">pid</var>, <var class="Arg">sig</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_kill</code>( <var class="Arg">pid</var>, <var class="Arg">sig</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
 
 <p>Sends the signal <var class="Arg">sig</var> to the process with process ID <var class="Arg">pid</var>. For details see "<code class="code">man 2 kill</code>". The signal numbers available can be found in the global <code class="code">IO</code> record with names like <code class="code">SIGTERM</code>.</p>
@@ -421,7 +421,7 @@
 
 <h5>3.2-30 IO_lchown</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_lchown</code>( <var class="Arg">path</var>, <var class="Arg">owner</var>, <var class="Arg">group</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_lchown</code>( <var class="Arg">path</var>, <var class="Arg">owner</var>, <var class="Arg">group</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
 
 <p>Changes owner and/or group of a file not following links. For details see "<code class="code">man 2 lchown</code>".</p>
@@ -430,7 +430,7 @@
 
 <h5>3.2-31 IO_link</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_link</code>( <var class="Arg">oldpath</var>, <var class="Arg">newpath</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_link</code>( <var class="Arg">oldpath</var>, <var class="Arg">newpath</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
 
 <p>Create a hard link. For details see "<code class="code">man 2 link</code>".</p>
@@ -439,7 +439,7 @@
 
 <h5>3.2-32 IO_listen</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_listen</code>( <var class="Arg">fd</var>, <var class="Arg">backlog</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_listen</code>( <var class="Arg">fd</var>, <var class="Arg">backlog</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
 
 <p>Switch a socket to listening. For details see "<code class="code">man 2 listen</code>".</p>
@@ -448,7 +448,7 @@
 
 <h5>3.2-33 IO_localtime</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_localtime</code>( <var class="Arg">seconds</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_localtime</code>( <var class="Arg">seconds</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: A record</p>
 
 <p>The argument is the number of seconds that have elapsed since 1.1.1970, 0:00 GMT. The result is a record with the current local time broken down into date and time as in the C-library function <code class="code">localtime</code>.</p>
@@ -457,7 +457,7 @@
 
 <h5>3.2-34 IO_lseek</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_lseek</code>( <var class="Arg">fd</var>, <var class="Arg">offset</var>, <var class="Arg">whence</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_lseek</code>( <var class="Arg">fd</var>, <var class="Arg">offset</var>, <var class="Arg">whence</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: an integer or <code class="keyw">fail</code></p>
 
 <p>Seeks within an open file. For details see "<code class="code">man 2 lseek</code>".</p>
@@ -466,7 +466,7 @@
 
 <h5>3.2-35 IO_lstat</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_lstat</code>( <var class="Arg">name</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_lstat</code>( <var class="Arg">name</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: a record or <code class="keyw">fail</code></p>
 
 <p>Returns the file meta data for a file not following links. For details see "<code class="code">man 2 lstat</code>". A <strong class="pkg">GAP</strong> record is returned with the same entries than a <code class="code">struct stat</code>.</p>
@@ -475,7 +475,7 @@
 
 <h5>3.2-36 IO_mkdir</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_mkdir</code>( <var class="Arg">pathname</var>, <var class="Arg">mode</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_mkdir</code>( <var class="Arg">pathname</var>, <var class="Arg">mode</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
 
 <p>Creates a directory. For details see "<code class="code">man 2 mkdir</code>".</p>
@@ -484,7 +484,7 @@
 
 <h5>3.2-37 IO_mkfifo</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_mkfifo</code>( <var class="Arg">pathname</var>, <var class="Arg">mode</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_mkfifo</code>( <var class="Arg">pathname</var>, <var class="Arg">mode</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
 
 <p>Creates a FIFO special file (a named pipe). For details see "<code class="code">man 3 mkfifo</code>".</p>
@@ -493,7 +493,7 @@
 
 <h5>3.2-38 IO_mknod</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_mknod</code>( <var class="Arg">pathname</var>, <var class="Arg">mode</var>, <var class="Arg">dev</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_mknod</code>( <var class="Arg">pathname</var>, <var class="Arg">mode</var>, <var class="Arg">dev</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
 
 <p>Create a special or ordinary file. For details see "<code class="code">man 2 mknod</code>".</p>
@@ -502,7 +502,7 @@
 
 <h5>3.2-39 IO_mkstemp</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_mkstemp</code>( <var class="Arg">template</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_mkstemp</code>( <var class="Arg">template</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: an integer or <code class="keyw">fail</code></p>
 
 <p>Create a special or ordinary file. For details see "<code class="code">man 3 mkstemp</code>".</p>
@@ -511,7 +511,7 @@
 
 <h5>3.2-40 IO_mkdtemp</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_mkdtemp</code>( <var class="Arg">template</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_mkdtemp</code>( <var class="Arg">template</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: a string or <code class="keyw">fail</code></p>
 
 <p>Create a temporary directory. For details see "<code class="code">man 3 mkdtemp</code>".</p>
@@ -520,7 +520,7 @@
 
 <h5>3.2-41 IO_open</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_open</code>( <var class="Arg">pathname</var>, <var class="Arg">flags</var>, <var class="Arg">mode</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_open</code>( <var class="Arg">pathname</var>, <var class="Arg">flags</var>, <var class="Arg">mode</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: an integer or <code class="keyw">fail</code></p>
 
 <p>Open and possibly create a file or device. For details see "<code class="code">man 2 open</code>". Only the variant with 3 arguments can be used.</p>
@@ -529,7 +529,7 @@
 
 <h5>3.2-42 IO_opendir</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_opendir</code>( <var class="Arg">name</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_opendir</code>( <var class="Arg">name</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
 
 <p>Opens a directory. For details see "<code class="code">man 3 opendir</code>". Note that only <code class="keyw">true</code> is returned if everything is OK, since only one <code class="code">DIR</code> struct is stored on the C level and thus only one directory can be open at any time.</p>
@@ -538,7 +538,7 @@
 
 <h5>3.2-43 IO_pipe</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_pipe</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_pipe</code>(  )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: a record or <code class="keyw">fail</code></p>
 
 <p>Create a pair of file descriptors with a pipe between them. For details see "<code class="code">man 2 pipe</code>". Note that no arguments are needed. The result is either <code class="keyw">fail</code> in case of an error or a record with two components <code class="code">toread</code> and <code class="code">towrite</code> bound to the two filedescriptors for reading and writing respectively.</p>
@@ -547,7 +547,7 @@
 
 <h5>3.2-44 IO_read</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_read</code>( <var class="Arg">fd</var>, <var class="Arg">st</var>, <var class="Arg">offset</var>, <var class="Arg">count</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_read</code>( <var class="Arg">fd</var>, <var class="Arg">st</var>, <var class="Arg">offset</var>, <var class="Arg">count</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: an integer or <code class="keyw">fail</code></p>
 
 <p>Reads from file descriptor. For details see "<code class="code">man 2 read</code>". Note that there is one more argument <var class="Arg">offset</var> to specify at which position in the string <var class="Arg">st</var> the read data should be stored. Note that <var class="Arg">offset</var> zero means at the beginning of the string, which is position 1 in <strong class="pkg">GAP</strong>. The number of bytes read or <code class="keyw">fail</code> in case of an error is returned.</p>
@@ -556,7 +556,7 @@
 
 <h5>3.2-45 IO_readdir</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_readdir</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_readdir</code>(  )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: a string or <code class="keyw">fail</code> or <code class="keyw">false</code></p>
 
 <p>Reads from a directory. For details see "<code class="code">man 2 readdir</code>". Note that no argument is required as we have only one <code class="code">DIR</code> struct on the C level. If the directory is read completely <code class="keyw">false</code> is returned, and otherwise a string. An error is indicated by <code class="keyw">fail</code>.</p>
@@ -565,7 +565,7 @@
 
 <h5>3.2-46 IO_readlink</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_readlink</code>( <var class="Arg">path</var>, <var class="Arg">buf</var>, <var class="Arg">bufsize</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_readlink</code>( <var class="Arg">path</var>, <var class="Arg">buf</var>, <var class="Arg">bufsize</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: an integer or <code class="keyw">fail</code></p>
 
 <p>Reads the value of a symbolic link. For details see "<code class="code">man 2 readlink</code>". <var class="Arg">buf</var> is modified. The new length of <var class="Arg">buf</var> is returned or <code class="keyw">fail</code> in case of an error.</p>
@@ -574,7 +574,7 @@
 
 <h5>3.2-47 IO_recv</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_recv</code>( <var class="Arg">fd</var>, <var class="Arg">st</var>, <var class="Arg">offset</var>, <var class="Arg">len</var>, <var class="Arg">flags</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_recv</code>( <var class="Arg">fd</var>, <var class="Arg">st</var>, <var class="Arg">offset</var>, <var class="Arg">len</var>, <var class="Arg">flags</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: an integer or <code class="keyw">fail</code></p>
 
 <p>Receives data from a socket. For details see "<code class="code">man 2 recv</code>". Note the additional argument <var class="Arg">offset</var> which plays the same role as for the <code class="func">IO_read</code> (<a href="chap3_mj.html#X84F3D862836BF17C"><span class="RefLink">3.2-44</span></a>) function.</p>
@@ -583,7 +583,7 @@
 
 <h5>3.2-48 IO_recvfrom</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_recvfrom</code>( <var class="Arg">fd</var>, <var class="Arg">st</var>, <var class="Arg">offset</var>, <var class="Arg">len</var>, <var class="Arg">flags</var>, <var class="Arg">addr</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_recvfrom</code>( <var class="Arg">fd</var>, <var class="Arg">st</var>, <var class="Arg">offset</var>, <var class="Arg">len</var>, <var class="Arg">flags</var>, <var class="Arg">addr</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: an integer or <code class="keyw">fail</code></p>
 
 <p>Receives data from a socket with given address. For details see "<code class="code">man 2 recvfrom</code>". Note the additional argument <var class="Arg">offset</var> which plays the same role as for the <code class="func">IO_read</code> (<a href="chap3_mj.html#X84F3D862836BF17C"><span class="RefLink">3.2-44</span></a>) function. The argument <var class="Arg">addr</var> can be made with <code class="func">IO_make_sockaddr_in</code> (<a href="chap3_mj.html#X878007A67E806CEF"><span class="RefLink">3.3-1</span></a>) and contains its length such that no 7th argument is necessary.</p>
@@ -592,7 +592,7 @@
 
 <h5>3.2-49 IO_rename</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_rename</code>( <var class="Arg">oldpath</var>, <var class="Arg">newpath</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_rename</code>( <var class="Arg">oldpath</var>, <var class="Arg">newpath</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
 
 <p>Renames a file or moves it. For details see "<code class="code">man 2 rename</code>".</p>
@@ -601,7 +601,7 @@
 
 <h5>3.2-50 IO_rewinddir</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_rewinddir</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_rewinddir</code>(  )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
 
 <p>Rewinds a directory. For details see "<code class="code">man 2 rewinddir</code>". Note that no argument is required as we have only one <code class="code">DIR</code> struct on the C level. Returns <code class="keyw">fail</code> only, if no prior <code class="func">IO_opendir</code> (<a href="chap3_mj.html#X78E234797EB01883"><span class="RefLink">3.2-42</span></a>) command has been called.</p>
@@ -610,7 +610,7 @@
 
 <h5>3.2-51 IO_rmdir</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_rmdir</code>( <var class="Arg">name</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_rmdir</code>( <var class="Arg">name</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
 
 <p>Removes an empty directory. For details see "<code class="code">man 2 rmdir</code>".</p>
@@ -619,7 +619,7 @@
 
 <h5>3.2-52 IO_seekdir</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_seekdir</code>( <var class="Arg">offset</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_seekdir</code>( <var class="Arg">offset</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
 
 <p>Sets the position of the next readdir call. For details see "<code class="code">man 3 seekdir</code>". Note that no second argument is required as we have only one <code class="code">DIR</code> struct on the C level.</p>
@@ -628,7 +628,7 @@
 
 <h5>3.2-53 IO_select</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_select</code>( <var class="Arg">inlist</var>, <var class="Arg">outlist</var>, <var class="Arg">exclist</var>, <var class="Arg">timeoutsec</var>, <var class="Arg">timeoutusec</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_select</code>( <var class="Arg">inlist</var>, <var class="Arg">outlist</var>, <var class="Arg">exclist</var>, <var class="Arg">timeoutsec</var>, <var class="Arg">timeoutusec</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: an integer or <code class="keyw">fail</code></p>
 
 <p>Used for I/O multiplexing. For details see "<code class="code">man 2 select</code>". <var class="Arg">inlist</var>, <var class="Arg">outlist</var> and <var class="Arg">exclist</var> are lists of filedescriptors, which are modified. If the corresponding file descriptor is not yet ready, it is replaced by <code class="keyw">fail</code>. The timeout values <var class="Arg">timeoutsec</var> and <var class="Arg">timeoutusec</var> correspond to the usual arguments of <code class="code">select</code>, if both are immediate integers, they are set, otherwise <code class="code">select</code> is called with no timeout value.</p>
@@ -637,7 +637,7 @@
 
 <h5>3.2-54 IO_send</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_send</code>( <var class="Arg">fd</var>, <var class="Arg">st</var>, <var class="Arg">offset</var>, <var class="Arg">len</var>, <var class="Arg">flags</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_send</code>( <var class="Arg">fd</var>, <var class="Arg">st</var>, <var class="Arg">offset</var>, <var class="Arg">len</var>, <var class="Arg">flags</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: an integer or <code class="keyw">fail</code></p>
 
 <p>Sends data to a socket. For details see "<code class="code">man 2 send</code>". Note that the additional argument <var class="Arg">offset</var> specifies the position of the data to send within the string <var class="Arg">st</var>. It is zero based, meaning that zero indicates the start of the string, which is position 1 in <strong class="pkg">GAP</strong>.</p>
@@ -646,7 +646,7 @@
 
 <h5>3.2-55 IO_sendto</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_sendto</code>( <var class="Arg">fd</var>, <var class="Arg">st</var>, <var class="Arg">offset</var>, <var class="Arg">len</var>, <var class="Arg">flags</var>, <var class="Arg">addr</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_sendto</code>( <var class="Arg">fd</var>, <var class="Arg">st</var>, <var class="Arg">offset</var>, <var class="Arg">len</var>, <var class="Arg">flags</var>, <var class="Arg">addr</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: an integer or <code class="keyw">fail</code></p>
 
 <p>Sends data to a socket. For details see "<code class="code">man 2 sendto</code>". Note that the additional argument <var class="Arg">offset</var> specifies the position of the data to send within the string <var class="Arg">st</var>. It is zero based, meaning that zero indicates the start of the string, which is position 1 in <strong class="pkg">GAP</strong>. The argument <var class="Arg">addr</var> can be made with <code class="func">IO_make_sockaddr_in</code> (<a href="chap3_mj.html#X878007A67E806CEF"><span class="RefLink">3.3-1</span></a>) and contains its length such that no 7th argument is necessary.</p>
@@ -655,7 +655,7 @@
 
 <h5>3.2-56 IO_setsockopt</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_setsockopt</code>( <var class="Arg">fd</var>, <var class="Arg">level</var>, <var class="Arg">optname</var>, <var class="Arg">optval</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_setsockopt</code>( <var class="Arg">fd</var>, <var class="Arg">level</var>, <var class="Arg">optname</var>, <var class="Arg">optval</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
 
 <p>Sets a socket option. For details see "<code class="code">man 2 setsockopt</code>". Note that the argument <var class="Arg">optval</var> carries its length around, such that no 5th argument is necessary.</p>
@@ -664,7 +664,7 @@
 
 <h5>3.2-57 IO_socket</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_socket</code>( <var class="Arg">domain</var>, <var class="Arg">type</var>, <var class="Arg">protocol</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_socket</code>( <var class="Arg">domain</var>, <var class="Arg">type</var>, <var class="Arg">protocol</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: an integer or <code class="keyw">fail</code></p>
 
 <p>Creates a socket, an endpoint for communication. For details see "<code class="code">man 2 socket</code>". There is one little special: On systems that have <code class="code">getprotobyname</code> you can pass a string as third argument <var class="Arg">protocol</var> which is automatically looked up by <code class="code">getprotobyname</code>.</p>
@@ -673,7 +673,7 @@
 
 <h5>3.2-58 IO_stat</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_stat</code>( <var class="Arg">pathname</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_stat</code>( <var class="Arg">pathname</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: a record or <code class="keyw">fail</code></p>
 
 <p>Returns the file metadata for the file <var class="Arg">pathname</var>. For details see "<code class="code">man 2 stat</code>". A <strong class="pkg">GAP</strong> record is returned with the same entries than a <code class="code">struct stat</code>.</p>
@@ -682,7 +682,7 @@
 
 <h5>3.2-59 IO_symlink</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_symlink</code>( <var class="Arg">oldpath</var>, <var class="Arg">newpath</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_symlink</code>( <var class="Arg">oldpath</var>, <var class="Arg">newpath</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
 
 <p>Creates a symbolic link. For details see "<code class="code">man 2 symlink</code>".</p>
@@ -691,7 +691,7 @@
 
 <h5>3.2-60 IO_telldir</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_telldir</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_telldir</code>(  )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: an integer or <code class="keyw">fail</code></p>
 
 <p>Return current location in directory. For details see "<code class="code">man 3 telldir</code>". Note that no second argument is required as we have only one <code class="code">DIR</code> struct on the C level.</p>
@@ -700,7 +700,7 @@
 
 <h5>3.2-61 IO_unlink</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_unlink</code>( <var class="Arg">pathname</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_unlink</code>( <var class="Arg">pathname</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">fail</code></p>
 
 <p>Delete a name and possibly the file it refers to. For details see "<code class="code">man 2 unlink</code>".</p>
@@ -709,7 +709,7 @@
 
 <h5>3.2-62 IO_WaitPid</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_WaitPid</code>( <var class="Arg">pid</var>, <var class="Arg">wait</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_WaitPid</code>( <var class="Arg">pid</var>, <var class="Arg">wait</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: a record or <code class="keyw">fail</code></p>
 
 <p>Waits for the termination of a child process. For details see "<code class="code">man 2 waitpid</code>". Returns a <strong class="pkg">GAP</strong> record describing PID and exit status. The second argument <var class="Arg">wait</var> must be either <code class="keyw">true</code> or <code class="keyw">false</code>. In the first case, the call blocks until new information about a terminated child process is available. In the second case no such waiting is performed, the call returns immediately. See <code class="func">IO_fork</code> (<a href="chap3_mj.html#X86C819F37D07ECF7"><span class="RefLink">3.2-19</span></a>). If you do not care about the return value of the process, call <code class="func">IO_IgnorePid</code> (<a href="chap3_mj.html#X84295FC77CCB1066"><span class="RefLink">3.2-63</span></a>).</p>
@@ -718,7 +718,7 @@
 
 <h5>3.2-63 IO_IgnorePid</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_IgnorePid</code>( <var class="Arg">pid</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_IgnorePid</code>( <var class="Arg">pid</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: Nothing</p>
 
 <p>Disowns a child process. This means there is no need to call <code class="func">IO_WaitPid</code> (<a href="chap3_mj.html#X80737A008450184F"><span class="RefLink">3.2-62</span></a>). Calling <code class="func">IO_WaitPid</code> (<a href="chap3_mj.html#X80737A008450184F"><span class="RefLink">3.2-62</span></a>) on a pid which was previously passed to <code class="func">IO_IgnorePid</code> may cause an infinite loop.F</p>
@@ -727,7 +727,7 @@
 
 <h5>3.2-64 IO_write</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_write</code>( <var class="Arg">fd</var>, <var class="Arg">st</var>, <var class="Arg">offset</var>, <var class="Arg">count</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_write</code>( <var class="Arg">fd</var>, <var class="Arg">st</var>, <var class="Arg">offset</var>, <var class="Arg">count</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: an integer or <code class="keyw">fail</code></p>
 
 <p>Writes to a file descriptor. For details see "<code class="code">man 2 write</code>". Note that the additional argument <var class="Arg">offset</var> specifies the position of the data to send within the string <var class="Arg">st</var>. It is zero based, meaning that zero indicates the start of the string, which is position 1 in <strong class="pkg">GAP</strong>.</p>
@@ -742,7 +742,7 @@
 
 <h5>3.3-1 IO_make_sockaddr_in</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_make_sockaddr_in</code>( <var class="Arg">ip</var>, <var class="Arg">port</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_make_sockaddr_in</code>( <var class="Arg">ip</var>, <var class="Arg">port</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: a string or <code class="keyw">fail</code></p>
 
 <p>Makes a struct <code class="code">sockaddr_in</code> from IP address and port. The IP address must be given as a string of length four, containing the four bytes of an IPv4 address in natural order. The port must be a port number. Returns a string containing the struct, which can be given to all functions above having an address argument.</p>
@@ -751,7 +751,7 @@
 
 <h5>3.3-2 IO_environ</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_environ</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_environ</code>(  )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: a list of strings</p>
 
 <p>For details see "<code class="code">man environ</code>". Returns the current environment as a list of strings of the form "key=value".</p>
@@ -760,7 +760,7 @@
 
 <h5>3.3-3 IO_InstallSIGCHLDHandler</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_InstallSIGCHLDHandler</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_InstallSIGCHLDHandler</code>(  )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="keyw">true</code> or <code class="keyw">false</code></p>
 
 <p>Installs our SIGCHLD handler. This functions works as an idempotent. That is, calling it twice does exactly the same as calling it once. It returns <code class="keyw">true</code> when it is called for the first time since then a pointer to the old signal handler is stored in a global variable. This function is automatically called by any function which creates new processes, so never needs to be called unless the handler was explictly disabled with <code class="func">IO_RestoreSIGCHLDHandler</code> (<a href="chap3_mj.html#X7EEB7471816B64DF"><span class="RefLink">3.3-4</span></a>) See <code class="func">IO_fork</code> (<a href="chap3_mj.html#X86C819F37D07ECF7"><span class="RefLink">3.2-19</span></a>).</p>
@@ -769,7 +769,7 @@
 
 <h5>3.3-4 IO_RestoreSIGCHLDHandler</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_RestoreSIGCHLDHandler</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_RestoreSIGCHLDHandler</code>(  )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Restores the original SIGCHLD handler. This function works as an idempotent. That is, calling it twice does exactly the same as calling it once. It returns <code class="keyw">true</code> when it is called for the first time after calling <code class="func">IO_InstallSIGCHLDHandler</code> (<a href="chap3_mj.html#X8383E62D86BE30C6"><span class="RefLink">3.3-3</span></a>). See <code class="func">IO_fork</code> (<a href="chap3_mj.html#X86C819F37D07ECF7"><span class="RefLink">3.2-19</span></a>).</p>
 
 

@@ -27,14 +27,14 @@
   
   [1X9.2-1 IOHub[101X
   
-  [29X[2XIOHub[102X(  ) [32X operation
+  [33X[1;0Y[29X[2XIOHub[102X(  ) [32X operation[133X
   [6XReturns:[106X  [33X[0;10Yan [2XIOHub[102X object[133X
   
   [33X[0;0YThis creates a new [2XIOHub[102X object at first without any open connections.[133X
   
   [1X9.2-2 NewConnection[101X
   
-  [29X[2XNewConnection[102X( [3Xh[103X, [3Xi[103X, [3Xo[103X ) [32X operation
+  [33X[1;0Y[29X[2XNewConnection[102X( [3Xh[103X, [3Xi[103X, [3Xo[103X ) [32X operation[133X
   [6XReturns:[106X  [33X[0;10Ya positive integer[133X
   
   [33X[0;0YThis  operation  adds  a  new  connection to the [2XIOHub[102X ([14X9.2-1[114X) object [3Xh[103X. The
@@ -56,7 +56,7 @@
   
   [1X9.2-3 CloseConnection[101X
   
-  [29X[2XCloseConnection[102X( [3Xh[103X, [3Xnr[103X ) [32X operation
+  [33X[1;0Y[29X[2XCloseConnection[102X( [3Xh[103X, [3Xnr[103X ) [32X operation[133X
   [6XReturns:[106X  [33X[0;10Ynothing[133X
   
   [33X[0;0YThe  argument  [3Xh[103X  must  be  an  [2XIOHub[102X  ([14X9.2-1[114X) object and [3Xnr[103X the number of a
@@ -65,7 +65,7 @@
   
   [1X9.2-4 AttachServingSocket[101X
   
-  [29X[2XAttachServingSocket[102X( [3Xh[103X, [3Xaddr[103X, [3Xport[103X ) [32X operation
+  [33X[1;0Y[29X[2XAttachServingSocket[102X( [3Xh[103X, [3Xaddr[103X, [3Xport[103X ) [32X operation[133X
   [6XReturns:[106X  [33X[0;10Ya Unix file descriptor or [9Xfail[109X[133X
   
   [33X[0;0YThe  argument  [3Xh[103X must be an [2XIOHub[102X ([14X9.2-1[114X) object, [3Xaddr[103X an IP address or host
@@ -78,7 +78,7 @@
   
   [1X9.2-5 ShutdownServingSocket[101X
   
-  [29X[2XShutdownServingSocket[102X( [3Xh[103X ) [32X operation
+  [33X[1;0Y[29X[2XShutdownServingSocket[102X( [3Xh[103X ) [32X operation[133X
   [6XReturns:[106X  [33X[0;10Ynothing[133X
   
   [33X[0;0YThe  argument [3Xh[103X must be an [2XIOHub[102X ([14X9.2-1[114X) object. Any server socket which was
@@ -86,7 +86,7 @@
   
   [1X9.2-6 Shutdown[101X
   
-  [29X[2XShutdown[102X( [3Xh[103X ) [32X operation
+  [33X[1;0Y[29X[2XShutdown[102X( [3Xh[103X ) [32X operation[133X
   [6XReturns:[106X  [33X[0;10Ynothing[133X
   
   [33X[0;0YThe argument [3Xh[103X must be an [2XIOHub[102X ([14X9.2-1[114X) object. All connections of [3Xh[103X will be
@@ -96,7 +96,7 @@
   
   [1X9.2-7 AcceptNewConnection[101X
   
-  [29X[2XAcceptNewConnection[102X( [3Xh[103X ) [32X operation
+  [33X[1;0Y[29X[2XAcceptNewConnection[102X( [3Xh[103X ) [32X operation[133X
   [6XReturns:[106X  [33X[0;10Ya positive integer or [9Xfail[109X[133X
   
   [33X[0;0YThe  argument  [3Xh[103X  must  be an [2XIOHub[102X ([14X9.2-1[114X) object. The object [3Xh[103X must have a
@@ -112,7 +112,7 @@
   
   [1X9.2-8 SubmitOutput[101X
   
-  [29X[2XSubmitOutput[102X( [3Xh[103X, [3Xnr[103X, [3Xst[103X ) [32X operation
+  [33X[1;0Y[29X[2XSubmitOutput[102X( [3Xh[103X, [3Xnr[103X, [3Xst[103X ) [32X operation[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
   
   [33X[0;0YThe  argument  [3Xh[103X  must  be  an  [2XIOHub[102X  ([14X9.2-1[114X) object, [3Xnr[103X must be a positive
@@ -124,7 +124,7 @@
   
   [1X9.2-9 GetInput[101X
   
-  [29X[2XGetInput[102X( [3Xh[103X, [3Xnr[103X ) [32X operation
+  [33X[1;0Y[29X[2XGetInput[102X( [3Xh[103X, [3Xnr[103X ) [32X operation[133X
   [6XReturns:[106X  [33X[0;10Ya list of length [22X2[122X[133X
   
   [33X[0;0YThe argument [3Xh[103X must be an [2XIOHub[102X ([14X9.2-1[114X) object, [3Xnr[103X must be an integer. If [3Xnr[103X
@@ -139,7 +139,7 @@
   
   [1X9.2-10 NewTCPConnection[101X
   
-  [29X[2XNewTCPConnection[102X( [3Xh[103X, [3Xaddr[103X, [3Xport[103X ) [32X operation
+  [33X[1;0Y[29X[2XNewTCPConnection[102X( [3Xh[103X, [3Xaddr[103X, [3Xport[103X ) [32X operation[133X
   [6XReturns:[106X  [33X[0;10Ya connection number or [9Xfail[109X[133X
   
   [33X[0;0YThe  argument [3Xh[103X must be an [2XIOHub[102X ([14X9.2-1[114X) object, the arguments [3Xaddr[103X and [3Xport[103X
@@ -152,7 +152,7 @@
   
   [1X9.2-11 OutputQueue[101X
   
-  [29X[2XOutputQueue[102X( [3Xh[103X ) [32X operation
+  [33X[1;0Y[29X[2XOutputQueue[102X( [3Xh[103X ) [32X operation[133X
   [6XReturns:[106X  [33X[0;10Ya list[133X
   
   [33X[0;0YThe  argument  [3Xh[103X  must be an [2XIOHub[102X ([14X9.2-1[114X) object. This returns the internal
@@ -163,7 +163,7 @@
   
   [1X9.2-12 InputQueue[101X
   
-  [29X[2XInputQueue[102X( [3Xh[103X ) [32X operation
+  [33X[1;0Y[29X[2XInputQueue[102X( [3Xh[103X ) [32X operation[133X
   [6XReturns:[106X  [33X[0;10Ya list[133X
   
   [33X[0;0YThe  argument  [3Xh[103X  must be an [2XIOHub[102X ([14X9.2-1[114X) object. This returns the internal
@@ -174,7 +174,7 @@
   
   [1X9.2-13 DoIO[101X
   
-  [29X[2XDoIO[102X( [3Xh[103X[, [3Xblock[103X] ) [32X operation
+  [33X[1;0Y[29X[2XDoIO[102X( [3Xh[103X[, [3Xblock[103X] ) [32X operation[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X or [9Xfail[109X[133X
   
   [33X[0;0YThe  argument  [3Xh[103X  must  be  an [2XIOHub[102X ([14X9.2-1[114X) object, and the optional second

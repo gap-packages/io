@@ -13,7 +13,7 @@
   
   [1X6.1-1 RandomSource[101X
   
-  [29X[2XRandomSource[102X( [3Xr[103X, [3Xdev[103X ) [32X method
+  [33X[1;0Y[29X[2XRandomSource[102X( [3Xr[103X, [3Xdev[103X ) [32X method[133X
   [6XReturns:[106X  [33X[0;10Ya real random source object or [10Xfail[110X[133X
   
   [33X[0;0YThe  first  argument  [3Xr[103X  must  be  the [5XGAP[105X filter [10XIsRealRandomSource[110X and the

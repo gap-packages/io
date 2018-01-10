@@ -50,7 +50,7 @@
 
 <h5>7.1-1 OpenHTTPConnection</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; OpenHTTPConnection</code>( <var class="Arg">hostname</var>, <var class="Arg">port</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; OpenHTTPConnection</code>( <var class="Arg">hostname</var>, <var class="Arg">port</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: a record</p>
 
 <p>The first argument <var class="Arg">hostname</var> must be a string containing the hostname of the server to connect. The second argument <var class="Arg">port</var> must be an integer in the range from <span class="SimpleMath">\(1\)</span> to <span class="SimpleMath">\(65535\)</span> and describes the port to connect to on the server.</p>
@@ -63,7 +63,7 @@
 
 <h5>7.1-2 HTTPRequest</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; HTTPRequest</code>( <var class="Arg">conn</var>, <var class="Arg">method</var>, <var class="Arg">uri</var>, <var class="Arg">header</var>, <var class="Arg">body</var>, <var class="Arg">target</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; HTTPRequest</code>( <var class="Arg">conn</var>, <var class="Arg">method</var>, <var class="Arg">uri</var>, <var class="Arg">header</var>, <var class="Arg">body</var>, <var class="Arg">target</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: a record</p>
 
 <p>This function performs a complete HTTP request. The first argument must be a connection record as returned by a successful call to <code class="func">OpenHTTPConnection</code> (<a href="chap7_mj.html#X7B5588D5856BE6DD"><span class="RefLink">7.1-1</span></a>). The argument <var class="Arg">method</var> must be a valid HTTP request "method" in form of a string. The most common will be <code class="keyw">GET</code>, <code class="keyw">POST</code>, or <code class="keyw">HEAD</code>. The argument <var class="Arg">uri</var> is a string containing the URI of the request, which is given in the first line of the request. This will usually be a relative or absolute path name given to the server. The argument <var class="Arg">header</var> must be a <strong class="pkg">GAP</strong> record. Each bound field of this record will we transformed into one header line with the name of the component being the key and the value the value. All bound values must be strings. The argument <var class="Arg">body</var> must either be a string or <code class="keyw">false</code>. If it is a string, this string is sent away as the body of the request. If no string or an empty string is given, no body will be sent. The header field <code class="keyw">Content-Length</code> is automatically created from the length of the string <var class="Arg">body</var>. Finally, the argument <var class="Arg">target</var> can either be <code class="keyw">false</code> or a string. In the latter case, the body of the request answer is written to the file with the name given in <var class="Arg">target</var>. The <code class="keyw">body</code> component of the result will be the file name in this case. If <var class="Arg">target</var> is false, the full body of the answer is stored into the <code class="keyw">body</code> component of the result.</p>
@@ -78,7 +78,7 @@
 
 <h5>7.1-3 HTTPTimeoutForSelect</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; HTTPTimeoutForSelect</code></td><td class="tdright">( global variable )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; HTTPTimeoutForSelect</code></td><td class="tdright">(&nbsp;global variable&nbsp;)</td></tr></table></div>
 <p>This global variable holds a list of length two. By default, both entries are <code class="keyw">fail</code> indicating that <code class="func">HTTPRequest</code> (<a href="chap7_mj.html#X80FF9E307BDA0659"><span class="RefLink">7.1-2</span></a>) should never timeout and wait forever for an answer. Actually, the two values in this variable are given to the <code class="func">IO_Select</code> (<a href="chap4_mj.html#X81CA6EE88062010E"><span class="RefLink">4.3-3</span></a>) function call during I/O multiplexing. That is, the first number is in seconds and the second in milliseconds. Together they lead to a timeout for the HTTP request. If a timeout occurs, an error condition is triggered which returns a record with status code <span class="SimpleMath">\(0\)</span> and status being the timeout error message.</p>
 
 <p>You can change the timeout by accessing the two entries of this write protected list variable directly.</p>
@@ -87,7 +87,7 @@
 
 <h5>7.1-4 CloseHTTPConnection</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; CloseHTTPConnection</code>( <var class="Arg">conn</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; CloseHTTPConnection</code>( <var class="Arg">conn</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: nothing</p>
 
 <p>Closes the connection described by the connection record <var class="Arg">conn</var>. No error can possibly occur.</p>
@@ -96,7 +96,7 @@
 
 <h5>7.1-5 SingleHTTPRequest</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SingleHTTPRequest</code>( <var class="Arg">hostname</var>, <var class="Arg">port</var>, <var class="Arg">method</var>, <var class="Arg">uri</var>, <var class="Arg">header</var>, <var class="Arg">body</var>, <var class="Arg">target</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SingleHTTPRequest</code>( <var class="Arg">hostname</var>, <var class="Arg">port</var>, <var class="Arg">method</var>, <var class="Arg">uri</var>, <var class="Arg">header</var>, <var class="Arg">body</var>, <var class="Arg">target</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: a record</p>
 
 <p>The arguments are as the corresponding ones in the functions <code class="func">OpenHTTPConnection</code> (<a href="chap7_mj.html#X7B5588D5856BE6DD"><span class="RefLink">7.1-1</span></a>) and <code class="func">HTTPRequest</code> (<a href="chap7_mj.html#X80FF9E307BDA0659"><span class="RefLink">7.1-2</span></a>) respectively. This function opens an HTTP connection, tries a single HTTP request and immediately closes the connection again. The result is as for the <code class="func">HTTPRequest</code> (<a href="chap7_mj.html#X80FF9E307BDA0659"><span class="RefLink">7.1-2</span></a>) function. If an error occurs during the opening of the connection, the <code class="keyw">statuscode</code> value of the result is <span class="SimpleMath">\(0\)</span> and the error message is stored in the <code class="keyw">status</code> component of the result.</p>
@@ -107,7 +107,7 @@
 
 <h5>7.1-6 CheckForUpdates</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; CheckForUpdates</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; CheckForUpdates</code>(  )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: nothing</p>
 
 <p>This function accesses a web page in St. Andrews and runs some <strong class="pkg">GAP</strong> code from there. This code knows all the currently released versions of <strong class="pkg">GAP</strong> and its packages. It prints out a summary and possibly suggests upgrades. If you do not want to executed code downloaded from the internet, then do not call this function.</p>
@@ -118,7 +118,7 @@
 
 <h5>7.1-7 ReadWeb</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ReadWeb</code>( <var class="Arg">URL</var> )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ReadWeb</code>( <var class="Arg">URL</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: nothing</p>
 
 <p>This function downloads the file from the given uniform resource locator <var class="Arg">URL</var> using the HTTP protocol and reads the contents into <strong class="pkg">GAP</strong> using <code class="func">Read</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap9_mj.html#X8373AC6B7D5F9167"><span class="RefLink">Reference: Read</span></a>).</p>

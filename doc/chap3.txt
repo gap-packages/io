@@ -102,7 +102,7 @@
   
   [1X3.2-1 IO_accept[101X
   
-  [29X[2XIO_accept[102X( [3Xfd[103X, [3Xaddr[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_accept[102X( [3Xfd[103X, [3Xaddr[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YAccepts  an  incoming  network connection. For details see [21X[10Xman 2 accept[110X[121X. The
@@ -111,7 +111,7 @@
   
   [1X3.2-2 IO_bind[101X
   
-  [29X[2XIO_bind[102X( [3Xfd[103X, [3Xmy_addr[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_bind[102X( [3Xfd[103X, [3Xmy_addr[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YBinds  a local address to a socket. For details see [21X[10Xman 2 bind[110X[121X. The argument
@@ -120,35 +120,35 @@
   
   [1X3.2-3 IO_chdir[101X
   
-  [29X[2XIO_chdir[102X( [3Xpath[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_chdir[102X( [3Xpath[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
   
   [33X[0;0YChanges the current working directory. For details see [21X[10Xman 2 chdir[110X[121X.[133X
   
   [1X3.2-4 IO_chmod[101X
   
-  [29X[2XIO_chmod[102X( [3Xpathname[103X, [3Xmode[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_chmod[102X( [3Xpathname[103X, [3Xmode[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
   
   [33X[0;0YChanges the mode of a file. For details see [21X[10Xman 2 chmod[110X[121X.[133X
   
   [1X3.2-5 IO_chown[101X
   
-  [29X[2XIO_chown[102X( [3Xpath[103X, [3Xowner[103X, [3Xgroup[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_chown[102X( [3Xpath[103X, [3Xowner[103X, [3Xgroup[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
   
   [33X[0;0YSets owner and/or group of file. For details see [21X[10Xman 2 chown[110X[121X.[133X
   
   [1X3.2-6 IO_close[101X
   
-  [29X[2XIO_close[102X( [3Xfd[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_close[102X( [3Xfd[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
   
   [33X[0;0YCloses a file descriptor. For details see [21X[10Xman 2 close[110X[121X.[133X
   
   [1X3.2-7 IO_closedir[101X
   
-  [29X[2XIO_closedir[102X(  ) [32X function
+  [33X[1;0Y[29X[2XIO_closedir[102X(  ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
   
   [33X[0;0YCloses  a  directory.  For  details  see  [21X[10Xman  3 closedir[110X[121X. Has no arguments,
@@ -156,7 +156,7 @@
   
   [1X3.2-8 IO_connect[101X
   
-  [29X[2XIO_connect[102X( [3Xfd[103X, [3Xserv_addr[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_connect[102X( [3Xfd[103X, [3Xserv_addr[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
   
   [33X[0;0YConnects  to  a  remote  socket. For details see [21X[10Xman 2 connect[110X[121X. The argument
@@ -165,28 +165,28 @@
   
   [1X3.2-9 IO_creat[101X
   
-  [29X[2XIO_creat[102X( [3Xpathname[103X, [3Xmode[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_creat[102X( [3Xpathname[103X, [3Xmode[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YCreates a new file. For details see [21X[10Xman 2 creat[110X[121X.[133X
   
   [1X3.2-10 IO_dup[101X
   
-  [29X[2XIO_dup[102X( [3Xoldfd[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_dup[102X( [3Xoldfd[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YDuplicates a file descriptor. For details see [21X[10Xman 2 dup[110X[121X.[133X
   
   [1X3.2-11 IO_dup2[101X
   
-  [29X[2XIO_dup2[102X( [3Xoldfd[103X, [3Xnewfd[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_dup2[102X( [3Xoldfd[103X, [3Xnewfd[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
   
   [33X[0;0YDuplicates a file descriptor to a new one. For details see [21X[10Xman 2 dup2[110X[121X.[133X
   
   [1X3.2-12 IO_execv[101X
   
-  [29X[2XIO_execv[102X( [3Xpath[103X, [3Xargv[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_execv[102X( [3Xpath[103X, [3Xargv[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xfail[109X or does not return[133X
   
   [33X[0;0YReplaces  the process with another process. For details see [21X[10Xman 3 execv[110X[121X. The
@@ -195,7 +195,7 @@
   
   [1X3.2-13 IO_execve[101X
   
-  [29X[2XIO_execve[102X( [3Xpath[103X, [3Xargv[103X, [3Xenvp[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_execve[102X( [3Xpath[103X, [3Xargv[103X, [3Xenvp[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xfail[109X or does not return[133X
   
   [33X[0;0YReplaces the process with another process. For details see [21X[10Xman 3 execve[110X[121X. The
@@ -206,7 +206,7 @@
   
   [1X3.2-14 IO_execvp[101X
   
-  [29X[2XIO_execvp[102X( [3Xpath[103X, [3Xargv[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_execvp[102X( [3Xpath[103X, [3Xargv[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xfail[109X or does not return[133X
   
   [33X[0;0YReplaces the process with another process. For details see [21X[10Xman 3 execvp[110X[121X. The
@@ -215,28 +215,28 @@
   
   [1X3.2-15 IO_exit[101X
   
-  [29X[2XIO_exit[102X( [3Xstatus[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_exit[102X( [3Xstatus[103X ) [32X function[133X
   
   [33X[0;0YStops  process  immediately  with  return code [3Xstatus[103X. For details see [21X[10Xman 2
   exit[110X[121X. The argument [3Xstatus[103X must be an integer. Does not return.[133X
   
   [1X3.2-16 IO_fchmod[101X
   
-  [29X[2XIO_fchmod[102X( [3Xfd[103X, [3Xmode[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_fchmod[102X( [3Xfd[103X, [3Xmode[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
   
   [33X[0;0YChanges mode of an opened file. For details see [21X[10Xman 2 fchmod[110X[121X.[133X
   
   [1X3.2-17 IO_fchown[101X
   
-  [29X[2XIO_fchown[102X( [3Xfd[103X, [3Xowner[103X, [3Xgroup[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_fchown[102X( [3Xfd[103X, [3Xowner[103X, [3Xgroup[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
   
   [33X[0;0YChanges owner and/or group of an opened file. For details see [21X[10Xman 2 fchown[110X[121X.[133X
   
   [1X3.2-18 IO_fcntl[101X
   
-  [29X[2XIO_fcntl[102X( [3Xfd[103X, [3Xcmd[103X, [3Xarg[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_fcntl[102X( [3Xfd[103X, [3Xcmd[103X, [3Xarg[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YDoes  various  things  to  control  the  behaviour of a file descriptor. For
@@ -244,7 +244,7 @@
   
   [1X3.2-19 IO_fork[101X
   
-  [29X[2XIO_fork[102X(  ) [32X function
+  [33X[1;0Y[29X[2XIO_fork[102X(  ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YForks off a child process, which is an identical copy. For details see [21X[10Xman 2
@@ -255,7 +255,7 @@
   
   [1X3.2-20 IO_fstat[101X
   
-  [29X[2XIO_fstat[102X( [3Xfd[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_fstat[102X( [3Xfd[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya record or [9Xfail[109X[133X
   
   [33X[0;0YReturns  the file meta data for an opened file. For details see [21X[10Xman 2 fstat[110X[121X.
@@ -263,7 +263,7 @@
   
   [1X3.2-21 IO_gethostbyname[101X
   
-  [29X[2XIO_gethostbyname[102X( [3Xname[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_gethostbyname[102X( [3Xname[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya record or [9Xfail[109X[133X
   
   [33X[0;0YReturn  host information by name. For details see [21X[10Xman 3 gethostbyname[110X[121X. A [5XGAP[105X
@@ -271,14 +271,14 @@
   
   [1X3.2-22 IO_gethostname[101X
   
-  [29X[2XIO_gethostname[102X(  ) [32X function
+  [33X[1;0Y[29X[2XIO_gethostname[102X(  ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya string or [9Xfail[109X[133X
   
   [33X[0;0YReturn host name. For details see [21X[10Xman 3 gethostname[110X[121X.[133X
   
   [1X3.2-23 IO_getpid[101X
   
-  [29X[2XIO_getpid[102X(  ) [32X function
+  [33X[1;0Y[29X[2XIO_getpid[102X(  ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer[133X
   
   [33X[0;0YReturns the process ID of the current process as an integer. For details see
@@ -286,7 +286,7 @@
   
   [1X3.2-24 IO_getppid[101X
   
-  [29X[2XIO_getppid[102X(  ) [32X function
+  [33X[1;0Y[29X[2XIO_getppid[102X(  ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer[133X
   
   [33X[0;0YReturns  the  process ID of the parent of the current process as an integer.
@@ -294,14 +294,14 @@
   
   [1X3.2-25 IO_getsockname[101X
   
-  [29X[2XIO_getsockname[102X( [3Xfd[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_getsockname[102X( [3Xfd[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya string or [9Xfail[109X[133X
   
   [33X[0;0YGet a socket name. For details see [21X[10Xman 2 getsockname[110X[121X.[133X
   
   [1X3.2-26 IO_getsockopt[101X
   
-  [29X[2XIO_getsockopt[102X( [3Xfd[103X, [3Xlevel[103X, [3Xoptname[103X, [3Xoptval[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_getsockopt[102X( [3Xfd[103X, [3Xlevel[103X, [3Xoptname[103X, [3Xoptval[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
   
   [33X[0;0YGet  a  socket  option.  For  details  see  [21X[10Xman  2 getsockopt[110X[121X. Note that the
@@ -310,7 +310,7 @@
   
   [1X3.2-27 IO_gettimeofday[101X
   
-  [29X[2XIO_gettimeofday[102X(  ) [32X function
+  [33X[1;0Y[29X[2XIO_gettimeofday[102X(  ) [32X function[133X
   [6XReturns:[106X  [33X[0;10YA record with components [10Xtv_sec[110X and [10Xtv_usec[110X[133X
   
   [33X[0;0YThis returns the time elapsed since 1.1.1970, 0:00 GMT. The component [10Xtv_sec[110X
@@ -319,7 +319,7 @@
   
   [1X3.2-28 IO_gmtime[101X
   
-  [29X[2XIO_gmtime[102X( [3Xseconds[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_gmtime[102X( [3Xseconds[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10YA record[133X
   
   [33X[0;0YThe argument is the number of seconds that have elapsed since 1.1.1970, 0:00
@@ -328,7 +328,7 @@
   
   [1X3.2-29 IO_kill[101X
   
-  [29X[2XIO_kill[102X( [3Xpid[103X, [3Xsig[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_kill[102X( [3Xpid[103X, [3Xsig[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
   
   [33X[0;0YSends the signal [3Xsig[103X to the process with process ID [3Xpid[103X. For details see [21X[10Xman
@@ -337,7 +337,7 @@
   
   [1X3.2-30 IO_lchown[101X
   
-  [29X[2XIO_lchown[102X( [3Xpath[103X, [3Xowner[103X, [3Xgroup[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_lchown[102X( [3Xpath[103X, [3Xowner[103X, [3Xgroup[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
   
   [33X[0;0YChanges  owner  and/or  group of a file not following links. For details see
@@ -345,21 +345,21 @@
   
   [1X3.2-31 IO_link[101X
   
-  [29X[2XIO_link[102X( [3Xoldpath[103X, [3Xnewpath[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_link[102X( [3Xoldpath[103X, [3Xnewpath[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
   
   [33X[0;0YCreate a hard link. For details see [21X[10Xman 2 link[110X[121X.[133X
   
   [1X3.2-32 IO_listen[101X
   
-  [29X[2XIO_listen[102X( [3Xfd[103X, [3Xbacklog[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_listen[102X( [3Xfd[103X, [3Xbacklog[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
   
   [33X[0;0YSwitch a socket to listening. For details see [21X[10Xman 2 listen[110X[121X.[133X
   
   [1X3.2-33 IO_localtime[101X
   
-  [29X[2XIO_localtime[102X( [3Xseconds[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_localtime[102X( [3Xseconds[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10YA record[133X
   
   [33X[0;0YThe argument is the number of seconds that have elapsed since 1.1.1970, 0:00
@@ -368,14 +368,14 @@
   
   [1X3.2-34 IO_lseek[101X
   
-  [29X[2XIO_lseek[102X( [3Xfd[103X, [3Xoffset[103X, [3Xwhence[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_lseek[102X( [3Xfd[103X, [3Xoffset[103X, [3Xwhence[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YSeeks within an open file. For details see [21X[10Xman 2 lseek[110X[121X.[133X
   
   [1X3.2-35 IO_lstat[101X
   
-  [29X[2XIO_lstat[102X( [3Xname[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_lstat[102X( [3Xname[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya record or [9Xfail[109X[133X
   
   [33X[0;0YReturns  the  file meta data for a file not following links. For details see
@@ -384,42 +384,42 @@
   
   [1X3.2-36 IO_mkdir[101X
   
-  [29X[2XIO_mkdir[102X( [3Xpathname[103X, [3Xmode[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_mkdir[102X( [3Xpathname[103X, [3Xmode[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
   
   [33X[0;0YCreates a directory. For details see [21X[10Xman 2 mkdir[110X[121X.[133X
   
   [1X3.2-37 IO_mkfifo[101X
   
-  [29X[2XIO_mkfifo[102X( [3Xpathname[103X, [3Xmode[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_mkfifo[102X( [3Xpathname[103X, [3Xmode[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
   
   [33X[0;0YCreates a FIFO special file (a named pipe). For details see [21X[10Xman 3 mkfifo[110X[121X.[133X
   
   [1X3.2-38 IO_mknod[101X
   
-  [29X[2XIO_mknod[102X( [3Xpathname[103X, [3Xmode[103X, [3Xdev[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_mknod[102X( [3Xpathname[103X, [3Xmode[103X, [3Xdev[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
   
   [33X[0;0YCreate a special or ordinary file. For details see [21X[10Xman 2 mknod[110X[121X.[133X
   
   [1X3.2-39 IO_mkstemp[101X
   
-  [29X[2XIO_mkstemp[102X( [3Xtemplate[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_mkstemp[102X( [3Xtemplate[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YCreate a special or ordinary file. For details see [21X[10Xman 3 mkstemp[110X[121X.[133X
   
   [1X3.2-40 IO_mkdtemp[101X
   
-  [29X[2XIO_mkdtemp[102X( [3Xtemplate[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_mkdtemp[102X( [3Xtemplate[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya string or [9Xfail[109X[133X
   
   [33X[0;0YCreate a temporary directory. For details see [21X[10Xman 3 mkdtemp[110X[121X.[133X
   
   [1X3.2-41 IO_open[101X
   
-  [29X[2XIO_open[102X( [3Xpathname[103X, [3Xflags[103X, [3Xmode[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_open[102X( [3Xpathname[103X, [3Xflags[103X, [3Xmode[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YOpen  and possibly create a file or device. For details see [21X[10Xman 2 open[110X[121X. Only
@@ -427,7 +427,7 @@
   
   [1X3.2-42 IO_opendir[101X
   
-  [29X[2XIO_opendir[102X( [3Xname[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_opendir[102X( [3Xname[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
   
   [33X[0;0YOpens  a  directory.  For  details see [21X[10Xman 3 opendir[110X[121X. Note that only [9Xtrue[109X is
@@ -436,7 +436,7 @@
   
   [1X3.2-43 IO_pipe[101X
   
-  [29X[2XIO_pipe[102X(  ) [32X function
+  [33X[1;0Y[29X[2XIO_pipe[102X(  ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya record or [9Xfail[109X[133X
   
   [33X[0;0YCreate  a pair of file descriptors with a pipe between them. For details see
@@ -446,7 +446,7 @@
   
   [1X3.2-44 IO_read[101X
   
-  [29X[2XIO_read[102X( [3Xfd[103X, [3Xst[103X, [3Xoffset[103X, [3Xcount[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_read[102X( [3Xfd[103X, [3Xst[103X, [3Xoffset[103X, [3Xcount[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YReads  from  file descriptor. For details see [21X[10Xman 2 read[110X[121X. Note that there is
@@ -457,7 +457,7 @@
   
   [1X3.2-45 IO_readdir[101X
   
-  [29X[2XIO_readdir[102X(  ) [32X function
+  [33X[1;0Y[29X[2XIO_readdir[102X(  ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya string or [9Xfail[109X or [9Xfalse[109X[133X
   
   [33X[0;0YReads from a directory. For details see [21X[10Xman 2 readdir[110X[121X. Note that no argument
@@ -467,7 +467,7 @@
   
   [1X3.2-46 IO_readlink[101X
   
-  [29X[2XIO_readlink[102X( [3Xpath[103X, [3Xbuf[103X, [3Xbufsize[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_readlink[102X( [3Xpath[103X, [3Xbuf[103X, [3Xbufsize[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YReads  the  value of a symbolic link. For details see [21X[10Xman 2 readlink[110X[121X. [3Xbuf[103X is
@@ -475,7 +475,7 @@
   
   [1X3.2-47 IO_recv[101X
   
-  [29X[2XIO_recv[102X( [3Xfd[103X, [3Xst[103X, [3Xoffset[103X, [3Xlen[103X, [3Xflags[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_recv[102X( [3Xfd[103X, [3Xst[103X, [3Xoffset[103X, [3Xlen[103X, [3Xflags[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YReceives data from a socket. For details see [21X[10Xman 2 recv[110X[121X. Note the additional
@@ -484,7 +484,7 @@
   
   [1X3.2-48 IO_recvfrom[101X
   
-  [29X[2XIO_recvfrom[102X( [3Xfd[103X, [3Xst[103X, [3Xoffset[103X, [3Xlen[103X, [3Xflags[103X, [3Xaddr[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_recvfrom[102X( [3Xfd[103X, [3Xst[103X, [3Xoffset[103X, [3Xlen[103X, [3Xflags[103X, [3Xaddr[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YReceives  data  from  a  socket  with  given  address. For details see [21X[10Xman 2
@@ -495,14 +495,14 @@
   
   [1X3.2-49 IO_rename[101X
   
-  [29X[2XIO_rename[102X( [3Xoldpath[103X, [3Xnewpath[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_rename[102X( [3Xoldpath[103X, [3Xnewpath[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
   
   [33X[0;0YRenames a file or moves it. For details see [21X[10Xman 2 rename[110X[121X.[133X
   
   [1X3.2-50 IO_rewinddir[101X
   
-  [29X[2XIO_rewinddir[102X(  ) [32X function
+  [33X[1;0Y[29X[2XIO_rewinddir[102X(  ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
   
   [33X[0;0YRewinds  a directory. For details see [21X[10Xman 2 rewinddir[110X[121X. Note that no argument
@@ -511,14 +511,14 @@
   
   [1X3.2-51 IO_rmdir[101X
   
-  [29X[2XIO_rmdir[102X( [3Xname[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_rmdir[102X( [3Xname[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
   
   [33X[0;0YRemoves an empty directory. For details see [21X[10Xman 2 rmdir[110X[121X.[133X
   
   [1X3.2-52 IO_seekdir[101X
   
-  [29X[2XIO_seekdir[102X( [3Xoffset[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_seekdir[102X( [3Xoffset[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
   
   [33X[0;0YSets  the  position of the next readdir call. For details see [21X[10Xman 3 seekdir[110X[121X.
@@ -527,7 +527,7 @@
   
   [1X3.2-53 IO_select[101X
   
-  [29X[2XIO_select[102X( [3Xinlist[103X, [3Xoutlist[103X, [3Xexclist[103X, [3Xtimeoutsec[103X, [3Xtimeoutusec[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_select[102X( [3Xinlist[103X, [3Xoutlist[103X, [3Xexclist[103X, [3Xtimeoutsec[103X, [3Xtimeoutusec[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YUsed for I/O multiplexing. For details see [21X[10Xman 2 select[110X[121X. [3Xinlist[103X, [3Xoutlist[103X and
@@ -539,7 +539,7 @@
   
   [1X3.2-54 IO_send[101X
   
-  [29X[2XIO_send[102X( [3Xfd[103X, [3Xst[103X, [3Xoffset[103X, [3Xlen[103X, [3Xflags[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_send[102X( [3Xfd[103X, [3Xst[103X, [3Xoffset[103X, [3Xlen[103X, [3Xflags[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YSends data to a socket. For details see [21X[10Xman 2 send[110X[121X. Note that the additional
@@ -549,7 +549,7 @@
   
   [1X3.2-55 IO_sendto[101X
   
-  [29X[2XIO_sendto[102X( [3Xfd[103X, [3Xst[103X, [3Xoffset[103X, [3Xlen[103X, [3Xflags[103X, [3Xaddr[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_sendto[102X( [3Xfd[103X, [3Xst[103X, [3Xoffset[103X, [3Xlen[103X, [3Xflags[103X, [3Xaddr[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YSends  data  to  a  socket.  For  details  see  [21X[10Xman  2 sendto[110X[121X. Note that the
@@ -561,7 +561,7 @@
   
   [1X3.2-56 IO_setsockopt[101X
   
-  [29X[2XIO_setsockopt[102X( [3Xfd[103X, [3Xlevel[103X, [3Xoptname[103X, [3Xoptval[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_setsockopt[102X( [3Xfd[103X, [3Xlevel[103X, [3Xoptname[103X, [3Xoptval[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
   
   [33X[0;0YSets  a  socket  option.  For  details  see  [21X[10Xman 2 setsockopt[110X[121X. Note that the
@@ -570,7 +570,7 @@
   
   [1X3.2-57 IO_socket[101X
   
-  [29X[2XIO_socket[102X( [3Xdomain[103X, [3Xtype[103X, [3Xprotocol[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_socket[102X( [3Xdomain[103X, [3Xtype[103X, [3Xprotocol[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YCreates  a  socket,  an  endpoint  for  communication. For details see [21X[10Xman 2
@@ -580,7 +580,7 @@
   
   [1X3.2-58 IO_stat[101X
   
-  [29X[2XIO_stat[102X( [3Xpathname[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_stat[102X( [3Xpathname[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya record or [9Xfail[109X[133X
   
   [33X[0;0YReturns the file metadata for the file [3Xpathname[103X. For details see [21X[10Xman 2 stat[110X[121X.
@@ -588,14 +588,14 @@
   
   [1X3.2-59 IO_symlink[101X
   
-  [29X[2XIO_symlink[102X( [3Xoldpath[103X, [3Xnewpath[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_symlink[102X( [3Xoldpath[103X, [3Xnewpath[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
   
   [33X[0;0YCreates a symbolic link. For details see [21X[10Xman 2 symlink[110X[121X.[133X
   
   [1X3.2-60 IO_telldir[101X
   
-  [29X[2XIO_telldir[102X(  ) [32X function
+  [33X[1;0Y[29X[2XIO_telldir[102X(  ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YReturn  current  location  in directory. For details see [21X[10Xman 3 telldir[110X[121X. Note
@@ -604,7 +604,7 @@
   
   [1X3.2-61 IO_unlink[101X
   
-  [29X[2XIO_unlink[102X( [3Xpathname[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_unlink[102X( [3Xpathname[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfail[109X[133X
   
   [33X[0;0YDelete  a  name  and  possibly  the file it refers to. For details see [21X[10Xman 2
@@ -612,7 +612,7 @@
   
   [1X3.2-62 IO_WaitPid[101X
   
-  [29X[2XIO_WaitPid[102X( [3Xpid[103X, [3Xwait[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_WaitPid[102X( [3Xpid[103X, [3Xwait[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya record or [9Xfail[109X[133X
   
   [33X[0;0YWaits for the termination of a child process. For details see [21X[10Xman 2 waitpid[110X[121X.
@@ -625,7 +625,7 @@
   
   [1X3.2-63 IO_IgnorePid[101X
   
-  [29X[2XIO_IgnorePid[102X( [3Xpid[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_IgnorePid[102X( [3Xpid[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10YNothing[133X
   
   [33X[0;0YDisowns  a  child  process.  This  means there is no need to call [2XIO_WaitPid[102X
@@ -634,7 +634,7 @@
   
   [1X3.2-64 IO_write[101X
   
-  [29X[2XIO_write[102X( [3Xfd[103X, [3Xst[103X, [3Xoffset[103X, [3Xcount[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_write[102X( [3Xfd[103X, [3Xst[103X, [3Xoffset[103X, [3Xcount[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
   [33X[0;0YWrites  to  a  file  descriptor.  For details see [21X[10Xman 2 write[110X[121X. Note that the
@@ -650,7 +650,7 @@
   
   [1X3.3-1 IO_make_sockaddr_in[101X
   
-  [29X[2XIO_make_sockaddr_in[102X( [3Xip[103X, [3Xport[103X ) [32X function
+  [33X[1;0Y[29X[2XIO_make_sockaddr_in[102X( [3Xip[103X, [3Xport[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya string or [9Xfail[109X[133X
   
   [33X[0;0YMakes  a struct [10Xsockaddr_in[110X from IP address and port. The IP address must be
@@ -661,7 +661,7 @@
   
   [1X3.3-2 IO_environ[101X
   
-  [29X[2XIO_environ[102X(  ) [32X function
+  [33X[1;0Y[29X[2XIO_environ[102X(  ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya list of strings[133X
   
   [33X[0;0YFor  details  see  [21X[10Xman environ[110X[121X. Returns the current environment as a list of
@@ -669,7 +669,7 @@
   
   [1X3.3-3 IO_InstallSIGCHLDHandler[101X
   
-  [29X[2XIO_InstallSIGCHLDHandler[102X(  ) [32X function
+  [33X[1;0Y[29X[2XIO_InstallSIGCHLDHandler[102X(  ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X[133X
   
   [33X[0;0YInstalls  our  SIGCHLD  handler. This functions works as an idempotent. That
@@ -682,7 +682,7 @@
   
   [1X3.3-4 IO_RestoreSIGCHLDHandler[101X
   
-  [29X[2XIO_RestoreSIGCHLDHandler[102X(  ) [32X function
+  [33X[1;0Y[29X[2XIO_RestoreSIGCHLDHandler[102X(  ) [32X function[133X
   
   [33X[0;0YRestores the original SIGCHLD handler. This function works as an idempotent.
   That  is,  calling  it  twice  does  exactly the same as calling it once. It

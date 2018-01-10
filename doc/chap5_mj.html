@@ -60,21 +60,21 @@
 
 <h5>5.1-1 IO_Error</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Error</code></td><td class="tdright">( global variable )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Error</code></td><td class="tdright">(&nbsp;global variable&nbsp;)</td></tr></table></div>
 <p>This object is returned if an error occurs.</p>
 
 <p><a id="X7887BFCF824B439B" name="X7887BFCF824B439B"></a></p>
 
 <h5>5.1-2 IO_Nothing</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Nothing</code></td><td class="tdright">( global variable )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Nothing</code></td><td class="tdright">(&nbsp;global variable&nbsp;)</td></tr></table></div>
 <p>This object is returned when there is nothing to return, for example if an unpickler (see <code class="func">IO_Unpickle</code> (<a href="chap5_mj.html#X8228EE63809A6DEF"><span class="RefLink">5.2-2</span></a>)) encounters the end of a file.</p>
 
 <p><a id="X7D4D092B8401EA0F" name="X7D4D092B8401EA0F"></a></p>
 
 <h5>5.1-3 IO_OK</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_OK</code></td><td class="tdright">( global variable )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_OK</code></td><td class="tdright">(&nbsp;global variable&nbsp;)</td></tr></table></div>
 <p>This object is returned if everything went well and there is no other canonical value to return to indicate this.</p>
 
 <p>The only thing you can do with these special values is to compare them to each other and to other objects.</p>
@@ -87,7 +87,7 @@
 
 <h5>5.2-1 IO_Pickle</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Pickle</code>( <var class="Arg">f</var>, <var class="Arg">ob</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Pickle</code>( <var class="Arg">f</var>, <var class="Arg">ob</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="code">IO_OK</code> or <code class="code">IO_Error</code></p>
 
 <p>The argument <var class="Arg">f</var> must be an open, writable <code class="code">File</code> object. The object <var class="Arg">ob</var> can be an arbitrary <strong class="pkg">GAP</strong> object. The operation "pickles" or "serialises" the object <var class="Arg">ob</var> and writes the result into the <code class="code">File</code> object <var class="Arg">f</var>. If everything is OK, the unique value <code class="code">IO_OK</code> is returned and otherwise the unique value <code class="code">IO_Error</code>. The resulting byte stream can be read again using the operation <code class="func">IO_Unpickle</code> (<a href="chap5_mj.html#X8228EE63809A6DEF"><span class="RefLink">5.2-2</span></a>) and is platform- and architecture independent. Especially the question whether a system has 32 bit or 64 bit wide words and the question of endianess does not matter.</p>
@@ -100,7 +100,7 @@
 
 <h5>5.2-2 IO_Unpickle</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Unpickle</code>( <var class="Arg">f</var> )</td><td class="tdright">( operation )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Unpickle</code>( <var class="Arg">f</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
 <p>Returns: <code class="code">IO_Error</code> or a <strong class="pkg">GAP</strong> object</p>
 
 <p>The argument <var class="Arg">f</var> must be an open, readable <code class="code">File</code> object. The operation reads from <var class="Arg">f</var> and "unpickles" the next object. If an error occurs, the unique value <code class="code">IO_Error</code> is returned. If the <code class="code">File</code> object is at end of file, the value <code class="code">IO_Nothing</code> is returned. Note that these two values are not picklable, because of their special meaning as return values of this operation here.</p>
@@ -109,7 +109,7 @@
 
 <h5>5.2-3 IO_ClearPickleCache</h5>
 
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_ClearPickleCache</code>(  )</td><td class="tdright">( function )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_ClearPickleCache</code>(  )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: Nothing</p>
 
 <p>This function clears the "pickle cache". This cache stores all object pickled in the current recursive call to <code class="func">IO_Pickle</code> (<a href="chap5_mj.html#X7E01770481297DF1"><span class="RefLink">5.2-1</span></a>) and is necessary to handle self-references. Usually it is not necessary to call this function explicitly. Only in the rare case (that should not happen) that a pickling or unpickling operation enters a break loop which is left by the user, the pickle cache has to be cleared explicitly using this function for later calls to <code class="func">IO_Pickle</code> (<a href="chap5_mj.html#X7E01770481297DF1"><span class="RefLink">5.2-1</span></a>) and <code class="func">IO_Unpickle</code> (<a href="chap5_mj.html#X8228EE63809A6DEF"><span class="RefLink">5.2-2</span></a>) to work!</p>

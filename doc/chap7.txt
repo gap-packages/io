@@ -11,7 +11,7 @@
   
   [1X7.1-1 OpenHTTPConnection[101X
   
-  [29X[2XOpenHTTPConnection[102X( [3Xhostname[103X, [3Xport[103X ) [32X function
+  [33X[1;0Y[29X[2XOpenHTTPConnection[102X( [3Xhostname[103X, [3Xport[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya record[133X
   
   [33X[0;0YThe  first argument [3Xhostname[103X must be a string containing the hostname of the
@@ -30,7 +30,7 @@
   
   [1X7.1-2 HTTPRequest[101X
   
-  [29X[2XHTTPRequest[102X( [3Xconn[103X, [3Xmethod[103X, [3Xuri[103X, [3Xheader[103X, [3Xbody[103X, [3Xtarget[103X ) [32X function
+  [33X[1;0Y[29X[2XHTTPRequest[102X( [3Xconn[103X, [3Xmethod[103X, [3Xuri[103X, [3Xheader[103X, [3Xbody[103X, [3Xtarget[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya record[133X
   
   [33X[0;0YThis function performs a complete HTTP request. The first argument must be a
@@ -78,7 +78,7 @@
   
   [1X7.1-3 HTTPTimeoutForSelect[101X
   
-  [29X[2XHTTPTimeoutForSelect[102X[32X global variable
+  [33X[1;0Y[29X[2XHTTPTimeoutForSelect[102X[32X global variable[133X
   
   [33X[0;0YThis  global  variable  holds a list of length two. By default, both entries
   are  [9Xfail[109X  indicating that [2XHTTPRequest[102X ([14X7.1-2[114X) should never timeout and wait
@@ -94,7 +94,7 @@
   
   [1X7.1-4 CloseHTTPConnection[101X
   
-  [29X[2XCloseHTTPConnection[102X( [3Xconn[103X ) [32X function
+  [33X[1;0Y[29X[2XCloseHTTPConnection[102X( [3Xconn[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ynothing[133X
   
   [33X[0;0YCloses  the connection described by the connection record [3Xconn[103X. No error can
@@ -102,7 +102,7 @@
   
   [1X7.1-5 SingleHTTPRequest[101X
   
-  [29X[2XSingleHTTPRequest[102X( [3Xhostname[103X, [3Xport[103X, [3Xmethod[103X, [3Xuri[103X, [3Xheader[103X, [3Xbody[103X, [3Xtarget[103X ) [32X function
+  [33X[1;0Y[29X[2XSingleHTTPRequest[102X( [3Xhostname[103X, [3Xport[103X, [3Xmethod[103X, [3Xuri[103X, [3Xheader[103X, [3Xbody[103X, [3Xtarget[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ya record[133X
   
   [33X[0;0YThe   arguments   are   as   the   corresponding   ones   in  the  functions
@@ -118,7 +118,7 @@
   
   [1X7.1-6 CheckForUpdates[101X
   
-  [29X[2XCheckForUpdates[102X(  ) [32X function
+  [33X[1;0Y[29X[2XCheckForUpdates[102X(  ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ynothing[133X
   
   [33X[0;0YThis function accesses a web page in St. Andrews and runs some [5XGAP[105X code from
@@ -133,7 +133,7 @@
   
   [1X7.1-7 ReadWeb[101X
   
-  [29X[2XReadWeb[102X( [3XURL[103X ) [32X function
+  [33X[1;0Y[29X[2XReadWeb[102X( [3XURL[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ynothing[133X
   
   [33X[0;0YThis function downloads the file from the given uniform resource locator [3XURL[103X
