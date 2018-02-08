@@ -24,7 +24,7 @@ f2;
 IO_GetWBuf(f2);
 IO_Write(f2,"Hi there","\n","\c",1234,2/3,"\n");
 f2;
-IO_Write(f2,Elements(SymmetricGroup(3)),"\n");
+IO_Write(f2,AsSet(SymmetricGroup(3)),"\n");
 l := ["a","b","c"];
 IO_WriteLines(f2,l);
 IO_GetWBuf(f2);
