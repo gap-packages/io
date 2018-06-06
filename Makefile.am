@@ -7,6 +7,7 @@ lib_LTLIBRARIES = io.la
 
 io_la_SOURCES = src/io.c
 io_la_CPPFLAGS = $(GAP_CPPFLAGS)
+io_la_CFLAGS = $(GAP_CFLAGS)
 io_la_LDFLAGS = $(GAP_LDFLAGS) -module -avoid-version
 if SYS_IS_CYGWIN
 io_la_LDFLAGS += -no-undefined -version-info 0:0:0 -Wl,$(GAPROOT)/bin/$(GAPARCH)/gap.dll
