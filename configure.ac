@@ -20,8 +20,6 @@ LT_INIT([disable-static dlopen win32-dll])
 
 AC_FIND_GAP
 
-AC_CHECK_SIZEOF([void **])
-
 # Checks for libraries.
 
 # Checks for header files.

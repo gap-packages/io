@@ -24,12 +24,6 @@
 
 #include "pkgconfig.h"    /* our own autoconf results */
 
-/* Note that SIZEOF_VOID_P comes from GAP's config.h whereas
- * SIZEOF_VOID_PP comes from pkgconfig.h! */
-#if SIZEOF_VOID_PP != SIZEOF_VOID_P
-#error GAPs word size is different from ours, 64bit/32bit mismatch
-#endif
-
 #include <stdlib.h>
 #ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
