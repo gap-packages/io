@@ -24,12 +24,8 @@ if IsBound(IO_PkgThingsToRead) then
     Unbind(IO_PkgThingsToRead);
 fi;
 
-if IsBound( MakeThreadLocal ) then
-    Perform(
-            [
-             "IO",
-             ],
-            MakeThreadLocal );
+if IsHPCGAP then
+    MakeThreadLocal("IO");
 fi;
 
 ##
