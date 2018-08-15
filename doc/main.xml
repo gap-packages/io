@@ -1025,17 +1025,24 @@ For details see <Q><C>man 2 unlink</C></Q>.
 <ManSection>
 <Func Name="IO_WaitPid" Arg="pid, wait"
       Comm="Waits for the termination of a child process."/>
-<Returns> a record or <K>fail</K> </Returns>
+<Returns> a record or <K>fail</K> or <K>false</K> </Returns>
 <Description>
 Waits for the termination of a child process.
-For details see <Q><C>man 2 waitpid</C></Q>. Returns a &GAP; record
-describing PID, the return value of waitpid, if the process exited
-normally and the exit status of the process. The second argument
-<A>wait</A> must
-be either <K>true</K> or <K>false</K>. In the first case, the call
-blocks until new information about a terminated child process is
-available. In the second case no such waiting is performed, the
-call returns immediately. See <Ref Func="IO_fork"/>. If you do not
+For details see <Q><C>man 2 waitpid</C></Q>.
+The first argument must be a process id, otherwise the function
+immediately exits with <K>fail</K> as return value.
+<P/>
+
+The second argument <A>wait</A> must be either <K>true</K> or <K>false</K>. In
+the first case, the call blocks until new information about a terminated child
+process is available. In the second case no such waiting is performed, the
+call returns immediately. If the child process has not yet terminated, returns
+<K>false</K>; otherwise, returns a &GAP; record describing the PID, the return
+value of waitpid, if the process exited normally and the exit status of the
+process.
+<P/>
+
+See <Ref Func="IO_fork"/>. If you do not
 care about the return value of the process, call
 <Ref Func="IO_IgnorePid"/>.
 </Description>
