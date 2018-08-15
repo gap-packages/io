@@ -1,3 +1,4 @@
+dist: xenial
 language: c
 env:
   global:
@@ -29,6 +30,7 @@ branches:
 
 before_script:
   - export GAPROOT="$HOME/gap"
+  - apt list gcc*
   - scripts/build_gap.sh
 script:
   - scripts/build_pkg.sh && scripts/run_tests.sh
