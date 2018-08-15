@@ -5,7 +5,7 @@ basepid := String(IO_getpid());
 
 # First we create a longish string:
 st := "";
-for i in [1..100000] do
+for i in [1..20000] do
     Append(st,String(i));
     Add(st,'\n');
 od;
