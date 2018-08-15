@@ -138,6 +138,9 @@ static int findSignaledPid(int pidc)
     if (fistats == lastats && !statsfull) /* queue empty */
         return -1;
 
+    if (pidc == -1)  /* queue not empty and any entry welcome */
+        return fistats;
+
     int pos = fistats;
     while (pids[pos] != pidc)
     {
@@ -313,27 +316,19 @@ Obj FuncIO_WaitPid(Obj self,Obj pid,Obj wait)
   }
   /* First set SIGCHLD to default action to avoid clashes with access: */
   signal(SIGCHLD,SIG_DFL);
+  pidc = INT_INTOBJ(pid);
   reallytried = 0;
   do {
-      pidc = INT_INTOBJ(pid);
-      if (fistats == lastats && !statsfull) /* queue empty */
-          pos = -1;
-      else if (pidc == -1)  /* queue not empty and any entry welcome */
-          pos = fistats;
-      else {  /* Queue nonempty, so look for matching entry: */
-          pos = findSignaledPid(pidc);
-      }
-      if (pos != -1) break;  /* we found something! */
+      pos = findSignaledPid(pidc);
+      if (pos != -1)
+          break;  /* we found something! */
       if (reallytried && wait != True) {
           /* Reinstantiate our handler: */
           signal(SIGCHLD,IO_SIGCHLDHandler);
           return False;
       }
-      /* Really wait for something, blocking: */
-      if (wait == True)
-          retcode = waitpid(-1, &status, 0);
-      else
-          retcode = waitpid(-1, &status, WNOHANG);
+      /* Really wait for something */
+      retcode = waitpid(-1, &status, (wait == True) ? 0 : WNOHANG);
       IO_HandleChildSignal(retcode, status);
       reallytried = 1;  /* Do not try again. */
   } while (1);  /* Left by break */
