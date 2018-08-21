@@ -1,5 +1,13 @@
 This file describes changes in the IO package.
 
+4.5.2 (2018-08-21)
+  - Add exit status to IO_WaitPid (contributed by Chris Jefferson, PR #64)
+  - Make IO usable in the HPC-GAP threads (contributed by Mohamed Barakat, PR #65)
+  - Fix a failure in the HTTP part of the test suite
+  - Replace the deprecated `Elements` in examples by `AsSet`
+  - Clarify IO_WaitPid documentation
+  - Various minor changes to the build system and test suite
+
 4.5.1 (2018-01-10)
   - Fix a bug which could break usage IO_mkstemp or IO_mkdtemp in
     a loaded GAP workspace
