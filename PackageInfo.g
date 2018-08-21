@@ -7,8 +7,8 @@ SetPackageInfo( rec(
 
 PackageName := "IO",
 Subtitle := "Bindings for low level C library I/O routines",
-Version := "4.5.1",
-Date := "10/01/2018", # dd/mm/yyyy format
+Version := "4.5.2",
+Date := "21/08/2018", # dd/mm/yyyy format
 
 ##  Information about authors and maintainers.
 Persons := [
@@ -114,12 +114,8 @@ AvailabilityTest := function()
   return true;
 end,
 
-##  *Optional*, but recommended: path relative to package root to a file which
-##  contains as many tests of the package functionality as sensible.
-#TestFile := "tst/testall.g",
+TestFile := "tst/testall.g",
 
-##  *Optional*: Here you can list some keyword related to the topic
-##  of the package.
 Keywords := ["input", "output", "I/O", "C-library", "network", "http",
  "object serialisation", "unpredictable random numbers", "TCP/IP",
  "inter process communication", "background jobs", "parallel skeletons",

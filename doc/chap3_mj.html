@@ -710,9 +710,13 @@
 <h5>3.2-62 IO_WaitPid</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_WaitPid</code>( <var class="Arg">pid</var>, <var class="Arg">wait</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
-<p>Returns: a record or <code class="keyw">fail</code></p>
+<p>Returns: a record or <code class="keyw">fail</code> or <code class="keyw">false</code></p>
 
-<p>Waits for the termination of a child process. For details see "<code class="code">man 2 waitpid</code>". Returns a <strong class="pkg">GAP</strong> record describing PID and exit status. The second argument <var class="Arg">wait</var> must be either <code class="keyw">true</code> or <code class="keyw">false</code>. In the first case, the call blocks until new information about a terminated child process is available. In the second case no such waiting is performed, the call returns immediately. See <code class="func">IO_fork</code> (<a href="chap3_mj.html#X86C819F37D07ECF7"><span class="RefLink">3.2-19</span></a>). If you do not care about the return value of the process, call <code class="func">IO_IgnorePid</code> (<a href="chap3_mj.html#X84295FC77CCB1066"><span class="RefLink">3.2-63</span></a>).</p>
+<p>Waits for the termination of a child process. For details see "<code class="code">man 2 waitpid</code>". The first argument must be a process id, otherwise the function immediately exits with <code class="keyw">fail</code> as return value.</p>
+
+<p>The second argument <var class="Arg">wait</var> must be either <code class="keyw">true</code> or <code class="keyw">false</code>. In the first case, the call blocks until new information about a terminated child process is available. In the second case no such waiting is performed, the call returns immediately. If the child process has not yet terminated, returns <code class="keyw">false</code>; otherwise, returns a <strong class="pkg">GAP</strong> record describing the PID, the return value of waitpid, if the process exited normally and the exit status of the process.</p>
+
+<p>See <code class="func">IO_fork</code> (<a href="chap3_mj.html#X86C819F37D07ECF7"><span class="RefLink">3.2-19</span></a>). If you do not care about the return value of the process, call <code class="func">IO_IgnorePid</code> (<a href="chap3_mj.html#X84295FC77CCB1066"><span class="RefLink">3.2-63</span></a>).</p>
 
 <p><a id="X84295FC77CCB1066" name="X84295FC77CCB1066"></a></p>
 

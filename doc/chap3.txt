@@ -613,15 +613,21 @@
   [1X3.2-62 IO_WaitPid[101X
   
   [33X[1;0Y[29X[2XIO_WaitPid[102X( [3Xpid[103X, [3Xwait[103X ) [32X function[133X
-  [6XReturns:[106X  [33X[0;10Ya record or [9Xfail[109X[133X
+  [6XReturns:[106X  [33X[0;10Ya record or [9Xfail[109X or [9Xfalse[109X[133X
   
   [33X[0;0YWaits for the termination of a child process. For details see [21X[10Xman 2 waitpid[110X[121X.
-  Returns  a  [5XGAP[105X  record  describing PID and exit status. The second argument
-  [3Xwait[103X  must be either [9Xtrue[109X or [9Xfalse[109X. In the first case, the call blocks until
-  new information about a terminated child process is available. In the second
-  case no such waiting is performed, the call returns immediately. See [2XIO_fork[102X
-  ([14X3.2-19[114X).  If  you  do  not care about the return value of the process, call
-  [2XIO_IgnorePid[102X ([14X3.2-63[114X).[133X
+  The  first argument must be a process id, otherwise the function immediately
+  exits with [9Xfail[109X as return value.[133X
+  
+  [33X[0;0YThe  second  argument  [3Xwait[103X must be either [9Xtrue[109X or [9Xfalse[109X. In the first case,
+  the  call  blocks  until new information about a terminated child process is
+  available. In the second case no such waiting is performed, the call returns
+  immediately.  If  the  child  process has not yet terminated, returns [9Xfalse[109X;
+  otherwise,  returns  a  [5XGAP[105X  record  describing the PID, the return value of
+  waitpid, if the process exited normally and the exit status of the process.[133X
+  
+  [33X[0;0YSee  [2XIO_fork[102X  ([14X3.2-19[114X).  If  you  do  not care about the return value of the
+  process, call [2XIO_IgnorePid[102X ([14X3.2-63[114X).[133X
   
   [1X3.2-63 IO_IgnorePid[101X
   
