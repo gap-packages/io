@@ -1,5 +1,9 @@
 This file describes changes in the IO package.
 
+4.5.3 (2018-09-18)
+  - Minimal GAP version is 4.9 (it already effectively was in 4.5.2, but PackageInfo.g
+    had not been updated)
+
 4.5.2 (2018-08-21)
   - Add exit status to IO_WaitPid (contributed by Chris Jefferson, PR #64)
   - Make IO usable in the HPC-GAP threads (contributed by Mohamed Barakat, PR #65)
