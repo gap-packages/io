@@ -1,5 +1,5 @@
 AC_PREREQ([2.68])
-AC_INIT([io], m4_esyscmd([tr -d '\n' < VERSION]), [https://github.com/gap-packages/io/issues], [io], [http://gap-packages.github.io/io/])
+AC_INIT([io], [package], [https://github.com/gap-packages/io/issues], [io], [http://gap-packages.github.io/io/])
 AC_CONFIG_SRCDIR([src/io.c])
 AC_CONFIG_HEADER([src/pkgconfig.h:cnf/pkgconfig.h.in])
 AC_CONFIG_MACRO_DIR([m4])
