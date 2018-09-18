@@ -1,6 +1,6 @@
 name: IO
-version: 4.5.2
-date: 2018-08-21
+version: 4.5.3
+date: 2018-09-18
 description: |
     Bindings for low level C library I/O routines
 
@@ -12,12 +12,7 @@ maintainers:
     - name: Max Horn
       url: http://www.quendi.de/math
 
-GAP: ">=4.8.0"
-
-needed-pkgs:
-    - name: "GAPDoc"
-      version: ">= 1.2"
-      url: "http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc"
+GAP: ">=4.9"
 
 www: https://gap-packages.github.io/io
 readme: README.md
@@ -25,9 +20,9 @@ packageinfo: https://gap-packages.github.io/io/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/gap-packages/io/releases/download/v4.5.2/io-4.5.2.tar.gz
+      url: https://github.com/gap-packages/io/releases/download/v4.5.3/io-4.5.3.tar.gz
     - name: .tar.bz2
-      url: https://github.com/gap-packages/io/releases/download/v4.5.2/io-4.5.2.tar.bz2
+      url: https://github.com/gap-packages/io/releases/download/v4.5.3/io-4.5.3.tar.bz2
 
 abstract: |
     The <span class="pkgname">IO</span> package, as its name suggests,    provides bindings for <span class="pkgname">GAP</span> to the lower    levels of Input/Output functionality in the C library.
