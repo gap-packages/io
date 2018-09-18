@@ -1865,386 +1865,235 @@ Obj FuncIO_gethostname(Obj self)
 */
 static StructGVarFunc GVarFuncs [] = {
 
-  { "IO_open", 3, "pathname, flags, mode",
-    FuncIO_open,
-    "io.c:IO_open" },
-
-  { "IO_creat", 2, "pathname, mode",
-    FuncIO_creat,
-    "io.c:IO_creat" },
-
-  { "IO_read", 4, "fd, st, offset, count",
-    FuncIO_read,
-    "io.c:IO_read" },
-
-  { "IO_write", 4, "fd, st, offset, count",
-    FuncIO_write,
-    "io.c:IO_write" },
-
-  { "IO_close", 1, "fd",
-    FuncIO_close,
-    "io.c:IO_close" },
-
-  { "IO_lseek", 3, "fd, offset, whence",
-    FuncIO_lseek,
-    "io.c:IO_lseek" },
-
+  GVAR_FUNC(IO_open, 3, "pathname, flags, mode"),
+  GVAR_FUNC(IO_creat, 2, "pathname, mode"),
+  GVAR_FUNC(IO_read, 4, "fd, st, offset, count"),
+  GVAR_FUNC(IO_write, 4, "fd, st, offset, count"),
+  GVAR_FUNC(IO_close, 1, "fd"),
+  GVAR_FUNC(IO_lseek, 3, "fd, offset, whence"),
 #ifdef HAVE_DIRENT_H
 
 #ifdef HAVE_OPENDIR
-  { "IO_opendir", 1, "name",
-    FuncIO_opendir,
-    "io.c:IO_opendir" },
+  GVAR_FUNC(IO_opendir, 1, "name"),
 #endif
 
 #ifdef HAVE_READDIR
-  { "IO_readdir", 0, "",
-    FuncIO_readdir,
-    "io.c:IO_readdir" },
+  GVAR_FUNC(IO_readdir, 0, ""),
 #endif
 
 #ifdef HAVE_REWINDDIR
-  { "IO_rewinddir", 0, "",
-    FuncIO_rewinddir,
-    "io.c:IO_rewinddir" },
+  GVAR_FUNC(IO_rewinddir, 0, ""),
 #endif
 
 #ifdef HAVE_CLOSEDIR
-  { "IO_closedir", 0, "",
-    FuncIO_closedir,
-    "io.c:IO_closedir" },
+  GVAR_FUNC(IO_closedir, 0, ""),
 #endif
 
 #ifdef HAVE_TELLDIR
-  { "IO_telldir", 0, "",
-    FuncIO_telldir,
-    "io.c:IO_telldir" },
+  GVAR_FUNC(IO_telldir, 0, ""),
 #endif
 
 #ifdef HAVE_SEEKDIR
-  { "IO_seekdir", 1, "offset",
-    FuncIO_seekdir,
-    "io.c:IO_seekdir" },
+  GVAR_FUNC(IO_seekdir, 1, "offset"),
 #endif
 
 #endif   /* HAVE_DIRENT_H */
 
 #ifdef HAVE_UNLINK
-  { "IO_unlink", 1, "pathname",
-    FuncIO_unlink,
-    "io.c:IO_unlink" },
+  GVAR_FUNC(IO_unlink, 1, "pathname"),
 #endif
 
 #ifdef HAVE_LINK
-  { "IO_link", 2, "oldpath, newpath",
-    FuncIO_link,
-    "io.c:IO_link" },
+  GVAR_FUNC(IO_link, 2, "oldpath, newpath"),
 #endif
 
 #ifdef HAVE_RENAME
-  { "IO_rename", 2, "oldpath, newpath",
-    FuncIO_rename,
-    "io.c:IO_rename" },
+  GVAR_FUNC(IO_rename, 2, "oldpath, newpath"),
 #endif
 
 #ifdef HAVE_SYMLINK
-  { "IO_symlink", 2, "oldpath, newpath",
-    FuncIO_symlink,
-    "io.c:IO_symlink" },
+  GVAR_FUNC(IO_symlink, 2, "oldpath, newpath"),
 #endif
 
 #ifdef HAVE_READLINK
-  { "IO_readlink", 3, "path, buf, bufsize",
-    FuncIO_readlink,
-    "io.c:IO_readlink" },
+  GVAR_FUNC(IO_readlink, 3, "path, buf, bufsize"),
 #endif
 
 #ifdef HAVE_MKDIR
-  { "IO_mkdir", 2, "pathname, mode",
-    FuncIO_mkdir,
-    "io.c:IO_mkdir" },
+  GVAR_FUNC(IO_mkdir, 2, "pathname, mode"),
 #endif
 
-  { "IO_chdir", 1, "path",
-    FuncIO_chdir,
-    "io.c:IO_chdir" },
-
+  GVAR_FUNC(IO_chdir, 1, "path"),
 #ifdef HAVE_RMDIR
-  { "IO_rmdir", 1, "pathname",
-    FuncIO_rmdir,
-    "io.c:IO_rmdir" },
+  GVAR_FUNC(IO_rmdir, 1, "pathname"),
 #endif
 
 #ifdef HAVE_STAT
-  { "IO_stat", 1, "pathname",
-    FuncIO_stat,
-    "io.c:IO_stat" },
+  GVAR_FUNC(IO_stat, 1, "pathname"),
 #endif
 
 #ifdef HAVE_FSTAT
-  { "IO_fstat", 1, "fd",
-    FuncIO_fstat,
-    "io.c:IO_fstat" },
+  GVAR_FUNC(IO_fstat, 1, "fd"),
 #endif
 
 #ifdef HAVE_LSTAT
-  { "IO_lstat", 1, "pathname",
-    FuncIO_lstat,
-    "io.c:IO_lstat" },
+  GVAR_FUNC(IO_lstat, 1, "pathname"),
 #endif
 
 #ifdef HAVE_CHMOD
-  { "IO_chmod", 2, "path, mode",
-    FuncIO_chmod,
-    "io.c:IO_chmod" },
+  GVAR_FUNC(IO_chmod, 2, "path, mode"),
 #endif
 
 #ifdef HAVE_FCHMOD
-  { "IO_fchmod", 2, "fd, mode",
-    FuncIO_fchmod,
-    "io.c:IO_fchmod" },
+  GVAR_FUNC(IO_fchmod, 2, "fd, mode"),
 #endif
 
 #ifdef HAVE_CHOWN
-  { "IO_chown", 3, "path, owner, group",
-    FuncIO_chown,
-    "io.c:IO_chown" },
+  GVAR_FUNC(IO_chown, 3, "path, owner, group"),
 #endif
 
 #ifdef HAVE_FCHOWN
-  { "IO_fchown", 3, "fd, owner, group",
-    FuncIO_fchown,
-    "io.c:IO_fchown" },
+  GVAR_FUNC(IO_fchown, 3, "fd, owner, group"),
 #endif
 
 #ifdef HAVE_LCHOWN
-  { "IO_lchown", 3, "path, owner, group",
-    FuncIO_lchown,
-    "io.c:IO_lchown" },
+  GVAR_FUNC(IO_lchown, 3, "path, owner, group"),
 #endif
 
 #ifdef HAVE_MKNOD
-  { "IO_mknod", 3, "path, mode, dev",
-    FuncIO_mknod,
-    "io.c:IO_mknod" },
+  GVAR_FUNC(IO_mknod, 3, "path, mode, dev"),
 #endif
 
 #ifdef HAVE_MKSTEMP
-  { "IO_mkstemp", 1, "template",
-    FuncIO_mkstemp,
-    "io.c:IO_mkstemp" },
+  GVAR_FUNC(IO_mkstemp, 1, "template"),
 #endif
 
 #ifdef HAVE_MKDTEMP
-  { "IO_mkdtemp", 1, "template",
-    FuncIO_mkdtemp,
-    "io.c:IO_mkdtemp" },
+  GVAR_FUNC(IO_mkdtemp, 1, "template"),
 #endif
 
 #ifdef HAVE_MKFIFO
-  { "IO_mkfifo", 2, "path, mode",
-    FuncIO_mkfifo,
-    "io.c:IO_mkfifo" },
+  GVAR_FUNC(IO_mkfifo, 2, "path, mode"),
 #endif
 
 #ifdef HAVE_DUP
-  { "IO_dup", 1, "oldfd",
-    FuncIO_dup,
-    "io.c:IO_dup" },
+  GVAR_FUNC(IO_dup, 1, "oldfd"),
 #endif
 
 #ifdef HAVE_DUP2
-  { "IO_dup2", 2, "oldfd, newfd",
-    FuncIO_dup2,
-    "io.c:IO_dup2" },
+  GVAR_FUNC(IO_dup2, 2, "oldfd, newfd"),
 #endif
 
 #ifdef HAVE_SOCKET
-  { "IO_socket", 3, "domain, type, protocol",
-    FuncIO_socket,
-    "io.c:IO_socket" },
+  GVAR_FUNC(IO_socket, 3, "domain, type, protocol"),
 #endif
 
 #ifdef HAVE_BIND
-  { "IO_bind", 2, "fd, my_addr",
-    FuncIO_bind,
-    "io.c:IO_bind" },
+  GVAR_FUNC(IO_bind, 2, "fd, my_addr"),
 #endif
 
 #ifdef HAVE_CONNECT
-  { "IO_connect", 2, "fd, serv_addr",
-    FuncIO_connect,
-    "io.c:IO_connect" },
+  GVAR_FUNC(IO_connect, 2, "fd, serv_addr"),
 #endif
 
 #ifdef HAVE_SOCKET
-  { "IO_make_sockaddr_in", 2, "ip, port",
-    FuncIO_make_sockaddr_in,
-    "io.c:IO_make_sockaddr_in" },
+  GVAR_FUNC(IO_make_sockaddr_in, 2, "ip, port"),
 #endif
 
 #ifdef HAVE_GETHOSTBYNAME
-  { "IO_gethostbyname", 1, "name",
-    FuncIO_gethostbyname,
-    "io.c:IO_gethostbyname" },
+  GVAR_FUNC(IO_gethostbyname, 1, "name"),
 #endif
 
 #ifdef HAVE_LISTEN
-  { "IO_listen", 2, "s, backlog",
-    FuncIO_listen,
-    "io.c:IO_listen" },
+  GVAR_FUNC(IO_listen, 2, "s, backlog"),
 #endif
 
 #ifdef HAVE_ACCEPT
-  { "IO_accept", 2, "fd, addr",
-    FuncIO_accept,
-    "io.c:IO_accept" },
+  GVAR_FUNC(IO_accept, 2, "fd, addr"),
 #endif
 
 #ifdef HAVE_RECV
-  { "IO_recv", 5, "fd, st, offset, len, flags",
-    FuncIO_recv,
-    "io.c:IO_recv" },
+  GVAR_FUNC(IO_recv, 5, "fd, st, offset, len, flags"),
 #endif
 
 #ifdef HAVE_RECVFROM
-  { "IO_recvfrom", 6, "fd, st, offset, len, flags, from",
-    FuncIO_recvfrom,
-    "io.c:IO_recvfrom" },
+  GVAR_FUNC(IO_recvfrom, 6, "fd, st, offset, len, flags, from"),
 #endif
 
 #ifdef HAVE_SEND
-  { "IO_send", 5, "fd, st, offset, len, flags",
-    FuncIO_send,
-    "io.c:IO_send" },
+  GVAR_FUNC(IO_send, 5, "fd, st, offset, len, flags"),
 #endif
 
 #ifdef HAVE_SENDTO
-  { "IO_sendto", 6, "fd, st, offset, len, flags, to",
-    FuncIO_sendto,
-    "io.c:IO_sendto" },
+  GVAR_FUNC(IO_sendto, 6, "fd, st, offset, len, flags, to"),
 #endif
 
 #ifdef HAVE_GETSOCKOPT
-  { "IO_getsockopt", 5, "fd, level, optname, optval, optlen",
-    FuncIO_getsockopt,
-    "io.c:IO_getsockopt" },
+  GVAR_FUNC(IO_getsockopt, 5, "fd, level, optname, optval, optlen"),
 #endif
 
 #ifdef HAVE_SETSOCKOPT
-  { "IO_setsockopt", 4, "fd, level, optname, optval",
-    FuncIO_setsockopt,
-    "io.c:IO_setsockopt" },
+  GVAR_FUNC(IO_setsockopt, 4, "fd, level, optname, optval"),
 #endif
 
 #ifdef HAVE_SELECT
-  { "IO_select", 5, "inlist, outlist, exclist, timeoutsec, timeoutusec",
-    FuncIO_select,
-    "io.c:IO_select" },
+  GVAR_FUNC(IO_select, 5, "inlist, outlist, exclist, timeoutsec, timeoutusec"),
 #endif
 
-  { "IO_IgnorePid", 1, "pid",
-    FuncIO_IgnorePid,
-    "io.c:IO_IgnorePid" },
-
+  GVAR_FUNC(IO_IgnorePid, 1, "pid"),
 #if defined(HAVE_SIGACTION) || defined(HAVE_SIGNAL)
-  { "IO_WaitPid", 2, "pid, wait",
-    FuncIO_WaitPid,
-    "io.c:IO_WaitPid" },
+  GVAR_FUNC(IO_WaitPid, 2, "pid, wait"),
 #endif
 
 #ifdef HAVE_FORK
-  { "IO_fork", 0, "",
-    FuncIO_fork,
-    "io.c:IO_fork" },
+  GVAR_FUNC(IO_fork, 0, ""),
 #endif
 
-  { "IO_execv", 2, "path, argv",
-    FuncIO_execv,
-    "io.c:IO_execv" },
-
-  { "IO_execvp", 2, "path, argv",
-    FuncIO_execvp,
-    "io.c:IO_execvp" },
-
-  { "IO_execve", 3, "path, argv, envp",
-    FuncIO_execve,
-    "io.c:IO_execve" },
-
-  { "IO_environ", 0, "",
-    FuncIO_environ,
-    "io.c:IO_environ" },
-
+  GVAR_FUNC(IO_execv, 2, "path, argv"),
+  GVAR_FUNC(IO_execvp, 2, "path, argv"),
+  GVAR_FUNC(IO_execve, 3, "path, argv, envp"),
+  GVAR_FUNC(IO_environ, 0, ""),
 #ifdef HAVE_SIGNAL
-  { "IO_InstallSIGCHLDHandler", 0, "",
-    FuncIO_InstallSIGCHLDHandler,
-    "io.c:IO_InstallSIGCHLDHandler" },
-
-  { "IO_RestoreSIGCHLDHandler", 0, "",
-    FuncIO_RestoreSIGCHLDHandler,
-    "io.c:IO_RestoreSIGCHLDHandler" },
+  GVAR_FUNC(IO_InstallSIGCHLDHandler, 0, ""),
+  GVAR_FUNC(IO_RestoreSIGCHLDHandler, 0, ""),
 #endif
 
-  { "IO_pipe", 0, "",
-    FuncIO_pipe,
-    "io.c:IO_pipe" },
-
-  { "IO_exit", 1, "status",
-    FuncIO_exit,
-    "io.c:IO_exit" },
-
+  GVAR_FUNC(IO_pipe, 0, ""),
+  GVAR_FUNC(IO_exit, 1, "status"),
 #ifdef HAVE_FCNTL_H
-  { "IO_fcntl", 3, "fd, cmd, arg",
-    FuncIO_fcntl,
-    "io.c:IO_fcntl" },
+  GVAR_FUNC(IO_fcntl, 3, "fd, cmd, arg"),
 #endif
 
 #ifdef HAVE_GETPID
-  { "IO_getpid", 0, "",
-    FuncIO_getpid,
-    "io.c:IO_getpid" },
+  GVAR_FUNC(IO_getpid, 0, ""),
 #endif
 
 #ifdef HAVE_GETPPID
-  { "IO_getppid", 0, "",
-    FuncIO_getppid,
-    "io.c:IO_getppid" },
+  GVAR_FUNC(IO_getppid, 0, ""),
 #endif
 
 #ifdef HAVE_KILL
-  { "IO_kill", 2, "pid, sig",
-    FuncIO_kill,
-    "io.c:IO_kill" },
+  GVAR_FUNC(IO_kill, 2, "pid, sig"),
 #endif
 
 #ifdef HAVE_GETTIMEOFDAY
-  { "IO_gettimeofday", 0, "",
-    FuncIO_gettimeofday,
-    "io.c:IO_gettimeofday" },
+  GVAR_FUNC(IO_gettimeofday, 0, ""),
 #endif
 
 #ifdef HAVE_GMTIME
-  { "IO_gmtime", 1, "seconds",
-    FuncIO_gmtime,
-    "io.c:IO_gmtime" },
+  GVAR_FUNC(IO_gmtime, 1, "seconds"),
 #endif
 
 #ifdef HAVE_LOCALTIME
-  { "IO_localtime", 1, "seconds",
-    FuncIO_localtime,
-    "io.c:IO_localtime" },
+  GVAR_FUNC(IO_localtime, 1, "seconds"),
 #endif
 
 #ifdef HAVE_GETSOCKNAME
-  { "IO_getsockname", 1, "fd",
-    FuncIO_getsockname,
-    "io.c:IO_getsockname" },
+  GVAR_FUNC(IO_getsockname, 1, "fd"),
 #endif
 
 #ifdef HAVE_GETHOSTNAME
-  { "IO_gethostname", 0, "",
-    FuncIO_gethostname,
-    "io.c:IO_gethostname" },
+  GVAR_FUNC(IO_gethostname, 0, ""),
 #endif
 
   { 0 }
