@@ -26,7 +26,7 @@ AC_FIND_GAP
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS([fcntl.h netdb.h netinet/in.h netinet/tcp.h stdlib.h sys/socket.h sys/time.h time.h unistd.h signal.h])
+AC_CHECK_HEADERS([fcntl.h netdb.h netinet/in.h netinet/tcp.h stdlib.h sys/param.h sys/socket.h sys/time.h time.h unistd.h signal.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST

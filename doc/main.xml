@@ -197,6 +197,7 @@ The following functions from the C library are made available as
 <C>fcntl</C>,
 <C>fork</C>,
 <C>fstat</C>,
+<C>getcwd</C>,
 <C>gethostbyname</C>,
 <C>gethostname</C>,
 <C>getpid</C>,
@@ -555,6 +556,16 @@ child processes, or call <Ref Func="IO_IgnorePid"/> to ignore the child.
 Returns the file meta data for an opened file.
 For details see <Q><C>man 2 fstat</C></Q>. A &GAP; record is returned with
 the same entries than a <C>struct stat</C>.
+</Description>
+</ManSection>
+
+<ManSection>
+<Func Name="IO_getcwd" Arg=""
+      Comm="Get the current working directory."/>
+<Returns> a string or <K>fail</K> </Returns>
+<Description>
+Returns the current working directory.
+For details see <Q><C>man 3 getcwd</C></Q>.
 </Description>
 </ManSection>
 

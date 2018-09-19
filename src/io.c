@@ -53,6 +53,9 @@
 #ifdef HAVE_NETDB_H
 #include <netdb.h>
 #endif
+#ifdef HAVE_SYS_PARAM_H
+#include <sys/param.h>
+#endif
 #ifdef HAVE_SYS_WAIT_H
 #include <sys/wait.h>
 #endif
@@ -692,6 +695,19 @@ Obj FuncIO_chdir(Obj self,Obj pathname)
       } else
           return True;
   }
+}
+
+Obj FuncIO_getcwd(Obj self)
+{
+  char *res;
+  char buf[MAXPATHLEN];
+
+  res = getcwd(buf, sizeof(buf));
+  if (res == NULL) {
+      SySetErrorNo();
+      return Fail;
+  } else
+      return MakeImmString(buf);
 }
 
 #ifdef HAVE_MKDIR
@@ -1924,6 +1940,7 @@ static StructGVarFunc GVarFuncs [] = {
 #endif
 
   GVAR_FUNC(IO_chdir, 1, "path"),
+  GVAR_FUNC(IO_getcwd, 0, ""),
 #ifdef HAVE_RMDIR
   GVAR_FUNC(IO_rmdir, 1, "pathname"),
 #endif
