@@ -1,6 +1,6 @@
 This file describes changes in the IO package.
 
-X.Y
+4.5.4 (2018-09-19)
   - Add IO_getcwd to query the current working directory
   - Fix ChangeDirectoryCurrent when used with relative paths
     (it used to set GAPInfo.DirectoryCurrent to an invalid value)
