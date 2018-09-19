@@ -1695,7 +1695,7 @@ if IsBoundGlobal("_IO_Defines_ChangeDirectoryCurrent") then
   InstallGlobalFunction( ChangeDirectoryCurrent,
     function( path )
       if IO_chdir(path) = true then
-          GAPInfo.DirectoryCurrent := Directory(path);
+          GAPInfo.DirectoryCurrent := Directory(IO_getcwd());
           return true;
       else
           return fail;

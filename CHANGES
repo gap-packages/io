@@ -1,7 +1,9 @@
 This file describes changes in the IO package.
 
 X.Y
-  - Add IO_getcwd
+  - Add IO_getcwd to query the current working directory
+  - Fix ChangeDirectoryCurrent when used with relative paths
+    (it used to set GAPInfo.DirectoryCurrent to an invalid value)
 
 4.5.3 (2018-09-18)
   - Minimal GAP version is 4.9 (it already effectively was in 4.5.2, but PackageInfo.g
