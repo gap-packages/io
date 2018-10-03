@@ -492,7 +492,6 @@ Obj FuncIO_opendir(Obj self,Obj name)
 #ifdef HAVE_READDIR
 Obj FuncIO_readdir(Obj self)
 {
-  Obj res;
   Int olderrno;
   if (ourDIR == 0) {
       SyClearErrorNo();
@@ -510,8 +509,7 @@ Obj FuncIO_readdir(Obj self)
           return False;
       }
   }
-  C_NEW_STRING(res,strlen(ourdirent->d_name),ourdirent->d_name);
-  return res;
+  return MakeString(ourdirent->d_name);
 }
 #endif     /* HAVE_READDIR */
 
@@ -985,7 +983,6 @@ Obj FuncIO_mkstemp(Obj self,Obj template)
 #ifdef HAVE_MKDTEMP
 Obj FuncIO_mkdtemp(Obj self,Obj template)
 {
-    Obj res;
     char *r;
 
     if (!IS_STRING(template) || !IS_STRING_REP(template)) {
@@ -997,8 +994,7 @@ Obj FuncIO_mkdtemp(Obj self,Obj template)
             SySetErrorNo();
             return Fail;
         } else {
-            C_NEW_STRING(res, strlen(r), r);
-            return res;
+            return MakeString(r);
         }
     }
 }
@@ -1178,13 +1174,13 @@ Obj FuncIO_gethostbyname(Obj self,Obj name)
           return Fail;
       }
       res = NEW_PREC(0);
-      C_NEW_STRING(tmp,strlen(he->h_name),he->h_name);
+      tmp = MakeString(he->h_name);
       AssPRec(res,RNamName("name"),tmp);
       for (len = 0,p = he->h_aliases; *p != NULL ; len++, p++) ;
       tmp2 = NEW_PLIST(T_PLIST_DENSE,len);
       SET_LEN_PLIST(tmp2,len);
       for (i = 1,p = he->h_aliases; i <= len; i++,p++) {
-          C_NEW_STRING(tmp,strlen(*p),*p);
+          tmp = MakeString(*p);
           SET_ELM_PLIST(tmp2,i,tmp);
           CHANGED_BAG(tmp2);
       }
@@ -1195,7 +1191,8 @@ Obj FuncIO_gethostbyname(Obj self,Obj name)
       tmp2 = NEW_PLIST(T_PLIST_DENSE,len);
       SET_LEN_PLIST(tmp2,len);
       for (i = 1,p = he->h_addr_list; i <= len; i++,p++) {
-          C_NEW_STRING(tmp,he->h_length,*p);
+          tmp = NEW_STRING(he->h_length);
+          memcpy(CHARS_STRING(tmp), *p, he->h_length);
           SET_ELM_PLIST(tmp2,i,tmp);
           CHANGED_BAG(tmp2);
       }
@@ -1686,7 +1683,7 @@ Obj FuncIO_environ(Obj self)
     tmp2 = tmp;   /* Just to please the compiler */
     SET_LEN_PLIST(tmp2,len);
     for (i = 1, p = environ;i <= len;i++,p++) {
-        C_NEW_STRING(tmp2,strlen(*p),*p);
+        tmp2 = MakeString(*p);
         SET_ELM_PLIST(tmp,i,tmp2);
         CHANGED_BAG(tmp);
     }
