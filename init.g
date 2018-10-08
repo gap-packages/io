@@ -29,6 +29,7 @@ ReadPackage("IO", "gap/realrandom.gd");
 ReadPackage("IO", "gap/http.gd");
 ReadPackage("IO", "gap/background.gd");
 ReadPackage("IO", "gap/iohub.gd");
+ReadPackage("IO", "gap/TCPStream.gd");
 
 ##
 ##  This program is free software: you can redistribute it and/or modify

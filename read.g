@@ -13,6 +13,7 @@ ReadPackage("IO", "gap/realrandom.gi");
 ReadPackage("IO", "gap/http.gi");
 ReadPackage("IO", "gap/background.gi");
 ReadPackage("IO", "gap/iohub.gi");
+ReadPackage("IO", "gap/TCPStream.gi");
 
 # We now create the possibility that other packages can provide pickling
 # and unpickling handlers.
