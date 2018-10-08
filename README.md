@@ -1,5 +1,9 @@
 # README file for the IO GAP4 package
 
+[![Build Status](https://travis-ci.org/gap-packages/io.svg?branch=master)](https://travis-ci.org/gap-packages/io)
+[![Code Coverage](https://codecov.io/github/gap-packages/io/coverage.svg?branch=master&token=)](https://codecov.io/gh/gap-packages/io)
+
+
 To get the newest version of this GAP 4 package download the
 archive file
 
