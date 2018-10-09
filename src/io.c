@@ -14,6 +14,10 @@
 #include "src/compiled.h"          /* GAP headers                */
 #include "src/iostream.h"          /* Signal Handling            */
 
+#if GAP_KERNEL_MAJOR_VERSION >= 6
+#include "src/profile.h"
+#endif
+
 #undef PACKAGE
 #undef PACKAGE_BUGREPORT
 #undef PACKAGE_NAME
@@ -1535,11 +1539,19 @@ Obj FuncIO_fork(Obj self)
 {
   int res;
   FuncIO_InstallSIGCHLDHandler(0);
+  // Ensure files are flushed before forking
+  fflush(0);
   res = fork();
   if (res == -1) {
       SySetErrorNo();
       return Fail;
   }
+  #if GAP_KERNEL_MAJOR_VERSION >= 6
+  if(res == 0) {
+      /* In child */
+      InformProfilingThatThisIsAForkedGAP();
+  }
+  #endif
   return INTOBJ_INT(res);
 }
 #endif
