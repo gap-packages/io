@@ -20,6 +20,7 @@ matrix:
   include:
     - env: ABI=64
     - env: ABI=32
+    - env: GAPBRANCH="stable-4.9"
     - env: GAPBRANCH="stable-4.10"
     - env: HPCGAP=yes GAP_PKGS_TO_BUILD="" NO_COVERAGE=1
 
