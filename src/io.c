@@ -1560,7 +1560,6 @@ Obj FuncIO_execv(Obj self,Obj path,Obj Argv)
 {
     int argc;
     char *argv[1024];   /* Up to 1024 arguments */
-    char *envp[1024];   /* Up to 1024 environment entries */
     int i;
     Obj tmp;
 
@@ -1596,7 +1595,6 @@ Obj FuncIO_execvp(Obj self,Obj file,Obj Argv)
 {
     int argc;
     char *argv[1024];   /* Up to 1024 arguments */
-    char *envp[1024];   /* Up to 1024 environment entries */
     int i;
     Obj tmp;
 
