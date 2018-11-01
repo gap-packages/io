@@ -12,7 +12,6 @@
 #define _GNU_SOURCE
 
 #include "src/compiled.h"          /* GAP headers                */
-#include "src/iostream.h"          /* Signal Handling            */
 
 #if GAP_KERNEL_MAJOR_VERSION >= 6
 #include "src/profile.h"
