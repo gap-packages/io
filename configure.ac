@@ -1,6 +1,6 @@
 AC_PREREQ([2.68])
 AC_INIT([io], [package], [https://github.com/gap-packages/io/issues], [io], [http://gap-packages.github.io/io/])
-AC_CONFIG_SRCDIR([src/io.c])
+AC_CONFIG_SRCDIR([src/kernel.c])
 AC_CONFIG_HEADER([src/pkgconfig.h:cnf/pkgconfig.h.in])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([cnf])

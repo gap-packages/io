@@ -1,6 +1,6 @@
 /***************************************************************************
 **
-*A  io.c               IO-package                            Max Neunhoeffer
+*A  kernel.c               IO-package                        Max Neunhoeffer
 **
 **
 **  Copyright (C) by Max Neunhoeffer

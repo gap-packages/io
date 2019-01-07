@@ -113,7 +113,7 @@ compiling <Q><F>gap</F></Q>. This directory also contains the &GAP; compiler scr
 
 <Verb>
     ./gac -o gap-static -p "-DIOSTATIC -I../../pkg/io/bin/BINDIR" \
-        -P "-static" ../../pkg/io/src/io.c
+        -P "-static" ../../pkg/io/src/kernel.c
 </Verb>
 
 Then copy your <Q><F>gap</F></Q> start script to, say, <Q><F>gaps</F></Q> and change the
@@ -136,7 +136,7 @@ in the ./gac command above. For the IO package, you have to add
 </Verb>
 to the string of the -p option and the file
 <Verb>
-  ../../pkg/io/src/io.c
+  ../../pkg/io/src/kernel.c
 </Verb>
 somewhere on the command line. As above, <Q><F>../..</F></Q> and
 <Q><F>BINDIR</F></Q> have to be replaced if you installed in a
