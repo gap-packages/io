@@ -1,17 +1,19 @@
 # This code is mostly based on xstream.g{d,i} from the SCSCP package
 
 #! @Chapter TCP Streams
+#! @Section TCP Streams
+
 DeclareInfoClass("InfoTCPSockets");
 
 #! @Description
 #! Printable version of an IP address
 #! @Arguments address
 #! @Example
-addr := IO_MakeIPAddressPort("127.0.0.1", 22);
+#! addr := IO_MakeIPAddressPort("127.0.0.1", 22);
 #! "\<\000\000\026\000\000\>\000\000\000\000\000\000\000\000"
-TCP_AddrToString(addr);
+#! TCP_AddrToString(addr);
 #! "127.0.0.1"
-# @EndExample
+#! @EndExample
 DeclareGlobalFunction("TCP_AddrToString");
 
 #! @Description
@@ -35,15 +37,18 @@ InputOutputTCPStreamDefaultType :=
   NewType( StreamsFamily,
            IsInputOutputTCPStreamRep and IsInputOutputTCPStream);
 
-#! @Arguments hostname, port
 #! @Description
-#! Creates a listening TCP socket on the <A>hostname</A> and <A>port</A > given.
-#! @Returns a file descriptor
-#! @Log
-sock := ListeningTCPSocket("localhost", 22222);;
-socket_descriptor := IO_accept(sock, IO_MakeIPAddressPort("0.0.0.0", 0));;
-serverstream := AcceptInputOutputTCPStream(socket_descriptor);;
-#! @EndLog
+#!  Creates a listening TCP socket on the <A>hostname</A> and <A>port</A> given.
+#!
+#! @Arguments hostname, port
+#!
+#! @BeginExample
+#!  sock := ListeningTCPSocket("localhost", 22222);;
+#!  socket_descriptor := IO_accept(sock, IO_MakeIPAddressPort("0.0.0.0", 0));;
+#!  serverstream := AcceptInputOutputTCPStream(socket_descriptor);;
+#! @EndExample
+#! @Returns 
+#!  a file descriptor for a socket
 DeclareGlobalFunction("ListeningTCPSocket");
 
 #! @Arguments hostname, port, handerCallback
@@ -57,8 +62,6 @@ DeclareGlobalFunction("ListeningTCPSocket");
 #!
 #! Note this can currently only handle a single connection at a time.
 #!
-#! @Log
-#! @EndLog
 DeclareGlobalFunction("StartTCPServer");
 
 #! @Arguments hostname, port
