@@ -7,7 +7,7 @@ SetPackageInfo( rec(
 
 PackageName := "IO",
 Subtitle := "Bindings for low level C library I/O routines",
-Version := "4.5.4",
+Version := "4.5.4dev",
 Date := "19/09/2018", # dd/mm/yyyy format
 
 ##  Information about authors and maintainers.
@@ -99,7 +99,7 @@ PackageDoc := rec(
 ),
 
 Dependencies := rec(
-  GAP := ">=4.9",
+  GAP := ">=4.10",
   NeededOtherPackages := [],
   SuggestedOtherPackages := [],
   ExternalConditions := []
