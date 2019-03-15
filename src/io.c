@@ -354,7 +354,7 @@ static Obj FuncIO_WaitPid(Obj self,Obj pid,Obj wait)
 
 static Obj FuncIO_open(Obj self,Obj path,Obj flags,Obj mode)
 {
-  Int res;
+  int res;
   if (!IS_STRING(path) || !IS_STRING_REP(path) || !IS_INTOBJ(flags) ||
       !IS_INTOBJ(mode) ) {
       SyClearErrorNo();
@@ -372,7 +372,7 @@ static Obj FuncIO_open(Obj self,Obj path,Obj flags,Obj mode)
 
 static Obj FuncIO_creat(Obj self,Obj path,Obj mode)
 {
-  Int res;
+  int res;
   if (!IS_STRING(path) || !IS_STRING_REP(path) || !IS_INTOBJ(mode) ) {
       SyClearErrorNo();
       return Fail;
@@ -437,7 +437,7 @@ static Obj FuncIO_write(Obj self,Obj fd,Obj st,Obj offset,Obj count)
 
 static Obj FuncIO_close(Obj self,Obj fd)
 {
-  Int res;
+  int res;
 
   if (!IS_INTOBJ(fd)) {
       SyClearErrorNo();
@@ -519,7 +519,7 @@ static Obj FuncIO_readdir(Obj self)
 #ifdef HAVE_CLOSEDIR
 static Obj FuncIO_closedir(Obj self)
 {
-  Int res;
+  int res;
 
   if (ourDIR == 0) {
       SyClearErrorNo();
@@ -584,7 +584,7 @@ static Obj FuncIO_seekdir(Obj self,Obj offset)
 #ifdef HAVE_UNLINK
 static Obj FuncIO_unlink(Obj self,Obj path)
 {
-  Int res;
+  int res;
   if (!IS_STRING(path) || !IS_STRING_REP(path)) {
       SyClearErrorNo();
       return Fail;
@@ -602,7 +602,7 @@ static Obj FuncIO_unlink(Obj self,Obj path)
 #ifdef HAVE_LINK
 static Obj FuncIO_link(Obj self,Obj oldpath,Obj newpath)
 {
-  Int res;
+  int res;
   if (!IS_STRING(oldpath) || !IS_STRING_REP(oldpath) ||
       !IS_STRING(newpath) || !IS_STRING_REP(newpath)) {
       SyClearErrorNo();
@@ -621,7 +621,7 @@ static Obj FuncIO_link(Obj self,Obj oldpath,Obj newpath)
 #ifdef HAVE_RENAME
 static Obj FuncIO_rename(Obj self,Obj oldpath,Obj newpath)
 {
-  Int res;
+  int res;
   if (!IS_STRING(oldpath) || !IS_STRING_REP(oldpath) ||
       !IS_STRING(newpath) || !IS_STRING_REP(newpath)) {
       SyClearErrorNo();
@@ -641,7 +641,7 @@ static Obj FuncIO_rename(Obj self,Obj oldpath,Obj newpath)
 #ifdef HAVE_SYMLINK
 static Obj FuncIO_symlink(Obj self,Obj oldpath,Obj newpath)
 {
-  Int res;
+  int res;
   if (!IS_STRING(oldpath) || !IS_STRING_REP(oldpath) ||
       !IS_STRING(newpath) || !IS_STRING_REP(newpath)) {
       SyClearErrorNo();
@@ -661,7 +661,7 @@ static Obj FuncIO_symlink(Obj self,Obj oldpath,Obj newpath)
 #ifdef HAVE_READLINK
 static Obj FuncIO_readlink(Obj self,Obj path,Obj buf,Obj bufsize)
 {
-  Int res;
+  int res;
   if (!IS_STRING(path) || !IS_STRING_REP(path) ||
       !IS_STRING(buf) || !IS_STRING_REP(buf) || !IS_INTOBJ(bufsize)) {
       SyClearErrorNo();
@@ -684,7 +684,7 @@ static Obj FuncIO_readlink(Obj self,Obj path,Obj buf,Obj bufsize)
 
 static Obj FuncIO_chdir(Obj self,Obj pathname)
 {
-  Int res;
+  int res;
   if (!IS_STRING(pathname) || !IS_STRING_REP(pathname)) {
       SyClearErrorNo();
       return Fail;
@@ -714,7 +714,7 @@ static Obj FuncIO_getcwd(Obj self)
 #ifdef HAVE_MKDIR
 static Obj FuncIO_mkdir(Obj self,Obj pathname,Obj mode)
 {
-  Int res;
+  int res;
   if (!IS_STRING(pathname) || !IS_STRING_REP(pathname) || !IS_INTOBJ(mode)) {
       SyClearErrorNo();
       return Fail;
@@ -732,7 +732,7 @@ static Obj FuncIO_mkdir(Obj self,Obj pathname,Obj mode)
 #ifdef HAVE_RMDIR
 static Obj FuncIO_rmdir(Obj self,Obj path)
 {
-  Int res;
+  int res;
   if (!IS_STRING(path) || !IS_STRING_REP(path)) {
       SyClearErrorNo();
       return Fail;
@@ -752,7 +752,7 @@ static Obj FuncIO_rmdir(Obj self,Obj path)
 static Obj FuncIO_stat(Obj self,Obj filename)
 {
   struct stat ourstatbuf;
-  Int res;
+  int res;
   Obj rec;
   if (!IS_STRING(filename) || !IS_STRING_REP(filename)) {
       SyClearErrorNo();
@@ -786,7 +786,7 @@ static Obj FuncIO_stat(Obj self,Obj filename)
 static Obj FuncIO_fstat(Obj self,Obj fd)
 {
   struct stat ourfstatbuf;
-  Int res;
+  int res;
   Obj rec;
   if (!IS_INTOBJ(fd)) {
       SyClearErrorNo();
@@ -820,7 +820,7 @@ static Obj FuncIO_fstat(Obj self,Obj fd)
 static Obj FuncIO_lstat(Obj self,Obj filename)
 {
   struct stat ourlstatbuf;
-  Int res;
+  int res;
   Obj rec;
   if (!IS_STRING(filename) || !IS_STRING_REP(filename)) {
       SyClearErrorNo();
@@ -853,7 +853,7 @@ static Obj FuncIO_lstat(Obj self,Obj filename)
 #ifdef HAVE_CHMOD
 static Obj FuncIO_chmod(Obj self,Obj pathname,Obj mode)
 {
-  Int res;
+  int res;
   if (!IS_STRING(pathname) || !IS_STRING_REP(pathname) || !IS_INTOBJ(mode)) {
       SyClearErrorNo();
       return Fail;
@@ -871,7 +871,7 @@ static Obj FuncIO_chmod(Obj self,Obj pathname,Obj mode)
 #ifdef HAVE_FCHMOD
 static Obj FuncIO_fchmod(Obj self,Obj fd,Obj mode)
 {
-  Int res;
+  int res;
   if (!IS_INTOBJ(fd) || !IS_INTOBJ(mode)) {
       SyClearErrorNo();
       return Fail;
@@ -889,7 +889,7 @@ static Obj FuncIO_fchmod(Obj self,Obj fd,Obj mode)
 #ifdef HAVE_CHOWN
 static Obj FuncIO_chown(Obj self,Obj path,Obj owner,Obj group)
 {
-  Int res;
+  int res;
   if (!IS_STRING(path) || !IS_STRING_REP(path) ||
       !IS_INTOBJ(owner) || !IS_INTOBJ(group)) {
       SyClearErrorNo();
@@ -909,7 +909,7 @@ static Obj FuncIO_chown(Obj self,Obj path,Obj owner,Obj group)
 #ifdef HAVE_FCHOWN
 static Obj FuncIO_fchown(Obj self,Obj fd,Obj owner,Obj group)
 {
-  Int res;
+  int res;
   if (!IS_INTOBJ(fd) || !IS_INTOBJ(owner) || !IS_INTOBJ(group)) {
       SyClearErrorNo();
       return Fail;
@@ -927,7 +927,7 @@ static Obj FuncIO_fchown(Obj self,Obj fd,Obj owner,Obj group)
 #ifdef HAVE_LCHOWN
 static Obj FuncIO_lchown(Obj self,Obj path,Obj owner,Obj group)
 {
-  Int res;
+  int res;
   if (!IS_STRING(path) || !IS_STRING_REP(path) ||
       !IS_INTOBJ(owner) || !IS_INTOBJ(group)) {
       SyClearErrorNo();
@@ -947,7 +947,7 @@ static Obj FuncIO_lchown(Obj self,Obj path,Obj owner,Obj group)
 #ifdef HAVE_MKNOD
 static Obj FuncIO_mknod(Obj self,Obj path,Obj mode,Obj dev)
 {
-  Int res;
+  int res;
   if (!IS_STRING(path) || !IS_STRING_REP(path) ||
       !IS_INTOBJ(mode) || !IS_INTOBJ(dev)) {
       SyClearErrorNo();
@@ -1006,7 +1006,7 @@ static Obj FuncIO_mkdtemp(Obj self,Obj template)
 #ifdef HAVE_MKFIFO
 static Obj FuncIO_mkfifo(Obj self,Obj path,Obj mode)
 {
-  Int res;
+  int res;
   if (!IS_STRING(path) || !IS_STRING_REP(path) || !IS_INTOBJ(mode)) {
       SyClearErrorNo();
       return Fail;
@@ -1024,7 +1024,7 @@ static Obj FuncIO_mkfifo(Obj self,Obj path,Obj mode)
 #ifdef HAVE_DUP
 static Obj FuncIO_dup(Obj self,Obj oldfd)
 {
-  Int res;
+  int res;
   if (!IS_INTOBJ(oldfd)) {
       SyClearErrorNo();
       return Fail;
@@ -1042,7 +1042,7 @@ static Obj FuncIO_dup(Obj self,Obj oldfd)
 #ifdef HAVE_DUP2
 static Obj FuncIO_dup2(Obj self,Obj oldfd,Obj newfd)
 {
-  Int res;
+  int res;
   if (!IS_INTOBJ(oldfd) || !IS_INTOBJ(newfd)) {
       SyClearErrorNo();
       return Fail;
@@ -1060,7 +1060,7 @@ static Obj FuncIO_dup2(Obj self,Obj oldfd,Obj newfd)
 #ifdef HAVE_SOCKET
 static Obj FuncIO_socket(Obj self,Obj domain,Obj type,Obj protocol)
 {
-  Int res;
+  int res;
 #ifdef HAVE_GETPROTOBYNAME
   struct protoent *pe;
 #endif
@@ -1098,7 +1098,7 @@ static Obj FuncIO_socket(Obj self,Obj domain,Obj type,Obj protocol)
 #ifdef HAVE_BIND
 static Obj FuncIO_bind(Obj self,Obj fd,Obj my_addr)
 {
-  Int res;
+  int res;
   Int len;
   if (!IS_INTOBJ(fd) || !IS_STRING(my_addr) || !IS_STRING_REP(my_addr)) {
       SyClearErrorNo();
@@ -1118,7 +1118,7 @@ static Obj FuncIO_bind(Obj self,Obj fd,Obj my_addr)
 #ifdef HAVE_CONNECT
 static Obj FuncIO_connect(Obj self,Obj fd,Obj serv_addr)
 {
-  Int res;
+  int res;
   Int len;
   if (!IS_INTOBJ(fd) || !IS_STRING(serv_addr) || !IS_STRING_REP(serv_addr)) {
       SyClearErrorNo();
@@ -1208,7 +1208,7 @@ static Obj FuncIO_gethostbyname(Obj self,Obj name)
 #ifdef HAVE_LISTEN
 static Obj FuncIO_listen(Obj self,Obj s,Obj backlog)
 {
-  Int res;
+  int res;
   if (!IS_INTOBJ(s) || !IS_INTOBJ(backlog)) {
       SyClearErrorNo();
       return Fail;
@@ -1226,7 +1226,7 @@ static Obj FuncIO_listen(Obj self,Obj s,Obj backlog)
 #ifdef HAVE_ACCEPT
 static Obj FuncIO_accept(Obj self,Obj fd,Obj addr)
 {
-  Int res;
+  int res;
   socklen_t len;
   if (!IS_INTOBJ(fd) || !IS_STRING(addr) || !IS_STRING_REP(addr)) {
       SyClearErrorNo();
@@ -1366,7 +1366,7 @@ static Obj FuncIO_sendto(Obj self,Obj fd,Obj st,Obj offset,Obj count,Obj flags,
 static Obj FuncIO_getsockopt(Obj self,Obj fd,Obj level,Obj optname,
                       Obj optval,Obj optlen)
 {
-  Int res;
+  int res;
   socklen_t olen;
 
   if (!IS_INTOBJ(fd) || !IS_INTOBJ(level) || !IS_INTOBJ(optname) ||
@@ -1391,7 +1391,7 @@ static Obj FuncIO_getsockopt(Obj self,Obj fd,Obj level,Obj optname,
 #ifdef HAVE_SETSOCKOPT
 static Obj FuncIO_setsockopt(Obj self,Obj fd,Obj level,Obj optname, Obj optval)
 {
-  Int res;
+  int res;
   socklen_t olen;
 
   if (!IS_INTOBJ(fd) || !IS_INTOBJ(level) || !IS_INTOBJ(optname) ||
@@ -1730,17 +1730,17 @@ static Obj FuncIO_exit(Obj self,Obj status)
 #ifdef HAVE_FCNTL_H
 static Obj FuncIO_fcntl(Obj self, Obj fd, Obj cmd, Obj arg)
 {
-    Int ret;
+    int res;
     if (!IS_INTOBJ(fd) || !IS_INTOBJ(cmd) || !IS_INTOBJ(arg)) {
         SyClearErrorNo();
         return Fail;
     }
-    ret = fcntl(INT_INTOBJ(fd),INT_INTOBJ(cmd),INT_INTOBJ(arg));
-    if (ret == -1) {
+    res = fcntl(INT_INTOBJ(fd),INT_INTOBJ(cmd),INT_INTOBJ(arg));
+    if (res == -1) {
         SySetErrorNo();
         return Fail;
     } else
-        return INTOBJ_INT(ret);
+        return INTOBJ_INT(res);
 }
 #endif
 
@@ -1761,13 +1761,13 @@ static Obj FuncIO_getppid(Obj self)
 #ifdef HAVE_KILL
 static Obj FuncIO_kill(Obj self, Obj pid, Obj sig)
 {
-    Int ret;
+    int res;
     if (!IS_INTOBJ(pid) || !IS_INTOBJ(sig)) {
         SyClearErrorNo();
         return Fail;
     }
-    ret = kill((pid_t) INT_INTOBJ(pid),(int) INT_INTOBJ(sig));
-    if (ret == -1) {
+    res = kill((pid_t) INT_INTOBJ(pid),(int) INT_INTOBJ(sig));
+    if (res == -1) {
         SySetErrorNo();
         return Fail;
     } else
