@@ -229,7 +229,7 @@ RETSIGTYPE IO_SIGCHLDHandler( int whichsig )
   signal(SIGCHLD, IO_SIGCHLDHandler);
 }
 
-Obj FuncIO_InstallSIGCHLDHandler( Obj self )
+static Obj FuncIO_InstallSIGCHLDHandler( Obj self )
 {
   /* Do not install ourselves twice: */
   if (oldhandler == 0) {
@@ -240,7 +240,7 @@ Obj FuncIO_InstallSIGCHLDHandler( Obj self )
       return False;
 }
 
-Obj FuncIO_RestoreSIGCHLDHandler( Obj self )
+static Obj FuncIO_RestoreSIGCHLDHandler( Obj self )
 {
   if (oldhandler == 0)
       return False;
@@ -271,7 +271,7 @@ static int IO_CheckForIgnoredPid( int pid )
     return found;
 }
 
-Obj FuncIO_IgnorePid(Obj self, Obj pid)
+static Obj FuncIO_IgnorePid(Obj self, Obj pid)
 {
     Int pidc;
     int pos;
@@ -309,7 +309,7 @@ Obj FuncIO_IgnorePid(Obj self, Obj pid)
     return True;
 }
 
-Obj FuncIO_WaitPid(Obj self,Obj pid,Obj wait)
+static Obj FuncIO_WaitPid(Obj self,Obj pid,Obj wait)
 {
   Int pidc;
   int pos;
@@ -352,7 +352,7 @@ Obj FuncIO_WaitPid(Obj self,Obj pid,Obj wait)
 }
 #endif
 
-Obj FuncIO_open(Obj self,Obj path,Obj flags,Obj mode)
+static Obj FuncIO_open(Obj self,Obj path,Obj flags,Obj mode)
 {
   Int res;
   if (!IS_STRING(path) || !IS_STRING_REP(path) || !IS_INTOBJ(flags) ||
@@ -370,7 +370,7 @@ Obj FuncIO_open(Obj self,Obj path,Obj flags,Obj mode)
   }
 }
 
-Obj FuncIO_creat(Obj self,Obj path,Obj mode)
+static Obj FuncIO_creat(Obj self,Obj path,Obj mode)
 {
   Int res;
   if (!IS_STRING(path) || !IS_STRING_REP(path) || !IS_INTOBJ(mode) ) {
@@ -386,7 +386,7 @@ Obj FuncIO_creat(Obj self,Obj path,Obj mode)
   }
 }
 
-Obj FuncIO_read(Obj self,Obj fd,Obj st,Obj offset,Obj count)
+static Obj FuncIO_read(Obj self,Obj fd,Obj st,Obj offset,Obj count)
 {
   Int bytes;
   Int len;
@@ -413,7 +413,7 @@ Obj FuncIO_read(Obj self,Obj fd,Obj st,Obj offset,Obj count)
   }
 }
 
-Obj FuncIO_write(Obj self,Obj fd,Obj st,Obj offset,Obj count)
+static Obj FuncIO_write(Obj self,Obj fd,Obj st,Obj offset,Obj count)
 {
   Int bytes;
 
@@ -435,7 +435,7 @@ Obj FuncIO_write(Obj self,Obj fd,Obj st,Obj offset,Obj count)
       return INTOBJ_INT(bytes);
 }
 
-Obj FuncIO_close(Obj self,Obj fd)
+static Obj FuncIO_close(Obj self,Obj fd)
 {
   Int res;
 
@@ -452,7 +452,7 @@ Obj FuncIO_close(Obj self,Obj fd)
   }
 }
 
-Obj FuncIO_lseek(Obj self,Obj fd,Obj offset,Obj whence)
+static Obj FuncIO_lseek(Obj self,Obj fd,Obj offset,Obj whence)
 {
   Int bytes;
 
@@ -476,7 +476,7 @@ static DIR *ourDIR = 0;
 static struct dirent *ourdirent;
 
 #ifdef HAVE_OPENDIR
-Obj FuncIO_opendir(Obj self,Obj name)
+static Obj FuncIO_opendir(Obj self,Obj name)
 {
   if (!IS_STRING(name) || !IS_STRING_REP(name)) {
       SyClearErrorNo();
@@ -493,7 +493,7 @@ Obj FuncIO_opendir(Obj self,Obj name)
 #endif     /* HAVE_OPENDIR */
 
 #ifdef HAVE_READDIR
-Obj FuncIO_readdir(Obj self)
+static Obj FuncIO_readdir(Obj self)
 {
   Int olderrno;
   if (ourDIR == 0) {
@@ -517,7 +517,7 @@ Obj FuncIO_readdir(Obj self)
 #endif     /* HAVE_READDIR */
 
 #ifdef HAVE_CLOSEDIR
-Obj FuncIO_closedir(Obj self)
+static Obj FuncIO_closedir(Obj self)
 {
   Int res;
 
@@ -535,7 +535,7 @@ Obj FuncIO_closedir(Obj self)
 #endif     /* HAVE_CLOSEDIR */
 
 #ifdef HAVE_REWINDDIR
-Obj FuncIO_rewinddir(Obj self)
+static Obj FuncIO_rewinddir(Obj self)
 {
   if (ourDIR == 0) {
       SyClearErrorNo();
@@ -547,7 +547,7 @@ Obj FuncIO_rewinddir(Obj self)
 #endif     /* HAVE_REWINDDIR */
 
 #ifdef HAVE_TELLDIR
-Obj FuncIO_telldir(Obj self)
+static Obj FuncIO_telldir(Obj self)
 {
   Int o;
   if (ourDIR == 0) {
@@ -564,7 +564,7 @@ Obj FuncIO_telldir(Obj self)
 #endif     /* HAVE_TELLDIR */
 
 #ifdef HAVE_SEEKDIR
-Obj FuncIO_seekdir(Obj self,Obj offset)
+static Obj FuncIO_seekdir(Obj self,Obj offset)
 {
   if (!IS_INTOBJ(offset)) {
       SyClearErrorNo();
@@ -582,7 +582,7 @@ Obj FuncIO_seekdir(Obj self,Obj offset)
 #endif     /* HAVE_DIRENT_H */
 
 #ifdef HAVE_UNLINK
-Obj FuncIO_unlink(Obj self,Obj path)
+static Obj FuncIO_unlink(Obj self,Obj path)
 {
   Int res;
   if (!IS_STRING(path) || !IS_STRING_REP(path)) {
@@ -600,7 +600,7 @@ Obj FuncIO_unlink(Obj self,Obj path)
 #endif
 
 #ifdef HAVE_LINK
-Obj FuncIO_link(Obj self,Obj oldpath,Obj newpath)
+static Obj FuncIO_link(Obj self,Obj oldpath,Obj newpath)
 {
   Int res;
   if (!IS_STRING(oldpath) || !IS_STRING_REP(oldpath) ||
@@ -619,7 +619,7 @@ Obj FuncIO_link(Obj self,Obj oldpath,Obj newpath)
 #endif
 
 #ifdef HAVE_RENAME
-Obj FuncIO_rename(Obj self,Obj oldpath,Obj newpath)
+static Obj FuncIO_rename(Obj self,Obj oldpath,Obj newpath)
 {
   Int res;
   if (!IS_STRING(oldpath) || !IS_STRING_REP(oldpath) ||
@@ -639,7 +639,7 @@ Obj FuncIO_rename(Obj self,Obj oldpath,Obj newpath)
 #endif
 
 #ifdef HAVE_SYMLINK
-Obj FuncIO_symlink(Obj self,Obj oldpath,Obj newpath)
+static Obj FuncIO_symlink(Obj self,Obj oldpath,Obj newpath)
 {
   Int res;
   if (!IS_STRING(oldpath) || !IS_STRING_REP(oldpath) ||
@@ -659,7 +659,7 @@ Obj FuncIO_symlink(Obj self,Obj oldpath,Obj newpath)
 #endif
 
 #ifdef HAVE_READLINK
-Obj FuncIO_readlink(Obj self,Obj path,Obj buf,Obj bufsize)
+static Obj FuncIO_readlink(Obj self,Obj path,Obj buf,Obj bufsize)
 {
   Int res;
   if (!IS_STRING(path) || !IS_STRING_REP(path) ||
@@ -682,7 +682,7 @@ Obj FuncIO_readlink(Obj self,Obj path,Obj buf,Obj bufsize)
 }
 #endif
 
-Obj FuncIO_chdir(Obj self,Obj pathname)
+static Obj FuncIO_chdir(Obj self,Obj pathname)
 {
   Int res;
   if (!IS_STRING(pathname) || !IS_STRING_REP(pathname)) {
@@ -698,7 +698,7 @@ Obj FuncIO_chdir(Obj self,Obj pathname)
   }
 }
 
-Obj FuncIO_getcwd(Obj self)
+static Obj FuncIO_getcwd(Obj self)
 {
   char *res;
   char buf[MAXPATHLEN];
@@ -712,7 +712,7 @@ Obj FuncIO_getcwd(Obj self)
 }
 
 #ifdef HAVE_MKDIR
-Obj FuncIO_mkdir(Obj self,Obj pathname,Obj mode)
+static Obj FuncIO_mkdir(Obj self,Obj pathname,Obj mode)
 {
   Int res;
   if (!IS_STRING(pathname) || !IS_STRING_REP(pathname) || !IS_INTOBJ(mode)) {
@@ -730,7 +730,7 @@ Obj FuncIO_mkdir(Obj self,Obj pathname,Obj mode)
 #endif
 
 #ifdef HAVE_RMDIR
-Obj FuncIO_rmdir(Obj self,Obj path)
+static Obj FuncIO_rmdir(Obj self,Obj path)
 {
   Int res;
   if (!IS_STRING(path) || !IS_STRING_REP(path)) {
@@ -749,7 +749,7 @@ Obj FuncIO_rmdir(Obj self,Obj path)
 
 
 #ifdef HAVE_STAT
-Obj FuncIO_stat(Obj self,Obj filename)
+static Obj FuncIO_stat(Obj self,Obj filename)
 {
   struct stat ourstatbuf;
   Int res;
@@ -783,7 +783,7 @@ Obj FuncIO_stat(Obj self,Obj filename)
 #endif
 
 #ifdef HAVE_FSTAT
-Obj FuncIO_fstat(Obj self,Obj fd)
+static Obj FuncIO_fstat(Obj self,Obj fd)
 {
   struct stat ourfstatbuf;
   Int res;
@@ -817,7 +817,7 @@ Obj FuncIO_fstat(Obj self,Obj fd)
 #endif
 
 #ifdef HAVE_LSTAT
-Obj FuncIO_lstat(Obj self,Obj filename)
+static Obj FuncIO_lstat(Obj self,Obj filename)
 {
   struct stat ourlstatbuf;
   Int res;
@@ -851,7 +851,7 @@ Obj FuncIO_lstat(Obj self,Obj filename)
 #endif
 
 #ifdef HAVE_CHMOD
-Obj FuncIO_chmod(Obj self,Obj pathname,Obj mode)
+static Obj FuncIO_chmod(Obj self,Obj pathname,Obj mode)
 {
   Int res;
   if (!IS_STRING(pathname) || !IS_STRING_REP(pathname) || !IS_INTOBJ(mode)) {
@@ -869,7 +869,7 @@ Obj FuncIO_chmod(Obj self,Obj pathname,Obj mode)
 #endif
 
 #ifdef HAVE_FCHMOD
-Obj FuncIO_fchmod(Obj self,Obj fd,Obj mode)
+static Obj FuncIO_fchmod(Obj self,Obj fd,Obj mode)
 {
   Int res;
   if (!IS_INTOBJ(fd) || !IS_INTOBJ(mode)) {
@@ -887,7 +887,7 @@ Obj FuncIO_fchmod(Obj self,Obj fd,Obj mode)
 #endif
 
 #ifdef HAVE_CHOWN
-Obj FuncIO_chown(Obj self,Obj path,Obj owner,Obj group)
+static Obj FuncIO_chown(Obj self,Obj path,Obj owner,Obj group)
 {
   Int res;
   if (!IS_STRING(path) || !IS_STRING_REP(path) ||
@@ -907,7 +907,7 @@ Obj FuncIO_chown(Obj self,Obj path,Obj owner,Obj group)
 #endif
 
 #ifdef HAVE_FCHOWN
-Obj FuncIO_fchown(Obj self,Obj fd,Obj owner,Obj group)
+static Obj FuncIO_fchown(Obj self,Obj fd,Obj owner,Obj group)
 {
   Int res;
   if (!IS_INTOBJ(fd) || !IS_INTOBJ(owner) || !IS_INTOBJ(group)) {
@@ -925,7 +925,7 @@ Obj FuncIO_fchown(Obj self,Obj fd,Obj owner,Obj group)
 #endif
 
 #ifdef HAVE_LCHOWN
-Obj FuncIO_lchown(Obj self,Obj path,Obj owner,Obj group)
+static Obj FuncIO_lchown(Obj self,Obj path,Obj owner,Obj group)
 {
   Int res;
   if (!IS_STRING(path) || !IS_STRING_REP(path) ||
@@ -945,7 +945,7 @@ Obj FuncIO_lchown(Obj self,Obj path,Obj owner,Obj group)
 #endif
 
 #ifdef HAVE_MKNOD
-Obj FuncIO_mknod(Obj self,Obj path,Obj mode,Obj dev)
+static Obj FuncIO_mknod(Obj self,Obj path,Obj mode,Obj dev)
 {
   Int res;
   if (!IS_STRING(path) || !IS_STRING_REP(path) ||
@@ -964,7 +964,7 @@ Obj FuncIO_mknod(Obj self,Obj path,Obj mode,Obj dev)
 #endif
 
 #ifdef HAVE_MKSTEMP
-Obj FuncIO_mkstemp(Obj self,Obj template)
+static Obj FuncIO_mkstemp(Obj self,Obj template)
 {
     Int fd;
     if (!IS_STRING(template) || !IS_STRING_REP(template)) {
@@ -984,7 +984,7 @@ Obj FuncIO_mkstemp(Obj self,Obj template)
 #endif
 
 #ifdef HAVE_MKDTEMP
-Obj FuncIO_mkdtemp(Obj self,Obj template)
+static Obj FuncIO_mkdtemp(Obj self,Obj template)
 {
     char *r;
 
@@ -1004,7 +1004,7 @@ Obj FuncIO_mkdtemp(Obj self,Obj template)
 #endif
 
 #ifdef HAVE_MKFIFO
-Obj FuncIO_mkfifo(Obj self,Obj path,Obj mode)
+static Obj FuncIO_mkfifo(Obj self,Obj path,Obj mode)
 {
   Int res;
   if (!IS_STRING(path) || !IS_STRING_REP(path) || !IS_INTOBJ(mode)) {
@@ -1022,7 +1022,7 @@ Obj FuncIO_mkfifo(Obj self,Obj path,Obj mode)
 #endif
 
 #ifdef HAVE_DUP
-Obj FuncIO_dup(Obj self,Obj oldfd)
+static Obj FuncIO_dup(Obj self,Obj oldfd)
 {
   Int res;
   if (!IS_INTOBJ(oldfd)) {
@@ -1040,7 +1040,7 @@ Obj FuncIO_dup(Obj self,Obj oldfd)
 #endif
 
 #ifdef HAVE_DUP2
-Obj FuncIO_dup2(Obj self,Obj oldfd,Obj newfd)
+static Obj FuncIO_dup2(Obj self,Obj oldfd,Obj newfd)
 {
   Int res;
   if (!IS_INTOBJ(oldfd) || !IS_INTOBJ(newfd)) {
@@ -1058,7 +1058,7 @@ Obj FuncIO_dup2(Obj self,Obj oldfd,Obj newfd)
 #endif
 
 #ifdef HAVE_SOCKET
-Obj FuncIO_socket(Obj self,Obj domain,Obj type,Obj protocol)
+static Obj FuncIO_socket(Obj self,Obj domain,Obj type,Obj protocol)
 {
   Int res;
 #ifdef HAVE_GETPROTOBYNAME
@@ -1096,7 +1096,7 @@ Obj FuncIO_socket(Obj self,Obj domain,Obj type,Obj protocol)
 #endif
 
 #ifdef HAVE_BIND
-Obj FuncIO_bind(Obj self,Obj fd,Obj my_addr)
+static Obj FuncIO_bind(Obj self,Obj fd,Obj my_addr)
 {
   Int res;
   Int len;
@@ -1116,7 +1116,7 @@ Obj FuncIO_bind(Obj self,Obj fd,Obj my_addr)
 #endif
 
 #ifdef HAVE_CONNECT
-Obj FuncIO_connect(Obj self,Obj fd,Obj serv_addr)
+static Obj FuncIO_connect(Obj self,Obj fd,Obj serv_addr)
 {
   Int res;
   Int len;
@@ -1137,7 +1137,7 @@ Obj FuncIO_connect(Obj self,Obj fd,Obj serv_addr)
 #endif
 
 #ifdef HAVE_SOCKET
-Obj FuncIO_make_sockaddr_in(Obj self,Obj ip,Obj port)
+static Obj FuncIO_make_sockaddr_in(Obj self,Obj ip,Obj port)
 {
   struct sockaddr_in sa;
   Obj res;
@@ -1158,7 +1158,7 @@ Obj FuncIO_make_sockaddr_in(Obj self,Obj ip,Obj port)
 #endif
 
 #ifdef HAVE_GETHOSTBYNAME
-Obj FuncIO_gethostbyname(Obj self,Obj name)
+static Obj FuncIO_gethostbyname(Obj self,Obj name)
 {
   struct hostent *he;
   Obj res;
@@ -1206,7 +1206,7 @@ Obj FuncIO_gethostbyname(Obj self,Obj name)
 #endif
 
 #ifdef HAVE_LISTEN
-Obj FuncIO_listen(Obj self,Obj s,Obj backlog)
+static Obj FuncIO_listen(Obj self,Obj s,Obj backlog)
 {
   Int res;
   if (!IS_INTOBJ(s) || !IS_INTOBJ(backlog)) {
@@ -1224,7 +1224,7 @@ Obj FuncIO_listen(Obj self,Obj s,Obj backlog)
 #endif
 
 #ifdef HAVE_ACCEPT
-Obj FuncIO_accept(Obj self,Obj fd,Obj addr)
+static Obj FuncIO_accept(Obj self,Obj fd,Obj addr)
 {
   Int res;
   socklen_t len;
@@ -1245,7 +1245,7 @@ Obj FuncIO_accept(Obj self,Obj fd,Obj addr)
 #endif
 
 #ifdef HAVE_RECV
-Obj FuncIO_recv(Obj self,Obj fd,Obj st,Obj offset,Obj count,Obj flags)
+static Obj FuncIO_recv(Obj self,Obj fd,Obj st,Obj offset,Obj count,Obj flags)
 {
   Int bytes;
   Int len;
@@ -1274,7 +1274,7 @@ Obj FuncIO_recv(Obj self,Obj fd,Obj st,Obj offset,Obj count,Obj flags)
 #endif
 
 #ifdef HAVE_RECVFROM
-Obj FuncIO_recvfrom(Obj self,Obj fd,Obj st,Obj offset,Obj count,Obj flags,
+static Obj FuncIO_recvfrom(Obj self,Obj fd,Obj st,Obj offset,Obj count,Obj flags,
                     Obj from)
 {
   Int bytes;
@@ -1308,7 +1308,7 @@ Obj FuncIO_recvfrom(Obj self,Obj fd,Obj st,Obj offset,Obj count,Obj flags,
 #endif
 
 #ifdef HAVE_SEND
-Obj FuncIO_send(Obj self,Obj fd,Obj st,Obj offset,Obj count,Obj flags)
+static Obj FuncIO_send(Obj self,Obj fd,Obj st,Obj offset,Obj count,Obj flags)
 {
   Int bytes;
 
@@ -1333,7 +1333,7 @@ Obj FuncIO_send(Obj self,Obj fd,Obj st,Obj offset,Obj count,Obj flags)
 #endif
 
 #ifdef HAVE_SENDTO
-Obj FuncIO_sendto(Obj self,Obj fd,Obj st,Obj offset,Obj count,Obj flags,
+static Obj FuncIO_sendto(Obj self,Obj fd,Obj st,Obj offset,Obj count,Obj flags,
                   Obj to)
 {
   Int bytes;
@@ -1363,7 +1363,7 @@ Obj FuncIO_sendto(Obj self,Obj fd,Obj st,Obj offset,Obj count,Obj flags,
 #endif
 
 #ifdef HAVE_GETSOCKOPT
-Obj FuncIO_getsockopt(Obj self,Obj fd,Obj level,Obj optname,
+static Obj FuncIO_getsockopt(Obj self,Obj fd,Obj level,Obj optname,
                       Obj optval,Obj optlen)
 {
   Int res;
@@ -1389,7 +1389,7 @@ Obj FuncIO_getsockopt(Obj self,Obj fd,Obj level,Obj optname,
 #endif
 
 #ifdef HAVE_SETSOCKOPT
-Obj FuncIO_setsockopt(Obj self,Obj fd,Obj level,Obj optname, Obj optval)
+static Obj FuncIO_setsockopt(Obj self,Obj fd,Obj level,Obj optname, Obj optval)
 {
   Int res;
   socklen_t olen;
@@ -1411,7 +1411,7 @@ Obj FuncIO_setsockopt(Obj self,Obj fd,Obj level,Obj optname, Obj optval)
 #endif
 
 #ifdef HAVE_SELECT
-Obj FuncIO_select(Obj self, Obj inlist, Obj outlist, Obj exclist,
+static Obj FuncIO_select(Obj self, Obj inlist, Obj outlist, Obj exclist,
                   Obj timeoutsec, Obj timeoutusec)
 {
   fd_set infds,outfds,excfds;
@@ -1534,7 +1534,7 @@ Obj FuncIO_select(Obj self, Obj inlist, Obj outlist, Obj exclist,
 #endif
 
 #ifdef HAVE_FORK
-Obj FuncIO_fork(Obj self)
+static Obj FuncIO_fork(Obj self)
 {
   int res;
   FuncIO_InstallSIGCHLDHandler(0);
@@ -1555,7 +1555,7 @@ Obj FuncIO_fork(Obj self)
 }
 #endif
 
-Obj FuncIO_execv(Obj self,Obj path,Obj Argv)
+static Obj FuncIO_execv(Obj self,Obj path,Obj Argv)
 {
     int argc;
     char *argv[1024];   /* Up to 1024 arguments */
@@ -1590,7 +1590,7 @@ Obj FuncIO_execv(Obj self,Obj path,Obj Argv)
     return Fail;
 }
 
-Obj FuncIO_execvp(Obj self,Obj file,Obj Argv)
+static Obj FuncIO_execvp(Obj self,Obj file,Obj Argv)
 {
     int argc;
     char *argv[1024];   /* Up to 1024 arguments */
@@ -1625,7 +1625,7 @@ Obj FuncIO_execvp(Obj self,Obj file,Obj Argv)
     return Fail;
 }
 
-Obj FuncIO_execve(Obj self,Obj path,Obj Argv,Obj Envp)
+static Obj FuncIO_execve(Obj self,Obj path,Obj Argv,Obj Envp)
 {
     int argc;
     char *argv[1024];   /* Up to 1024 arguments */
@@ -1678,7 +1678,7 @@ Obj FuncIO_execve(Obj self,Obj path,Obj Argv,Obj Envp)
 
 extern char **environ;
 
-Obj FuncIO_environ(Obj self)
+static Obj FuncIO_environ(Obj self)
 {
     Int i,len;
     char **p;
@@ -1699,7 +1699,7 @@ Obj FuncIO_environ(Obj self)
     return tmp;
 }
 
-Obj FuncIO_pipe(Obj self)
+static Obj FuncIO_pipe(Obj self)
 {
     Obj tmp;
     int fds[2];
@@ -1716,7 +1716,7 @@ Obj FuncIO_pipe(Obj self)
     return tmp;
 }
 
-Obj FuncIO_exit(Obj self,Obj status)
+static Obj FuncIO_exit(Obj self,Obj status)
 {
     if (!IS_INTOBJ(status)) {
         SyClearErrorNo();
@@ -1728,7 +1728,7 @@ Obj FuncIO_exit(Obj self,Obj status)
 }
 
 #ifdef HAVE_FCNTL_H
-Obj FuncIO_fcntl(Obj self, Obj fd, Obj cmd, Obj arg)
+static Obj FuncIO_fcntl(Obj self, Obj fd, Obj cmd, Obj arg)
 {
     Int ret;
     if (!IS_INTOBJ(fd) || !IS_INTOBJ(cmd) || !IS_INTOBJ(arg)) {
@@ -1745,21 +1745,21 @@ Obj FuncIO_fcntl(Obj self, Obj fd, Obj cmd, Obj arg)
 #endif
 
 #ifdef HAVE_GETPID
-Obj FuncIO_getpid(Obj self)
+static Obj FuncIO_getpid(Obj self)
 {
     return INTOBJ_INT(getpid());
 }
 #endif
 
 #ifdef HAVE_GETPPID
-Obj FuncIO_getppid(Obj self)
+static Obj FuncIO_getppid(Obj self)
 {
     return INTOBJ_INT(getppid());
 }
 #endif
 
 #ifdef HAVE_KILL
-Obj FuncIO_kill(Obj self, Obj pid, Obj sig)
+static Obj FuncIO_kill(Obj self, Obj pid, Obj sig)
 {
     Int ret;
     if (!IS_INTOBJ(pid) || !IS_INTOBJ(sig)) {
@@ -1776,7 +1776,7 @@ Obj FuncIO_kill(Obj self, Obj pid, Obj sig)
 #endif
 
 #ifdef HAVE_GETTIMEOFDAY
-Obj FuncIO_gettimeofday( Obj self )
+static Obj FuncIO_gettimeofday( Obj self )
 {
    Obj tmp;
    struct timeval tv;
@@ -1789,7 +1789,7 @@ Obj FuncIO_gettimeofday( Obj self )
 #endif
 
 #ifdef HAVE_GMTIME
-Obj FuncIO_gmtime( Obj self, Obj time )
+static Obj FuncIO_gmtime( Obj self, Obj time )
 {
     Obj tmp;
     time_t t;
@@ -1816,7 +1816,7 @@ Obj FuncIO_gmtime( Obj self, Obj time )
 #endif
 
 #ifdef HAVE_LOCALTIME
-Obj FuncIO_localtime( Obj self, Obj time )
+static Obj FuncIO_localtime( Obj self, Obj time )
 {
     Obj tmp;
     time_t t;
@@ -1843,7 +1843,7 @@ Obj FuncIO_localtime( Obj self, Obj time )
 #endif
 
 #ifdef HAVE_GETSOCKNAME
-Obj FuncIO_getsockname(Obj self, Obj fd)
+static Obj FuncIO_getsockname(Obj self, Obj fd)
 {
   struct sockaddr_in sa;
   socklen_t sa_len;
@@ -1862,7 +1862,7 @@ Obj FuncIO_getsockname(Obj self, Obj fd)
 #endif
 
 #ifdef HAVE_GETHOSTNAME
-Obj FuncIO_gethostname(Obj self)
+static Obj FuncIO_gethostname(Obj self)
 {
   char name[256];
   Obj res;
