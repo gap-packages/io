@@ -91,8 +91,6 @@ unzip -x io-x.x.zip
 
 <p>Secondly you have to specify the path to the directory containing your "<code class="file">pkg</code>" directory to <strong class="pkg">GAP</strong>'s list of directories. This can be done by starting <strong class="pkg">GAP</strong> with the "<code class="file">-l</code>" command line option followed by the name of the directory and a semicolon. Then your directory is prepended to the list of directories searched. Otherwise the package is not found by <strong class="pkg">GAP</strong>. Of course, you can add this option to your <strong class="pkg">GAP</strong> startup script.</p>
 
-<p>If you installed <strong class="pkg">GAP</strong> on several architectures, you must execute the configure/make step for each of the architectures. You can either do this immediately after configuring and compiling <strong class="pkg">GAP</strong> itself on this architecture, or alternatively (when using version 4.5 of <strong class="pkg">GAP</strong> or newer) set the environment variable <code class="code">CONFIGNAME</code> to the name of the configuration you used when compiling <strong class="pkg">GAP</strong> before running <code class="code">./configure</code>. Note however that your compiler choice and flags (environment variables <code class="code">CC</code> and <code class="code">CFLAGS</code>) need to be chosen to match the setup of the original <strong class="pkg">GAP</strong> compilation. For example you have to specify 32-bit or 64-bit mode correctly!</p>
-
 <p><a id="X7FB00ED2787027A3" name="X7FB00ED2787027A3"></a></p>
 
 <h4>2.1 <span class="Heading">Recompiling the documentation</span></h4>

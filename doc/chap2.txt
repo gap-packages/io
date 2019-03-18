@@ -49,16 +49,6 @@
   searched.  Otherwise the package is not found by [5XGAP[105X. Of course, you can add
   this option to your [5XGAP[105X startup script.[133X
   
-  [33X[0;0YIf  you  installed  [5XGAP[105X  on  several  architectures,  you  must  execute the
-  configure/make  step  for  each of the architectures. You can either do this
-  immediately after configuring and compiling [5XGAP[105X itself on this architecture,
-  or  alternatively  (when  using  version  4.5  of  [5XGAP[105X  or  newer)  set  the
-  environment  variable  [10XCONFIGNAME[110X  to the name of the configuration you used
-  when  compiling  [5XGAP[105X  before  running  [10X./configure[110X.  Note  however that your
-  compiler  choice  and flags (environment variables [10XCC[110X and [10XCFLAGS[110X) need to be
-  chosen  to  match the setup of the original [5XGAP[105X compilation. For example you
-  have to specify 32-bit or 64-bit mode correctly![133X
-  
   
   [1X2.1 [33X[0;0YRecompiling the documentation[133X[101X
   
