@@ -97,6 +97,12 @@ void __stack_chk_fail_local (void)
 #endif
 #endif
 
+#ifdef __GNUC__
+#ifndef MAXPATHLEN
+#define MAXPATHLEN 4096
+#endif
+#endif
+
 
 /* Functions that are done:
  * open, creat, read, write, close, unlink, lseek, opendir, readdir,
