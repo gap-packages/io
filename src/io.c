@@ -752,19 +752,19 @@ static Obj FuncIO_rmdir(Obj self,Obj path)
 static Obj WrapStat(struct stat * statbuf)
 {
     Obj rec = NEW_PREC(13);
-    AssPRec(rec,RNamName("dev"),ObjInt_Int((Int) statbuf->st_dev));
-    AssPRec(rec,RNamName("ino"),ObjInt_Int((Int) statbuf->st_ino));
-    AssPRec(rec,RNamName("mode"),ObjInt_Int((Int) statbuf->st_mode));
-    AssPRec(rec,RNamName("nlink"),ObjInt_Int((Int) statbuf->st_nlink));
-    AssPRec(rec,RNamName("uid"),ObjInt_Int((Int) statbuf->st_uid));
-    AssPRec(rec,RNamName("gid"),ObjInt_Int((Int) statbuf->st_gid));
-    AssPRec(rec,RNamName("rdev"),ObjInt_Int((Int) statbuf->st_rdev));
-    AssPRec(rec,RNamName("size"),ObjInt_Int((Int) statbuf->st_size));
-    AssPRec(rec,RNamName("blksize"),ObjInt_Int((Int)statbuf->st_blksize));
-    AssPRec(rec,RNamName("blocks"),ObjInt_Int((Int) statbuf->st_blocks));
-    AssPRec(rec,RNamName("atime"),ObjInt_Int((Int) statbuf->st_atime));
-    AssPRec(rec,RNamName("mtime"),ObjInt_Int((Int) statbuf->st_mtime));
-    AssPRec(rec,RNamName("ctime"),ObjInt_Int((Int) statbuf->st_ctime));
+    AssPRec(rec, RNamName("dev"), ObjInt_UInt8(statbuf->st_dev));
+    AssPRec(rec, RNamName("ino"), ObjInt_UInt8(statbuf->st_ino));
+    AssPRec(rec, RNamName("mode"),ObjInt_UInt(statbuf->st_mode));
+    AssPRec(rec, RNamName("nlink"), ObjInt_UInt8(statbuf->st_nlink));
+    AssPRec(rec, RNamName("uid"), ObjInt_UInt(statbuf->st_uid));
+    AssPRec(rec, RNamName("gid"), ObjInt_UInt(statbuf->st_gid));
+    AssPRec(rec, RNamName("rdev"), ObjInt_UInt8(statbuf->st_rdev));
+    AssPRec(rec, RNamName("size"), ObjInt_Int8(statbuf->st_size));
+    AssPRec(rec, RNamName("blksize"), ObjInt_Int8(statbuf->st_blksize));
+    AssPRec(rec, RNamName("blocks"), ObjInt_Int8(statbuf->st_blocks));
+    AssPRec(rec, RNamName("atime"), ObjInt_Int(statbuf->st_atime));
+    AssPRec(rec, RNamName("mtime"), ObjInt_Int(statbuf->st_mtime));
+    AssPRec(rec, RNamName("ctime"), ObjInt_Int(statbuf->st_ctime));
     return rec;
 }
 
