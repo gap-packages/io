@@ -24,6 +24,12 @@ matrix:
     - env: GAPBRANCH="stable-4.10"
     - env: HPCGAP=yes GAP_PKGS_TO_BUILD="" NO_COVERAGE=1
     - os: windows
+      before_install:
+        - choco install cyg-get
+        - cyg-get install libgmp-devel
+        - cyg-get install zlib-devel
+        - cyg-get install python27 python27-pip
+        - cyg-get install autoconf libtool
     - os: osx
 
 branches:
