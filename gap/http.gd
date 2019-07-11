@@ -17,8 +17,6 @@ DeclareGlobalFunction( "CloseHTTPConnection" );
 DeclareGlobalFunction( "SingleHTTPRequest" );
 DeclareGlobalFunction( "FixChunkedBody" );
 
-DeclareGlobalFunction( "CheckForUpdates" );
-
 DeclareGlobalFunction( "ReadWeb" );
 
 ##

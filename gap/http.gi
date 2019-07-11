@@ -361,22 +361,6 @@ InstallGlobalFunction( SingleHTTPRequest,
     return r;
   end );
 
-InstallGlobalFunction( CheckForUpdates,
-  # This function was kindly contributed by Alexander Konovalov.
-  function()
-    local n1,n2,r;
-    r := SingleHTTPRequest( "www.gap-system.org",
-                            80,
-                            "GET",
-                            "/Download/upgrade.html",
-                            rec(),
-                            false,
-                            false);
-    n1 := PositionSublist( r.body, "SuggestUpgrades" );
-    n2 := PositionSublist( r.body, "]);" ) + 3;
-    Read( InputTextString( r.body{[n1..n2]} ) );
-  end );
-
 InstallGlobalFunction( ReadWeb,
   function(url)
     local p, domain, uri, f;

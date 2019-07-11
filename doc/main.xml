@@ -2355,16 +2355,11 @@ up to date:
 <Func Name="CheckForUpdates" Arg=""/>
 <Returns> nothing </Returns>
 <Description>
-    This function accesses a web page in St. Andrews and runs some
-    &GAP; code from there. This code knows all the currently released
-    versions of &GAP; and its packages. It prints out a summary and
-    possibly suggests upgrades. If you do not want to executed
-    code downloaded from the internet, then do not call this function.
-    <P/>
-    More concretely, the page accessed is
-    <URL>http://www.gap-system.org/Download/upgrade.html</URL> and the
-    code executed is a single call to the function <C>SuggestUpgrades</C>
-    function in the &GAP; library.
+    This function has been removed, as it only worked over the insecure
+    HTTP protocol, but not over HTTPS; and the relevant webservice these
+    days only works over HTTPS. If you relied on this functionality,
+    please take a look at the <Package>PackageManager</Package> package,
+    see <URL>https://gap-packages.github.io/PackageManager/</URL>.
 </Description>
 </ManSection>
 
