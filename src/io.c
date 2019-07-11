@@ -747,106 +747,80 @@ static Obj FuncIO_rmdir(Obj self,Obj path)
 }
 #endif
 
+#if defined(HAVE_STAT) || defined(HAVE_FSTAT) || defined(HAVE_LSTAT)
+
+static Obj WrapStat(struct stat * statbuf)
+{
+    Obj rec = NEW_PREC(13);
+    AssPRec(rec,RNamName("dev"),ObjInt_Int((Int) statbuf->st_dev));
+    AssPRec(rec,RNamName("ino"),ObjInt_Int((Int) statbuf->st_ino));
+    AssPRec(rec,RNamName("mode"),ObjInt_Int((Int) statbuf->st_mode));
+    AssPRec(rec,RNamName("nlink"),ObjInt_Int((Int) statbuf->st_nlink));
+    AssPRec(rec,RNamName("uid"),ObjInt_Int((Int) statbuf->st_uid));
+    AssPRec(rec,RNamName("gid"),ObjInt_Int((Int) statbuf->st_gid));
+    AssPRec(rec,RNamName("rdev"),ObjInt_Int((Int) statbuf->st_rdev));
+    AssPRec(rec,RNamName("size"),ObjInt_Int((Int) statbuf->st_size));
+    AssPRec(rec,RNamName("blksize"),ObjInt_Int((Int)statbuf->st_blksize));
+    AssPRec(rec,RNamName("blocks"),ObjInt_Int((Int) statbuf->st_blocks));
+    AssPRec(rec,RNamName("atime"),ObjInt_Int((Int) statbuf->st_atime));
+    AssPRec(rec,RNamName("mtime"),ObjInt_Int((Int) statbuf->st_mtime));
+    AssPRec(rec,RNamName("ctime"),ObjInt_Int((Int) statbuf->st_ctime));
+    return rec;
+}
+
+#endif
 
 #ifdef HAVE_STAT
 static Obj FuncIO_stat(Obj self,Obj filename)
 {
-  struct stat ourstatbuf;
-  int res;
-  Obj rec;
-  if (!IS_STRING(filename) || !IS_STRING_REP(filename)) {
-      SyClearErrorNo();
-      return Fail;
-  } else {
-      res = stat(CSTR_STRING(filename),&ourstatbuf);
-      if (res < 0) {
+    if (!IS_STRING(filename) || !IS_STRING_REP(filename)) {
+        SyClearErrorNo();
+        return Fail;
+    }
+
+    struct stat ourstatbuf;
+    int res = stat(CSTR_STRING(filename), &ourstatbuf);
+    if (res < 0) {
         SySetErrorNo();
         return Fail;
-      }
-      rec = NEW_PREC(0);
-      AssPRec(rec,RNamName("dev"),ObjInt_Int((Int) ourstatbuf.st_dev));
-      AssPRec(rec,RNamName("ino"),ObjInt_Int((Int) ourstatbuf.st_ino));
-      AssPRec(rec,RNamName("mode"),ObjInt_Int((Int) ourstatbuf.st_mode));
-      AssPRec(rec,RNamName("nlink"),ObjInt_Int((Int) ourstatbuf.st_nlink));
-      AssPRec(rec,RNamName("uid"),ObjInt_Int((Int) ourstatbuf.st_uid));
-      AssPRec(rec,RNamName("gid"),ObjInt_Int((Int) ourstatbuf.st_gid));
-      AssPRec(rec,RNamName("rdev"),ObjInt_Int((Int) ourstatbuf.st_rdev));
-      AssPRec(rec,RNamName("size"),ObjInt_Int((Int) ourstatbuf.st_size));
-      AssPRec(rec,RNamName("blksize"),ObjInt_Int((Int)ourstatbuf.st_blksize));
-      AssPRec(rec,RNamName("blocks"),ObjInt_Int((Int) ourstatbuf.st_blocks));
-      AssPRec(rec,RNamName("atime"),ObjInt_Int((Int) ourstatbuf.st_atime));
-      AssPRec(rec,RNamName("mtime"),ObjInt_Int((Int) ourstatbuf.st_mtime));
-      AssPRec(rec,RNamName("ctime"),ObjInt_Int((Int) ourstatbuf.st_ctime));
-      return rec;
-  }
+    }
+    return WrapStat(&ourstatbuf);
 }
 #endif
 
 #ifdef HAVE_FSTAT
 static Obj FuncIO_fstat(Obj self,Obj fd)
 {
-  struct stat ourfstatbuf;
-  int res;
-  Obj rec;
-  if (!IS_INTOBJ(fd)) {
-      SyClearErrorNo();
-      return Fail;
-  } else {
-      res = fstat(INT_INTOBJ(fd),&ourfstatbuf);
-      if (res < 0) {
+    if (!IS_INTOBJ(fd)) {
+        SyClearErrorNo();
+        return Fail;
+    }
+
+    struct stat ourstatbuf;
+    int res = fstat(INT_INTOBJ(fd), &ourstatbuf);
+    if (res < 0) {
         SySetErrorNo();
         return Fail;
-      }
-      rec = NEW_PREC(0);
-      AssPRec(rec,RNamName("dev"),ObjInt_Int((Int) ourfstatbuf.st_dev));
-      AssPRec(rec,RNamName("ino"),ObjInt_Int((Int) ourfstatbuf.st_ino));
-      AssPRec(rec,RNamName("mode"),ObjInt_Int((Int) ourfstatbuf.st_mode));
-      AssPRec(rec,RNamName("nlink"),ObjInt_Int((Int) ourfstatbuf.st_nlink));
-      AssPRec(rec,RNamName("uid"),ObjInt_Int((Int) ourfstatbuf.st_uid));
-      AssPRec(rec,RNamName("gid"),ObjInt_Int((Int) ourfstatbuf.st_gid));
-      AssPRec(rec,RNamName("rdev"),ObjInt_Int((Int) ourfstatbuf.st_rdev));
-      AssPRec(rec,RNamName("size"),ObjInt_Int((Int) ourfstatbuf.st_size));
-      AssPRec(rec,RNamName("blksize"),ObjInt_Int((Int)ourfstatbuf.st_blksize));
-      AssPRec(rec,RNamName("blocks"),ObjInt_Int((Int) ourfstatbuf.st_blocks));
-      AssPRec(rec,RNamName("atime"),ObjInt_Int((Int) ourfstatbuf.st_atime));
-      AssPRec(rec,RNamName("mtime"),ObjInt_Int((Int) ourfstatbuf.st_mtime));
-      AssPRec(rec,RNamName("ctime"),ObjInt_Int((Int) ourfstatbuf.st_ctime));
-      return rec;
-  }
+    }
+    return WrapStat(&ourstatbuf);
 }
 #endif
 
 #ifdef HAVE_LSTAT
 static Obj FuncIO_lstat(Obj self,Obj filename)
 {
-  struct stat ourlstatbuf;
-  int res;
-  Obj rec;
-  if (!IS_STRING(filename) || !IS_STRING_REP(filename)) {
-      SyClearErrorNo();
-      return Fail;
-  } else {
-      res = lstat(CSTR_STRING(filename),&ourlstatbuf);
-      if (res < 0) {
+    if (!IS_STRING(filename) || !IS_STRING_REP(filename)) {
+        SyClearErrorNo();
+        return Fail;
+    }
+
+    struct stat ourstatbuf;
+    int res = lstat(CSTR_STRING(filename), &ourstatbuf);
+    if (res < 0) {
         SySetErrorNo();
         return Fail;
-      }
-      rec = NEW_PREC(0);
-      AssPRec(rec,RNamName("dev"),ObjInt_Int((Int) ourlstatbuf.st_dev));
-      AssPRec(rec,RNamName("ino"),ObjInt_Int((Int) ourlstatbuf.st_ino));
-      AssPRec(rec,RNamName("mode"),ObjInt_Int((Int) ourlstatbuf.st_mode));
-      AssPRec(rec,RNamName("nlink"),ObjInt_Int((Int) ourlstatbuf.st_nlink));
-      AssPRec(rec,RNamName("uid"),ObjInt_Int((Int) ourlstatbuf.st_uid));
-      AssPRec(rec,RNamName("gid"),ObjInt_Int((Int) ourlstatbuf.st_gid));
-      AssPRec(rec,RNamName("rdev"),ObjInt_Int((Int) ourlstatbuf.st_rdev));
-      AssPRec(rec,RNamName("size"),ObjInt_Int((Int) ourlstatbuf.st_size));
-      AssPRec(rec,RNamName("blksize"),ObjInt_Int((Int)ourlstatbuf.st_blksize));
-      AssPRec(rec,RNamName("blocks"),ObjInt_Int((Int) ourlstatbuf.st_blocks));
-      AssPRec(rec,RNamName("atime"),ObjInt_Int((Int) ourlstatbuf.st_atime));
-      AssPRec(rec,RNamName("mtime"),ObjInt_Int((Int) ourlstatbuf.st_mtime));
-      AssPRec(rec,RNamName("ctime"),ObjInt_Int((Int) ourlstatbuf.st_ctime));
-      return rec;
-  }
+    }
+    return WrapStat(&ourstatbuf);
 }
 #endif
 
