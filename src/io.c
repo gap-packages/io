@@ -701,7 +701,7 @@ static Obj FuncIO_chdir(Obj self,Obj pathname)
 static Obj FuncIO_getcwd(Obj self)
 {
   char *res;
-  char buf[MAXPATHLEN];
+  char buf[GAP_PATH_MAX];
 
   res = getcwd(buf, sizeof(buf));
   if (res == NULL) {
