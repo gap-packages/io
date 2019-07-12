@@ -1,6 +1,6 @@
 #############################################################################
 ##
-#F  IO_CallWithTimeout( <timeout>, <func>[, <arg1>[, <arg2>....]] )  
+#F  IO_CallWithTimeout( <timeout>, <func>, ... )  
 ##         . . call a function with a time limit
 #F  IO_CallWithTimeoutList( <timeout>, <func>, <arglist> )  
 ##
