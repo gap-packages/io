@@ -40,9 +40,9 @@ gap> IO_WriteLine(f, s{[1..2^17+1]}) - cygwinAdjust;
 131074
 gap> IO_WriteNonBlocking(f, s, 1, 2^10);
 Error, Usage: IO_WriteNonBlocking( f, st, pos )
-gap> IO_WriteNonBlocking(f, s2, 1, 2^17) - cygwinAdjust;
+gap> IO_WriteNonBlocking(f, s2, 1, 2^17);
 131072
-gap> IO_WriteNonBlocking(f, s2, 1, 2^17+1) - cygwinAdjust;
+gap> IO_WriteNonBlocking(f, s2, 1, 2^17+1);
 131073
 gap> IO_Close(f);
 true
