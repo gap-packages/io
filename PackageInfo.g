@@ -7,8 +7,8 @@ SetPackageInfo( rec(
 
 PackageName := "IO",
 Subtitle := "Bindings for low level C library I/O routines",
-Version := "4.6.0",
-Date := "18/03/2019", # dd/mm/yyyy format
+Version := "4.7.0",
+Date := "17/07/2019", # dd/mm/yyyy format
 License := "GPL-3.0-or-later",
 
 ##  Information about authors and maintainers.
@@ -32,17 +32,16 @@ Persons := [
     FirstNames    := "Max",
     IsAuthor      := false,
     IsMaintainer  := true,
-    Email         := "max.horn@math.uni-giessen.de",
+    Email         := "max.horn@uni-siegen.de",
     WWWHome       := "https://www.quendi.de/math",
     PostalAddress := Concatenation(
-                       "AG Algebra\n",
-                       "Mathematisches Institut\n",
-                       "Justus-Liebig-Universität Gießen\n",
-                       "Arndtstraße 2\n",
-                       "35392 Gießen\n",
+                       "Department Mathematik\n",
+                       "Universität Siegen\n",
+                       "Walter-Flex-Straße 3\n",
+                       "57072 Siegen\n",
                        "Germany" ),
-    Place         := "Gießen",
-    Institution   := "Justus-Liebig-Universität Gießen"
+    Place         := "Siegen",
+    Institution   := "Universität Siegen"
   ),
 ],
 
@@ -128,7 +127,7 @@ AutoDoc := rec(
                     "&copyright; 2005-2014 by Max Neunhöffer<P/>\n",
                     "\n",
                     "This package may be distributed under the terms and conditions of the\n",
-                    "GNU Public License Version 3 or later.\n"
+                    "GNU Public License Version 3 or later (at your convenience).\n"
                 ),
     )
 ),

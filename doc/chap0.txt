@@ -6,10 +6,10 @@
                 [1X Bindings for low level C library I/O routines [101X
   
   
-                                     4.6.0
+                                     4.7.0
   
   
-                                 18 March 2019
+                                  17 July 2019
   
   
                                  Max Neunhöffer
@@ -27,13 +27,12 @@
   
   
   Max Horn
-      Email:    [7Xmailto:max.horn@math.uni-giessen.de[107X
+      Email:    [7Xmailto:max.horn@uni-siegen.de[107X
       Homepage: [7Xhttps://www.quendi.de/math[107X
-      Address:  [33X[0;14YAG Algebra[133X
-                [33X[0;14YMathematisches Institut[133X
-                [33X[0;14YJustus-Liebig-Universität Gießen[133X
-                [33X[0;14YArndtstraße 2[133X
-                [33X[0;14Y35392 Gießen[133X
+      Address:  [33X[0;14YDepartment Mathematik[133X
+                [33X[0;14YUniversität Siegen[133X
+                [33X[0;14YWalter-Flex-Straße 3[133X
+                [33X[0;14Y57072 Siegen[133X
                 [33X[0;14YGermany[133X
   
   
@@ -43,7 +42,7 @@
   [33X[0;0Y© 2005-2014 by Max Neunhöffer[133X
   
   [33X[0;0YThis  package  may  be distributed under the terms and conditions of the GNU
-  Public License Version 3 or later.[133X
+  Public License Version 3 or later (at your convenience).[133X
   
   
   -------------------------------------------------------
@@ -208,6 +207,7 @@
       8.2-2 ParDoByFork
       8.2-3 ParListByFork
       8.2-4 ParMapReduceByFork
+      8.2-5 IO_CallWithTimeout
     8.3 [33X[0;0YWorker farms[133X
       8.3-1 ParWorkerFarmByFork
       8.3-2 DoQueues

@@ -226,6 +226,47 @@
   computation   time   for   all  the  worker  function  calls  dominates  the
   communication time for a single result.[133X
   
+  [1X8.2-5 IO_CallWithTimeout[101X
+  
+  [33X[1;0Y[29X[2XIO_CallWithTimeout[102X( [3Xtimeout[103X, [3Xfunc[103X, [3X...[103X ) [32X function[133X
+  [33X[1;0Y[29X[2XIO_CallWithTimeoutList[102X( [3Xtimeout[103X, [3Xfunc[103X, [3Xarglist[103X ) [32X function[133X
+  
+  [33X[0;0Y[10XIO_CallWithTimeout[110X  and [10XIO_CallWithTimeoutList[110X allow calling a function with
+  a  limit on length of time it will run. The function is run inside a copy of
+  the  current  GAP  session,  so any changes it makes to global variables are
+  thrown away when the function finishes or times out.[133X
+  
+  [33X[0;0Y[10XIO_CallWithTimeout[110X is variadic. Any arguments to it beyond the first two are
+  passed  as  arguments  to  [3Xfunc[103X.  [10XIO_CallWithTimeoutList[110X  in  contrast takes
+  exactly  three  arguments,  of which the third is a list (possibly empty) of
+  arguments to pass to [3Xfunc[103X.[133X
+  
+  [33X[0;0YIf  the call completes within the allotted time and returns a value [10Xres[110X, the
+  result of [10XIO_CallWithTimeout[List][110X is a list of the form [10X[ true, res ][110X.[133X
+  
+  [33X[0;0YIf  the  call  completes  within the allotted time and returns no value, the
+  result of [10XIO_CallWithTimeout[List][110X is the list [10X[ true ][110X.[133X
+  
+  [33X[0;0YIf   the   call  does  not  complete  within  the  timeout,  the  result  of
+  [10XIO_CallWithTimeout[List][110X is a list of length 1 containing the value [10Xfalse[110X.[133X
+  
+  [33X[0;0YThe  timer  is suspended during execution of a break loop and abandoned when
+  you quit from a break loop.[133X
+  
+  [33X[0;0YThe  limit  [3Xtimeout[103X  is  specified  as  a  record.  At present the following
+  components  are recognised [10Xnanoseconds[110X, [10Xmicroseconds[110X, [10Xmilliseconds[110X, [10Xseconds[110X,
+  [10Xminutes[110X,  [10Xhours[110X,  [10Xdays[110X  and  [10Xweeks[110X. Any of these components which is present
+  should  be  bound  to  a  positive  integer, rational or float and the times
+  represented  are  totalled  to  give  the  actual timeout. As a shorthand, a
+  single  positive  integers  may  be  supplied,  and  is taken as a number of
+  microseconds.  Further  components  are  permitted and ignored, to allow for
+  future functionality.[133X
+  
+  [33X[0;0YThe  precision  of  the  timeouts  is  not guaranteed, and there is a system
+  dependent  upper limit on the timeout which is typically about 8 years on 32
+  bit  systems  and  about 30 billion years on 64 bit systems. Timeouts longer
+  than this will be reduced to this limit.[133X
+  
   [33X[0;0YNote  that the next parallel skeleton is a worker farm which is described in
   the following section.[133X
   

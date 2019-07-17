@@ -121,15 +121,11 @@
   [33X[1;0Y[29X[2XCheckForUpdates[102X(  ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Ynothing[133X
   
-  [33X[0;0YThis function accesses a web page in St. Andrews and runs some [5XGAP[105X code from
-  there.  This  code  knows all the currently released versions of [5XGAP[105X and its
-  packages.  It prints out a summary and possibly suggests upgrades. If you do
-  not  want  to  executed  code downloaded from the internet, then do not call
-  this function.[133X
-  
-  [33X[0;0YMore         concretely,         the         page         accessed        is
-  [7Xhttp://www.gap-system.org/Download/upgrade.html[107X  and  the code executed is a
-  single call to the function [10XSuggestUpgrades[110X function in the [5XGAP[105X library.[133X
+  [33X[0;0YThis  function  has  been  removed, as it only worked over the insecure HTTP
+  protocol,  but  not  over HTTPS; and the relevant webservice these days only
+  works over HTTPS. If you relied on this functionality, please take a look at
+  the                [5XPackageManager[105X                package,                see
+  [7Xhttps://gap-packages.github.io/PackageManager/[107X.[133X
   
   [1X7.1-7 ReadWeb[101X
   

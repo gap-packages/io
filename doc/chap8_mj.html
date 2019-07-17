@@ -43,6 +43,7 @@
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X7A1F40D1841C36D2">8.2-2 ParDoByFork</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X80DA6945873DCC66">8.2-3 ParListByFork</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X7AD5D85283BC41AC">8.2-4 ParMapReduceByFork</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap8_mj.html#X7A5CCA557B7F8660">8.2-5 IO_CallWithTimeout</a></span>
 </div></div>
 <div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap8_mj.html#X7D18519B879047B3">8.3 <span class="Heading">Worker farms</span></a>
 </span>
@@ -190,6 +191,28 @@
 <p>This is a parallel version implementation of the classical <code class="code">MapReduce</code> pattern. It applies the function <var class="Arg">map</var> to all elements of the list <var class="Arg">l</var> and then reduces the result using the <var class="Arg">reduce</var> function which accepts two return values of <var class="Arg">map</var> and returns one of them. Thus, the final result is one return value or <code class="keyw">fail</code> if the startup of the jobs fails. You have to specify the component <code class="code">NumberJobs</code> in the options record <var class="Arg">opt</var> which indicates how many background processes to start. You can optionally use the <code class="code">TimeOut</code> option exactly as for <code class="func">ParDoByFork</code> (<a href="chap8_mj.html#X7A1F40D1841C36D2"><span class="RefLink">8.2-2</span></a>), however, if a timeout occurs, <code class="func">ParMapReduceByFork</code> returns <code class="keyw">fail</code>.</p>
 
 <p>Note that this can be very useful because quite often the cumulated computation time for all the worker function calls dominates the communication time for a single result.</p>
+
+<p><a id="X7A5CCA557B7F8660" name="X7A5CCA557B7F8660"></a></p>
+
+<h5>8.2-5 IO_CallWithTimeout</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_CallWithTimeout</code>( <var class="Arg">timeout</var>, <var class="Arg">func</var>, <var class="Arg">...</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_CallWithTimeoutList</code>( <var class="Arg">timeout</var>, <var class="Arg">func</var>, <var class="Arg">arglist</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
+<p><code class="code">IO_CallWithTimeout</code> and <code class="code">IO_CallWithTimeoutList</code> allow calling a function with a limit on length of time it will run. The function is run inside a copy of the current GAP session, so any changes it makes to global variables are thrown away when the function finishes or times out.</p>
+
+<p><code class="code">IO_CallWithTimeout</code> is variadic. Any arguments to it beyond the first two are passed as arguments to <var class="Arg">func</var>. <code class="code">IO_CallWithTimeoutList</code> in contrast takes exactly three arguments, of which the third is a list (possibly empty) of arguments to pass to <var class="Arg">func</var>.</p>
+
+<p>If the call completes within the allotted time and returns a value <code class="code">res</code>, the result of <code class="code">IO_CallWithTimeout[List]</code> is a list of the form <code class="code">[ true, res ]</code>.</p>
+
+<p>If the call completes within the allotted time and returns no value, the result of <code class="code">IO_CallWithTimeout[List]</code> is the list <code class="code">[ true ]</code>.</p>
+
+<p>If the call does not complete within the timeout, the result of <code class="code">IO_CallWithTimeout[List]</code> is a list of length 1 containing the value <code class="code">false</code>.</p>
+
+<p>The timer is suspended during execution of a break loop and abandoned when you quit from a break loop.</p>
+
+<p>The limit <var class="Arg">timeout</var> is specified as a record. At present the following components are recognised <code class="code">nanoseconds</code>, <code class="code">microseconds</code>, <code class="code">milliseconds</code>, <code class="code">seconds</code>, <code class="code">minutes</code>, <code class="code">hours</code>, <code class="code">days</code> and <code class="code">weeks</code>. Any of these components which is present should be bound to a positive integer, rational or float and the times represented are totalled to give the actual timeout. As a shorthand, a single positive integers may be supplied, and is taken as a number of microseconds. Further components are permitted and ignored, to allow for future functionality.</p>
+
+<p>The precision of the timeouts is not guaranteed, and there is a system dependent upper limit on the timeout which is typically about 8 years on 32 bit systems and about 30 billion years on 64 bit systems. Timeouts longer than this will be reduced to this limit.</p>
 
 <p>Note that the next parallel skeleton is a worker farm which is described in the following section.</p>
 

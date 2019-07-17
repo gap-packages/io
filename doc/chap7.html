@@ -107,9 +107,7 @@
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; CheckForUpdates</code>(  )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: nothing</p>
 
-<p>This function accesses a web page in St. Andrews and runs some <strong class="pkg">GAP</strong> code from there. This code knows all the currently released versions of <strong class="pkg">GAP</strong> and its packages. It prints out a summary and possibly suggests upgrades. If you do not want to executed code downloaded from the internet, then do not call this function.</p>
-
-<p>More concretely, the page accessed is <span class="URL"><a href="http://www.gap-system.org/Download/upgrade.html">http://www.gap-system.org/Download/upgrade.html</a></span> and the code executed is a single call to the function <code class="code">SuggestUpgrades</code> function in the <strong class="pkg">GAP</strong> library.</p>
+<p>This function has been removed, as it only worked over the insecure HTTP protocol, but not over HTTPS; and the relevant webservice these days only works over HTTPS. If you relied on this functionality, please take a look at the <strong class="pkg">PackageManager</strong> package, see <span class="URL"><a href="https://gap-packages.github.io/PackageManager/">https://gap-packages.github.io/PackageManager/</a></span>.</p>
 
 <p><a id="X872B174F7FFD345B" name="X872B174F7FFD345B"></a></p>
 

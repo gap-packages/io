@@ -19,6 +19,8 @@
   [5XIO[105X 1. 
   [2XIO_accept[102X 3.2-1 
   [2XIO_bind[102X 3.2-2 
+  [2XIO_CallWithTimeout[102X 8.2-5 
+  [2XIO_CallWithTimeoutList[102X 8.2-5 
   [2XIO_chdir[102X 3.2-3 
   [2XIO_chmod[102X 3.2-4 
   [2XIO_chown[102X 3.2-5 
@@ -157,6 +159,7 @@
   [2XSubmit[102X, bgjob 8.1-6 
       wfarm 8.3-5 
   [2XSubmitOutput[102X 9.2-8 
+  Timeouts 8.2-4 
   [2XWaitUntilIdle[102X 8.1-4 
   
   
