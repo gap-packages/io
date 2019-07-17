@@ -1,5 +1,11 @@
 This file describes changes in the IO package.
 
+4.7.0 (2019-07-17)
+  - Add IO_CallWithTimeout
+  - Remove CheckForUpdates, it was hopelessly broken
+  - Make IO_stat/IO_lstat/IO_fstat compatible with large files
+  - Various janitorial changes
+
 4.6.0 (2019-03-15)
   - Change minimal required GAP version to 4.10
   - Fix for profiling when IO_fork is called
