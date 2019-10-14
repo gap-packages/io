@@ -1395,21 +1395,18 @@ static Obj FuncIO_select(Obj self, Obj inlist, Obj outlist, Obj exclist,
   Obj o;
   time_t t1,t2;
 
-  while (inlist == (Obj) 0 || !(IS_PLIST(inlist)))
-    inlist = ErrorReturnObj(
+  if (!IS_PLIST(inlist))
+    ErrorMayQuit(
            "<inlist> must be a list of small integers (not a %s)",
-           (Int)TNAM_OBJ(inlist),0L,
-           "you can replace <inlist> via 'return <inlist>;'" );
-  while (outlist == (Obj) 0 || !(IS_PLIST(outlist)))
-    outlist = ErrorReturnObj(
+           (Int)TNAM_OBJ(inlist),0);
+  if (!IS_PLIST(outlist))
+    ErrorMayQuit(
            "<outlist> must be a list of small integers (not a %s)",
-           (Int)TNAM_OBJ(outlist),0L,
-           "you can replace <outlist> via 'return <outlist>;'" );
-  while (exclist == (Obj) 0 || !(IS_PLIST(exclist)))
-    exclist = ErrorReturnObj(
+           (Int)TNAM_OBJ(outlist),0);
+  if (!IS_PLIST(exclist))
+    ErrorMayQuit(
            "<exclist> must be a list of small integers (not a %s)",
-           (Int)TNAM_OBJ(exclist),0L,
-           "you can replace <exclist> via 'return <exclist>;'" );
+           (Int)TNAM_OBJ(exclist),0);
 
   FD_ZERO(&infds);
   FD_ZERO(&outfds);
