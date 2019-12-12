@@ -3,7 +3,7 @@
 # Can be configured using --with-gaproot=...
 #######################################################################
 
-AC_DEFUN([AC_FIND_GAP],
+AC_DEFUN([FIND_GAP],
 [
   AC_LANG_PUSH([C])
 
@@ -21,7 +21,7 @@ AC_DEFUN([AC_FIND_GAP],
   #Allow the user to specify the location of GAP
   #
   AC_ARG_WITH(gaproot,
-    [AC_HELP_STRING([--with-gaproot=<path>], [specify root of GAP installation])],
+    [AS_HELP_STRING([--with-gaproot=<path>], [specify root of GAP installation])],
     [GAPROOT="$withval"])
 
   # Convert the path to absolute

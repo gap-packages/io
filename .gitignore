@@ -20,31 +20,13 @@
 /doc/manual.pdf
 /doc/title.xml
 
-.deps/
-.dirstamp
-.libs/
-
-/aclocal.m4
 /autom4te.cache/
 /bin/
-/cnf
 /config.log
 /config.status
 /configure
-/lib/
-/libtool
-/m4/libtool.m4
-/m4/ltoptions.m4
-/m4/ltsugar.m4
-/m4/ltversion.m4
-/m4/lt~obsolete.m4
+/gen/
 /Makefile
-/Makefile.in
-/src/pkgconfig.h
-/src/stamp-h1
-
-/io.la
-/src/io_la-io.lo
 
 /tmp/
 /gh-pages/
