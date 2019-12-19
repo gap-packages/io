@@ -39,11 +39,13 @@ gen/pkgconfig.h: gen/pkgconfig.h.stamp
 
 gen/pkgconfig.h.stamp: gen/pkgconfig.h.in config.status
 	@rm -f $@
+	@mkdir -p $(@D)
 	./config.status gen/pkgconfig.h
 	echo > $@
 
 gen/pkgconfig.h.in: $(configure_deps)
 	@if command -v autoheader >/dev/null 2>&1 ; then \
+	   mkdir -p $(@D) ; \
 	   echo "running autoheader" ; \
 	   autoheader ; \
 	   rm -f gen/pkgconfig.h.stamp ; \
@@ -51,3 +53,5 @@ gen/pkgconfig.h.in: $(configure_deps)
 	   echo "autoheader not available, proceeding with stale config.h" ; \
 	 fi
 	touch $@
+
+$(KEXT_OBJS): gen/pkgconfig.h
