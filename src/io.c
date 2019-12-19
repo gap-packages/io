@@ -190,7 +190,7 @@ static int ignoredpidslen;
 
 static int IO_CheckForIgnoredPid( int pid );
 
-static RETSIGTYPE (*oldhandler)(int whichsig) = 0;  /* the old handler */
+static void (*oldhandler)(int whichsig) = 0;  /* the old handler */
 
 static void IO_HandleChildSignal(int retcode, int status)
 {
@@ -216,7 +216,7 @@ static void IO_HandleChildSignal(int retcode, int status)
 }
 
 #ifdef HAVE_SIGNAL
-RETSIGTYPE IO_SIGCHLDHandler( int whichsig )
+void IO_SIGCHLDHandler( int whichsig )
 {
   int retcode,status;
   /* We collect information about our child processes that have

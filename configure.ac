@@ -30,7 +30,6 @@ AC_FUNC_FORK
 AC_FUNC_LSTAT
 AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
 AC_FUNC_SELECT_ARGTYPES
-AC_TYPE_SIGNAL
 AC_FUNC_STAT
 AC_CHECK_FUNCS([dup2 gethostbyname lchown memset mkdir mkfifo rmdir select socket getprotobyname signal sigaction opendir readdir closedir rewinddir telldir seekdir unlink link rename symlink readlink accept bind chmod connect dup fchmod fchown stat fstat lstat getsockopt listen lstat mknod mkstemp mkdtemp recv recvfrom send sendto setsockopt gettimeofday gmtime localtime getpid getppid kill gethostname getsockname])
 
