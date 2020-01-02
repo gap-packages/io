@@ -19,13 +19,6 @@ Persons := [
     IsAuthor      := true,
     IsMaintainer  := false,
     Email         := "max@9hoeffer.de",
-    WWWHome       := "http://www-groups.mcs.st-and.ac.uk/~neunhoef",
-    PostalAddress := Concatenation( [
-                       "Gustav-Freytag-Straße 40\n",
-                       "50354 Hürth\n",
-                       "Germany" ] ),
-    #Place         := "St Andrews",
-    #Institution   := "University of St Andrews"
   ),
   rec(
     LastName      := "Horn",
