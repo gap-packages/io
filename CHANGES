@@ -54,7 +54,7 @@ This file describes changes in the IO package.
   - Some maintenance changes
 
 4.4.5 (2016-01-07)
-  - Move website to http://gap-packages.github.io/io/
+  - Move website to https://gap-packages.github.io/io/
   - Change IO_PipeThroughWithError to also return the exit status of
     the child process
   - Improve test suite a little bit
