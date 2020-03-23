@@ -31,8 +31,8 @@
 ##  result of <C>IO_CallWithTimeout[List]</C> is the list <C>[ true ]</C>.<P/>
 ##
 ##  If the call does not complete within the timeout, the result of
-##  <C>IO_CallWithTimeout[List]</C> is a list of length 1 containing the value
-##  <C>false</C>. <P/>
+##  <C>IO_CallWithTimeout[List]</C> is the list <C>[ false ]</C>. If the
+##  call causes GAP to crash or exit, the result is the list <C>[ fail ]</C>. <P/>
 ##
 ##  The timer is suspended during execution of a break loop and abandoned when
 ##  you quit from a break loop.<P/>
