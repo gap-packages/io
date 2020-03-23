@@ -61,6 +61,8 @@ InstallGlobalFunction("IO_CallWithTimeoutList",
     ret := ParDoByFork( [callfunc], [ [] ], timeoutrec);
     if ret = [ ] then
         return [ false ];
+    elif ret[1] = fail then
+        return [ fail ];
     elif Length(ret[1]) > 0 then
         return [ true, ret[1][1] ];
     else
