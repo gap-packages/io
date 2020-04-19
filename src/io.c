@@ -11,7 +11,7 @@
 /* Try to use as much of the GNU C library as possible: */
 #define _GNU_SOURCE
 
-#include "src/compiled.h"          /* GAP headers                */
+#include "compiled.h" // GAP headers
 
 #if GAP_KERNEL_MAJOR_VERSION >= 6
 #include "src/profile.h"
