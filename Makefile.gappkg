@@ -3,8 +3,8 @@
 # The build rules in this file are intended for use by GAP packages that
 # want to build a simple GAP kernel extensions. They are based on the
 # GAP build system, and require GNU make. To use this in your GAP
-# package, `include` this from your primary Makefile. You must also set
-# several variables beforehand:
+# package, `include` this file from your primary Makefile. You must also
+# set several variables beforehand:
 #
 # - GAPPATH must be set to the location of the GAP installation against
 #   which to build your package.
@@ -13,7 +13,9 @@
 # - KEXT_SOURCES must contain a list of .c or .cc files to be linked
 #   into your kernel extension
 # - optionally, you can set KEXT_CFLAGS, KEXT_CXXFLAGS, KEXT_LDFLAGS
-#
+# - if you are using autoconf to produce your configure script, set
+#   KEXT_USE_AUTOCONF to 1 to enable dependency rules that enable
+#   regenerating the configure script etc. when necessary
 #
 # Only GAP >= 4.11 ships with this file. In order to keep your package
 # compatible with older GAP versions, we recommend to bundle a copy of
@@ -27,10 +29,11 @@
 # package, etc.
 #
 # If you bundle this file with your package, please try not to edit it,
-# so that we can keep it identical across all GAP packages. If you still
-# find that you must edit it, please consider submitting your changes
-# back to the GAP team, so that a future version of this file can be
-# adjusted to cover your usecase without modifications.
+# so that we can keep it identical across all GAP packages. Instead, if
+# you find that you must edit it, please submit your changes back to
+# the GAP team, so that a future version of this file can be adjusted
+# to cover your usecase without modifications, thus ensuring you can
+# always easily update to newer version of it.
 #
 ########################################################################
 
@@ -155,6 +158,7 @@ ifdef KEXT_USE_AUTOCONF
 # react to modifications of the build system
 configure_deps = configure.ac $(wildcard m4/*.m4)
 
+ifneq ($(MAINTAINER_MODE),no)
 configure: $(configure_deps)
 	@if command -v autoconf >/dev/null 2>&1 ; then \
 	   echo "running autoconf" ; \
@@ -162,6 +166,7 @@ configure: $(configure_deps)
 	 else \
 	   echo "autoconf not available, proceeding with stale configure" ; \
 	 fi
+endif # MAINTAINER_MODE
 
 # re-run configure if configure, Makefile.in or GAP itself changed
 config.status: configure $(GAPPATH)/sysinfo.gap
@@ -180,6 +185,7 @@ gen/pkgconfig.h.stamp: gen/pkgconfig.h.in config.status
 	./config.status gen/pkgconfig.h
 	echo > $@
 
+ifneq ($(MAINTAINER_MODE),no)
 gen/pkgconfig.h.in: $(configure_deps)
 	@if command -v autoheader >/dev/null 2>&1 ; then \
 	   mkdir -p $(@D) ; \
@@ -190,8 +196,9 @@ gen/pkgconfig.h.in: $(configure_deps)
 	   echo "autoheader not available, proceeding with stale config.h" ; \
 	 fi
 	touch $@
+endif # MAINTAINER_MODE
 
-endif
+endif # KEXT_USE_AUTOCONF
 
 .PHONY: check clean distclean doc
 .PHONY: check-kext clean-kext distclean-kext doc-kext
