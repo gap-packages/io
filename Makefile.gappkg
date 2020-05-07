@@ -37,6 +37,12 @@
 # read GAP's build settings
 include $(GAPPATH)/sysinfo.gap
 
+# hack to support GAP <= 4.9
+ifndef GAP_KERNEL_MAJOR_VERSION
+  KEXT_CFLAGS += -I$(GAP_LIB_DIR)/src
+  KEXT_CXXFLAGS += -I$(GAP_LIB_DIR)/src
+endif
+
 # various derived settings
 KEXT_BINARCHDIR = bin/$(GAParch)
 KEXT_SO = $(KEXT_BINARCHDIR)/$(KEXT_NAME).so
@@ -46,7 +52,11 @@ GAC = $(GAPPATH)/gac
 
 # override KEXT_RECONF if your package needs a different invocation
 # for reconfiguring (e.g. `./config.status --recheck` for autoconf)
+ifdef KEXT_USE_AUTOCONF
+KEXT_RECONF ?= ./config.status Makefile
+else
 KEXT_RECONF ?= ./configure "$(GAPPATH)"
+endif
 
 # default target
 all: $(KEXT_SO)
@@ -57,7 +67,10 @@ all: $(KEXT_SO)
 # For each file FOO.c in SOURCES, add gen/FOO.lo to KEXT_OBJS; similar
 # for .cc files
 ########################################################################
-KEXT_OBJS = $(patsubst %.cc,gen/%.lo,$(patsubst %.c,gen/%.lo,$(KEXT_SOURCES)))
+KEXT_OBJS = $(patsubst %.s,gen/%.lo, \
+            $(patsubst %.cc,gen/%.lo, \
+            $(patsubst %.c,gen/%.lo, \
+                $(KEXT_SOURCES))))
 
 ########################################################################
 # Quiet rules.
@@ -76,13 +89,10 @@ endif
 # This is based on the GAP build system.
 ########################################################################
 
-# List of all (potential) dependency directories, derived from KEXT_OBJS
-# and KEXT_SOURCES (the latter for generated sources, which may also
-# involve dependency tracking)
-KEXT_DEPDIRS = $(sort $(dir $(KEXT_SOURCES) $(KEXT_OBJS)))
-KEXT_DEPFILES = $(wildcard $(addsuffix /*.d,$(KEXT_DEPDIRS)))
+# List of all (potential) dependency files, derived from KEXT_OBJS
+KEXT_DEPFILES = $(patsubst %.lo,%.d,$(KEXT_OBJS))
 
-# Include the dependency tracking files.
+# Include the dependency tracking files
 -include $(KEXT_DEPFILES)
 
 # Mark *.d files as PHONY. This stops make from trying to recreate them
@@ -98,17 +108,22 @@ KEXT_DEPFLAGS = -MQ "$@" -MMD -MP -MF $(@D)/$(*F).d
 # build rule for C code
 # The dependency on Makefile ensures that re-running configure recompiles everything
 gen/%.lo: %.c Makefile
-	$(QUIET_GAC)$(GAC) -d -p "$(KEXT_DEPFLAGS)" -p "$(KEXT_CFLAGS)" -c $< -o $@
+	$(QUIET_GAC)$(GAC) -d -p "$(KEXT_DEPFLAGS)" -p "$(KEXT_CFLAGS)" -p "$(CFLAGS)" -c $< -o $@
 
 # build rule for C++ code
 # The dependency on Makefile ensures that re-running configure recompiles everything
 gen/%.lo: %.cc Makefile
-	$(QUIET_GAC)$(GAC) -d -p "$(KEXT_DEPFLAGS)" -p "$(KEXT_CXXFLAGS)" -c $< -o $@
+	$(QUIET_GAC)$(GAC) -d -p "$(KEXT_DEPFLAGS)" -p "$(KEXT_CXXFLAGS)" -p "$(CXXFLAGS)" -c $< -o $@
+
+# build rule for assembler code
+# The dependency on Makefile ensures that re-running configure recompiles everything
+gen/%.lo: %.s Makefile
+	$(QUIET_GAC)$(GAC) -d -p "$(KEXT_DEPFLAGS)" -p "$(KEXT_CFLAGS)" -p "$(CFLAGS)" -c $< -o $@
 
 # build rule for linking all object files together into a kernel extension
 $(KEXT_SO): $(KEXT_OBJS)
 	@mkdir -p $(KEXT_BINARCHDIR)
-	$(QUIET_GAC)$(GAC) -d -p "$(KEXT_DEPFLAGS)" -P "$(KEXT_LDFLAGS)" $(KEXT_OBJS) -o $@
+	$(QUIET_GAC)$(GAC) -d -p "$(KEXT_DEPFLAGS)" -P "$(KEXT_LDFLAGS)" -P "$(LDFLAGS)" $(KEXT_OBJS) -o $@
 
 # hook into `make clean`
 clean: clean-kext
@@ -134,6 +149,49 @@ check-kext:
 # re-run configure if configure, Makefile.in or GAP itself changed
 Makefile: configure Makefile.in $(GAPPATH)/sysinfo.gap
 	$(KEXT_RECONF)
+
+ifdef KEXT_USE_AUTOCONF
+
+# react to modifications of the build system
+configure_deps = configure.ac $(wildcard m4/*.m4)
+
+configure: $(configure_deps)
+	@if command -v autoconf >/dev/null 2>&1 ; then \
+	   echo "running autoconf" ; \
+	   autoconf ; \
+	 else \
+	   echo "autoconf not available, proceeding with stale configure" ; \
+	 fi
+
+# re-run configure if configure, Makefile.in or GAP itself changed
+config.status: configure $(GAPPATH)/sysinfo.gap
+	./config.status --recheck
+
+# update Makefile if config.status changed
+Makefile: config.status
+
+gen/pkgconfig.h: gen/pkgconfig.h.stamp
+	@if test ! -f $@; then rm -f $<; else :; fi
+	@if test ! -f $@; then $(MAKE) $<; else :; fi
+
+gen/pkgconfig.h.stamp: gen/pkgconfig.h.in config.status
+	@rm -f $@
+	@mkdir -p $(@D)
+	./config.status gen/pkgconfig.h
+	echo > $@
+
+gen/pkgconfig.h.in: $(configure_deps)
+	@if command -v autoheader >/dev/null 2>&1 ; then \
+	   mkdir -p $(@D) ; \
+	   echo "running autoheader" ; \
+	   autoheader ; \
+	   rm -f gen/pkgconfig.h.stamp ; \
+	 else \
+	   echo "autoheader not available, proceeding with stale config.h" ; \
+	 fi
+	touch $@
+
+endif
 
 .PHONY: check clean distclean doc
 .PHONY: check-kext clean-kext distclean-kext doc-kext

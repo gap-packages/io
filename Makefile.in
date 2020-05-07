@@ -6,52 +6,11 @@ KEXT_SOURCES = src/io.c
 
 KEXT_CFLAGS = -Igen
 
-KEXT_RECONF ?= ./config.status Makefile
+KEXT_USE_AUTOCONF = 1
 
 # include shared GAP package build system
 GAPPATH = @GAPROOT@
 include Makefile.gappkg
 
-#
-# react to modifications of the build system
-#
-
-configure_deps = configure.ac $(wildcard m4/*.m4)
-
-configure: $(configure_deps)
-	@if command -v autoconf >/dev/null 2>&1 ; then \
-	   echo "running autoconf" ; \
-	   autoconf ; \
-	 else \
-	   echo "autoconf not available, proceeding with stale configure" ; \
-	 fi
-
-# re-run configure if configure, Makefile.in or GAP itself changed
-config.status: configure $(GAPPATH)/sysinfo.gap
-	./config.status --recheck
-
-# update Makefile if config.status changed
-Makefile: config.status
-
-gen/pkgconfig.h: gen/pkgconfig.h.stamp
-	@if test ! -f $@; then rm -f $<; else :; fi
-	@if test ! -f $@; then $(MAKE) $<; else :; fi
-
-gen/pkgconfig.h.stamp: gen/pkgconfig.h.in config.status
-	@rm -f $@
-	@mkdir -p $(@D)
-	./config.status gen/pkgconfig.h
-	echo > $@
-
-gen/pkgconfig.h.in: $(configure_deps)
-	@if command -v autoheader >/dev/null 2>&1 ; then \
-	   mkdir -p $(@D) ; \
-	   echo "running autoheader" ; \
-	   autoheader ; \
-	   rm -f gen/pkgconfig.h.stamp ; \
-	 else \
-	   echo "autoheader not available, proceeding with stale config.h" ; \
-	 fi
-	touch $@
-
+# ensure pkgconfig.h is built
 $(KEXT_OBJS): gen/pkgconfig.h
