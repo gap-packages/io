@@ -8,7 +8,7 @@ on:
 jobs:
   # The job running the package tests.
   test:
-    name: ${{ matrix.gap-branch }} - ${{ matrix.os }}
+    name: ${{ matrix.gap-branch }} ${{ matrix.ABI }} - HPCGAP ${{ matrix.HPCGAP }} - ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -18,14 +18,31 @@ jobs:
           - master
           - stable-4.11
           - stable-4.10
+        GAP_PKGS_TO_BUILD: ['profiling']
+        HPCGAP: ['no']
+        ABI: ['']
+        include:
+          - os: ubuntu-latest
+            gap-branch: master
+            GAP_PKGS_TO_BUILD: ''
+            HPCGAP: 'yes'
+            NO_COVERAGE: 'yes'
+          - os: ubuntu-latest
+            gap-branch: master
+            ABI: 32
 
     steps:
       - uses: actions/checkout@v2
       - uses: gap-actions/setup-gap-for-packages@v1
         with:
           GAPBRANCH: ${{ matrix.gap-branch }}
+          GAP_PKGS_TO_BUILD: ${{ matrix.GAP_PKGS_TO_BUILD }}
+          HPCGAP: ${{ matrix.HPCGAP }}
+          ABI: ${{ matrix.ABI }}
       - uses: gap-actions/compile-documentation-for-packages@v1
       - uses: gap-actions/run-test-for-packages@v1
+        with:
+          NO_COVERAGE: ${{ matrix.NO_COVERAGE }}
 
   # A job to compile the manual with latex and upload it as an artifact.
   manual:
