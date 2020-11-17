@@ -1,0 +1,67 @@
+name: CI
+
+# Trigger the workflow on push or pull request
+on:
+  - push
+  - pull_request
+
+jobs:
+  # The CI test job
+  test:
+    name: ${{ matrix.gap-branch }} ${{ matrix.ABI }} - HPCGAP ${{ matrix.HPCGAP }}
+    runs-on: ubuntu-latest
+    # Don't run this twice on PRs for branches pushed to the same repository
+    if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
+    strategy:
+      fail-fast: false
+      matrix:
+        gap-branch:
+          - master
+          - stable-4.11
+          - stable-4.10
+        GAP_PKGS_TO_BUILD: ['profiling']
+        HPCGAP: ['no']
+        ABI: ['']
+        include:
+          - os: ubuntu-latest
+            gap-branch: master
+            GAP_PKGS_TO_BUILD: ''
+            HPCGAP: 'yes'
+            ABI: ''
+            NO_COVERAGE: 'yes'
+          - os: ubuntu-latest
+            gap-branch: master
+            GAP_PKGS_TO_BUILD: 'profiling'
+            HPCGAP: 'no'
+            ABI: 32
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: gap-actions/setup-gap-for-packages@v1
+        with:
+          GAPBRANCH: ${{ matrix.gap-branch }}
+          ABI: ${{ matrix.ABI }}
+          GAP_PKGS_TO_BUILD: ${{ matrix.GAP_PKGS_TO_BUILD }}
+          HPCGAP: ${{ matrix.HPCGAP }}
+      - uses: gap-actions/run-test-for-packages@v1
+        with:
+          NO_COVERAGE: ${{ matrix.NO_COVERAGE }}
+
+  # The documentation job
+  manual:
+    name: Build manuals
+    runs-on: ubuntu-latest
+    # Don't run this twice on PRs for branches pushed to the same repository
+    if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: gap-actions/setup-gap-for-packages@v1
+      - uses: gap-actions/compile-documentation-for-packages@v1
+        with:
+          use-latex: 'true'
+      - name: 'Upload documentation'
+        uses: actions/upload-artifact@v2
+        with:
+          name: manual
+          path: ./doc/manual.pdf
