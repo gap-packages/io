@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.com/gap-packages/io.svg?branch=master)](https://travis-ci.com/gap-packages/io)
-[![Code Coverage](https://codecov.io/github/gap-packages/io/coverage.svg?branch=master&token=)](https://codecov.io/gh/gap-packages/io)
+[![CI](https://github.com/ssiccha/io/workflows/CI/badge.svg?branch=master)](https://github.com/gap-packages/recog/actions?query=workflow%3ACI+branch%3Amaster)
+[![Code Coverage](https://app.codecov.io/github/gap-packages/io/coverage.svg?branch=master&token=)](https://codecov.io/gh/gap-packages/io)
 
 # README file for the IO GAP4 package
 
