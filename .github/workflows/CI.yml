@@ -26,11 +26,13 @@ jobs:
             gap-branch: master
             GAP_PKGS_TO_BUILD: ''
             HPCGAP: 'yes'
+            ABI: ''
             NO_COVERAGE: 'yes'
           - os: ubuntu-latest
             gap-branch: master
-            ABI: 32
             GAP_PKGS_TO_BUILD: 'profiling'
+            HPCGAP: 'no'
+            ABI: 32
 
     steps:
       - uses: actions/checkout@v2
