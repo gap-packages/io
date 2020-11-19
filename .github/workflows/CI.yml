@@ -30,6 +30,7 @@ jobs:
           - os: ubuntu-latest
             gap-branch: master
             ABI: 32
+            GAP_PKGS_TO_BUILD: 'profiling'
 
     steps:
       - uses: actions/checkout@v2
