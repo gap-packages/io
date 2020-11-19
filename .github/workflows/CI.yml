@@ -24,7 +24,7 @@ jobs:
         include:
           - os: ubuntu-latest
             gap-branch: master
-            GAP_PKGS_TO_BUILD: ''
+            GAP_PKGS_TO_BUILD: 'profiling'
             HPCGAP: 'yes'
             ABI: ''
             NO_COVERAGE: 'yes'
