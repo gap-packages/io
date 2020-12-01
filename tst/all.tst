@@ -196,6 +196,14 @@ gap> # IO_readdir(); # TODO: test this
 gap> IO_readlink(fail, fail, fail);
 fail
 
+# IO_realpath(path)
+gap> IO_realpath(fail);
+fail
+gap> IO_realpath("/");
+"/"
+gap> IO_getcwd() = IO_realpath(".");
+true
+
 # IO_recv(fd, st, offset, len, flags)
 gap> IO_recv(fail, fail, fail, fail, fail);
 fail
