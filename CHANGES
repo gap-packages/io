@@ -1,5 +1,10 @@
 This file describes changes in the IO package.
 
+4.X.Y (2020-MM-DD)
+  - Add IO_realpath
+  - Switch to a new build system
+  - Various janitorial changes
+
 4.7.0 (2019-07-17)
   - Add IO_CallWithTimeout
   - Remove CheckForUpdates, it was hopelessly broken

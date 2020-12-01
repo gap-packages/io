@@ -683,6 +683,23 @@ static Obj FuncIO_readlink(Obj self,Obj path,Obj buf,Obj bufsize)
 }
 #endif
 
+static Obj FuncIO_realpath(Obj self, Obj path)
+{
+    if (!IS_STRING_REP(path)) {
+        SyClearErrorNo();
+        return Fail;
+    }
+
+    char buf[PATH_MAX];
+    if (realpath(CSTR_STRING(path), buf)) {
+        return MakeImmString(buf);
+    }
+
+    SySetErrorNo();
+    return Fail;
+}
+
+
 static Obj FuncIO_chdir(Obj self,Obj pathname)
 {
   int res;
@@ -1912,6 +1929,8 @@ static StructGVarFunc GVarFuncs [] = {
 #ifdef HAVE_READLINK
   GVAR_FUNC(IO_readlink, 3, "path, buf, bufsize"),
 #endif
+
+  GVAR_FUNC(IO_realpath, 1, "path"),
 
 #ifdef HAVE_MKDIR
   GVAR_FUNC(IO_mkdir, 2, "pathname, mode"),
