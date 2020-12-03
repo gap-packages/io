@@ -1180,7 +1180,7 @@ IO_Unpicklers.PRMG :=
   function(f)
     local base,g,gens,size;
     gens := IO_Unpickle(f); if gens = IO_Error then return IO_Error; fi;
-    g := GroupWithGenerators(gens);
+    g := GroupWithGenerators(gens, ());
     size := IO_Unpickle(f); if size = IO_Error then return IO_Error; fi;
     if size <> fail then SetSize(g,size); fi;
     base := IO_Unpickle(f); if base = IO_Error then return IO_Error; fi;
