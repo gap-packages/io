@@ -15,7 +15,9 @@
 ##  a function with a limit on length of time it will run. The function is run
 ##  inside a copy of the current GAP session, so any changes it makes to
 ##  global variables are thrown away when the function finishes or times
-##  out.<P/>
+##  out. The return value of <A>func</A> is passed back to the current GAP
+##  session via <C>IO_Pickle</C>. Note that <C>IO_Pickle</C> may not be
+##  available for all objects.<P/>
 ##
 ##  <C>IO_CallWithTimeout</C> is variadic. Any arguments to it beyond the
 ##  first two are passed as arguments to <A>func</A>.
