@@ -1,7 +1,7 @@
 AC_PREREQ([2.68])
 AC_INIT([io], [package], [https://github.com/gap-packages/io/issues], [io], [https://gap-packages.github.io/io/])
 AC_CONFIG_SRCDIR([src/io.c])
-AC_CONFIG_HEADER([gen/pkgconfig.h])
+AC_CONFIG_HEADERS([gen/pkgconfig.h])
 AC_CONFIG_MACRO_DIR([m4])
 m4_include([m4/find_gap.m4])
 
@@ -11,7 +11,6 @@ FIND_GAP
 
 # Checks for header files.
 AC_HEADER_DIRENT
-AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS([fcntl.h netdb.h netinet/in.h netinet/tcp.h stdlib.h sys/param.h sys/socket.h sys/time.h time.h unistd.h signal.h])
 
@@ -21,7 +20,6 @@ AC_TYPE_PID_T
 AC_CHECK_MEMBERS([struct stat.st_blksize])
 AC_STRUCT_ST_BLOCKS
 AC_CHECK_MEMBERS([struct stat.st_rdev])
-AC_HEADER_TIME
 
 # Checks for library functions.
 AC_FUNC_CHOWN
