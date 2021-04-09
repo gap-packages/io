@@ -8,13 +8,15 @@ on:
 jobs:
   # The CI test job
   test:
-    name: ${{ matrix.gap-branch }} ${{ matrix.ABI }} - HPCGAP ${{ matrix.HPCGAP }}
-    runs-on: ubuntu-latest
+    name: ${{ matrix.os }} - GAP ${{ matrix.gap-branch }} ${{ matrix.ABI }} - HPCGAP ${{ matrix.HPCGAP }}
+    runs-on: ${{ matrix.os }}-latest
     # Don't run this twice on PRs for branches pushed to the same repository
     if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
     strategy:
       fail-fast: false
       matrix:
+        os:
+          - ubuntu
         gap-branch:
           - master
           - stable-4.11
@@ -23,17 +25,21 @@ jobs:
         HPCGAP: ['no']
         ABI: ['']
         include:
-          - os: ubuntu-latest
+          - os: ubuntu
             gap-branch: master
             GAP_PKGS_TO_BUILD: ''
             HPCGAP: 'yes'
             ABI: ''
             NO_COVERAGE: 'yes'
-          - os: ubuntu-latest
+          - os: ubuntu
             gap-branch: master
             GAP_PKGS_TO_BUILD: 'profiling'
             HPCGAP: 'no'
             ABI: 32
+          - os: macos
+            gap-branch: master
+            GAP_PKGS_TO_BUILD: 'profiling'
+            HPCGAP: 'no'
 
     steps:
       - uses: actions/checkout@v2
