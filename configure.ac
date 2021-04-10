@@ -10,26 +10,80 @@ AC_PROG_CC
 FIND_GAP
 
 # Checks for header files.
-AC_HEADER_DIRENT
-AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS([fcntl.h netdb.h netinet/in.h netinet/tcp.h stdlib.h sys/param.h sys/socket.h sys/time.h time.h unistd.h signal.h])
-
-# Checks for typedefs, structures, and compiler characteristics.
-AC_C_CONST
-AC_TYPE_PID_T
-AC_CHECK_MEMBERS([struct stat.st_blksize])
-AC_STRUCT_ST_BLOCKS
-AC_CHECK_MEMBERS([struct stat.st_rdev])
+AC_CHECK_HEADERS_ONCE([
+    dirent.h
+    fcntl.h
+    netdb.h
+    netinet/in.h
+    netinet/tcp.h
+    signal.h
+    sys/param.h
+    sys/socket.h
+    sys/stat.h
+    sys/time.h
+    sys/types.h
+    sys/wait.h
+    time.h
+    unistd.h
+])
 
 # Checks for library functions.
-AC_FUNC_CHOWN
-AC_FUNC_CLOSEDIR_VOID
 AC_FUNC_FORK
-AC_FUNC_LSTAT
-AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
-AC_FUNC_SELECT_ARGTYPES
-AC_FUNC_STAT
-AC_CHECK_FUNCS([dup2 gethostbyname lchown memset mkdir mkfifo rmdir select socket getprotobyname signal sigaction opendir readdir closedir rewinddir telldir seekdir unlink link rename symlink readlink accept bind chmod connect dup fchmod fchown stat fstat lstat getsockopt listen lstat mknod mkstemp mkdtemp recv recvfrom send sendto setsockopt gettimeofday gmtime localtime getpid getppid kill gethostname getsockname])
+AC_CHECK_FUNCS_ONCE([
+    accept
+    bind
+    chmod
+    chown
+    closedir
+    connect
+    dup
+    dup2
+    fchmod
+    fchown
+    fstat
+    gethostbyname
+    gethostname
+    getpid
+    getppid
+    getprotobyname
+    getsockname
+    getsockopt
+    gettimeofday
+    gmtime
+    kill
+    lchown
+    link
+    listen
+    localtime
+    lstat
+    lstat
+    memset
+    mkdir
+    mkdtemp
+    mkfifo
+    mknod
+    mkstemp
+    opendir
+    readdir
+    readlink
+    recv
+    recvfrom
+    rename
+    rewinddir
+    rmdir
+    seekdir
+    select
+    send
+    sendto
+    setsockopt
+    sigaction
+    signal
+    socket
+    stat
+    symlink
+    telldir
+    unlink
+])
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
