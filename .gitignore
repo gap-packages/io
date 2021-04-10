@@ -25,6 +25,7 @@
 /config.log
 /config.status
 /configure
+/configure~
 /gen/
 /Makefile
 
