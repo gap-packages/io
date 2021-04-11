@@ -6,36 +6,18 @@
                 [1X Bindings for low level C library I/O routines [101X
   
   
-                                     4.7.0
+                                     4.7.1
   
   
-                                  17 July 2019
+                                 11 April 2021
   
   
                                  Max Neunhöffer
-  
-                                    Max Horn
   
   
   
   Max Neunhöffer
       Email:    [7Xmailto:max@9hoeffer.de[107X
-      Homepage: [7Xhttp://www-groups.mcs.st-and.ac.uk/~neunhoef[107X
-      Address:  [33X[0;14YGustav-Freytag-Straße 40[133X
-                [33X[0;14Y50354 Hürth[133X
-                [33X[0;14YGermany[133X
-  
-  
-  Max Horn
-      Email:    [7Xmailto:max.horn@uni-siegen.de[107X
-      Homepage: [7Xhttps://www.quendi.de/math[107X
-      Address:  [33X[0;14YDepartment Mathematik[133X
-                [33X[0;14YUniversität Siegen[133X
-                [33X[0;14YWalter-Flex-Straße 3[133X
-                [33X[0;14Y57072 Siegen[133X
-                [33X[0;14YGermany[133X
-  
-  
   
   -------------------------------------------------------
   [1XCopyright[101X

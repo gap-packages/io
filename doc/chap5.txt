@@ -23,20 +23,20 @@
   
   [1X5.1-1 IO_Error[101X
   
-  [33X[1;0Y[29X[2XIO_Error[102X[32X global variable[133X
+  [33X[1;0Y[29X[2XIO_Error[102X [32X global variable[133X
   
   [33X[0;0YThis object is returned if an error occurs.[133X
   
   [1X5.1-2 IO_Nothing[101X
   
-  [33X[1;0Y[29X[2XIO_Nothing[102X[32X global variable[133X
+  [33X[1;0Y[29X[2XIO_Nothing[102X [32X global variable[133X
   
   [33X[0;0YThis  object  is returned when there is nothing to return, for example if an
   unpickler (see [2XIO_Unpickle[102X ([14X5.2-2[114X)) encounters the end of a file.[133X
   
   [1X5.1-3 IO_OK[101X
   
-  [33X[1;0Y[29X[2XIO_OK[102X[32X global variable[133X
+  [33X[1;0Y[29X[2XIO_OK[102X [32X global variable[133X
   
   [33X[0;0YThis  object  is  returned  if  everything  went  well and there is no other
   canonical value to return to indicate this.[133X

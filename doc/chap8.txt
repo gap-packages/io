@@ -194,7 +194,7 @@
   [33X[1;0Y[29X[2XParListByFork[102X( [3Xl[103X, [3Xworker[103X[, [3Xopt[103X] ) [32X operation[133X
   [6XReturns:[106X  [33X[0;10Ya list of results or [9Xfail[109X[133X
   
-  [33X[0;0YThis  is  a parallel version of the [2XList[102X ([14XReference: list element operation[114X)
+  [33X[0;0YThis  is a parallel version of the [2XList[102X ([14XReference: list of available books[114X)
   function.  It  applies the function [3Xworker[103X to all elements of the list [3Xl[103X and
   returns  a  list containing the results in corresponding positions. You have
   to  specify  the  component  [10XNumberJobs[110X  in  the  options  record  [3Xopt[103X which
@@ -248,7 +248,8 @@
   result of [10XIO_CallWithTimeout[List][110X is the list [10X[ true ][110X.[133X
   
   [33X[0;0YIf   the   call  does  not  complete  within  the  timeout,  the  result  of
-  [10XIO_CallWithTimeout[List][110X is a list of length 1 containing the value [10Xfalse[110X.[133X
+  [10XIO_CallWithTimeout[List][110X  is  the  list [10X[ false ][110X. If the call causes GAP to
+  crash or exit, the result is the list [10X[ fail ][110X.[133X
   
   [33X[0;0YThe  timer  is suspended during execution of a break loop and abandoned when
   you quit from a break loop.[133X

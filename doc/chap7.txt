@@ -78,7 +78,7 @@
   
   [1X7.1-3 HTTPTimeoutForSelect[101X
   
-  [33X[1;0Y[29X[2XHTTPTimeoutForSelect[102X[32X global variable[133X
+  [33X[1;0Y[29X[2XHTTPTimeoutForSelect[102X [32X global variable[133X
   
   [33X[0;0YThis  global  variable  holds a list of length two. By default, both entries
   are  [9Xfail[109X  indicating that [2XHTTPRequest[102X ([14X7.1-2[114X) should never timeout and wait

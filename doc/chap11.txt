@@ -12,5 +12,5 @@
   more details.[133X
   
   [33X[0;0YYou should have received a copy of the GNU General Public License along with
-  this program. If not, see http://www.gnu.org/licenses/.[133X
+  this program. If not, see https://www.gnu.org/licenses/.[133X
   
