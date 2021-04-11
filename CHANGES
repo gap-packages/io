@@ -1,7 +1,9 @@
 This file describes changes in the IO package.
 
-4.X.Y (2020-MM-DD)
+4.7.1 (2021-04-11)
   - Add IO_realpath
+  - Handle crashing GAP in IO_CallWithTimeout
+  - Fix unpickling of permutation groups with no generators
   - Switch to a new build system
   - Various janitorial changes
 
