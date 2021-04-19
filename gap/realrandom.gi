@@ -51,7 +51,8 @@ InstallMethod( Random, "for a real random source and two integers",
   function( r, f, t )
     local c,d,h,i,l,q,s;
     d := t-f;   # we need d+1 different outcomes from [0..d]
-    if d <= 0 then return fail; fi;
+    if d < 0 then return fail; fi;
+    if d = 0 then return f; fi;
     l := (Log2Int(d)+1);      # now 2^l >= d
     l := (l+7) - (l+7) mod 8; # this rounds up to a multiple of 8, still 2^l>=d
     q := QuoInt(2^l,d+1);     # now q*(d+1) <= 2^l < (q+1)*(d+1)
