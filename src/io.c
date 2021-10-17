@@ -79,7 +79,7 @@
 #ifdef HAVE_NETINET_TCP_H
 #include <netinet/tcp.h>
 #endif
-#if SYS_IS_CYGWIN32
+#if defined(__CYGWIN__) || defined(__CYGWIN32__)
 #include <cygwin/in.h>
 #endif
 
@@ -88,7 +88,7 @@
  * hurt in future or other versions... */
 #ifdef __GNUC__
 #if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 1))
-#if SYS_IS_CYGWIN32 == 0
+#if defined(__CYGWIN__) || defined(__CYGWIN32__)
 extern void __stack_chk_fail();
 void __stack_chk_fail_local (void)
 {
