@@ -1,5 +1,9 @@
 This file describes changes in the IO package.
 
+4.7.2 (2021-10-21)
+  - Change `Random( RandomSource( IsRealRandomSource, "random" ), 1, 1 )` from `fail` to `1`.
+  - Improve `IO_CallWithTimeout` documentation
+
 4.7.1 (2021-04-11)
   - Add IO_realpath
   - Handle crashing GAP in IO_CallWithTimeout
