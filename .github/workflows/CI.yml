@@ -2,8 +2,9 @@ name: CI
 
 # Trigger the workflow on push or pull request
 on:
-  - push
-  - pull_request
+  push:
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   # The CI test job
@@ -43,13 +44,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: gap-actions/setup-gap-for-packages@v1
+      - uses: gap-actions/setup-gap@v2
         with:
           GAPBRANCH: ${{ matrix.gap-branch }}
           ABI: ${{ matrix.ABI }}
           GAP_PKGS_TO_BUILD: ${{ matrix.GAP_PKGS_TO_BUILD }}
           HPCGAP: ${{ matrix.HPCGAP }}
-      - uses: gap-actions/run-test-for-packages@v1
+      - uses: gap-actions/build-pkg@v1
+      - uses: gap-actions/run-pkg-tests@v2
         with:
           NO_COVERAGE: ${{ matrix.NO_COVERAGE }}
 
@@ -62,12 +64,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: gap-actions/setup-gap-for-packages@v1
-      - uses: gap-actions/compile-documentation-for-packages@v1
+      - uses: gap-actions/setup-gap@v2
+      - uses: gap-actions/build-pkg-docs@v1
         with:
           use-latex: 'true'
       - name: 'Upload documentation'
         uses: actions/upload-artifact@v2
         with:
+          retention-days: 7
           name: manual
           path: ./doc/manual.pdf
