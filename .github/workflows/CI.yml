@@ -55,6 +55,23 @@ jobs:
         with:
           NO_COVERAGE: ${{ matrix.NO_COVERAGE }}
 
+  test-cygwin:
+    name: "cygwin64 - GAP master - HPCGAP no"
+    if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
+    runs-on: windows-latest
+    env:
+      CHERE_INVOKING: 1
+    steps:
+      - uses: actions/checkout@v2
+      - uses: gap-actions/setup-cygwin@v1
+      - uses: gap-actions/setup-gap@cygwin-v2
+        with:
+          GAP_PKGS_TO_BUILD: ''
+      - uses: gap-actions/build-pkg@cygwin-v1
+      - uses: gap-actions/run-pkg-tests@cygwin-v2
+        with:
+          NO_COVERAGE: 'yes'
+
   # The documentation job
   manual:
     name: Build manuals
