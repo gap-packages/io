@@ -42,7 +42,7 @@ checkCompression := function(original_filename)
     f := IO_CompressedFile(filename, "r");
 
     x := IO_ReadLines(f);
-    if x <> [ "xyz\n", "abc\n" ] then
+    if x <> [ "xyz\n", "abc\n" ] and x <> [ "xyz\r\n", "abc\r\n" ] then
       Print("Unexpected contents of compressed file: ", x, "\n");
       Error("Unable to read compressed file ", filename, " correctly: ", 6);
     fi;
