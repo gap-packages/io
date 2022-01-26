@@ -9,7 +9,7 @@ on:
 jobs:
   # The CI test job
   test:
-    name: ${{ matrix.os }} - GAP ${{ matrix.gap-branch }} ${{ matrix.ABI }} - HPCGAP ${{ matrix.HPCGAP }}
+    name: ${{ matrix.os }} - GAP ${{ matrix.gap-branch }} ${{ matrix.ABI }} - HPCGAP ${{ matrix.HPCGAP }} ${{ matrix.NO_COVERAGE }}
     runs-on: ${{ matrix.os }}-latest
     # Don't run this twice on PRs for branches pushed to the same repository
     if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
@@ -31,7 +31,7 @@ jobs:
             GAP_PKGS_TO_BUILD: ''
             HPCGAP: 'yes'
             ABI: ''
-            NO_COVERAGE: 'yes'
+            NO_COVERAGE: 'no-coverage'
           - os: ubuntu
             gap-branch: master
             GAP_PKGS_TO_BUILD: 'profiling'
@@ -54,6 +54,10 @@ jobs:
       - uses: gap-actions/run-pkg-tests@v2
         with:
           NO_COVERAGE: ${{ matrix.NO_COVERAGE }}
+      - uses: gap-actions/process-coverage@v2
+        if: ${{ matrix.NO_COVERAGE == '' }}
+      - uses: codecov/codecov-action@v2
+        if: ${{ matrix.NO_COVERAGE == '' }}
 
   test-cygwin:
     name: "cygwin64 - GAP master - HPCGAP no"
