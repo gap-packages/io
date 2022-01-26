@@ -71,6 +71,10 @@ jobs:
       - uses: gap-actions/run-pkg-tests@cygwin-v2
         with:
           NO_COVERAGE: 'yes'
+      - name: "Setup tmate session"
+        uses: mxschmitt/action-tmate@v3
+        if: ${{ failure() }}
+        timeout-minutes: 60
 
   # The documentation job
   manual:
