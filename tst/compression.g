@@ -8,18 +8,19 @@ basepid := String(IO_getpid());
 LoadPackage("io");
 d := DirectoriesPackageLibrary("io", "tst");
 
-checkCompression := function(filename)
-    local f, lines;
-    filename := Concatenation(basepid, filename);
+checkCompression := function(original_filename)
+    local f, lines, filename, x;
+    filename := Concatenation(basepid, original_filename);
+
     # Lets hope we can write to the current directory
     f := IO_CompressedFile(filename, "w");
 
     if f = fail then
-       Error("Unable to create compressed file: ", 2);
+       Error("Unable to create compressed file ", filename, ": ", 2);
     fi;
 
     if IO_WriteLine(f, "xyz") = fail then
-      Error("Invalid write compressed file: ", 3);
+      Error("Invalid write to compressed file ", filename, ": ", 3);
     fi;
 
     IO_Close(f);
@@ -28,19 +29,22 @@ checkCompression := function(filename)
     f := IO_CompressedFile(filename, "a");
 
     if f = fail then
-       Error("Unable to append to compressed file: ", 4);
+       Error("Unable to append to compressed file ", filename, ": ", 4);
     fi;
 
     if IO_WriteLine(f, "abc") = fail then
-      Error("Invalid write compressed file: ", 5);
+      Error("Invalid write to compressed file ", filename, ": ", 5);
     fi;
 
     IO_Close(f);
 
+    # Let's check we can read what we've written
     f := IO_CompressedFile(filename, "r");
 
-    if IO_ReadLines(f) <> [ "xyz\n", "abc\n" ] then
-      Error("Unable to read compressed file correctly: ", 6);
+    x := IO_ReadLines(f);
+    if x <> [ "xyz\n", "abc\n" ] then
+      Print("Unexpected contents of compressed file: ", x, "\n");
+      Error("Unable to read compressed file ", filename, " correctly: ", 6);
     fi;
     
     IO_Close(f);
