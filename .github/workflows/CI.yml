@@ -57,7 +57,6 @@ jobs:
       - uses: gap-actions/process-coverage@v2
         if: ${{ matrix.NO_COVERAGE == '' }}
       - uses: codecov/codecov-action@v2
-        if: ${{ matrix.NO_COVERAGE == '' }}
 
   test-cygwin:
     name: "cygwin64 - GAP master - HPCGAP no"
@@ -70,15 +69,15 @@ jobs:
       - uses: gap-actions/setup-cygwin@v1
       - uses: gap-actions/setup-gap@cygwin-v2
         with:
-          GAP_PKGS_TO_BUILD: ''
+          GAP_PKGS_TO_BUILD: 'profiling'
       - uses: gap-actions/build-pkg@cygwin-v1
       - uses: gap-actions/run-pkg-tests@cygwin-v2
-        with:
-          NO_COVERAGE: 'yes'
+      - uses: gap-actions/process-coverage@cygwin-v2
+      - uses: codecov/codecov-action@v2
       - name: "Setup tmate session"
         uses: mxschmitt/action-tmate@v3
         if: ${{ failure() }}
-        timeout-minutes: 60
+        timeout-minutes: 15
 
   # The documentation job
   manual:
