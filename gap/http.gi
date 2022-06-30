@@ -13,7 +13,7 @@
 # The following is given as argument to IO_Select for the timeout
 # values in a HTTP request.
 
-InstallValue( HTTPTimeoutForSelect, [fail,fail] );
+BindGlobal( "HTTPTimeoutForSelect", [fail,fail] );
 
 InstallGlobalFunction( OpenHTTPConnection,
   function(server,port)

@@ -13,15 +13,10 @@ DeclareInfoClass("InfoIO");
 SetInfoLevel(InfoIO, 1);
 
 DeclareCategory( "IsFile", IsObject );
-DeclareGlobalVariable( "FileType" );
 DeclareAttribute( "ProcessID", IsFile );
 
 BindGlobal( "IO_ResultsFamily", NewFamily( "IO_ResultsFamily" ) );
 DeclareCategory( "IO_Result", IsComponentObjectRep );
-DeclareGlobalVariable( "IO_Error" );
-DeclareGlobalVariable( "IO_Nothing" );
-DeclareGlobalVariable( "IO_OK" );
-DeclareGlobalVariable( "IO_EOF" );    # End of file marker
 
 DeclareGlobalFunction( "IO_WrapFD" );
 DeclareGlobalFunction( "IO_File" );

@@ -32,7 +32,6 @@ DeclareGlobalFunction("CompareTimes");
 
 DeclareOperation("BackgroundJobByFork", [IsFunction, IsObject]);
 DeclareOperation("BackgroundJobByFork", [IsFunction, IsObject, IsRecord]);
-DeclareGlobalVariable("BackgroundJobByForkOptions");
 DeclareGlobalFunction("BackgroundJobByForkChild");
 
 
@@ -48,16 +47,12 @@ DeclareOperation("Submit", [IsBackgroundJob, IsObject]);
 
 # Parallel skeletons:
 
-DeclareGlobalVariable("ParTakeFirstResultByForkOptions");
-
 DeclareOperation("ParTakeFirstResultByFork", [IsList, IsList]);
 DeclareOperation("ParTakeFirstResultByFork", [IsList, IsList, IsRecord]);
 # Arguments are:
 #   list of job functions
 #   list of argument lists
 #   options record
-
-DeclareGlobalVariable("ParDoByForkOptions");
 
 DeclareOperation( "ParDoByFork", [IsList, IsList]);
 DeclareOperation( "ParDoByFork", [IsList, IsList, IsRecord]);
@@ -67,7 +62,6 @@ DeclareOperation( "ParDoByFork", [IsList, IsList, IsRecord]);
 #   options record
 
 DeclareGlobalFunction("ParMapReduceWorker");
-DeclareGlobalVariable("ParMapReduceByForkOptions");
 
 DeclareOperation("ParMapReduceByFork",
   [IsList, IsFunction, IsFunction, IsRecord]);
@@ -78,7 +72,6 @@ DeclareOperation("ParMapReduceByFork",
 #   options record
 
 DeclareGlobalFunction("ParListWorker");
-DeclareGlobalVariable("ParListByForkOptions");
 
 DeclareOperation("ParListByFork",
   [IsList, IsFunction, IsRecord]);
@@ -100,8 +93,6 @@ DeclareRepresentation("IsWorkerFarmByFork", IsWorkerFarm,
 
 BindGlobal("WorkerFarmByForkType",
            NewType(WorkerFarmsFamily, IsWorkerFarmByFork));
-
-DeclareGlobalVariable("ParWorkerFarmByForkOptions");
 
 DeclareOperation("ParWorkerFarmByFork", [IsFunction, IsRecord]);
 # Arguments are:
