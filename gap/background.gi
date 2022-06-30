@@ -35,7 +35,7 @@ InstallMethod(BackgroundJobByFork, "for a function and a list",
     return BackgroundJobByFork(fun, args, rec());
   end );
 
-InstallValue(BackgroundJobByForkOptions,
+BindGlobal("BackgroundJobByForkOptions",
   rec(
     TerminateImmediately := false,
     BufferSize := 8192,
@@ -252,7 +252,7 @@ InstallMethod(ParTakeFirstResultByFork, "for two lists",
     return ParTakeFirstResultByFork(jobs, args, rec());
   end);
 
-InstallValue( ParTakeFirstResultByForkOptions,
+BindGlobal( "ParTakeFirstResultByForkOptions",
   rec( TimeOut := rec(tv_sec := false, tv_usec := false),
   ));
 
@@ -316,7 +316,7 @@ InstallMethod(ParDoByFork, "for two lists",
     return ParDoByFork(jobs, args, rec());
   end);
 
-InstallValue( ParDoByForkOptions,
+BindGlobal( "ParDoByForkOptions",
   rec( TimeOut := rec(tv_sec := false, tv_usec := false),
   ));
 
@@ -391,7 +391,7 @@ InstallMethod(ParDoByFork, "for two lists and a record",
     return results;
   end);
 
-InstallValue(ParMapReduceByForkOptions,
+BindGlobal("ParMapReduceByForkOptions",
   rec( TimeOut := rec(tv_sec := false, tv_usec := false),
   ));
 
@@ -447,7 +447,7 @@ InstallMethod(ParMapReduceByFork, "for a list, two functions and a record",
     return res2;
   end);
 
-InstallValue(ParListByForkOptions,
+BindGlobal("ParListByForkOptions",
   rec( TimeOut := rec(tv_sec := false, tv_usec := false),
   ));
 
@@ -496,7 +496,7 @@ InstallMethod(ParListByFork, "for a list, two functions and a record",
   end);
 
 
-InstallValue(ParWorkerFarmByForkOptions,
+BindGlobal("ParWorkerFarmByForkOptions",
   rec(
   ));
 
