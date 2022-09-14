@@ -1,5 +1,8 @@
 This file describes changes in the IO package.
 
+4.7.3 (YYYY-MM-DD)
+  - Various janitorial changes
+
 4.7.2 (2021-10-21)
   - Change `Random( RandomSource( IsRealRandomSource, "random" ), 1, 1 )` from `fail` to `1`.
   - Improve `IO_CallWithTimeout` documentation
