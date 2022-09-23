@@ -19,6 +19,7 @@
 /doc/*.toc
 /doc/manual.pdf
 /doc/title.xml
+/doc/_*.xml
 
 /autom4te.cache/
 /bin/
