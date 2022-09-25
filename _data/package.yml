@@ -1,6 +1,6 @@
 name: IO
-version: 4.7.2
-date: 2021-10-21
+version: 4.7.3
+date: 2022-09-25
 description: |
     Bindings for low level C library I/O routines
 
@@ -20,13 +20,13 @@ packageinfo: https://gap-packages.github.io/io/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/gap-packages/io/releases/download/v4.7.2/io-4.7.2.tar.gz
+      url: https://github.com/gap-packages/io/releases/download/v4.7.3/io-4.7.3.tar.gz
     - name: .tar.bz2
-      url: https://github.com/gap-packages/io/releases/download/v4.7.2/io-4.7.2.tar.bz2
+      url: https://github.com/gap-packages/io/releases/download/v4.7.3/io-4.7.3.tar.bz2
 
 abstract: |
     The <span class="pkgname">IO</span> package, as its name suggests,    provides bindings for <span class="pkgname">GAP</span> to the lower    levels of Input/Output functionality in the C library.
 
 status: deposited
-doc-html: doc/chap0.html
+doc-html: doc/chap0_mj.html
 doc-pdf: doc/manual.pdf

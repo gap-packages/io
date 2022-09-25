@@ -7,8 +7,8 @@ SetPackageInfo( rec(
 
 PackageName := "IO",
 Subtitle := "Bindings for low level C library I/O routines",
-Version := "4.7.2",
-Date := "21/10/2021", # dd/mm/yyyy format
+Version := "4.7.3",
+Date := "25/09/2022", # dd/mm/yyyy format
 License := "GPL-3.0-or-later",
 
 ##  Information about authors and maintainers.
@@ -85,7 +85,7 @@ AbstractHTML :=
 PackageDoc := rec(
   BookName  := "IO",
   ArchiveURLSubset := ["doc"],
-  HTMLStart := "doc/chap0.html",
+  HTMLStart := "doc/chap0_mj.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
   LongTitle := "Bindings for low level C library I/O routines",
