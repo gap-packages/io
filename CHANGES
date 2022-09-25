@@ -1,6 +1,9 @@
 This file describes changes in the IO package.
 
 4.7.3 (YYYY-MM-DD)
+  - Fix a build issue where running `make clean` would break the build
+    system (and hence building this package via GAP's BuildPackages.sh
+    script was broken, as that always runs `make clean` first)
   - Various janitorial changes
 
 4.7.2 (2021-10-21)
