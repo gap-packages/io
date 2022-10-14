@@ -3107,24 +3107,13 @@ static Int InitLibrary(StructInitInfo * module)
  *F  InitInfopl()  . . . . . . . . . . . . . . . . . table of init functions
  */
 static StructInitInfo module = {
-#ifdef IOSTATIC
-    .type = MODULE_STATIC,
-#else
     .type = MODULE_DYNAMIC,
-#endif
     .name = "io",
     .initKernel = InitKernel,
     .initLibrary = InitLibrary,
 };
 
-#ifndef IOSTATIC
 StructInitInfo * Init__Dynamic(void)
-{
-    return &module;
-}
-#endif
-
-StructInitInfo * Init__io(void)
 {
     return &module;
 }
