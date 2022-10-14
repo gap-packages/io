@@ -25,10 +25,13 @@
 /bin/
 /config.log
 /config.status
+/confdefs.h
+/conftest.c
 /configure
 /configure~
 /gen/
 /Makefile
+/src/pkgconfig.h.in
 
 /tmp/
 /gh-pages/
