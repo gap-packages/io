@@ -225,20 +225,18 @@ static Obj FuncIO_InstallSIGCHLDHandler(Obj self)
         signal(SIGPIPE, SIG_IGN);
         return True;
     }
-    else
-        return False;
+    return False;
 }
 
 static Obj FuncIO_RestoreSIGCHLDHandler(Obj self)
 {
     if (oldhandler == 0)
         return False;
-    else {
-        signal(SIGCHLD, oldhandler);
-        oldhandler = 0;
-        signal(SIGPIPE, SIG_DFL);
-        return True;
-    }
+
+    signal(SIGCHLD, oldhandler);
+    oldhandler = 0;
+    signal(SIGPIPE, SIG_DFL);
+    return True;
 }
 
 // The following function checks if a PID is marked as ignored.
@@ -349,15 +347,13 @@ static Obj FuncIO_open(Obj self, Obj path, Obj flags, Obj mode)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        res = open(CSTR_STRING(path), INT_INTOBJ(flags), INT_INTOBJ(mode));
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return INTOBJ_INT(res);
+
+    res = open(CSTR_STRING(path), INT_INTOBJ(flags), INT_INTOBJ(mode));
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return INTOBJ_INT(res);
 }
 
 static Obj FuncIO_creat(Obj self, Obj path, Obj mode)
@@ -367,15 +363,13 @@ static Obj FuncIO_creat(Obj self, Obj path, Obj mode)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        res = creat(CSTR_STRING(path), INT_INTOBJ(mode));
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return INTOBJ_INT(res);
+
+    res = creat(CSTR_STRING(path), INT_INTOBJ(mode));
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return INTOBJ_INT(res);
 }
 
 static Obj FuncIO_read(Obj self, Obj fd, Obj st, Obj offset, Obj count)
@@ -398,13 +392,12 @@ static Obj FuncIO_read(Obj self, Obj fd, Obj st, Obj offset, Obj count)
         SySetErrorNo();
         return Fail;
     }
-    else {
-        if (bytes + INT_INTOBJ(offset) > GET_LEN_STRING(st)) {
-            SET_LEN_STRING(st, bytes + INT_INTOBJ(offset));
-            CHARS_STRING(st)[len] = 0;
-        }
-        return INTOBJ_INT(bytes);
+
+    if (bytes + INT_INTOBJ(offset) > GET_LEN_STRING(st)) {
+        SET_LEN_STRING(st, bytes + INT_INTOBJ(offset));
+        CHARS_STRING(st)[len] = 0;
     }
+    return INTOBJ_INT(bytes);
 }
 
 static Obj FuncIO_write(Obj self, Obj fd, Obj st, Obj offset, Obj count)
@@ -426,8 +419,7 @@ static Obj FuncIO_write(Obj self, Obj fd, Obj st, Obj offset, Obj count)
         SySetErrorNo();
         return Fail;
     }
-    else
-        return INTOBJ_INT(bytes);
+    return INTOBJ_INT(bytes);
 }
 
 static Obj FuncIO_close(Obj self, Obj fd)
@@ -438,15 +430,13 @@ static Obj FuncIO_close(Obj self, Obj fd)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        res = close(INT_INTOBJ(fd));
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return True;
+
+    res = close(INT_INTOBJ(fd));
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return True;
 }
 
 static Obj FuncIO_lseek(Obj self, Obj fd, Obj offset, Obj whence)
@@ -463,9 +453,7 @@ static Obj FuncIO_lseek(Obj self, Obj fd, Obj offset, Obj whence)
         SySetErrorNo();
         return Fail;
     }
-    else {
-        return INTOBJ_INT(bytes);
-    }
+    return INTOBJ_INT(bytes);
 }
 
 #ifdef HAVE_DIRENT_H
@@ -480,15 +468,13 @@ static Obj FuncIO_opendir(Obj self, Obj name)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        ourDIR = opendir(CSTR_STRING(name));
-        if (ourDIR == 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return True;
+
+    ourDIR = opendir(CSTR_STRING(name));
+    if (ourDIR == 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return True;
 }
 #endif    // HAVE_OPENDIR
 
@@ -531,8 +517,7 @@ static Obj FuncIO_closedir(Obj self)
         SySetErrorNo();
         return Fail;
     }
-    else
-        return True;
+    return True;
 }
 #endif    // HAVE_CLOSEDIR
 
@@ -561,8 +546,7 @@ static Obj FuncIO_telldir(Obj self)
         SySetErrorNo();
         return Fail;
     }
-    else
-        return INTOBJ_INT(o);
+    return INTOBJ_INT(o);
 }
 #endif    // HAVE_TELLDIR
 
@@ -592,15 +576,13 @@ static Obj FuncIO_unlink(Obj self, Obj path)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        res = unlink(CSTR_STRING(path));
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return True;
+
+    res = unlink(CSTR_STRING(path));
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return True;
 }
 #endif
 
@@ -613,15 +595,13 @@ static Obj FuncIO_link(Obj self, Obj oldpath, Obj newpath)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        res = link(CSTR_STRING(oldpath), CSTR_STRING(newpath));
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return True;
+
+    res = link(CSTR_STRING(oldpath), CSTR_STRING(newpath));
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return True;
 }
 #endif
 
@@ -634,15 +614,13 @@ static Obj FuncIO_rename(Obj self, Obj oldpath, Obj newpath)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        res = rename(CSTR_STRING(oldpath), CSTR_STRING(newpath));
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return True;
+
+    res = rename(CSTR_STRING(oldpath), CSTR_STRING(newpath));
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return True;
 }
 #endif
 
@@ -655,15 +633,13 @@ static Obj FuncIO_symlink(Obj self, Obj oldpath, Obj newpath)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        res = symlink(CSTR_STRING(oldpath), CSTR_STRING(newpath));
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return True;
+
+    res = symlink(CSTR_STRING(oldpath), CSTR_STRING(newpath));
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return True;
 }
 #endif
 
@@ -676,20 +652,17 @@ static Obj FuncIO_readlink(Obj self, Obj path, Obj buf, Obj bufsize)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        GrowString(buf, INT_INTOBJ(bufsize));
-        res = readlink(CSTR_STRING(path), CSTR_STRING(buf),
-                       INT_INTOBJ(bufsize));
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else {
-            SET_LEN_STRING(buf, res);
-            CHARS_STRING(buf)[res] = 0;
-            return INTOBJ_INT(res);
-        }
+
+    GrowString(buf, INT_INTOBJ(bufsize));
+    res = readlink(CSTR_STRING(path), CSTR_STRING(buf), INT_INTOBJ(bufsize));
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+
+    SET_LEN_STRING(buf, res);
+    CHARS_STRING(buf)[res] = 0;
+    return INTOBJ_INT(res);
 }
 #endif
 
@@ -717,15 +690,13 @@ static Obj FuncIO_chdir(Obj self, Obj pathname)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        res = chdir(CSTR_STRING(pathname));
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return True;
+
+    res = chdir(CSTR_STRING(pathname));
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return True;
 }
 
 static Obj FuncIO_getcwd(Obj self)
@@ -738,8 +709,7 @@ static Obj FuncIO_getcwd(Obj self)
         SySetErrorNo();
         return Fail;
     }
-    else
-        return MakeImmString(buf);
+    return MakeImmString(buf);
 }
 
 #ifdef HAVE_MKDIR
@@ -751,15 +721,13 @@ static Obj FuncIO_mkdir(Obj self, Obj pathname, Obj mode)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        res = mkdir(CSTR_STRING(pathname), INT_INTOBJ(mode));
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return True;
+
+    res = mkdir(CSTR_STRING(pathname), INT_INTOBJ(mode));
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return True;
 }
 #endif
 
@@ -771,15 +739,13 @@ static Obj FuncIO_rmdir(Obj self, Obj path)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        res = rmdir(CSTR_STRING(path));
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return True;
+
+    res = rmdir(CSTR_STRING(path));
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return True;
 }
 #endif
 
@@ -869,15 +835,13 @@ static Obj FuncIO_chmod(Obj self, Obj pathname, Obj mode)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        res = chmod(CSTR_STRING(pathname), INT_INTOBJ(mode));
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return True;
+
+    res = chmod(CSTR_STRING(pathname), INT_INTOBJ(mode));
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return True;
 }
 #endif
 
@@ -889,15 +853,13 @@ static Obj FuncIO_fchmod(Obj self, Obj fd, Obj mode)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        res = fchmod(INT_INTOBJ(fd), INT_INTOBJ(mode));
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return True;
+
+    res = fchmod(INT_INTOBJ(fd), INT_INTOBJ(mode));
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return True;
 }
 #endif
 
@@ -910,15 +872,13 @@ static Obj FuncIO_chown(Obj self, Obj path, Obj owner, Obj group)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        res = chown(CSTR_STRING(path), INT_INTOBJ(owner), INT_INTOBJ(group));
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return True;
+
+    res = chown(CSTR_STRING(path), INT_INTOBJ(owner), INT_INTOBJ(group));
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return True;
 }
 #endif
 
@@ -930,15 +890,13 @@ static Obj FuncIO_fchown(Obj self, Obj fd, Obj owner, Obj group)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        res = fchown(INT_INTOBJ(fd), INT_INTOBJ(owner), INT_INTOBJ(group));
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return True;
+
+    res = fchown(INT_INTOBJ(fd), INT_INTOBJ(owner), INT_INTOBJ(group));
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return True;
 }
 #endif
 
@@ -951,15 +909,13 @@ static Obj FuncIO_lchown(Obj self, Obj path, Obj owner, Obj group)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        res = lchown(CSTR_STRING(path), INT_INTOBJ(owner), INT_INTOBJ(group));
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return True;
+
+    res = lchown(CSTR_STRING(path), INT_INTOBJ(owner), INT_INTOBJ(group));
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return True;
 }
 #endif
 
@@ -972,15 +928,13 @@ static Obj FuncIO_mknod(Obj self, Obj path, Obj mode, Obj dev)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        res = mknod(CSTR_STRING(path), INT_INTOBJ(mode), INT_INTOBJ(dev));
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return True;
+
+    res = mknod(CSTR_STRING(path), INT_INTOBJ(mode), INT_INTOBJ(dev));
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return True;
 }
 #endif
 
@@ -992,16 +946,14 @@ static Obj FuncIO_mkstemp(Obj self, Obj template)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        fd = mkstemp(CSTR_STRING(template));
-        if (fd < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else {
-            return INTOBJ_INT(fd);
-        }
+
+    fd = mkstemp(CSTR_STRING(template));
+    if (fd < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+
+    return INTOBJ_INT(fd);
 }
 #endif
 
@@ -1014,16 +966,14 @@ static Obj FuncIO_mkdtemp(Obj self, Obj template)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        r = mkdtemp(CSTR_STRING(template));
-        if (r == NULL) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else {
-            return MakeString(r);
-        }
+
+    r = mkdtemp(CSTR_STRING(template));
+    if (r == NULL) {
+        SySetErrorNo();
+        return Fail;
     }
+
+    return MakeString(r);
 }
 #endif
 
@@ -1035,15 +985,13 @@ static Obj FuncIO_mkfifo(Obj self, Obj path, Obj mode)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        res = mkfifo(CSTR_STRING(path), INT_INTOBJ(mode));
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return True;
+
+    res = mkfifo(CSTR_STRING(path), INT_INTOBJ(mode));
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return True;
 }
 #endif
 
@@ -1055,15 +1003,13 @@ static Obj FuncIO_dup(Obj self, Obj oldfd)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        res = dup(INT_INTOBJ(oldfd));
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return INTOBJ_INT(res);
+
+    res = dup(INT_INTOBJ(oldfd));
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return INTOBJ_INT(res);
 }
 #endif
 
@@ -1075,15 +1021,13 @@ static Obj FuncIO_dup2(Obj self, Obj oldfd, Obj newfd)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        res = dup2(INT_INTOBJ(oldfd), INT_INTOBJ(newfd));
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return True;
+
+    res = dup2(INT_INTOBJ(oldfd), INT_INTOBJ(newfd));
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return True;
 }
 #endif
 
@@ -1104,27 +1048,25 @@ static Obj FuncIO_socket(Obj self, Obj domain, Obj type, Obj protocol)
         SyClearErrorNo();
         return Fail;
     }
-    else {
+
 #ifdef HAVE_GETPROTOBYNAME
-        if (IS_STRING(protocol)) {    // we have to look up the protocol
-            pe = getprotobyname(CSTR_STRING(protocol));
-            if (pe == NULL) {
-                SySetErrorNo();
-                return Fail;
-            }
-            proto = pe->p_proto;
-        }
-        else
-#endif
-            proto = INT_INTOBJ(protocol);
-        res = socket(INT_INTOBJ(domain), INT_INTOBJ(type), proto);
-        if (res < 0) {
+    if (IS_STRING(protocol)) {    // we have to look up the protocol
+        pe = getprotobyname(CSTR_STRING(protocol));
+        if (pe == NULL) {
             SySetErrorNo();
             return Fail;
         }
-        else
-            return INTOBJ_INT(res);
+        proto = pe->p_proto;
     }
+    else
+#endif
+        proto = INT_INTOBJ(protocol);
+    res = socket(INT_INTOBJ(domain), INT_INTOBJ(type), proto);
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
+    }
+    return INTOBJ_INT(res);
 }
 #endif
 
@@ -1137,17 +1079,14 @@ static Obj FuncIO_bind(Obj self, Obj fd, Obj my_addr)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        len = GET_LEN_STRING(my_addr);
-        res = bind(INT_INTOBJ(fd), (struct sockaddr *)CHARS_STRING(my_addr),
-                   len);
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return True;
+
+    len = GET_LEN_STRING(my_addr);
+    res = bind(INT_INTOBJ(fd), (struct sockaddr *)CHARS_STRING(my_addr), len);
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return True;
 }
 #endif
 
@@ -1161,17 +1100,15 @@ static Obj FuncIO_connect(Obj self, Obj fd, Obj serv_addr)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        len = GET_LEN_STRING(serv_addr);
-        res = connect(INT_INTOBJ(fd),
-                      (struct sockaddr *)(CHARS_STRING(serv_addr)), len);
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return True;
+
+    len = GET_LEN_STRING(serv_addr);
+    res = connect(INT_INTOBJ(fd),
+                  (struct sockaddr *)(CHARS_STRING(serv_addr)), len);
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return True;
 }
 #endif
 
@@ -1185,15 +1122,14 @@ static Obj FuncIO_make_sockaddr_in(Obj self, Obj ip, Obj port)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        memset(&sa, 0, sizeof(sa));
-        sa.sin_family = AF_INET;
-        sa.sin_port = htons(INT_INTOBJ(port));
-        memcpy(&(sa.sin_addr.s_addr), CHARS_STRING(ip), 4);
-        res = NEW_STRING(sizeof(sa));
-        memcpy(CHARS_STRING(res), &sa, sizeof(sa));
-        return res;
-    }
+
+    memset(&sa, 0, sizeof(sa));
+    sa.sin_family = AF_INET;
+    sa.sin_port = htons(INT_INTOBJ(port));
+    memcpy(&(sa.sin_addr.s_addr), CHARS_STRING(ip), 4);
+    res = NEW_STRING(sizeof(sa));
+    memcpy(CHARS_STRING(res), &sa, sizeof(sa));
+    return res;
 }
 #endif
 
@@ -1211,40 +1147,39 @@ static Obj FuncIO_gethostbyname(Obj self, Obj name)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        he = gethostbyname(CSTR_STRING(name));
-        if (he == NULL) {
-            SySetErrorNo();
-            return Fail;
-        }
-        res = NEW_PREC(0);
-        tmp = MakeString(he->h_name);
-        AssPRec(res, RNamName("name"), tmp);
-        for (len = 0, p = he->h_aliases; *p != NULL; len++, p++)
-            ;
-        tmp2 = NEW_PLIST(T_PLIST_DENSE, len);
-        SET_LEN_PLIST(tmp2, len);
-        for (i = 1, p = he->h_aliases; i <= len; i++, p++) {
-            tmp = MakeString(*p);
-            SET_ELM_PLIST(tmp2, i, tmp);
-            CHANGED_BAG(tmp2);
-        }
-        AssPRec(res, RNamName("aliases"), tmp2);
-        AssPRec(res, RNamName("addrtype"), INTOBJ_INT(he->h_addrtype));
-        AssPRec(res, RNamName("length"), INTOBJ_INT(he->h_length));
-        for (len = 0, p = he->h_addr_list; *p != NULL; len++, p++)
-            ;
-        tmp2 = NEW_PLIST(T_PLIST_DENSE, len);
-        SET_LEN_PLIST(tmp2, len);
-        for (i = 1, p = he->h_addr_list; i <= len; i++, p++) {
-            tmp = NEW_STRING(he->h_length);
-            memcpy(CHARS_STRING(tmp), *p, he->h_length);
-            SET_ELM_PLIST(tmp2, i, tmp);
-            CHANGED_BAG(tmp2);
-        }
-        AssPRec(res, RNamName("addr"), tmp2);
-        return res;
+
+    he = gethostbyname(CSTR_STRING(name));
+    if (he == NULL) {
+        SySetErrorNo();
+        return Fail;
     }
+    res = NEW_PREC(0);
+    tmp = MakeString(he->h_name);
+    AssPRec(res, RNamName("name"), tmp);
+    for (len = 0, p = he->h_aliases; *p != NULL; len++, p++)
+        ;
+    tmp2 = NEW_PLIST(T_PLIST_DENSE, len);
+    SET_LEN_PLIST(tmp2, len);
+    for (i = 1, p = he->h_aliases; i <= len; i++, p++) {
+        tmp = MakeString(*p);
+        SET_ELM_PLIST(tmp2, i, tmp);
+        CHANGED_BAG(tmp2);
+    }
+    AssPRec(res, RNamName("aliases"), tmp2);
+    AssPRec(res, RNamName("addrtype"), INTOBJ_INT(he->h_addrtype));
+    AssPRec(res, RNamName("length"), INTOBJ_INT(he->h_length));
+    for (len = 0, p = he->h_addr_list; *p != NULL; len++, p++)
+        ;
+    tmp2 = NEW_PLIST(T_PLIST_DENSE, len);
+    SET_LEN_PLIST(tmp2, len);
+    for (i = 1, p = he->h_addr_list; i <= len; i++, p++) {
+        tmp = NEW_STRING(he->h_length);
+        memcpy(CHARS_STRING(tmp), *p, he->h_length);
+        SET_ELM_PLIST(tmp2, i, tmp);
+        CHANGED_BAG(tmp2);
+    }
+    AssPRec(res, RNamName("addr"), tmp2);
+    return res;
 }
 #endif
 
@@ -1256,15 +1191,13 @@ static Obj FuncIO_listen(Obj self, Obj s, Obj backlog)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        res = listen(INT_INTOBJ(s), INT_INTOBJ(backlog));
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return True;
+
+    res = listen(INT_INTOBJ(s), INT_INTOBJ(backlog));
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return True;
 }
 #endif
 
@@ -1277,17 +1210,15 @@ static Obj FuncIO_accept(Obj self, Obj fd, Obj addr)
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        len = GET_LEN_STRING(addr);
-        res = accept(INT_INTOBJ(fd), (struct sockaddr *)(CHARS_STRING(addr)),
-                     &len);
-        if (res < 0) {
-            SySetErrorNo();
-            return Fail;
-        }
-        else
-            return INTOBJ_INT(res);
+
+    len = GET_LEN_STRING(addr);
+    res =
+        accept(INT_INTOBJ(fd), (struct sockaddr *)(CHARS_STRING(addr)), &len);
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
     }
+    return INTOBJ_INT(res);
 }
 #endif
 
@@ -1313,13 +1244,12 @@ FuncIO_recv(Obj self, Obj fd, Obj st, Obj offset, Obj count, Obj flags)
         SySetErrorNo();
         return Fail;
     }
-    else {
-        if (bytes + INT_INTOBJ(offset) > GET_LEN_STRING(st)) {
-            SET_LEN_STRING(st, bytes + INT_INTOBJ(offset));
-            CHARS_STRING(st)[len] = 0;
-        }
-        return INTOBJ_INT(bytes);
+
+    if (bytes + INT_INTOBJ(offset) > GET_LEN_STRING(st)) {
+        SET_LEN_STRING(st, bytes + INT_INTOBJ(offset));
+        CHARS_STRING(st)[len] = 0;
     }
+    return INTOBJ_INT(bytes);
 }
 #endif
 
@@ -1349,13 +1279,12 @@ static Obj FuncIO_recvfrom(
         SySetErrorNo();
         return Fail;
     }
-    else {
-        if (bytes + INT_INTOBJ(offset) > GET_LEN_STRING(st)) {
-            SET_LEN_STRING(st, bytes + INT_INTOBJ(offset));
-            CHARS_STRING(st)[len] = 0;
-        }
-        return INTOBJ_INT(bytes);
+
+    if (bytes + INT_INTOBJ(offset) > GET_LEN_STRING(st)) {
+        SET_LEN_STRING(st, bytes + INT_INTOBJ(offset));
+        CHARS_STRING(st)[len] = 0;
     }
+    return INTOBJ_INT(bytes);
 }
 #endif
 
@@ -1380,8 +1309,7 @@ FuncIO_send(Obj self, Obj fd, Obj st, Obj offset, Obj count, Obj flags)
         SySetErrorNo();
         return Fail;
     }
-    else
-        return INTOBJ_INT(bytes);
+    return INTOBJ_INT(bytes);
 }
 #endif
 
@@ -1410,8 +1338,7 @@ static Obj FuncIO_sendto(
         SySetErrorNo();
         return Fail;
     }
-    else
-        return INTOBJ_INT(bytes);
+    return INTOBJ_INT(bytes);
 }
 #endif
 
@@ -1436,10 +1363,9 @@ static Obj FuncIO_getsockopt(
         SySetErrorNo();
         return Fail;
     }
-    else {
-        SET_LEN_STRING(optval, olen);
-        return True;
-    }
+
+    SET_LEN_STRING(optval, olen);
+    return True;
 }
 #endif
 
@@ -1462,8 +1388,7 @@ FuncIO_setsockopt(Obj self, Obj fd, Obj level, Obj optname, Obj optval)
         SySetErrorNo();
         return Fail;
     }
-    else
-        return True;
+    return True;
 }
 #endif
 
@@ -1802,8 +1727,7 @@ static Obj FuncIO_fcntl(Obj self, Obj fd, Obj cmd, Obj arg)
         SySetErrorNo();
         return Fail;
     }
-    else
-        return INTOBJ_INT(res);
+    return INTOBJ_INT(res);
 }
 #endif
 
@@ -1834,8 +1758,7 @@ static Obj FuncIO_kill(Obj self, Obj pid, Obj sig)
         SySetErrorNo();
         return Fail;
     }
-    else
-        return True;
+    return True;
 }
 #endif
 
@@ -1920,17 +1843,17 @@ static Obj FuncIO_getsockname(Obj self, Obj fd)
     struct sockaddr_in sa;
     socklen_t          sa_len;
     Obj                res;
+
     if (!IS_INTOBJ(fd)) {
         SyClearErrorNo();
         return Fail;
     }
-    else {
-        sa_len = sizeof sa;
-        getsockname(INT_INTOBJ(fd), (struct sockaddr *)(&sa), &sa_len);
-        res = NEW_STRING(sa_len);
-        memcpy(CHARS_STRING(res), &sa, sa_len);
-        return res;
-    }
+
+    sa_len = sizeof sa;
+    getsockname(INT_INTOBJ(fd), (struct sockaddr *)(&sa), &sa_len);
+    res = NEW_STRING(sa_len);
+    memcpy(CHARS_STRING(res), &sa, sa_len);
+    return res;
 }
 #endif
 
