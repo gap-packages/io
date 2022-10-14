@@ -8,7 +8,7 @@
 **
 */
 
-/* Try to use as much of the GNU C library as possible: */
+// Try to use as much of the GNU C library as possible:
 #define _GNU_SOURCE
 
 #include "compiled.h"    // GAP headers
@@ -25,7 +25,7 @@
 #undef PACKAGE_URL
 #undef PACKAGE_VERSION
 
-#include "pkgconfig.h" /* our own autoconf results */
+#include "pkgconfig.h"    // our own autoconf results
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -64,7 +64,7 @@
 #include <sys/wait.h>
 #endif
 #ifdef HAVE_SIGNAL_H
-/* Maybe the GAP kernel headers have already included it: */
+// Maybe the GAP kernel headers have already included it:
 #ifndef SYS_SIGNAL_H
 #include <signal.h>
 #endif
@@ -74,7 +74,7 @@
  * tedious. */
 #ifdef HAVE_NETINET_IN_H
 #include <netinet/in.h>
-/* #include <netinet/ip.h> */
+// #include <netinet/ip.h>
 #endif
 #ifdef HAVE_NETINET_TCP_H
 #include <netinet/tcp.h>
@@ -131,21 +131,21 @@ void        __stack_chk_fail_local(void)
 // FIXME: globals
 
 #define MAXCHLDS 1024
-/* The following arrays make a FIFO structure: */
-static int stats[MAXCHLDS]; /* than this number */
-static int pids[MAXCHLDS];  /* and this number! */
-static int fistats = 0;     /* First used entry */
-static int lastats = 0;     /* First unused entry */
-static int statsfull = 0;   /* Flag, whether stats FIFO full */
+// The following arrays make a FIFO structure:
+static int stats[MAXCHLDS];    // than this number
+static int pids[MAXCHLDS];     // and this number!
+static int fistats = 0;        // First used entry
+static int lastats = 0;        // First unused entry
+static int statsfull = 0;      // Flag, whether stats FIFO full
 
 
 // This function must only be called while IO's signal handler is disabled!
 static int findSignaledPid(int pidc)
 {
-    if (fistats == lastats && !statsfull) /* queue empty */
+    if (fistats == lastats && !statsfull)    // queue empty
         return -1;
 
-    if (pidc == -1) /* queue not empty and any entry welcome */
+    if (pidc == -1)    // queue not empty and any entry welcome
         return fistats;
 
     int pos = fistats;
@@ -154,7 +154,7 @@ static int findSignaledPid(int pidc)
         if (pos >= MAXCHLDS)
             pos = 0;
         if (pos == lastats) {
-            pos = -1; /* None found */
+            pos = -1;    // None found
             break;
         }
     }
@@ -164,16 +164,16 @@ static int findSignaledPid(int pidc)
 // This function must only be called while IO's signal handler is disabled!
 static void removeSignaledPidByPos(int pos)
 {
-    if (fistats == lastats && !statsfull) /* queue empty */
+    if (fistats == lastats && !statsfull)    // queue empty
         return;
 
     int newpos;
-    if (pos == fistats) { /* this is the easy case: */
+    if (pos == fistats) {    // this is the easy case:
         fistats++;
         if (fistats >= MAXCHLDS)
             fistats = 0;
     }
-    else { /* The more difficult case: */
+    else {    // The more difficult case:
         do {
             newpos = pos + 1;
             if (newpos >= MAXCHLDS)
@@ -189,17 +189,17 @@ static void removeSignaledPidByPos(int pos)
     statsfull = 0;
 }
 
-/* This does not have to be the same size as the array above */
+// This does not have to be the same size as the array above
 static int ignoredpids[MAXCHLDS];
 static int ignoredpidslen;
 
 static int IO_CheckForIgnoredPid(int pid);
 
-static void (*oldhandler)(int whichsig) = 0; /* the old handler */
+static void (*oldhandler)(int whichsig) = 0;    // the old handler
 
 static void IO_HandleChildSignal(int retcode, int status)
 {
-    if (retcode > 0) { /* One of our child processes terminated */
+    if (retcode > 0) {    // One of our child processes terminated
         if (WIFEXITED(status) || WIFSIGNALED(status)) {
 #ifdef GAP_HasCheckChildStatusChanged
             if (CheckChildStatusChanged(retcode, status)) {
@@ -240,7 +240,7 @@ void IO_SIGCHLDHandler(int whichsig)
 
 static Obj FuncIO_InstallSIGCHLDHandler(Obj self)
 {
-    /* Do not install ourselves twice: */
+    // Do not install ourselves twice:
     if (oldhandler == 0) {
         oldhandler = signal(SIGCHLD, IO_SIGCHLDHandler);
         signal(SIGPIPE, SIG_IGN);
@@ -329,24 +329,24 @@ static Obj FuncIO_WaitPid(Obj self, Obj pid, Obj wait)
         SyClearErrorNo();
         return Fail;
     }
-    /* First set SIGCHLD to default action to avoid clashes with access: */
+    // First set SIGCHLD to default action to avoid clashes with access:
     signal(SIGCHLD, SIG_DFL);
     pidc = INT_INTOBJ(pid);
     reallytried = 0;
     do {
         pos = findSignaledPid(pidc);
         if (pos != -1)
-            break; /* we found something! */
+            break;    // we found something!
         if (reallytried && wait != True) {
-            /* Reinstantiate our handler: */
+            // Reinstantiate our handler:
             signal(SIGCHLD, IO_SIGCHLDHandler);
             return False;
         }
-        /* Really wait for something */
+        // Really wait for something
         retcode = waitpid(-1, &status, (wait == True) ? 0 : WNOHANG);
         IO_HandleChildSignal(retcode, status);
-        reallytried = 1; /* Do not try again. */
-    } while (1);         /* Left by break */
+        reallytried = 1;    // Do not try again.
+    } while (1);            // Left by break
     tmp = NEW_PREC(0);
     AssPRec(tmp, RNamName("pid"), INTOBJ_INT(pids[pos]));
     AssPRec(tmp, RNamName("status"), INTOBJ_INT(stats[pos]));
@@ -354,9 +354,9 @@ static Obj FuncIO_WaitPid(Obj self, Obj pid, Obj wait)
     AssPRec(tmp, RNamName("WEXITSTATUS"),
             INTOBJ_INT(WEXITSTATUS(stats[pos])));
 
-    /* Dequeue element: */
+    // Dequeue element:
     removeSignaledPidByPos(pos);
-    /* Reinstantiate our handler: */
+    // Reinstantiate our handler:
     signal(SIGCHLD, IO_SIGCHLDHandler);
     return tmp;
 }
@@ -511,7 +511,7 @@ static Obj FuncIO_opendir(Obj self, Obj name)
             return True;
     }
 }
-#endif /* HAVE_OPENDIR */
+#endif    // HAVE_OPENDIR
 
 #ifdef HAVE_READDIR
 static Obj FuncIO_readdir(Obj self)
@@ -524,7 +524,7 @@ static Obj FuncIO_readdir(Obj self)
     olderrno = errno;
     ourdirent = readdir(ourDIR);
     if (ourdirent == 0) {
-        /* This is a bit of a hack, but how should this be done? */
+        // This is a bit of a hack, but how should this be done?
         if (errno == EBADF && olderrno != EBADF) {
             SySetErrorNo();
             return Fail;
@@ -536,7 +536,7 @@ static Obj FuncIO_readdir(Obj self)
     }
     return MakeString(ourdirent->d_name);
 }
-#endif /* HAVE_READDIR */
+#endif    // HAVE_READDIR
 
 #ifdef HAVE_CLOSEDIR
 static Obj FuncIO_closedir(Obj self)
@@ -555,7 +555,7 @@ static Obj FuncIO_closedir(Obj self)
     else
         return True;
 }
-#endif /* HAVE_CLOSEDIR */
+#endif    // HAVE_CLOSEDIR
 
 #ifdef HAVE_REWINDDIR
 static Obj FuncIO_rewinddir(Obj self)
@@ -567,7 +567,7 @@ static Obj FuncIO_rewinddir(Obj self)
     rewinddir(ourDIR);
     return True;
 }
-#endif /* HAVE_REWINDDIR */
+#endif    // HAVE_REWINDDIR
 
 #ifdef HAVE_TELLDIR
 static Obj FuncIO_telldir(Obj self)
@@ -585,7 +585,7 @@ static Obj FuncIO_telldir(Obj self)
     else
         return INTOBJ_INT(o);
 }
-#endif /* HAVE_TELLDIR */
+#endif    // HAVE_TELLDIR
 
 #ifdef HAVE_SEEKDIR
 static Obj FuncIO_seekdir(Obj self, Obj offset)
@@ -601,9 +601,9 @@ static Obj FuncIO_seekdir(Obj self, Obj offset)
     seekdir(ourDIR, INT_INTOBJ(offset));
     return True;
 }
-#endif /* HAVE_SEEKDIR */
+#endif    // HAVE_SEEKDIR
 
-#endif /* HAVE_DIRENT_H */
+#endif    // HAVE_DIRENT_H
 
 #ifdef HAVE_UNLINK
 static Obj FuncIO_unlink(Obj self, Obj path)
@@ -1127,7 +1127,7 @@ static Obj FuncIO_socket(Obj self, Obj domain, Obj type, Obj protocol)
     }
     else {
 #ifdef HAVE_GETPROTOBYNAME
-        if (IS_STRING(protocol)) { /* we have to look up the protocol */
+        if (IS_STRING(protocol)) {    // we have to look up the protocol
             pe = getprotobyname(CSTR_STRING(protocol));
             if (pe == NULL) {
                 SySetErrorNo();
@@ -1517,37 +1517,37 @@ static Obj FuncIO_select(Obj self,
     FD_ZERO(&outfds);
     FD_ZERO(&excfds);
     maxfd = 0;
-    /* Handle input file descriptors: */
+    // Handle input file descriptors:
     for (i = 1; i <= LEN_PLIST(inlist); i++) {
         o = ELM_PLIST(inlist, i);
         if (o != (Obj)0 && IS_INTOBJ(o)) {
-            j = INT_INTOBJ(o); /* a UNIX file descriptor */
+            j = INT_INTOBJ(o);    // a UNIX file descriptor
             FD_SET(j, &infds);
             if (j > maxfd)
                 maxfd = j;
         }
     }
-    /* Handle output file descriptors: */
+    // Handle output file descriptors:
     for (i = 1; i <= LEN_PLIST(outlist); i++) {
         o = ELM_PLIST(outlist, i);
         if (o != (Obj)0 && IS_INTOBJ(o)) {
-            j = INT_INTOBJ(o); /* a UNIX file descriptor */
+            j = INT_INTOBJ(o);    // a UNIX file descriptor
             FD_SET(j, &outfds);
             if (j > maxfd)
                 maxfd = j;
         }
     }
-    /* Handle exception file descriptors: */
+    // Handle exception file descriptors:
     for (i = 1; i <= LEN_PLIST(exclist); i++) {
         o = ELM_PLIST(exclist, i);
         if (o != (Obj)0 && IS_INTOBJ(o)) {
-            j = INT_INTOBJ(o); /* a UNIX file descriptor */
+            j = INT_INTOBJ(o);    // a UNIX file descriptor
             FD_SET(j, &excfds);
             if (j > maxfd)
                 maxfd = j;
         }
     }
-    /* Handle the timeout: */
+    // Handle the timeout:
     if (timeoutsec != (Obj)0 && IS_INTOBJ(timeoutsec) &&
         timeoutusec != (Obj)0 && IS_INTOBJ(timeoutusec)) {
         tv.tv_sec = INT_INTOBJ(timeoutsec);
@@ -1572,34 +1572,34 @@ static Obj FuncIO_select(Obj self,
     }
 
     if (n >= 0) {
-        /* Now run through the lists and call functions if ready: */
+        // Now run through the lists and call functions if ready:
 
         for (i = 1; i <= LEN_PLIST(inlist); i++) {
             o = ELM_PLIST(inlist, i);
             if (o != (Obj)0 && IS_INTOBJ(o)) {
-                j = INT_INTOBJ(o); /* a UNIX file descriptor */
+                j = INT_INTOBJ(o);    // a UNIX file descriptor
                 if (!(FD_ISSET(j, &infds))) {
                     SET_ELM_PLIST(inlist, i, Fail);
                     CHANGED_BAG(inlist);
                 }
             }
         }
-        /* Handle output file descriptors: */
+        // Handle output file descriptors:
         for (i = 1; i <= LEN_PLIST(outlist); i++) {
             o = ELM_PLIST(outlist, i);
             if (o != (Obj)0 && IS_INTOBJ(o)) {
-                j = INT_INTOBJ(o); /* a UNIX file descriptor */
+                j = INT_INTOBJ(o);    // a UNIX file descriptor
                 if (!(FD_ISSET(j, &outfds))) {
                     SET_ELM_PLIST(outlist, i, Fail);
                     CHANGED_BAG(outlist);
                 }
             }
         }
-        /* Handle exception file descriptors: */
+        // Handle exception file descriptors:
         for (i = 1; i <= LEN_PLIST(exclist); i++) {
             o = ELM_PLIST(exclist, i);
             if (o != (Obj)0 && IS_INTOBJ(o)) {
-                j = INT_INTOBJ(o); /* a UNIX file descriptor */
+                j = INT_INTOBJ(o);    // a UNIX file descriptor
                 if (!(FD_ISSET(j, &excfds))) {
                     SET_ELM_PLIST(exclist, i, Fail);
                     CHANGED_BAG(exclist);
@@ -1629,7 +1629,7 @@ static Obj FuncIO_fork(Obj self)
     }
 #if GAP_KERNEL_MAJOR_VERSION >= 6
     if (res == 0) {
-        /* In child */
+        // In child
         InformProfilingThatThisIsAForkedGAP();
     }
 #endif
@@ -1640,7 +1640,7 @@ static Obj FuncIO_fork(Obj self)
 static Obj FuncIO_execv(Obj self, Obj path, Obj Argv)
 {
     int    argc;
-    char * argv[1024]; /* Up to 1024 arguments */
+    char * argv[1024];    // Up to 1024 arguments
     int    i;
     Obj    tmp;
 
@@ -1668,14 +1668,14 @@ static Obj FuncIO_execv(Obj self, Obj path, Obj Argv)
         SySetErrorNo();
         return INTOBJ_INT(i);
     }
-    /* This will never happen: */
+    // This will never happen:
     return Fail;
 }
 
 static Obj FuncIO_execvp(Obj self, Obj file, Obj Argv)
 {
     int    argc;
-    char * argv[1024]; /* Up to 1024 arguments */
+    char * argv[1024];    // Up to 1024 arguments
     int    i;
     Obj    tmp;
 
@@ -1703,15 +1703,15 @@ static Obj FuncIO_execvp(Obj self, Obj file, Obj Argv)
         SySetErrorNo();
         return Fail;
     }
-    /* This will never happen: */
+    // This will never happen:
     return Fail;
 }
 
 static Obj FuncIO_execve(Obj self, Obj path, Obj Argv, Obj Envp)
 {
     int    argc;
-    char * argv[1024]; /* Up to 1024 arguments */
-    char * envp[1024]; /* Up to 1024 environment entries */
+    char * argv[1024];    // Up to 1024 arguments
+    char * envp[1024];    // Up to 1024 environment entries
     int    i;
     Obj    tmp;
 
@@ -1754,7 +1754,7 @@ static Obj FuncIO_execve(Obj self, Obj path, Obj Argv, Obj Envp)
         SySetErrorNo();
         return Fail;
     }
-    /* This will never happen: */
+    // This will never happen:
     return Fail;
 }
 
@@ -1766,13 +1766,13 @@ static Obj FuncIO_environ(Obj self)
     char ** p;
     Obj     tmp, tmp2;
 
-    /* First count the entries: */
+    // First count the entries:
     for (len = 0, p = environ; *p; p++, len++)
         ;
 
-    /* Now make a list: */
+    // Now make a list:
     tmp = NEW_PLIST(T_PLIST_DENSE, len);
-    tmp2 = tmp; /* Just to please the compiler */
+    tmp2 = tmp;    // Just to please the compiler
     SET_LEN_PLIST(tmp2, len);
     for (i = 1, p = environ; i <= len; i++, p++) {
         tmp2 = MakeString(*p);
@@ -1806,7 +1806,7 @@ static Obj FuncIO_exit(Obj self, Obj status)
         return Fail;
     }
     exit(INT_INTOBJ(status));
-    /* This never happens: */
+    // This never happens:
     return True;
 }
 
@@ -2013,7 +2013,7 @@ static StructGVarFunc GVarFuncs[] = {
     GVAR_FUNC(IO_seekdir, 1, "offset"),
 #endif
 
-#endif /* HAVE_DIRENT_H */
+#endif    // HAVE_DIRENT_H
 
 #ifdef HAVE_UNLINK
     GVAR_FUNC(IO_unlink, 1, "pathname"),
@@ -2225,10 +2225,10 @@ static StructGVarFunc GVarFuncs[] = {
  */
 static Int InitKernel(StructInitInfo * module)
 {
-    /* init filters and functions                                          */
+    // init filters and functions
     InitHdlrFuncsFromTable(GVarFuncs);
 
-    /* return success                                                      */
+    // return success
     return 0;
 }
 
@@ -2245,7 +2245,7 @@ static Int InitLibrary(StructInitInfo * module)
     InitGVarFuncsFromTable(GVarFuncs);
 
     tmp = NEW_PREC(0);
-    /* Constants for the flags: */
+    // Constants for the flags:
     AssPRec(tmp, RNamName("O_RDONLY"), INTOBJ_INT((Int)O_RDONLY));
     AssPRec(tmp, RNamName("O_WRONLY"), INTOBJ_INT((Int)O_WRONLY));
     AssPRec(tmp, RNamName("O_RDWR"), INTOBJ_INT((Int)O_RDWR));
@@ -2301,7 +2301,7 @@ static Int InitLibrary(StructInitInfo * module)
     AssPRec(tmp, RNamName("SEEK_END"), INTOBJ_INT((Int)SEEK_END));
 #endif
 
-    /* Constants for the mode: */
+    // Constants for the mode:
 #ifdef S_IRWXU
     AssPRec(tmp, RNamName("S_IRWXU"), INTOBJ_INT((Int)S_IRWXU));
 #endif
@@ -2372,7 +2372,7 @@ static Int InitLibrary(StructInitInfo * module)
     AssPRec(tmp, RNamName("S_ISVTX"), INTOBJ_INT((Int)S_ISVTX));
 #endif
 
-    /* Constants for the errors: */
+    // Constants for the errors:
 #ifdef EACCES
     AssPRec(tmp, RNamName("EACCES"), INTOBJ_INT((Int)EACCES));
 #endif
@@ -2528,7 +2528,7 @@ static Int InitLibrary(StructInitInfo * module)
     AssPRec(tmp, RNamName("TRY_AGAIN"), INTOBJ_INT((Int)TRY_AGAIN));
 #endif
 
-    /* Constants for networking: */
+    // Constants for networking:
 #ifdef AF_APPLETALK
     AssPRec(tmp, RNamName("AF_APPLETALK"), INTOBJ_INT((Int)AF_APPLETALK));
 #endif
@@ -2895,7 +2895,7 @@ static Int InitLibrary(StructInitInfo * module)
     AssPRec(tmp, RNamName("ICMP_FILTER"), INTOBJ_INT((Int)ICMP_FILTER));
 #endif
 
-    /* Constants for messages for recv and send: */
+    // Constants for messages for recv and send:
 #ifdef MSG_OOB
     AssPRec(tmp, RNamName("MSG_OOB"), INTOBJ_INT((Int)MSG_OOB));
 #endif
@@ -3099,7 +3099,7 @@ static Int InitLibrary(StructInitInfo * module)
     MakeReadWriteGVar(gvar);
     AssGVar(gvar, tmp);
     MakeReadOnlyGVar(gvar);
-    /* return success                                                      */
+    // return success
     return 0;
 }
 
