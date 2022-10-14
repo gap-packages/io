@@ -69,12 +69,8 @@
 #include <signal.h>
 #endif
 #endif
-/* We should test for existence of netinet/in.h and netinet/tcp.h, but
- * this would require a change in the GAP configure script, which is
- * tedious. */
 #ifdef HAVE_NETINET_IN_H
 #include <netinet/in.h>
-// #include <netinet/ip.h>
 #endif
 #ifdef HAVE_NETINET_TCP_H
 #include <netinet/tcp.h>
@@ -82,22 +78,6 @@
 #if defined(__CYGWIN__) || defined(__CYGWIN32__)
 #include <cygwin/in.h>
 #endif
-
-/* The following seems to be necessary to run under modern gcc compilers
- * which have the ssp stack checking enabled. Hopefully this does not
- * hurt in future or other versions... */
-#ifdef __GNUC__
-#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 1))
-#if defined(__CYGWIN__) || defined(__CYGWIN32__)
-extern void __stack_chk_fail();
-void        __stack_chk_fail_local(void)
-{
-    __stack_chk_fail();
-}
-#endif
-#endif
-#endif
-
 
 /* Functions that are done:
  * open, creat, read, write, close, unlink, lseek, opendir, readdir,
@@ -228,8 +208,7 @@ static void IO_HandleChildSignal(int retcode, int status)
 void IO_SIGCHLDHandler(int whichsig)
 {
     int retcode, status;
-    /* We collect information about our child processes that have
-       terminated: */
+    // We collect information about our child processes that have terminated
     do {
         retcode = waitpid(-1, &status, WNOHANG);
         IO_HandleChildSignal(retcode, status);
@@ -1973,12 +1952,9 @@ static Obj FuncIO_gethostname(Obj self)
 #endif
 
 
-/*F * * * * * * * * * * * * * initialize package * * * * * * * * * * * * * *
- */
-
-/******************************************************************************
- *V  GVarFuncs . . . . . . . . . . . . . . . . . . list of functions to export
- */
+//
+// list of functions to export
+//
 static StructGVarFunc GVarFuncs[] = {
 
     GVAR_FUNC(IO_open, 3, "pathname, flags, mode"),
@@ -2220,9 +2196,7 @@ static StructGVarFunc GVarFuncs[] = {
 
 };
 
-/******************************************************************************
- *F  InitKernel( <module> )  . . . . . . . . initialise kernel data structures
- */
+// initialise kernel data structures
 static Int InitKernel(StructInitInfo * module)
 {
     // init filters and functions
@@ -2232,16 +2206,14 @@ static Int InitKernel(StructInitInfo * module)
     return 0;
 }
 
-/******************************************************************************
- *F  InitLibrary( <module> ) . . . . . . .  initialise library data structures
- */
+// initialise library data structures
 static Int InitLibrary(StructInitInfo * module)
 {
     Int gvar;
     Obj tmp;
 
-    /* init filters and functions
-       we assign the functions to components of a record "IO"         */
+    // init filters and functions we assign the functions to components of a
+    // record "IO"
     InitGVarFuncsFromTable(GVarFuncs);
 
     tmp = NEW_PREC(0);
@@ -3103,9 +3075,7 @@ static Int InitLibrary(StructInitInfo * module)
     return 0;
 }
 
-/******************************************************************************
- *F  InitInfopl()  . . . . . . . . . . . . . . . . . table of init functions
- */
+// table of init functions
 static StructInitInfo module = {
     .type = MODULE_DYNAMIC,
     .name = "io",
