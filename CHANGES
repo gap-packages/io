@@ -1,5 +1,8 @@
 This file describes changes in the IO package.
 
+X.Y.Z (YYYY-MM-DD)
+  - Change minimal required GAP version to 4.11
+
 4.7.3 (2022-09-25)
   - Fix a build issue where running `make clean` would break the build
     system (and hence building this package via GAP's BuildPackages.sh

@@ -21,7 +21,6 @@ jobs:
         gap-branch:
           - master
           - stable-4.11
-          - stable-4.10
         GAP_PKGS_TO_BUILD: ['profiling']
         HPCGAP: ['no']
         ABI: ['']
