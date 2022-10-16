@@ -1116,7 +1116,6 @@ static Obj FuncIO_connect(Obj self, Obj fd, Obj serv_addr)
 static Obj FuncIO_make_sockaddr_in(Obj self, Obj ip, Obj port)
 {
     struct sockaddr_in sa;
-    Obj                res;
     if (!IS_INTOBJ(port) || !IS_STRING(ip) || !IS_STRING_REP(ip) ||
         GET_LEN_STRING(ip) != 4) {
         SyClearErrorNo();
@@ -1127,9 +1126,7 @@ static Obj FuncIO_make_sockaddr_in(Obj self, Obj ip, Obj port)
     sa.sin_family = AF_INET;
     sa.sin_port = htons(INT_INTOBJ(port));
     memcpy(&(sa.sin_addr.s_addr), CHARS_STRING(ip), 4);
-    res = NEW_STRING(sizeof(sa));
-    memcpy(CHARS_STRING(res), &sa, sizeof(sa));
-    return res;
+    return MakeStringWithLen((void *)&sa, sizeof(sa));
 }
 #endif
 
@@ -1173,8 +1170,7 @@ static Obj FuncIO_gethostbyname(Obj self, Obj name)
     tmp2 = NEW_PLIST(T_PLIST_DENSE, len);
     SET_LEN_PLIST(tmp2, len);
     for (i = 1, p = he->h_addr_list; i <= len; i++, p++) {
-        tmp = NEW_STRING(he->h_length);
-        memcpy(CHARS_STRING(tmp), *p, he->h_length);
+        tmp = MakeStringWithLen(*p, he->h_length);
         SET_ELM_PLIST(tmp2, i, tmp);
         CHANGED_BAG(tmp2);
     }
@@ -1842,7 +1838,6 @@ static Obj FuncIO_getsockname(Obj self, Obj fd)
 {
     struct sockaddr_in sa;
     socklen_t          sa_len;
-    Obj                res;
 
     if (!IS_INTOBJ(fd)) {
         SyClearErrorNo();
@@ -1851,9 +1846,7 @@ static Obj FuncIO_getsockname(Obj self, Obj fd)
 
     sa_len = sizeof sa;
     getsockname(INT_INTOBJ(fd), (struct sockaddr *)(&sa), &sa_len);
-    res = NEW_STRING(sa_len);
-    memcpy(CHARS_STRING(res), &sa, sa_len);
-    return res;
+    return MakeStringWithLen((void *)&sa, sa_len);
 }
 #endif
 
@@ -1861,16 +1854,12 @@ static Obj FuncIO_getsockname(Obj self, Obj fd)
 static Obj FuncIO_gethostname(Obj self)
 {
     char name[256];
-    Obj  res;
-    int  i, r;
+    int  r;
     r = gethostname(name, 256);
     if (r < 0) {
         return Fail;
     }
-    i = strlen(name);
-    res = NEW_STRING(i);
-    memcpy(CHARS_STRING(res), name, i);
-    return res;
+    return MakeString(name);
 }
 #endif
 
