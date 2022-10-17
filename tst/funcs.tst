@@ -36,3 +36,29 @@ gap> r:=IO_lstat(".");; IsRecord(r); Set(RecNames(r));
 true
 [ "atime", "blksize", "blocks", "ctime", "dev", "gid", "ino", "mode", 
   "mtime", "nlink", "rdev", "size", "uid" ]
+
+#
+gap> env:=RecNames(GAPInfo.SystemEnvironment)[1];;
+gap> IO_getenv(env) = GAPInfo.SystemEnvironment.(env);
+true
+
+# find an environment variable name hopefully not yet set
+gap> env := Concatenation("GAP_IO_TEST_VAR_", String(Random(10^15,10^16-1)));;
+gap> IO_getenv(env);
+fail
+gap> IO_setenv(env, "A", true);
+true
+gap> IO_getenv(env);
+"A"
+gap> IO_setenv(env, "B", false);
+true
+gap> IO_getenv(env);
+"A"
+gap> IO_setenv(env, "B", true);
+true
+gap> IO_getenv(env);
+"B"
+gap> IO_unsetenv(env);
+true
+gap> IO_getenv(env);
+fail

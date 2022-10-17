@@ -86,6 +86,10 @@ fail
 gap> IsString(IO_getcwd());
 true
 
+# IO_getenv(name)
+gap> IO_getenv(fail);
+fail
+
 # IO_gethostbyname(name)
 gap> IO_gethostbyname(fail);
 fail
@@ -239,6 +243,10 @@ fail
 gap> IO_sendto(fail, fail, fail, fail, fail, fail);
 fail
 
+# IO_setenv(name, value, overwrite)
+gap> IO_setenv(fail, fail, fail);
+fail
+
 # IO_setsockopt(fd, level, optname, optval)
 gap> IO_setsockopt(fail, fail, fail, fail);
 fail
@@ -260,6 +268,10 @@ gap> #IO_telldir(); # TODO: test this
 
 # IO_unlink(pathname)
 gap> IO_unlink(fail);
+fail
+
+# IO_unsetenv(name)
+gap> IO_unsetenv(fail);
 fail
 
 # IO_WaitPid(pid, wait)
