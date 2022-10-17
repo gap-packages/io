@@ -1863,6 +1863,49 @@ static Obj FuncIO_gethostname(Obj self)
 }
 #endif
 
+static Obj FuncIO_getenv(Obj self, Obj name)
+{
+    if (!IS_STRING_REP(name)) {
+        SyClearErrorNo();
+        return Fail;
+    }
+    char * res = getenv(CONST_CSTR_STRING(name));
+    if (res == NULL) {
+        SySetErrorNo();
+        return Fail;
+    }
+    return MakeString(res);
+}
+
+static Obj FuncIO_setenv(Obj self, Obj name, Obj value, Obj overwrite)
+{
+    if (!IS_STRING_REP(name) || !IS_STRING_REP(value) ||
+        (overwrite != True && overwrite != False)) {
+        SyClearErrorNo();
+        return Fail;
+    }
+    int res = setenv(CONST_CSTR_STRING(name), CONST_CSTR_STRING(value),
+                     overwrite == True);
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
+    }
+    return True;
+}
+
+static Obj FuncIO_unsetenv(Obj self, Obj name)
+{
+    if (!IS_STRING_REP(name)) {
+        SyClearErrorNo();
+        return Fail;
+    }
+    int res = unsetenv(CONST_CSTR_STRING(name));
+    if (res < 0) {
+        SySetErrorNo();
+        return Fail;
+    }
+    return True;
+}
 
 //
 // list of functions to export
@@ -2103,6 +2146,10 @@ static StructGVarFunc GVarFuncs[] = {
 #ifdef HAVE_GETHOSTNAME
     GVAR_FUNC(IO_gethostname, 0, ""),
 #endif
+
+    GVAR_FUNC(IO_getenv, 1, "name"),
+    GVAR_FUNC(IO_setenv, 3, "name, value, overwrite"),
+    GVAR_FUNC(IO_unsetenv, 1, "name"),
 
     { 0 }
 
