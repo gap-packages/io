@@ -6,10 +6,10 @@
                 [1X Bindings for low level C library I/O routines [101X
   
   
-                                     4.7.3
+                                     4.8.0
   
   
-                               25 September 2022
+                                18 October 2022
   
   
                                  Max Neunhöffer
@@ -59,50 +59,53 @@
       3.2-19 IO_fork
       3.2-20 IO_fstat
       3.2-21 IO_getcwd
-      3.2-22 IO_gethostbyname
-      3.2-23 IO_gethostname
-      3.2-24 IO_getpid
-      3.2-25 IO_getppid
-      3.2-26 IO_getsockname
-      3.2-27 IO_getsockopt
-      3.2-28 IO_gettimeofday
-      3.2-29 IO_gmtime
-      3.2-30 IO_kill
-      3.2-31 IO_lchown
-      3.2-32 IO_link
-      3.2-33 IO_listen
-      3.2-34 IO_localtime
-      3.2-35 IO_lseek
-      3.2-36 IO_lstat
-      3.2-37 IO_mkdir
-      3.2-38 IO_mkfifo
-      3.2-39 IO_mknod
-      3.2-40 IO_mkstemp
-      3.2-41 IO_mkdtemp
-      3.2-42 IO_open
-      3.2-43 IO_opendir
-      3.2-44 IO_pipe
-      3.2-45 IO_read
-      3.2-46 IO_readdir
-      3.2-47 IO_readlink
-      3.2-48 IO_recv
-      3.2-49 IO_recvfrom
-      3.2-50 IO_rename
-      3.2-51 IO_rewinddir
-      3.2-52 IO_rmdir
-      3.2-53 IO_seekdir
-      3.2-54 IO_select
-      3.2-55 IO_send
-      3.2-56 IO_sendto
-      3.2-57 IO_setsockopt
-      3.2-58 IO_socket
-      3.2-59 IO_stat
-      3.2-60 IO_symlink
-      3.2-61 IO_telldir
-      3.2-62 IO_unlink
-      3.2-63 IO_WaitPid
-      3.2-64 IO_IgnorePid
-      3.2-65 IO_write
+      3.2-22 IO_getenv
+      3.2-23 IO_gethostbyname
+      3.2-24 IO_gethostname
+      3.2-25 IO_getpid
+      3.2-26 IO_getppid
+      3.2-27 IO_getsockname
+      3.2-28 IO_getsockopt
+      3.2-29 IO_gettimeofday
+      3.2-30 IO_gmtime
+      3.2-31 IO_kill
+      3.2-32 IO_lchown
+      3.2-33 IO_link
+      3.2-34 IO_listen
+      3.2-35 IO_localtime
+      3.2-36 IO_lseek
+      3.2-37 IO_lstat
+      3.2-38 IO_mkdir
+      3.2-39 IO_mkfifo
+      3.2-40 IO_mknod
+      3.2-41 IO_mkstemp
+      3.2-42 IO_mkdtemp
+      3.2-43 IO_open
+      3.2-44 IO_opendir
+      3.2-45 IO_pipe
+      3.2-46 IO_read
+      3.2-47 IO_readdir
+      3.2-48 IO_readlink
+      3.2-49 IO_recv
+      3.2-50 IO_recvfrom
+      3.2-51 IO_rename
+      3.2-52 IO_rewinddir
+      3.2-53 IO_rmdir
+      3.2-54 IO_seekdir
+      3.2-55 IO_select
+      3.2-56 IO_send
+      3.2-57 IO_sendto
+      3.2-58 IO_setenv
+      3.2-59 IO_setsockopt
+      3.2-60 IO_socket
+      3.2-61 IO_stat
+      3.2-62 IO_symlink
+      3.2-63 IO_telldir
+      3.2-64 IO_unlink
+      3.2-65 IO_unsetenv
+      3.2-66 IO_WaitPid
+      3.2-67 IO_IgnorePid
+      3.2-68 IO_write
     3.3 [33X[0;0YFurther C level functions[133X
       3.3-1 IO_make_sockaddr_in
       3.3-2 IO_environ

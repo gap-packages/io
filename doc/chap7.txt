@@ -23,7 +23,7 @@
   otherwise a [10XFile[110X object linked to the file descriptor of the socket. In case
   of  an  error,  the component [9Xconn.errormsg[109X contains an error message, it is
   otherwise empty. If everything went well then the component [9Xconn.host[109X is the
-  result  from  the  host  name lookup (see [2XIO_gethostbyname[102X ([14X3.2-22[114X)) and the
+  result  from  the  host  name lookup (see [2XIO_gethostbyname[102X ([14X3.2-23[114X)) and the
   component [9Xconn.closed[109X is set to [9Xfalse[109X.[133X
   
   [33X[0;0YNo data is sent or received on the socket in this function.[133X

@@ -7,7 +7,7 @@
   [33X[0;0YWhenever  one  needs  to  do  input/output on more than one connection (file
   descriptor) at a time, some code is needed to organise the I/O multiplexing.
   Due to the single-threaded nature of the current [5XGAP[105X language one has to use
-  [2XIO_select[102X  ([14X3.2-54[114X)  and  some buffering and queueing to organise this. This
+  [2XIO_select[102X  ([14X3.2-55[114X)  and  some buffering and queueing to organise this. This
   chapter  describes  a  relative  generic  implementation of I/O-multiplexing
   using  so-called  [2XIOHub[102X  ([14X9.2-1[114X)  objects.  The  basic idea is that an [2XIOHub[102X
   ([14X9.2-1[114X)  object  handles  lots  of  I/O  connections  at  the  same time and
@@ -107,7 +107,7 @@
   returned. Note first that this operation blocks until a new connection comes
   in.  Note furthermore that this operation is usually called automatically in
   [2XDoIO[102X  ([14X9.2-13[114X)  whenever  a new connection has come in, which is reported in
-  the  internal  [2XIO_select[102X ([14X3.2-54[114X) call. So usually, the client code does not
+  the  internal  [2XIO_select[102X ([14X3.2-55[114X) call. So usually, the client code does not
   have to call this operation at all.[133X
   
   [1X9.2-8 SubmitOutput[101X
@@ -178,7 +178,7 @@
   [6XReturns:[106X  [33X[0;10Y[9Xtrue[109X or [9Xfalse[109X or [9Xfail[109X[133X
   
   [33X[0;0YThe  argument  [3Xh[103X  must  be  an [2XIOHub[102X ([14X9.2-1[114X) object, and the optional second
-  argument [3Xblock[103X must be [9Xtrue[109X or [9Xfalse[109X. This operation uses [2XIO_select[102X ([14X3.2-54[114X)
+  argument [3Xblock[103X must be [9Xtrue[109X or [9Xfalse[109X. This operation uses [2XIO_select[102X ([14X3.2-55[114X)
   to  decide  which  of the file descriptors belonging to the connections of [3Xh[103X
   are ready to read or write. All file descriptors which are ready are served,
   possibly  updating the input and output queues. A possible serving socket is

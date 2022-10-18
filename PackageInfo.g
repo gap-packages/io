@@ -7,8 +7,8 @@ SetPackageInfo( rec(
 
 PackageName := "IO",
 Subtitle := "Bindings for low level C library I/O routines",
-Version := "4.7.3",
-Date := "25/09/2022", # dd/mm/yyyy format
+Version := "4.8.0",
+Date := "18/10/2022", # dd/mm/yyyy format
 License := "GPL-3.0-or-later",
 
 ##  Information about authors and maintainers.
@@ -27,6 +27,7 @@ Persons := [
     IsMaintainer  := true,
     Email         := "horn@mathematik.uni-kl.de",
     WWWHome       := "https://www.quendi.de/math",
+    GitHubUsername:= "fingolfin",
     PostalAddress := Concatenation(
                        "Fachbereich Mathematik\n",
                        "TU Kaiserslautern\n",
@@ -92,7 +93,7 @@ PackageDoc := rec(
 ),
 
 Dependencies := rec(
-  GAP := ">=4.10",
+  GAP := ">=4.11",
   NeededOtherPackages := [],
   SuggestedOtherPackages := [],
   ExternalConditions := []

@@ -75,7 +75,7 @@
   meaning read access, write access (with creating and truncating), and append
   access  respectively.  If  [3Xmode[103X  is  omitted,  it defaults to [21Xr[121X. [3Xbufsize[103X, if
   given,  must  be  a  positive  integer  or  [10Xfalse[110X,  otherwise it defaults to
-  [10XIO.DefaultBufSize[110X. Internally, the [2XIO_open[102X ([14X3.2-42[114X) function is used and the
+  [10XIO.DefaultBufSize[110X. Internally, the [2XIO_open[102X ([14X3.2-43[114X) function is used and the
   result  file  descriptor  is wrapped using [2XIO_WrapFD[102X ([14X4.1-2[114X) with [3Xbufsize[103X as
   the buffer size.[133X
   
@@ -321,7 +321,7 @@
   buffer  out  and closing the file descriptor. All buffers are freed. In case
   of  an  error,  the  function returns [9Xfail[109X and otherwise [9Xtrue[109X. Note that for
   pipes  to  other  processes this function collects data about the terminated
-  processes using [2XIO_WaitPid[102X ([14X3.2-63[114X).[133X
+  processes using [2XIO_WaitPid[102X ([14X3.2-66[114X).[133X
   
   
   [1X4.3 [33X[0;0YOther functions[133X[101X
@@ -350,7 +350,7 @@
   [33X[1;0Y[29X[2XIO_Select[102X( [3Xr[103X, [3Xw[103X, [3Xf[103X, [3Xe[103X, [3Xt1[103X, [3Xt2[103X ) [32X function[133X
   [6XReturns:[106X  [33X[0;10Yan integer or [9Xfail[109X[133X
   
-  [33X[0;0YThis  function  is  the  corresponding  function  to  [2XIO_select[102X ([14X3.2-54[114X) for
+  [33X[0;0YThis  function  is  the  corresponding  function  to  [2XIO_select[102X ([14X3.2-55[114X) for
   buffered file access. It behaves similarly to that function. The differences
   are  the  following:  There are four lists of files [3Xr[103X, [3Xw[103X, [3Xf[103X, and [3Xe[103X. They all
   can contain either integers (standing for file descriptors) or [10XFile[110X objects.
@@ -363,7 +363,7 @@
   available  in a reading buffer or space in a writing buffer. If so, they are
   immediately  reported  to  be  ready  (this  feature  makes the list of [10XFile[110X
   objects to test for flushability necessary). For the remaining files and for
-  all specified file descriptors, the function [2XIO_select[102X ([14X3.2-54[114X) is called to
+  all specified file descriptors, the function [2XIO_select[102X ([14X3.2-55[114X) is called to
   get  an  overview  about  readiness. The timeout values [3Xt1[103X and [3Xt2[103X are set to
   zero for immediate returning if one of the requested buffers were ready.[133X
   
@@ -403,7 +403,7 @@
   and an integer [3Xportnr[103X, which is a port number. The result is a string of the
   correct length to be used for the low level C library functions, wherever IP
   address port number pairs are needed. The string [3Xipstring[103X can also be a host
-  name, which is then looked up using [2XIO_gethostbyname[102X ([14X3.2-22[114X) to find the IP
+  name, which is then looked up using [2XIO_gethostbyname[102X ([14X3.2-23[114X) to find the IP
   address.[133X
   
   [1X4.3-7 IO_Environment[101X
@@ -478,7 +478,7 @@
   
   [33X[0;0YThe  process  will  usually die, when the pipe is closed, but can also do so
   without  that.  The  [10XFile[110X  object  remembers  the  process ID of the started
-  process  and  the  [2XIO_Close[102X ([14X4.2-16[114X) function then calls [2XIO_WaitPid[102X ([14X3.2-63[114X)
+  process  and  the  [2XIO_Close[102X ([14X4.2-16[114X) function then calls [2XIO_WaitPid[102X ([14X3.2-66[114X)
   for it to acquire information about the terminated process.[133X
   
   [33X[0;0YNote     that     [2XIO_Popen[102X    activates    our    SIGCHLD    handler    (see
@@ -507,7 +507,7 @@
   
   [33X[0;0YThe  process  will  usually  die,  when one of the pipes is closed. The [10XFile[110X
   objects  remember the process ID of the called process and the function call
-  to [2XIO_Close[102X ([14X4.2-16[114X) for the [10Xstdout[110X object will call [2XIO_WaitPid[102X ([14X3.2-63[114X) for
+  to [2XIO_Close[102X ([14X4.2-16[114X) for the [10Xstdout[110X object will call [2XIO_WaitPid[102X ([14X3.2-66[114X) for
   it to acquire information about the terminated process.[133X
   
   [33X[0;0YNote     that    [2XIO_Popen2[102X    activates    our    SIGCHLD    handler    (see
@@ -537,7 +537,7 @@
   [33X[0;0YThe  process  will  usually  die, when one of the pipes is closed. All three
   [10XFile[110X  objects  will remember the process ID of the newly created process and
   the  call  to the [2XIO_Close[102X ([14X4.2-16[114X) function for the [10Xstdout[110X object will call
-  [2XIO_WaitPid[102X ([14X3.2-63[114X) for it to acquire information about the terminated child
+  [2XIO_WaitPid[102X ([14X3.2-66[114X) for it to acquire information about the terminated child
   process.[133X
   
   [33X[0;0YNote     that    [2XIO_Popen3[102X    activates    our    SIGCHLD    handler    (see
@@ -575,9 +575,9 @@
   
   [33X[0;0YNote  that  the  SIGCHLD  handler  of  the  [5XIO[105X  package is installed by this
   function  (see  [2XIO_InstallSIGCHLDHandler[102X  ([14X3.3-3[114X))  and  that it lies in the
-  responsibility  of  the  caller  to  use  [2XIO_WaitPid[102X ([14X3.2-63[114X) to ask for the
+  responsibility  of  the  caller  to  use  [2XIO_WaitPid[102X ([14X3.2-66[114X) to ask for the
   status  information  of all child processes after their termination, or call
-  [2XIO_IgnorePid[102X ([14X3.2-64[114X) to ignore the return value of a process.[133X
+  [2XIO_IgnorePid[102X ([14X3.2-67[114X) to ignore the return value of a process.[133X
   
   [1X4.4-7 IO_StringFilterFile[101X
   
@@ -612,10 +612,10 @@
   are filtered through this pipeline of processes.[133X
   
   [33X[0;0YThe  [10XFile[110X  object remembers the started processes and upon the final call to
-  [2XIO_Close[102X  ([14X4.2-16[114X)  automatically  uses  the [2XIO_WaitPid[102X ([14X3.2-63[114X) function to
+  [2XIO_Close[102X  ([14X4.2-16[114X)  automatically  uses  the [2XIO_WaitPid[102X ([14X3.2-66[114X) function to
   acquire  information  from  the  terminated  processes in the pipeline after
   their  termination.  This  means  that  you  do  not have to call [2XIO_WaitPid[102X
-  ([14X3.2-63[114X) any more after the call to [2XIO_Close[102X ([14X4.2-16[114X).[133X
+  ([14X3.2-66[114X) any more after the call to [2XIO_Close[102X ([14X4.2-16[114X).[133X
   
   [33X[0;0YNote    that    [2XIO_FilteredFile[102X   activates   our   SIGCHLD   handler   (see
   [2XIO_InstallSIGCHLDHandler[102X ([14X3.3-3[114X)).[133X
@@ -690,7 +690,7 @@
   [33X[0;0YAll  the  necessary I/O multiplexing and non-blocking I/O to avoid deadlocks
   is done in this function.[133X
   
-  [33X[0;0YThis  function properly does [2XIO_WaitPid[102X ([14X3.2-63[114X) to wait for the termination
+  [33X[0;0YThis  function properly does [2XIO_WaitPid[102X ([14X3.2-66[114X) to wait for the termination
   of  the  child  process but does not restore the original [5XGAP[105X SIGCHLD signal
   handler (see [2XIO_InstallSIGCHLDHandler[102X ([14X3.3-3[114X)).[133X
   
@@ -710,7 +710,7 @@
   [33X[0;0YAll  the  necessary I/O multiplexing and non-blocking I/O to avoid deadlocks
   is done in this function.[133X
   
-  [33X[0;0YThis  function properly does [2XIO_WaitPid[102X ([14X3.2-63[114X) to wait for the termination
+  [33X[0;0YThis  function properly does [2XIO_WaitPid[102X ([14X3.2-66[114X) to wait for the termination
   of  the  child  process but does not restore the original [5XGAP[105X SIGCHLD signal
   handler (see [2XIO_InstallSIGCHLDHandler[102X ([14X3.3-3[114X)).[133X
   

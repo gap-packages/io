@@ -163,7 +163,7 @@
   job  finishes by setting the [10XTimeOut[110X component of the options record [3Xopt[103X. In
   this  case  you  have  to  set it to a record with two components [10Xtv_sec[110X and
   [10Xtv_usec[110X which are seconds and microseconds respectively, exactly as returned
-  by  the  [2XIO_gettimeofday[102X  ([14X3.2-28[114X) function. In the case of timeout an empty
+  by  the  [2XIO_gettimeofday[102X  ([14X3.2-29[114X) function. In the case of timeout an empty
   list is returned.[133X
   
   [1X8.2-2 ParDoByFork[101X
@@ -184,7 +184,7 @@
   jobs  finish  in time by setting the [10XTimeOut[110X component of the options record
   [3Xopt[103X.  In this case you have to set it to a record with two components [10Xtv_sec[110X
   and  [10Xtv_usec[110X  which  are  seconds  and microseconds respectively, exactly as
-  returned  by the [2XIO_gettimeofday[102X ([14X3.2-28[114X) function. In the case of timeout a
+  returned  by the [2XIO_gettimeofday[102X ([14X3.2-29[114X) function. In the case of timeout a
   list  is  returned  in  which the positions corresponding to those jobs that
   have  already  finished  are  bound  to the respective results and the other
   positions are unbound.[133X
