@@ -27,6 +27,7 @@ Persons := [
     IsMaintainer  := true,
     Email         := "horn@mathematik.uni-kl.de",
     WWWHome       := "https://www.quendi.de/math",
+    GitHubUsername:= "fingolfin",
     PostalAddress := Concatenation(
                        "Fachbereich Mathematik\n",
                        "TU Kaiserslautern\n",
