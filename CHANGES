@@ -1,6 +1,6 @@
 This file describes changes in the IO package.
 
-X.Y.Z (YYYY-MM-DD)
+4.8.0 (2022-10-18)
   - Change minimal required GAP version to 4.11
   - Add IO_getenv, IO_setenv, IO_unsetenv
 
