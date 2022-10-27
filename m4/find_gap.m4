@@ -55,6 +55,7 @@ AC_DEFUN([FIND_GAP],
   if test "x$GAParch" != "x"; then
     GAPARCH=$GAParch
   fi
+  AC_MSG_RESULT($GAPARCH)
 
   if test "x$GAPARCH" = "xUnknown" ; then
     echo ""
