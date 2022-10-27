@@ -3,16 +3,24 @@ name: CI
 # Trigger the workflow on push or pull request
 on:
   push:
+    branches:
+      - master
   pull_request:
   workflow_dispatch:
+
+# the `concurrency` settings ensure that not too many CI jobs run in parallel
+concurrency:
+  # group by workflow and ref; the last slightly strange component ensures that for pull
+  # requests, we limit to 1 concurrent job, but for the master branch we don't
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.ref != 'refs/heads/master' || github.run_number }}
+  # Cancel intermediate builds, but only if it is a pull request build.
+  cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
 
 jobs:
   # The CI test job
   test:
     name: ${{ matrix.os }} - GAP ${{ matrix.gap-branch }} ${{ matrix.ABI }} - HPCGAP ${{ matrix.HPCGAP }} ${{ matrix.NO_COVERAGE }}
     runs-on: ${{ matrix.os }}-latest
-    # Don't run this twice on PRs for branches pushed to the same repository
-    if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
     strategy:
       fail-fast: false
       matrix:
@@ -20,6 +28,7 @@ jobs:
           - ubuntu
         gap-branch:
           - master
+          - stable-4.12
           - stable-4.11
         GAP_PKGS_TO_BUILD: ['profiling']
         HPCGAP: ['no']
@@ -42,7 +51,7 @@ jobs:
             HPCGAP: 'no'
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: gap-actions/setup-gap@v2
         with:
           GAPBRANCH: ${{ matrix.gap-branch }}
@@ -55,7 +64,7 @@ jobs:
           NO_COVERAGE: ${{ matrix.NO_COVERAGE }}
       - uses: gap-actions/process-coverage@v2
         if: ${{ matrix.NO_COVERAGE == '' }}
-      - uses: codecov/codecov-action@v2
+      - uses: codecov/codecov-action@v3
 
   test-cygwin:
     name: "cygwin64 - GAP master - HPCGAP no"
@@ -64,7 +73,7 @@ jobs:
     env:
       CHERE_INVOKING: 1
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: gap-actions/setup-cygwin@v1
       - uses: gap-actions/setup-gap@cygwin-v2
         with:
@@ -72,7 +81,7 @@ jobs:
       - uses: gap-actions/build-pkg@cygwin-v1
       - uses: gap-actions/run-pkg-tests@cygwin-v2
       - uses: gap-actions/process-coverage@cygwin-v2
-      - uses: codecov/codecov-action@v2
+      - uses: codecov/codecov-action@v3
       - name: "Setup tmate session"
         uses: mxschmitt/action-tmate@v3
         if: ${{ failure() }}
@@ -84,14 +93,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: gap-actions/setup-gap@v2
       - uses: gap-actions/build-pkg-docs@v1
         with:
           use-latex: 'true'
       - name: 'Upload documentation'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           retention-days: 7
           name: manual
           path: ./doc/manual.pdf
+          if-no-files-found: error
