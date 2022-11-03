@@ -14,7 +14,7 @@
 #include "compiled.h"    // GAP headers
 
 #if GAP_KERNEL_MAJOR_VERSION >= 6
-#include "src/profile.h"
+#include "profile.h"
 #endif
 
 #undef PACKAGE
