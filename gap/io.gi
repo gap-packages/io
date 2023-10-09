@@ -65,10 +65,15 @@ InstallMethod( ViewObj, "for an IO_Result",
 IO.OpenFiles := Set([]);
 InstallAtExit(function()
   local file;
-  for file in IO.OpenFiles do
+  # CAUTION: Calling IO_Close below removes the file from
+  # IO.OpenFiles, so iterating over IO.OpenFiles in a for-loop
+  # would skip every second file!
+  while Length(IO.OpenFiles) > 0 do
+      file := IO.OpenFiles[1];
       if IsBound(file!.dowaitpid) then
         Unbind(file!.dowaitpid);
       fi;
+      # this call removes the file from IO.OpenFiles
       IO_Close(file);
   od;
 end
