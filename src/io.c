@@ -1777,6 +1777,10 @@ static Obj FuncIO_gmtime(Obj self, Obj time)
     Obj         tmp;
     time_t      t;
     struct tm * s;
+    if (!IS_INT(time)) {
+        SyClearErrorNo();
+        return Fail;
+    }
     if (!IS_INTOBJ(time)) {
         tmp = QuoInt(time, INTOBJ_INT(256));
         if (!IS_INTOBJ(tmp))
@@ -1808,6 +1812,10 @@ static Obj FuncIO_localtime(Obj self, Obj time)
     Obj         tmp;
     time_t      t;
     struct tm * s;
+    if (!IS_INT(time)) {
+        SyClearErrorNo();
+        return Fail;
+    }
     if (!IS_INTOBJ(time)) {
         tmp = QuoInt(time, INTOBJ_INT(256));
         if (!IS_INTOBJ(tmp))
