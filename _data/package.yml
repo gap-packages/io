@@ -1,5 +1,6 @@
 name: IO
-version: 4.8.2
+version: "4.8.2"
+license: "GPL-3.0-or-later"
 date: 2023-10-16
 description: |
     Bindings for low level C library I/O routines
@@ -30,3 +31,33 @@ abstract: |
 status: deposited
 doc-html: doc/chap0_mj.html
 doc-pdf: doc/manual.pdf
+keywords: |
+    input, output, I/O, C-library, network, http, object serialisation, unpredictable random numbers, TCP/IP, inter process communication, background jobs, parallel skeletons, I/O multiplexing.
+citeas: |
+    <p class='BibEntry'>
+    [<span class='BibKey'>NH23</span>]   <b class='BibAuthor'>Neunhöffer, M. and Horn, M.</b>,
+     <i class='BibTitle'>IO, Bindings for low level C library I/O routines,
+             Version 4.8.2</i>
+     (<span class='BibYear'>2023</span>)<br />
+    (<span class='BibNote'>GAP package</span>),
+    <span class='BibHowpublished'><a href="https://gap-packages.github.io/io">https://gap-packages.github.io/io</a></span>.
+    </p>
+    
+
+bibtex: |
+    @misc{ IO4.8.2,
+      author =           {Neunh{\"o}ffer, M. and Horn, M.},
+      title =            {{IO},  Bindings  for low level C library I/O routines,
+                          {V}ersion 4.8.2},
+      month =            {Oct},
+      year =             {2023},
+      note =             {GAP package},
+      howpublished =     {\href              {https://gap-packages.github.io/io}
+                          {\texttt{https://gap-packages.github.io/io}}},
+      keywords =         {input;  output;  I/O; C-library; network; http; object
+                          serialisation;  unpredictable  random numbers; TCP/IP;
+                          inter process communication; background jobs; parallel
+                          skeletons; I/O multiplexing},
+      printedkey =       {NH23}
+    }
+

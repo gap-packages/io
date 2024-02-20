@@ -68,7 +68,10 @@ GeneratePackageYML:=function(pkg)
     SetPrintFormattingStatus(stream, false);
     
     AppendTo(stream, "name: ", pkg.PackageName, "\n");
-    AppendTo(stream, "version: ", pkg.Version, "\n");
+    AppendTo(stream, "version: \"", pkg.Version, "\"\n");
+    if IsBound(pkg.License) then
+        AppendTo(stream, "license: \"", pkg.License, "\"\n");
+    fi;
 
     # convert date from DD/MM/YYYY to ISO 8601, i.e. YYYY-MM-DD
     #
@@ -168,7 +171,23 @@ GeneratePackageYML:=function(pkg)
         fi;
     fi;
 
-    # TODO: use Keywords?
+    if IsBound(pkg.Keywords) and
+        Length(pkg.Keywords) > 0 then
+        AppendTo(stream, "keywords: |\n");
+        AppendTo(stream, "    ", JoinStringsWithSeparator(pkg.Keywords,", "),".\n");
+    fi;
+
+    AppendTo(stream, "citeas: |\n");
+    for tmp in SplitString(StringBibXMLEntry(ParseBibXMLextString(BibEntry(pkg)).entries[1],"HTML"),"\n") do
+        AppendTo(stream, "    ", tmp, "\n");
+    od;
+    AppendTo(stream, "\n");
+
+    AppendTo(stream, "bibtex: |\n");
+    for tmp in SplitString(StringBibXMLEntry(ParseBibXMLextString(BibEntry(pkg)).entries[1],"BibTeX"),"\n") do
+        AppendTo(stream, "    ", tmp, "\n");
+    od;
+    AppendTo(stream, "\n");
 
     CloseStream(stream);
 end;
