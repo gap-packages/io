@@ -28,6 +28,7 @@ jobs:
           - ubuntu
         gap-branch:
           - master
+          - stable-4.13
           - stable-4.12
           - stable-4.11
         GAP_PKGS_TO_BUILD: ['profiling']
@@ -51,7 +52,7 @@ jobs:
             HPCGAP: 'no'
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: gap-actions/setup-gap@v2
         with:
           GAPBRANCH: ${{ matrix.gap-branch }}
@@ -62,6 +63,10 @@ jobs:
       - uses: gap-actions/run-pkg-tests@v2
         with:
           NO_COVERAGE: ${{ matrix.NO_COVERAGE }}
+      - uses: gap-actions/run-pkg-tests@v2
+        with:
+          NO_COVERAGE: ${{ matrix.NO_COVERAGE }}
+          only-needed: true
       - uses: gap-actions/process-coverage@v2
         if: ${{ matrix.NO_COVERAGE == '' }}
       - uses: codecov/codecov-action@v3
@@ -73,7 +78,7 @@ jobs:
     env:
       CHERE_INVOKING: 1
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: gap-actions/setup-cygwin@v1
       - uses: gap-actions/setup-gap@cygwin-v2
         with:
@@ -93,13 +98,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: gap-actions/setup-gap@v2
       - uses: gap-actions/build-pkg-docs@v1
         with:
           use-latex: 'true'
       - name: 'Upload documentation'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           retention-days: 7
           name: manual
