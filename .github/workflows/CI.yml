@@ -69,7 +69,9 @@ jobs:
           only-needed: true
       - uses: gap-actions/process-coverage@v2
         if: ${{ matrix.NO_COVERAGE == '' }}
-      - uses: codecov/codecov-action@v3
+      - uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   test-cygwin:
     name: "cygwin64 - GAP master - HPCGAP no"
@@ -86,7 +88,9 @@ jobs:
       - uses: gap-actions/build-pkg@cygwin-v1
       - uses: gap-actions/run-pkg-tests@cygwin-v2
       - uses: gap-actions/process-coverage@cygwin-v2
-      - uses: codecov/codecov-action@v3
+      - uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
       - name: "Setup tmate session"
         uses: mxschmitt/action-tmate@v3
         if: ${{ failure() }}
