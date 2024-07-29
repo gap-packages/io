@@ -1,7 +1,7 @@
 name: IO
-version: "4.8.2"
+version: "4.8.3"
 license: "GPL-3.0-or-later"
-date: 2023-10-16
+date: 2024-07-29
 description: |
     Bindings for low level C library I/O routines
 
@@ -21,9 +21,9 @@ packageinfo: https://gap-packages.github.io/io/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/gap-packages/io/releases/download/v4.8.2/io-4.8.2.tar.gz
+      url: https://github.com/gap-packages/io/releases/download/v4.8.3/io-4.8.3.tar.gz
     - name: .tar.bz2
-      url: https://github.com/gap-packages/io/releases/download/v4.8.2/io-4.8.2.tar.bz2
+      url: https://github.com/gap-packages/io/releases/download/v4.8.3/io-4.8.3.tar.bz2
 
 abstract: |
     The <span class="pkgname">IO</span> package, as its name suggests,    provides bindings for <span class="pkgname">GAP</span> to the lower    levels of Input/Output functionality in the C library.
@@ -35,29 +35,29 @@ keywords: |
     input, output, I/O, C-library, network, http, object serialisation, unpredictable random numbers, TCP/IP, inter process communication, background jobs, parallel skeletons, I/O multiplexing.
 citeas: |
     <p class='BibEntry'>
-    [<span class='BibKey'>NH23</span>]   <b class='BibAuthor'>Neunhöffer, M. and Horn, M.</b>,
+    [<span class='BibKey'>NH24</span>]   <b class='BibAuthor'>Neunhöffer, M. and Horn, M.</b>,
      <i class='BibTitle'>IO, Bindings for low level C library I/O routines,
-             Version 4.8.2</i>
-     (<span class='BibYear'>2023</span>)<br />
+             Version 4.8.3</i>
+     (<span class='BibYear'>2024</span>)<br />
     (<span class='BibNote'>GAP package</span>),
     <span class='BibHowpublished'><a href="https://gap-packages.github.io/io">https://gap-packages.github.io/io</a></span>.
     </p>
     
 
 bibtex: |
-    @misc{ IO4.8.2,
+    @misc{ IO,
       author =           {Neunh{\"o}ffer, M. and Horn, M.},
       title =            {{IO},  Bindings  for low level C library I/O routines,
-                          {V}ersion 4.8.2},
-      month =            {Oct},
-      year =             {2023},
+                          {V}ersion 4.8.3},
+      month =            {Jul},
+      year =             {2024},
       note =             {GAP package},
       howpublished =     {\href              {https://gap-packages.github.io/io}
-                          {\texttt{https://gap-packages.github.io/io}}},
-      keywords =         {input;  output;  I/O; C-library; network; http; object
-                          serialisation;  unpredictable  random numbers; TCP/IP;
-                          inter process communication; background jobs; parallel
-                          skeletons; I/O multiplexing},
-      printedkey =       {NH23}
+                          {\texttt{https://gap\texttt{\symbol{45}}packages.github.io/io}}},
+      keywords =         {input;   output;   I/O;  C\texttt{\symbol{45}}library;
+                          network;  http;  object  serialisation;  unpredictable
+                          random  numbers;  TCP/IP; inter process communication;
+                          background jobs; parallel skeletons; I/O multiplexing},
+      printedkey =       {NH24}
     }
 

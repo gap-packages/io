@@ -16,7 +16,7 @@
   [2XHTTPRequest[102X 7.1-2 
   [2XHTTPTimeoutForSelect[102X 7.1-3 
   [2XInputQueue[102X 9.2-12 
-  [5XIO[105X 1. 
+  [5XIO[105X 1.0 
   [2XIO_accept[102X 3.2-1 
   [2XIO_bind[102X 3.2-2 
   [2XIO_CallWithTimeout[102X 8.2-5 

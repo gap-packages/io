@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <script type="text/javascript"
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 <title>GAP (IO) - Chapter 4: High level functions for buffered I/O</title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
@@ -91,7 +91,7 @@
 
 <p>Note that considerable care has been taken to ensure that one can do I/O multiplexing with buffered I/O. That is, one always has the possibility to make sure before a read or write operation, that this read or write operation will not block. This is crucial when one wants to serve more than one I/O channel from the same (single-threaded) <strong class="pkg">GAP</strong> process. This design principle sometimes made it necessary to have more than one function for a certain operation. Those functions usually differ in a subtle way with respect to their blocking behaviour.</p>
 
-<p>One remark applies again to nearly all functions presented here: If an error is indicated by the returned value <code class="keyw">fail</code> one can use the library function <code class="func">LastSystemError</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>) to find out more about the cause of the error. This fact is not mentioned with every single function.</p>
+<p>One remark applies again to nearly all functions presented here: If an error is indicated by the returned value <code class="keyw">fail</code> one can use the library function <code class="func">LastSystemError</code> (<a href="https://docs.gap-system.org/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>) to find out more about the cause of the error. This fact is not mentioned with every single function.</p>
 
 <p><a id="X83C42F7778B704C7" name="X83C42F7778B704C7"></a></p>
 
@@ -136,7 +136,7 @@
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_File</code>( <var class="Arg">filename</var>, <var class="Arg">mode</var>, <var class="Arg">bufsize</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: a <code class="code">File</code> object or <code class="keyw">fail</code></p>
 
-<p>The argument <var class="Arg">filename</var> must be a string specifying the path name of the file to work on. <var class="Arg">mode</var> must also be a string with possible values "r", "w", or "a", meaning read access, write access (with creating and truncating), and append access respectively. If <var class="Arg">mode</var> is omitted, it defaults to "r". <var class="Arg">bufsize</var>, if given, must be a positive integer or <code class="code">false</code>, otherwise it defaults to <code class="code">IO.DefaultBufSize</code>. Internally, the <code class="func">IO_open</code> (<a href="chap3_mj.html#X8731A44E8032D9D2"><span class="RefLink">3.2-43</span></a>) function is used and the result file descriptor is wrapped using <code class="func">IO_WrapFD</code> (<a href="chap4_mj.html#X7DDB0BA6836DA208"><span class="RefLink">4.1-2</span></a>) with <var class="Arg">bufsize</var> as the buffer size.</p>
+<p>The argument <var class="Arg">filename</var> must be a string specifying the path name of the file to work on. <var class="Arg">mode</var> must also be a string with possible values <q>r</q>, <q>w</q>, or <q>a</q>, meaning read access, write access (with creating and truncating), and append access respectively. If <var class="Arg">mode</var> is omitted, it defaults to <q>r</q>. <var class="Arg">bufsize</var>, if given, must be a positive integer or <code class="code">false</code>, otherwise it defaults to <code class="code">IO.DefaultBufSize</code>. Internally, the <code class="func">IO_open</code> (<a href="chap3_mj.html#X8731A44E8032D9D2"><span class="RefLink">3.2-43</span></a>) function is used and the result file descriptor is wrapped using <code class="func">IO_WrapFD</code> (<a href="chap4_mj.html#X7DDB0BA6836DA208"><span class="RefLink">4.1-2</span></a>) with <var class="Arg">bufsize</var> as the buffer size.</p>
 
 <p>The result is either <code class="keyw">fail</code> in case of an error or a <code class="code">File</code> object in case of success.</p>
 
@@ -173,7 +173,7 @@
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_ReadLine</code>( <var class="Arg">f</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: a string or <code class="keyw">fail</code></p>
 
-<p>This function gets exactly one argument, which must be a <code class="code">File</code> object <var class="Arg">f</var>. It reads one line of data, where the definition of line is operating system dependent. The line end character(s) are included in the result. The function returns a string with the line in case of success and <code class="keyw">fail</code> in case of an error. In the latter case, one can query the error with <code class="func">LastSystemError</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>).</p>
+<p>This function gets exactly one argument, which must be a <code class="code">File</code> object <var class="Arg">f</var>. It reads one line of data, where the definition of line is operating system dependent. The line end character(s) are included in the result. The function returns a string with the line in case of success and <code class="keyw">fail</code> in case of an error. In the latter case, one can query the error with <code class="func">LastSystemError</code> (<a href="https://docs.gap-system.org/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>).</p>
 
 <p>Note that the reading is done via the buffer of <var class="Arg">f</var>, such that this function will be quite fast also for large amounts of data.</p>
 
@@ -186,7 +186,7 @@
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_ReadLines</code>( <var class="Arg">f</var>[, <var class="Arg">max</var>] )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: a list of strings or <code class="keyw">fail</code></p>
 
-<p>This function gets one or two arguments, the first of which must always be a <code class="code">File</code> object <var class="Arg">f</var>. It reads lines of data (where the definition of line is operating system dependent) either until end of file (without a second argument) or up to <var class="Arg">max</var> lines (with a second argument <var class="Arg">max</var>. A list of strings with the result is returned, if everything went well and <code class="keyw">fail</code> oterwise. In the latter case, one can query the error with <code class="func">LastSystemError</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>).</p>
+<p>This function gets one or two arguments, the first of which must always be a <code class="code">File</code> object <var class="Arg">f</var>. It reads lines of data (where the definition of line is operating system dependent) either until end of file (without a second argument) or up to <var class="Arg">max</var> lines (with a second argument <var class="Arg">max</var>. A list of strings with the result is returned, if everything went well and <code class="keyw">fail</code> oterwise. In the latter case, one can query the error with <code class="func">LastSystemError</code> (<a href="https://docs.gap-system.org/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>).</p>
 
 <p>Note that the reading is done via the buffer of <var class="Arg">f</var>, such that this function will be quite fast also for large amounts of data.</p>
 
@@ -208,7 +208,7 @@
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_Read</code>( <var class="Arg">f</var>, <var class="Arg">len</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: a string or <code class="keyw">fail</code></p>
 
-<p>The function gets two arguments, the first of which must be a <code class="code">File</code> object <var class="Arg">f</var>. The second argument must be a positive integer. The function reads data up to <var class="Arg">len</var> bytes. A string with the result is returned, if everything went well and <code class="keyw">fail</code> otherwise. In the latter case, one can query the error with <code class="func">LastSystemError</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>).</p>
+<p>The function gets two arguments, the first of which must be a <code class="code">File</code> object <var class="Arg">f</var>. The second argument must be a positive integer. The function reads data up to <var class="Arg">len</var> bytes. A string with the result is returned, if everything went well and <code class="keyw">fail</code> otherwise. In the latter case, one can query the error with <code class="func">LastSystemError</code> (<a href="https://docs.gap-system.org/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>).</p>
 
 <p>Note that the reading is done via the buffer of <var class="Arg">f</var>, such that this function will be quite fast also for large amounts of data.</p>
 
@@ -227,7 +227,7 @@
 
 <p>Note that the writing is done buffered. That is, the data is first written to the buffer and only really written out after the buffer is full or after the user explicitly calls <code class="func">IO_Flush</code> (<a href="chap4_mj.html#X7873A49F7CC7ECFB"><span class="RefLink">4.2-10</span></a>) on <var class="Arg">f</var>.</p>
 
-<p>The result is either the number of bytes written in case of success or <code class="keyw">fail</code> in case of an error. In the latter case the error can be queried with <code class="func">LastSystemError</code> (<a href="https://www.gap-system.org/Manuals/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>).</p>
+<p>The result is either the number of bytes written in case of success or <code class="keyw">fail</code> in case of an error. In the latter case the error can be queried with <code class="func">LastSystemError</code> (<a href="https://docs.gap-system.org/doc/ref/chap9_mj.html#X87D278437A916905"><span class="RefLink">Reference: LastSystemError</span></a>).</p>
 
 <p>Note that this function blocks until all data is at least written into the buffer and might block until data can be sent again if the buffer is full.</p>
 
@@ -380,7 +380,7 @@
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_MakeIPAddressPort</code>( <var class="Arg">ipstring</var>, <var class="Arg">portnr</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: a string</p>
 
-<p>This function gets a string <var class="Arg">ipstring</var> containing an IP address in dot notation, i.e. four numbers in the range from 0 to 255 separated by dots ".", and an integer <var class="Arg">portnr</var>, which is a port number. The result is a string of the correct length to be used for the low level C library functions, wherever IP address port number pairs are needed. The string <var class="Arg">ipstring</var> can also be a host name, which is then looked up using <code class="func">IO_gethostbyname</code> (<a href="chap3_mj.html#X7DD25BDC79EE65AD"><span class="RefLink">3.2-23</span></a>) to find the IP address.</p>
+<p>This function gets a string <var class="Arg">ipstring</var> containing an IP address in dot notation, i.e. four numbers in the range from 0 to 255 separated by dots <q>.</q>, and an integer <var class="Arg">portnr</var>, which is a port number. The result is a string of the correct length to be used for the low level C library functions, wherever IP address port number pairs are needed. The string <var class="Arg">ipstring</var> can also be a host name, which is then looked up using <code class="func">IO_gethostbyname</code> (<a href="chap3_mj.html#X7DD25BDC79EE65AD"><span class="RefLink">3.2-23</span></a>) to find the IP address.</p>
 
 <p><a id="X7F9AAE018474E1D8" name="X7F9AAE018474E1D8"></a></p>
 
@@ -433,7 +433,7 @@
 
 <p>The argument <var class="Arg">path</var> must refer to an executable file in the sense of <code class="func">IO_FindExecutable</code> (<a href="chap4_mj.html#X84E91FE27A7860F3"><span class="RefLink">4.4-1</span></a>).</p>
 
-<p>Starts a child process using the executable in <var class="Arg">path</var> with either stdout or stdin being a pipe. The argument <var class="Arg">mode</var> must be either the string "<code class="code">r</code>" or the string "<code class="code">w</code>".</p>
+<p>Starts a child process using the executable in <var class="Arg">path</var> with either stdout or stdin being a pipe. The argument <var class="Arg">mode</var> must be either the string <q><code class="code">r</code></q> or the string <q><code class="code">w</code></q>.</p>
 
 <p>In the first case, the standard output of the child process will be the writing end of a pipe. A <code class="code">File</code> object for reading connected to the reading end of the pipe is returned. The standard input and standard error of the child process will be the same as in the calling <strong class="pkg">GAP</strong> process.</p>
 
@@ -445,7 +445,7 @@
 
 <p>Note that <code class="func">IO_Popen</code> activates our SIGCHLD handler (see <code class="func">IO_InstallSIGCHLDHandler</code> (<a href="chap3_mj.html#X8383E62D86BE30C6"><span class="RefLink">3.3-3</span></a>)).</p>
 
-<p>In either case the <code class="code">File</code> object will have the attribute "<code class="keyw">ProcessID</code>" set to the process ID of the child process.</p>
+<p>In either case the <code class="code">File</code> object will have the attribute <q><code class="keyw">ProcessID</code></q> set to the process ID of the child process.</p>
 
 <p><a id="X7E05CF6481CBC0A1" name="X7E05CF6481CBC0A1"></a></p>
 
@@ -456,7 +456,7 @@
 
 <p>The argument <var class="Arg">path</var> must refer to an executable file in the sense of <code class="func">IO_FindExecutable</code> (<a href="chap4_mj.html#X84E91FE27A7860F3"><span class="RefLink">4.4-1</span></a>).</p>
 
-<p>A new child process is started using the executable in <var class="Arg">path</var>. The standard input and standard output of it are pipes. The writing end of the input pipe and the reading end of the output pipe are returned as <code class="code">File</code> objects bound to two components "<code class="code">stdin</code>" and "<code class="code">stdout</code>" (resp.) of the returned record. This means, you have to <em>write</em> to "<code class="code">stdin</code>" and <em>read</em> from "<code class="code">stdout</code>" in the calling <strong class="pkg">GAP</strong> process. The standard error of the child process will be the same as the one of the calling <strong class="pkg">GAP</strong> process.</p>
+<p>A new child process is started using the executable in <var class="Arg">path</var>. The standard input and standard output of it are pipes. The writing end of the input pipe and the reading end of the output pipe are returned as <code class="code">File</code> objects bound to two components <q><code class="code">stdin</code></q> and <q><code class="code">stdout</code></q> (resp.) of the returned record. This means, you have to <em>write</em> to <q><code class="code">stdin</code></q> and <em>read</em> from <q><code class="code">stdout</code></q> in the calling <strong class="pkg">GAP</strong> process. The standard error of the child process will be the same as the one of the calling <strong class="pkg">GAP</strong> process.</p>
 
 <p>Returns <code class="keyw">fail</code> if an error occurred.</p>
 
@@ -464,7 +464,7 @@
 
 <p>Note that <code class="func">IO_Popen2</code> activates our SIGCHLD handler (see <code class="func">IO_InstallSIGCHLDHandler</code> (<a href="chap3_mj.html#X8383E62D86BE30C6"><span class="RefLink">3.3-3</span></a>)).</p>
 
-<p>Both <code class="code">File</code> objects will have the attribute "<code class="keyw">ProcessID</code>" set to the process ID of the child process, which will also be bound to the "<code class="keyw">pid</code>" component of the returned record.</p>
+<p>Both <code class="code">File</code> objects will have the attribute <q><code class="keyw">ProcessID</code></q> set to the process ID of the child process, which will also be bound to the <q><code class="keyw">pid</code></q> component of the returned record.</p>
 
 <p><a id="X7975BC6D80BC71E5" name="X7975BC6D80BC71E5"></a></p>
 
@@ -475,7 +475,7 @@
 
 <p>The argument <var class="Arg">path</var> must refer to an executable file in the sense of <code class="func">IO_FindExecutable</code> (<a href="chap4_mj.html#X84E91FE27A7860F3"><span class="RefLink">4.4-1</span></a>).</p>
 
-<p>A new child process is started using the executable in <var class="Arg">path</var> The standard input, standard output, and standard error of it are pipes. The writing end of the input pipe, the reading end of the output pipe and the reading end of the error pipe are returned as <code class="code">File</code> objects bound to two components "<code class="code">stdin</code>", "<code class="code">stdout</code>", and "<code class="code">stderr</code>" (resp.) of the returned record. This means, you have to <em>write</em> to "<code class="code">stdin</code>" and <em>read</em> from "<code class="code">stdout</code>" and "<code class="code">stderr</code>" in the calling <strong class="pkg">GAP</strong> process.</p>
+<p>A new child process is started using the executable in <var class="Arg">path</var> The standard input, standard output, and standard error of it are pipes. The writing end of the input pipe, the reading end of the output pipe and the reading end of the error pipe are returned as <code class="code">File</code> objects bound to two components <q><code class="code">stdin</code></q>, <q><code class="code">stdout</code></q>, and <q><code class="code">stderr</code></q> (resp.) of the returned record. This means, you have to <em>write</em> to <q><code class="code">stdin</code></q> and <em>read</em> from <q><code class="code">stdout</code></q> and <q><code class="code">stderr</code></q> in the calling <strong class="pkg">GAP</strong> process.</p>
 
 <p>Returns <code class="keyw">fail</code> if an error occurred.</p>
 
@@ -483,7 +483,7 @@
 
 <p>Note that <code class="func">IO_Popen3</code> activates our SIGCHLD handler (see <code class="func">IO_InstallSIGCHLDHandler</code> (<a href="chap3_mj.html#X8383E62D86BE30C6"><span class="RefLink">3.3-3</span></a>)).</p>
 
-<p>All three <code class="code">File</code> objects will have the attribute "<code class="keyw">ProcessID</code>" set to the process ID of the child process, which will also be bound to the "<code class="keyw">pid</code>" component of the returned record.</p>
+<p>All three <code class="code">File</code> objects will have the attribute <q><code class="keyw">ProcessID</code></q> set to the process ID of the child process, which will also be bound to the <q><code class="keyw">pid</code></q> component of the returned record.</p>
 
 <p><a id="X813219C17FB54731" name="X813219C17FB54731"></a></p>
 
@@ -492,11 +492,11 @@
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IO_StartPipeline</code>( <var class="Arg">progs</var>, <var class="Arg">infd</var>, <var class="Arg">outfd</var>, <var class="Arg">switcherror</var> )</td><td class="tdright">(&nbsp;function&nbsp;)</td></tr></table></div>
 <p>Returns: a record or <code class="keyw">fail</code></p>
 
-<p>The argument <var class="Arg">progs</var> is a list of pairs, the first entry being a path to an executable (in the sense of <code class="func">IO_FindExecutable</code> (<a href="chap4_mj.html#X84E91FE27A7860F3"><span class="RefLink">4.4-1</span></a>)), the second an argument list, the argument <var class="Arg">infd</var> is an open file descriptor for reading, <var class="Arg">outfd</var> is an open file descriptor for writing, both can be replaced by the string "<code class="keyw">open</code>" in which case a new pipe will be opened. The argument <var class="Arg">switcherror</var> is a boolean indicating whether standard error channels are also switched to the corresponding output channels.</p>
+<p>The argument <var class="Arg">progs</var> is a list of pairs, the first entry being a path to an executable (in the sense of <code class="func">IO_FindExecutable</code> (<a href="chap4_mj.html#X84E91FE27A7860F3"><span class="RefLink">4.4-1</span></a>)), the second an argument list, the argument <var class="Arg">infd</var> is an open file descriptor for reading, <var class="Arg">outfd</var> is an open file descriptor for writing, both can be replaced by the string <q><code class="keyw">open</code></q> in which case a new pipe will be opened. The argument <var class="Arg">switcherror</var> is a boolean indicating whether standard error channels are also switched to the corresponding output channels.</p>
 
 <p>This function starts up all processes and connects them with pipes. The input of the first is switched to <var class="Arg">infd</var> and the output of the last to <var class="Arg">outfd</var>.</p>
 
-<p>Returns a record with the following components: <code class="keyw">pids</code> is a list of process ids if everything worked. For each process for which some error occurred the corresponding pid is replaced by <code class="keyw">fail</code>. The <code class="keyw">stdin</code> component is equal to <code class="keyw">false</code>, or to the file descriptor of the writing end of the newly created pipe which is connected to the standard input of the first of the new processes if <var class="Arg">infd</var> was "<code class="keyw">open</code>". The <code class="keyw">stdout</code> component is equal to <code class="keyw">false</code> or to the file descriptor of the reading end of the newly created pipe which is connected to the standard output of the last of the new processes if <var class="Arg">outfd</var> was "<code class="keyw">open</code>".</p>
+<p>Returns a record with the following components: <code class="keyw">pids</code> is a list of process ids if everything worked. For each process for which some error occurred the corresponding pid is replaced by <code class="keyw">fail</code>. The <code class="keyw">stdin</code> component is equal to <code class="keyw">false</code>, or to the file descriptor of the writing end of the newly created pipe which is connected to the standard input of the first of the new processes if <var class="Arg">infd</var> was <q><code class="keyw">open</code></q>. The <code class="keyw">stdout</code> component is equal to <code class="keyw">false</code> or to the file descriptor of the reading end of the newly created pipe which is connected to the standard output of the last of the new processes if <var class="Arg">outfd</var> was <q><code class="keyw">open</code></q>.</p>
 
 <p>Note that the SIGCHLD handler of the <strong class="pkg">IO</strong> package is installed by this function (see <code class="func">IO_InstallSIGCHLDHandler</code> (<a href="chap3_mj.html#X8383E62D86BE30C6"><span class="RefLink">3.3-3</span></a>)) and that it lies in the responsibility of the caller to use <code class="func">IO_WaitPid</code> (<a href="chap3_mj.html#X80737A008450184F"><span class="RefLink">3.2-66</span></a>) to ask for the status information of all child processes after their termination, or call <code class="func">IO_IgnorePid</code> (<a href="chap3_mj.html#X84295FC77CCB1066"><span class="RefLink">3.2-67</span></a>) to ignore the return value of a process.</p>
 
@@ -531,7 +531,7 @@
 
 <p>Note that <code class="func">IO_FilteredFile</code> activates our SIGCHLD handler (see <code class="func">IO_InstallSIGCHLDHandler</code> (<a href="chap3_mj.html#X8383E62D86BE30C6"><span class="RefLink">3.3-3</span></a>)).</p>
 
-<p>The <code class="code">File</code> object will have the attribute "<code class="keyw">ProcessID</code>" set to the list of process IDs of the child processes.</p>
+<p>The <code class="code">File</code> object will have the attribute <q><code class="keyw">ProcessID</code></q> set to the list of process IDs of the child processes.</p>
 
 <p><a id="X7B425F3B7A68C2FB" name="X7B425F3B7A68C2FB"></a></p>
 
@@ -544,7 +544,7 @@
 
 <p>Note that as this function calls <code class="func">IO_FilteredFile</code> (<a href="chap4_mj.html#X801CE3708656FB00"><span class="RefLink">4.4-9</span></a>), it will activate our SIGCHLD handler (see <code class="func">IO_InstallSIGCHLDHandler</code> (<a href="chap3_mj.html#X8383E62D86BE30C6"><span class="RefLink">3.3-3</span></a>)).</p>
 
-<p>When compression / decompression is active, the <code class="code">File</code> object will have the attribute "<code class="keyw">ProcessID</code>" set to the list of process IDs of the child processes.</p>
+<p>When compression / decompression is active, the <code class="code">File</code> object will have the attribute <q><code class="keyw">ProcessID</code></q> set to the list of process IDs of the child processes.</p>
 
 <p><a id="X7D62E9C57F1F96FB" name="X7D62E9C57F1F96FB"></a></p>
 
@@ -557,7 +557,7 @@
 
 <p>Remember to close the writing end of the standard input pipe in the calling <strong class="pkg">GAP</strong> process directly after <code class="func">IO_SendStringBackground</code> has returned, because otherwise the child process might not notice that all data has arrived, because the pipe persists! See the file <code class="file">popen2.g</code> in the <code class="file">example</code> directory for an example.</p>
 
-<p>Note that with most modern operating systems the forking off of an identical child process does in fact <em>not</em> mean a duplication of the total main memory used by both processes, because the operating system kernel will use "copy on write". However, if a garbage collection happens to become necessary during the sending of the data in the forked off sending process, this might trigger doubled memory usage.</p>
+<p>Note that with most modern operating systems the forking off of an identical child process does in fact <em>not</em> mean a duplication of the total main memory used by both processes, because the operating system kernel will use <q>copy on write</q>. However, if a garbage collection happens to become necessary during the sending of the data in the forked off sending process, this might trigger doubled memory usage.</p>
 
 <p><a id="X8484B0CD7836A19E" name="X8484B0CD7836A19E"></a></p>
 
@@ -594,6 +594,6 @@
 <div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0_mj.html">Top</a>  <a href="chap1_mj.html">1</a>  <a href="chap2_mj.html">2</a>  <a href="chap3_mj.html">3</a>  <a href="chap4_mj.html">4</a>  <a href="chap5_mj.html">5</a>  <a href="chap6_mj.html">6</a>  <a href="chap7_mj.html">7</a>  <a href="chap8_mj.html">8</a>  <a href="chap9_mj.html">9</a>  <a href="chap10_mj.html">10</a>  <a href="chap11_mj.html">11</a>  <a href="chapInd_mj.html">Ind</a>  </div>
 
 <hr />
-<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+<p class="foot">generated by <a href="https://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
 </body>
 </html>
