@@ -30,7 +30,6 @@ jobs:
           - master
           - stable-4.13
           - stable-4.12
-          - stable-4.11
         GAP_PKGS_TO_BUILD: ['profiling']
         HPCGAP: ['no']
         ABI: ['']
