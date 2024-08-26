@@ -13,14 +13,8 @@
 # First look after our C part: #
 ################################
 
-# load kernel function if it is installed:
-if (not IsBound(IO)) and ("io" in SHOW_STAT()) then
-  # try static module
-  LoadStaticModule("io");
-fi;
-if (not IsBound(IO)) and
-   (Filename(DirectoriesPackagePrograms("io"), "io.so") <> fail) then
-  LoadDynamicModule(Filename(DirectoriesPackagePrograms("io"), "io.so"));
+if not LoadKernelExtension("io") then
+  Error("failed to load the io package kernel extension");
 fi;
 
 ReadPackage("IO", "gap/io.gd");
