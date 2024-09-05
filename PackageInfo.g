@@ -7,8 +7,8 @@ SetPackageInfo( rec(
 
 PackageName := "IO",
 Subtitle := "Bindings for low level C library I/O routines",
-Version := "4.8.3",
-Date := "29/07/2024", # dd/mm/yyyy format
+Version := "4.9.0",
+Date := "05/09/2024", # dd/mm/yyyy format
 License := "GPL-3.0-or-later",
 
 ##  Information about authors and maintainers.
@@ -93,16 +93,17 @@ PackageDoc := rec(
 ),
 
 Dependencies := rec(
-  GAP := ">=4.11",
+  GAP := ">=4.12",
   NeededOtherPackages := [],
   SuggestedOtherPackages := [],
   ExternalConditions := []
 ),
 
 AvailabilityTest := function()
-  if (not("io" in SHOW_STAT())) and
-     (Filename(DirectoriesPackagePrograms("io"), "io.so") = fail) then
-    #Info(InfoWarning, 1, "IO: kernel IO functions not available.");
+  if not IsKernelExtensionAvailable("io") then
+    LogPackageLoadingMessage(PACKAGE_WARNING,
+                              ["the kernel module is not compiled, ",
+                               "the package cannot be loaded."]);
     return fail;
   fi;
   return true;
