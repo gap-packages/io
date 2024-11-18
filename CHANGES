@@ -1,5 +1,8 @@
 This file describes changes in the IO package.
 
+4.9.1 (2024-11-18)
+  - Various janitorial changes
+
 4.9.0 (2024-09-05)
   - Require GAP >= 4.12 so that we can use `LoadKernelExtension`
 
