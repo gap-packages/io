@@ -2,7 +2,7 @@
 
 LoadPackage("io");
 
-r := SingleHTTPRequest("neverssl.com",80,"GET",
+r := SingleHTTPRequest("httpforever.com",80,"GET",
         "/index.html",
         rec(),false,false);
 
