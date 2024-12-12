@@ -28,6 +28,7 @@ jobs:
           - ubuntu
         gap-branch:
           - master
+          - stable-4.14
           - stable-4.13
           - stable-4.12
         GAP_PKGS_TO_BUILD: ['profiling']
