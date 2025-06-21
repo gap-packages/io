@@ -13,10 +13,6 @@
 
 #include "gap_all.h"    // GAP headers
 
-#if GAP_KERNEL_MAJOR_VERSION >= 6
-#include "profile.h"
-#endif
-
 #undef PACKAGE
 #undef PACKAGE_BUGREPORT
 #undef PACKAGE_NAME
