@@ -1,7 +1,7 @@
 name: IO
-version: "4.9.2"
+version: "4.9.3"
 license: "GPL-3.0-or-later"
-date: 2025-06-20
+date: 2025-06-21
 description: |
     Bindings for low level C library I/O routines
 
@@ -21,9 +21,9 @@ packageinfo: https://gap-packages.github.io/io/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/gap-packages/io/releases/download/v4.9.2/io-4.9.2.tar.gz
+      url: https://github.com/gap-packages/io/releases/download/v4.9.3/io-4.9.3.tar.gz
     - name: .tar.bz2
-      url: https://github.com/gap-packages/io/releases/download/v4.9.2/io-4.9.2.tar.bz2
+      url: https://github.com/gap-packages/io/releases/download/v4.9.3/io-4.9.3.tar.bz2
 
 abstract: |
     The <span class="pkgname">IO</span> package, as its name suggests,    provides bindings for <span class="pkgname">GAP</span> to the lower    levels of Input/Output functionality in the C library.
@@ -37,7 +37,7 @@ citeas: |
     <p class='BibEntry'>
     [<span class='BibKey'>NH25</span>]   <b class='BibAuthor'>Neunhöffer, M. and Horn, M.</b>,
      <i class='BibTitle'>IO, Bindings for low level C library I/O routines,
-             Version 4.9.2</i>
+             Version 4.9.3</i>
      (<span class='BibYear'>2025</span>)<br />
     (<span class='BibNote'>GAP package</span>),
     <span class='BibHowpublished'><a href="https://gap-packages.github.io/io">https://gap-packages.github.io/io</a></span>.
@@ -48,7 +48,7 @@ bibtex: |
     @misc{ IO,
       author =           {Neunh{\"o}ffer, M. and Horn, M.},
       title =            {{IO}, {Bindings for low level C library I/O routines},
-                          {V}ersion 4.9.2},
+                          {V}ersion 4.9.3},
       month =            {Jun},
       year =             {2025},
       note =             {GAP package},
