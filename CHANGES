@@ -1,7 +1,10 @@
 This file describes changes in the IO package.
 
+4.9.3 (2025-06-21)
+  - More preparation for future GAP versions
+
 4.9.2 (2025-06-20)
-  - Janitorial changes
+  - Prepare code for future GAP versions
 
 4.9.1 (2024-11-18)
   - Various janitorial changes
