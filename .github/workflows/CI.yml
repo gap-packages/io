@@ -52,7 +52,7 @@ jobs:
             HPCGAP: 'no'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: gap-actions/setup-gap@v2
         with:
           GAPBRANCH: ${{ matrix.gap-branch }}
@@ -60,10 +60,10 @@ jobs:
           GAP_PKGS_TO_BUILD: ${{ matrix.GAP_PKGS_TO_BUILD }}
           HPCGAP: ${{ matrix.HPCGAP }}
       - uses: gap-actions/build-pkg@v1
-      - uses: gap-actions/run-pkg-tests@v2
+      - uses: gap-actions/run-pkg-tests@v3
         with:
           NO_COVERAGE: ${{ matrix.NO_COVERAGE }}
-      - uses: gap-actions/run-pkg-tests@v2
+      - uses: gap-actions/run-pkg-tests@v3
         with:
           NO_COVERAGE: ${{ matrix.NO_COVERAGE }}
           only-needed: true
@@ -80,7 +80,7 @@ jobs:
     env:
       CHERE_INVOKING: 1
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: gap-actions/setup-cygwin@v1
       - uses: gap-actions/setup-gap@cygwin-v2
         with:
@@ -102,7 +102,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: gap-actions/setup-gap@v2
       - uses: gap-actions/build-pkg-docs@v1
         with:
