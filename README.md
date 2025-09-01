@@ -1,4 +1,4 @@
-[![Build Status](https://github.com/gap-packages/io/workflows/CI/badge.svg?branch=master)](https://github.com/gap-packages/io/actions?query=workflow%3ACI+branch%3Amaster)
+[![Build Status](https://github.com/gap-packages/io/actions/workflows/CI.yml/badge.svg)](https://github.com/gap-packages/io/actions/workflows/CI.yml)
 [![Code Coverage](https://codecov.io/github/gap-packages/io/coverage.svg?branch=master&token=)](https://codecov.io/gh/gap-packages/io)
 
 # README file for the IO GAP4 package
