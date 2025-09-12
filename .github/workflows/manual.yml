@@ -1,0 +1,28 @@
+name: Build manual
+
+# Trigger the workflow on push or pull request or manually
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+  pull_request:
+
+  # The documentation job
+  manual:
+    name: Build manuals
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+      - uses: gap-actions/setup-gap@v3
+      - uses: gap-actions/build-pkg-docs@v2
+        with:
+          use-latex: 'true'
+      - name: 'Upload documentation'
+        uses: actions/upload-artifact@v4
+        with:
+          retention-days: 7
+          name: manual
+          path: ./doc/manual.pdf
+          if-no-files-found: error
