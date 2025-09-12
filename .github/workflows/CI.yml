@@ -1,12 +1,12 @@
 name: CI
 
-# Trigger the workflow on push or pull request
+# Trigger the workflow on push or pull request or manually
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
   pull_request:
-  workflow_dispatch:
 
 # the `concurrency` settings ensure that not too many CI jobs run in parallel
 concurrency:
@@ -19,98 +19,74 @@ concurrency:
 jobs:
   # The CI test job
   test:
-    name: ${{ matrix.os }} - GAP ${{ matrix.gap-branch }} ${{ matrix.ABI }} - HPCGAP ${{ matrix.HPCGAP }} ${{ matrix.NO_COVERAGE }}
+    name: ${{ matrix.os }} - GAP ${{ matrix.gap-branch }} ${{ matrix.ABI }} - HPCGAP ${{ matrix.HPCGAP }} - coverage ${{ matrix.coverage }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
       matrix:
         os:
           - ubuntu
+        coverage:
+          - true
+        HPCGAP:
+          - no
+        ABI:
+          - 64
+        GAP_PKGS_TO_BUILD:
+          - profiling
         gap-branch:
           - master
+          - stable-4.15
           - stable-4.14
           - stable-4.13
           - stable-4.12
-        GAP_PKGS_TO_BUILD: ['profiling']
-        HPCGAP: ['no']
-        ABI: ['']
         include:
           - os: ubuntu
             gap-branch: master
             GAP_PKGS_TO_BUILD: ''
             HPCGAP: 'yes'
-            ABI: ''
-            NO_COVERAGE: 'no-coverage'
+            ABI: 64
+            coverage: 'false'
           - os: ubuntu
             gap-branch: master
             GAP_PKGS_TO_BUILD: 'profiling'
             HPCGAP: 'no'
             ABI: 32
+            coverage: true
           - os: macos
             gap-branch: master
             GAP_PKGS_TO_BUILD: 'profiling'
             HPCGAP: 'no'
+            ABI: 64
+            coverage: true
+          - os: windows
+            gap-branch: master
+            GAP_PKGS_TO_BUILD: 'profiling'
+            HPCGAP: 'no'
+            ABI: 64
+            coverage: true
 
     steps:
       - uses: actions/checkout@v5
+      - uses: gap-actions/setup-cygwin@v2
+        if: ${{ runner.os == 'Windows' }}
       - uses: gap-actions/setup-gap@v2
         with:
           GAPBRANCH: ${{ matrix.gap-branch }}
           ABI: ${{ matrix.ABI }}
           GAP_PKGS_TO_BUILD: ${{ matrix.GAP_PKGS_TO_BUILD }}
           HPCGAP: ${{ matrix.HPCGAP }}
-      - uses: gap-actions/build-pkg@v1
-      - uses: gap-actions/run-pkg-tests@v3
+      - uses: gap-actions/build-pkg@v2
+      - uses: gap-actions/run-pkg-tests@v4
         with:
-          NO_COVERAGE: ${{ matrix.NO_COVERAGE }}
-      - uses: gap-actions/run-pkg-tests@v3
+          coverage: ${{ matrix.coverage }}
+      - uses: gap-actions/run-pkg-tests@v4
         with:
-          NO_COVERAGE: ${{ matrix.NO_COVERAGE }}
-          only-needed: true
+          coverage: ${{ matrix.coverage }}
+          mode: 'onlyneeded'
       - uses: gap-actions/process-coverage@v2
-        if: ${{ matrix.NO_COVERAGE == '' }}
+        if: ${{ matrix.coverage == true }}
       - uses: codecov/codecov-action@v5
+        if: ${{ matrix.coverage == true }}
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-
-  test-cygwin:
-    name: "cygwin64 - GAP master - HPCGAP no"
-    if: ${{ !(github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository) }}
-    runs-on: windows-2022
-    env:
-      CHERE_INVOKING: 1
-    steps:
-      - uses: actions/checkout@v5
-      - uses: gap-actions/setup-cygwin@v1
-      - uses: gap-actions/setup-gap@cygwin-v2
-        with:
-          GAP_PKGS_TO_BUILD: 'profiling'
-      - uses: gap-actions/build-pkg@cygwin-v1
-      - uses: gap-actions/run-pkg-tests@cygwin-v2
-      - uses: gap-actions/process-coverage@cygwin-v2
-      - uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-      - name: "Setup tmate session"
-        uses: mxschmitt/action-tmate@v3
-        if: ${{ failure() }}
-        timeout-minutes: 15
-
-  # The documentation job
-  manual:
-    name: Build manuals
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v5
-      - uses: gap-actions/setup-gap@v2
-      - uses: gap-actions/build-pkg-docs@v1
-        with:
-          use-latex: 'true'
-      - name: 'Upload documentation'
-        uses: actions/upload-artifact@v4
-        with:
-          retention-days: 7
-          name: manual
-          path: ./doc/manual.pdf
-          if-no-files-found: error
