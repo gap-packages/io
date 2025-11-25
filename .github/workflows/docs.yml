@@ -1,23 +1,22 @@
-name: Build manual
+name: Docs
 
-# Trigger the workflow on push or pull request or manually
+# Trigger the workflow on push or pull request
 on:
-  workflow_dispatch:
   push:
     branches:
+      - main
       - master
   pull_request:
 
 # the `concurrency` settings ensure that not too many CI jobs run in parallel
 concurrency:
   # group by workflow and ref; the last slightly strange component ensures that for pull
-  # requests, we limit to 1 concurrent job, but for the master branch we don't
-  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.ref != 'refs/heads/master' || github.run_number }}
+  # requests, we limit to 1 concurrent job, but for the default repository branch we don't
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.ref_name != github.event.repository.default_branch || github.run_number }}
   # Cancel intermediate builds, but only if it is a pull request build.
   cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
 
 jobs:
-  # The documentation job
   manual:
     name: Build manuals
     runs-on: ubuntu-latest
@@ -31,7 +30,6 @@ jobs:
       - name: 'Upload documentation'
         uses: actions/upload-artifact@v4
         with:
-          retention-days: 7
           name: manual
           path: ./doc/manual.pdf
           if-no-files-found: error
