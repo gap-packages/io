@@ -20,7 +20,7 @@ concurrency:
 jobs:
   # The CI test job
   test:
-    name: ${{ matrix.os }} - GAP ${{ matrix.gap-branch }} ${{ matrix.ABI }} - HPCGAP ${{ matrix.HPCGAP }} - coverage ${{ matrix.coverage }}
+    name: ${{ matrix.os }} - GAP ${{ matrix.gap-branch }} - HPCGAP ${{ matrix.HPCGAP }} - coverage ${{ matrix.coverage }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
@@ -31,8 +31,6 @@ jobs:
           - true
         HPCGAP:
           - no
-        ABI:
-          - 64
         GAP_PKGS_TO_BUILD:
           - profiling
         gap-branch:
@@ -46,25 +44,21 @@ jobs:
             gap-branch: master
             GAP_PKGS_TO_BUILD: ''
             HPCGAP: 'yes'
-            ABI: 64
             coverage: 'false'
           - os: ubuntu
             gap-branch: master
             GAP_PKGS_TO_BUILD: 'profiling'
             HPCGAP: 'no'
-            ABI: 32
             coverage: true
           - os: macos
             gap-branch: master
             GAP_PKGS_TO_BUILD: 'profiling'
             HPCGAP: 'no'
-            ABI: 64
             coverage: true
           - os: windows
             gap-branch: master
             GAP_PKGS_TO_BUILD: 'profiling'
             HPCGAP: 'no'
-            ABI: 64
             coverage: true
 
     steps:
@@ -74,7 +68,6 @@ jobs:
       - uses: gap-actions/setup-gap@v2
         with:
           GAPBRANCH: ${{ matrix.gap-branch }}
-          ABI: ${{ matrix.ABI }}
           GAP_PKGS_TO_BUILD: ${{ matrix.GAP_PKGS_TO_BUILD }}
           HPCGAP: ${{ matrix.HPCGAP }}
       - uses: gap-actions/build-pkg@v2
