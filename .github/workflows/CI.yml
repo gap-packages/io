@@ -80,7 +80,7 @@ jobs:
           mode: 'onlyneeded'
       - uses: gap-actions/process-coverage@v2
         if: ${{ matrix.coverage == true }}
-      - uses: codecov/codecov-action@v5
+      - uses: codecov/codecov-action@v6
         if: ${{ matrix.coverage == true }}
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
