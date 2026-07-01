@@ -32,12 +32,9 @@ jobs:
         GAP_PKGS_TO_BUILD:
           - profiling
         gap-version:
-          - devel
-          - '4.16'
-          - '4.15'
-          - '4.14'
-          - '4.13'
-          - '4.12'
+          - devel   # latest GAP development version from git
+          - latest  # latest GAP release
+          - minimal # oldest GAP release supported by this package
         include:
           - os: ubuntu
             gap-version: devel
