@@ -1,5 +1,11 @@
 This file describes changes in the IO package.
 
+Changes since 4.9.3
+  - Avoid hangs in the external HTTP test by requesting connection closure
+  - Handle chunked HTTP responses without waiting for the server to close the
+    connection
+  - Give HTTP requests a default timeout of 30 seconds
+
 4.9.3 (2025-06-21)
   - More preparation for future GAP versions
 
