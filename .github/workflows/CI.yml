@@ -78,7 +78,7 @@ jobs:
       - uses: gap-actions/run-pkg-tests@v4
         with:
           coverage: ${{ matrix.coverage }}
-          mode: 'onlyneeded'
+          mode: onlyneeded
       - uses: gap-actions/process-coverage@v2
         if: ${{ matrix.coverage == true }}
       - uses: codecov/codecov-action@v6
