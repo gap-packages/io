@@ -87,9 +87,9 @@ InstallGlobalFunction( HTTPRequest,
     # header must be a record
     # body either false or a string
     # target either false or the name of a file where the body is stored
-    local ParseHeader,bodyread,byt,chunk,contentlength,haveseenheader,
-          inpos,k,msg,nr,out,outeof,r,responseheader,ret,w,SetError,
-          chunked;
+    local ChunkedBodyComplete,ParseHeader,bodyread,byt,chunk,chunkedbody,
+          contentlength,haveseenheader,inpos,k,msg,nr,out,outeof,r,
+          responseheader,ret,w,SetError,chunked;
 
     if conn.sock = fail or conn.closed = true then
         Error("Trying to work with closed connection");
@@ -148,6 +148,45 @@ InstallGlobalFunction( HTTPRequest,
       else
           return pos;
       fi;
+    end;
+
+    ChunkedBodyComplete := function( st )
+      local chunklen,head,p,pos,q;
+      pos := 0;
+      while true do
+          p := PositionSublist(st,"\r\n",pos);
+          if p = fail or p = pos + 1 then
+              return false;
+          fi;
+          head := st{[pos+1..p-1]};
+          q := Position(head,';');
+          if q <> fail then
+              head := head{[1..q-1]};
+          fi;
+          if Length(head) = 0 or
+             not ForAll(head,c -> c in "0123456789ABCDEFabcdef") then
+              return false;
+          fi;
+          chunklen := IntHexString(head);
+          pos := p + 1;
+          if chunklen = 0 then
+              while true do
+                  p := PositionSublist(st,"\r\n",pos);
+                  if p = fail then
+                      return false;
+                  elif p = pos + 1 then
+                      return true;
+                  fi;
+                  pos := p + 1;
+              od;
+          elif Length(st) < pos + chunklen + 2 then
+              return false;
+          elif st[pos+chunklen+1] <> '\r' or
+               st[pos+chunklen+2] <> '\n' then
+              return false;
+          fi;
+          pos := pos + chunklen + 2;
+      od;
     end;
 
     # Maybe add some default values:
@@ -216,6 +255,7 @@ InstallGlobalFunction( HTTPRequest,
     inpos := 0;
     outeof := false;
     chunked := false;
+    chunkedbody := "";
     repeat
         if not(outeof) then
             r := [conn.sock];
@@ -281,6 +321,9 @@ InstallGlobalFunction( HTTPRequest,
                         fi;
                     fi;
                     chunk := out{[r..Length(out)]};
+                    if chunked then
+                        chunkedbody := chunk;
+                    fi;
 
                     # See to the target:
                     if IsString(target) then
@@ -295,6 +338,9 @@ InstallGlobalFunction( HTTPRequest,
                 fi;
             else
                 # We are only reading the body until done:
+                if chunked then
+                    Append(chunkedbody,chunk);
+                fi;
                 if IsList(out) then
                     Add(out,chunk);
                 else
@@ -303,7 +349,10 @@ InstallGlobalFunction( HTTPRequest,
                 bodyread := bodyread + Length(chunk);
             fi;
         fi;
-    until outeof or (haveseenheader and bodyread >= contentlength);
+    until outeof or
+          (haveseenheader and
+           (bodyread >= contentlength or
+            (chunked and ChunkedBodyComplete(chunkedbody))));
 
     if outeof and not(haveseenheader) then
         # Obviously, the connection broke:
