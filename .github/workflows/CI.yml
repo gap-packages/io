@@ -20,7 +20,7 @@ concurrency:
 jobs:
   # The CI test job
   test:
-    name: ${{ matrix.os }} - GAP ${{ matrix.gap-branch }} - HPCGAP ${{ matrix.HPCGAP }} - coverage ${{ matrix.coverage }}
+    name: ${{ matrix.os }} - GAP ${{ matrix.gap-version }} - coverage ${{ matrix.coverage }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
@@ -29,49 +29,36 @@ jobs:
           - ubuntu
         coverage:
           - true
-        HPCGAP:
-          - no
-        GAP_PKGS_TO_BUILD:
+        extra-pkgs:
           - profiling
-        gap-branch:
-          - master
-          - stable-4.16
-          - stable-4.15
-          - stable-4.14
-          - stable-4.13
-          - stable-4.12
+        gap-version:
+          - 'devel'   # current GAP development version from git
+          - 'latest'  # latest GAP release
+          - 'minimal' # oldest GAP release supported by this package
         include:
           - os: ubuntu
-            gap-branch: master
-            GAP_PKGS_TO_BUILD: ''
-            HPCGAP: 'yes'
-            coverage: 'false'
-          - os: ubuntu
-            gap-branch: master
-            GAP_PKGS_TO_BUILD: 'profiling'
-            HPCGAP: 'no'
+            gap-version: devel
+            extra-pkgs: 'profiling'
             coverage: true
           - os: macos
-            gap-branch: master
-            GAP_PKGS_TO_BUILD: 'profiling'
-            HPCGAP: 'no'
+            gap-version: devel
+            extra-pkgs: 'profiling'
             coverage: true
           - os: windows
-            gap-branch: master
-            GAP_PKGS_TO_BUILD: 'profiling'
-            HPCGAP: 'no'
+            gap-version: devel
+            extra-pkgs: 'profiling'
             coverage: true
 
     steps:
       - uses: actions/checkout@v6
       - uses: gap-actions/setup-cygwin@v2
         if: ${{ runner.os == 'Windows' }}
-      - uses: gap-actions/setup-gap@v2
+      - uses: gap-actions/setup-gap@v3
         with:
-          GAPBRANCH: ${{ matrix.gap-branch }}
-          GAP_PKGS_TO_BUILD: ${{ matrix.GAP_PKGS_TO_BUILD }}
-          HPCGAP: ${{ matrix.HPCGAP }}
-      - uses: gap-actions/build-pkg@v2
+          gap-version: ${{ matrix.gap-version }}
+      - uses: gap-actions/build-pkg@v3
+        with:
+          extra-pkgs: ${{ matrix.extra-pkgs }}
       - uses: gap-actions/run-pkg-tests@v4
         with:
           coverage: ${{ matrix.coverage }}
@@ -79,7 +66,7 @@ jobs:
         with:
           coverage: ${{ matrix.coverage }}
           mode: onlyneeded
-      - uses: gap-actions/process-coverage@v2
+      - uses: gap-actions/process-coverage@v3
         if: ${{ matrix.coverage == true }}
       - uses: codecov/codecov-action@v6
         if: ${{ matrix.coverage == true }}
