@@ -26,7 +26,7 @@ HTTP access scheint nicht immer zu funktionieren --> debug
     (ev. nur bei "chunked access"???)
     --> www.tagesschau.de z.B.
 
-HTTP/1.1-Konformitaet -> Alexander Konovalovs Tests mit Online int seq site
+HTTP/1.1-Konformitaet -> Olexandr Konovalov's Tests mit Online int seq site
 chunked transfer
 
 Web-Proxy???
