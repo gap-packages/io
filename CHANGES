@@ -224,7 +224,7 @@ This file describes changes in the IO package.
   - Pickling/Unpickling of finite fields
   - Set Host component of HTTP request header by default of the name
     of the server argument in SingleHTTPRequest.
-  - Alexander Konovalov's CheckForUpdates function.
+  - Olexandr Konovalov's CheckForUpdates function.
   - Released revision 289 as 2.1: 26.2.2007
 
 2.0 (2006-12-12)
