@@ -21,8 +21,11 @@ DeclareGlobalFunction( "IO_ReadSmallInt" );
 DeclareGlobalFunction( "IO_WriteAttribute" );
 DeclareGlobalFunction( "IO_ReadAttribute" );
 DeclareGlobalFunction( "IO_PickleByString" );
-DeclareGlobalFunction( "IO_UnpickleByEvalString" );
+DeclareGlobalFunction( "IO_UnpickleByEvalString" );   # deprecated, see below
 DeclareGlobalFunction( "IO_UnpickleByFunction" );
+DeclareGlobalFunction( "IO_UnpickleByParser" );
+DeclareGlobalFunction( "IO_ParseLegacyExpression" );
+DeclareGlobalFunction( "IO_ParsePermString" );
 DeclareGlobalFunction( "IO_GenericObjectPickler" );
 DeclareGlobalFunction( "IO_GenericObjectUnpickler" );
 
@@ -32,14 +35,25 @@ DeclareOperation( "IO_Pickle", [ IsObject ]);
 DeclareOperation( "IO_Unpickle", [ IsStringRep ]);
 BindGlobal ("IO_Unpicklers", rec() );
 
+# Unpickling the source of a function means evaluating it, which lets a
+# hostile pickle run arbitrary code, so it is refused unless this is set.
+# Functions that are global variables are unpickled by name either way.
+IO_UnpickleAllowEvalOfFunctions := false;
+
 # Here is an overview over the defined tags in this package:
 #
 # CHAR  a character
-# CYCL  a cyclotomic
+# CYCC  a cyclotomic, as its coefficients over the rationals
 # FAIL  fail
 # FALS  false
-# FFEL  a finite field element
+# FFEC  a finite field element, as its coefficients over the prime field
 # FLOT  a Floating point number
+# FPEL  an element of a finitely presented group
+# FPGR  a finitely presented group
+# FPSG  a subgroup of a free or finitely presented group
+# FRAC  a rational number
+# FREG  a free group
+# FREW  an element of a free group
 # FUNC  a GAP function, if it is a global one, only its name is pickled
 # GAPL  a gap in a list (unbound entries)
 # GSLP  a GAP straight line program
@@ -60,11 +74,13 @@ BindGlobal ("IO_Unpicklers", rec() );
 # MREC  a mutable record
 # MRNG  a mutable range
 # MSTR  a mutable string
+# NINF  minus infinity
 # OPER  a GAP operation, only its name is pickled
-# PERM  a permutation
-# PPER  a partial permutation
+# PINF  infinity
 # POLF  an object in the representation IsPolynomialDefaultRep
 # POLY  a Laurent polynomial (or a rational function) deprecated
+# PPER  a partial permutation
+# PRML  a permutation, as its list of images
 # RATF  an object in the representation IsRationalFunctionDefaultRep
 # RSGL  the global random source
 # RSGA  a GAP random source
@@ -75,6 +91,15 @@ BindGlobal ("IO_Unpicklers", rec() );
 # TRUE  true
 # UPOL  an object in the representation IsLaurentPolynomialDefaultRep
 # URFU  an object in the representation IsUnivariateRationalFunctionDefaultRep
+#
+# These tags are only read, never written. They store the printed form of the
+# object, which used to be read back with EvalString; that let a hostile
+# pickle run arbitrary code, so they are parsed now and were replaced by the
+# tags above. Files written before IO 4.11 still use them.
+#
+# CYCL  a cyclotomic
+# FFEL  a finite field element
+# PERM  a permutation
 #
 # Some tags defined in other packages:
 #
