@@ -6,6 +6,11 @@ This file describes changes in the IO package.
   not compile there
 - Make IO_InstallSIGCHLDHandler and IO_RestoreSIGCHLDHandler do nothing on
   platforms without SIGCHLD, instead of raising an error
+- Document `IO_Pickle( ob )` and `IO_Unpickle( str )`, which pickle to and
+  from a string instead of a file. These have existed since 2011 but were
+  never documented
+- Make `IO_Pickle( ob )` report failure instead of returning a truncated
+  string, and drop its 1 MB preallocation
 
 ## 4.11.0 (2026-09-28)
 
