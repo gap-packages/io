@@ -1,6 +1,17 @@
 This file describes changes in the IO package.
 
 Changes since 4.10.0
+  - Stop unpickling from evaluating its input: permutations, finite field
+    elements and cyclotomics used to be stored as their printed form and read
+    back with EvalString, so a pickle from an untrusted source could run
+    arbitrary code. They now use formats that need no evaluation, and the old
+    formats are parsed rather than evaluated. Pickles written by earlier
+    versions are still readable; pickles written by this version need IO 4.11
+    or newer to read
+  - Unpickle functions stored by name without evaluating anything, and refuse
+    to evaluate pickled function source unless
+    IO_UnpickleAllowEvalOfFunctions is set to true
+  - Pickle rationals, infinity and -infinity directly
   - Document `IO_Pickle( ob )` and `IO_Unpickle( str )`, which pickle to and
     from a string instead of a file. These have existed since 2011 but were
     never documented

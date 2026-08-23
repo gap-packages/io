@@ -2050,7 +2050,8 @@ to each other and to other objects.<P/>
         rational functions,
         lists, records, compressed vectors and matrices over finite fields
         (objects are uncompressed in the byte stream but recompressed
-        during unpickling), and straight line programs.
+        during unpickling), straight line programs, and free and finitely
+        presented groups together with their elements and subgroups.
         <P/>
         Self-referential objects built from records and lists are handled
         correctly and are restored completely with the same self-references
@@ -2098,6 +2099,20 @@ gap> IO_Unpickle( s );
         Unpickles the first object stored in the string <A>str</A>, which
         may be immutable and is not changed. Anything in <A>str</A> after
         that first object is ignored.
+    </Description>
+</ManSection>
+
+<ManSection>
+    <Var Name="IO_UnpickleAllowEvalOfFunctions"/>
+    <Description>
+        A pickled function is stored as the name of the global variable
+        holding it where possible, and as its source code otherwise.
+        Reading the latter back means evaluating it, which lets a pickle
+        from an untrusted source run arbitrary code, so
+        <Ref Oper="IO_Unpickle"/> refuses to do it and returns
+        <C>IO&uscore;Error</C> unless this variable is set to
+        <K>true</K>. It is <K>false</K> by default. Functions stored by
+        name are unpickled either way.
     </Description>
 </ManSection>
 
