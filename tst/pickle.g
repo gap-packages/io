@@ -299,3 +299,115 @@ if List(floatlist, x -> ExtRepOfObj(x)) <>
    List(unpickled_floatlist, x -> ExtRepOfObj(x)) then
     Error(46);
 fi;
+
+# Deprecated formats: pickles written before IO 4.11 store the printed form of
+# permutations, finite field elements and cyclotomics. Those are parsed rather
+# than evaluated now, so check the parsers against everything GAP prints.
+
+pickle_as := function( ob, tag )
+  local s, f, res;
+  s := ""; f := IO_WrapFD(-1,false,s);
+  IO_PickleByString(f,ob,tag);
+  IO_Close(f);
+  f := IO_WrapFD(-1,s,false); res := IO_Unpickle(f); IO_Close(f);
+  return res;
+end;;
+
+for x in [ (), (1,2), (1,2,3)(5,7), (2,3)(4,10000),
+           Random(SymmetricGroup(500)) ] do
+  if pickle_as(x,"PERM") <> x then
+    Error( 47 );
+  fi;
+od;
+
+old:=InfoLevel(InfoWarning);;
+SetInfoLevel(InfoWarning, 0);;
+for x in [ Z(2), 0*Z(2), Z(5)^2, Z(4), Z(9)^5, Z(65537)^3, Z(65537^2)^5,
+           Z(2,20)^123, Z(3,20)^7, Z(2,100)^3+Z(2,100)^5, Z(65537,2)^7 ] do
+  if pickle_as(x,"FFEL") <> x then
+    Error( 48 );
+  fi;
+od;
+SetInfoLevel(InfoWarning, old);;
+
+for x in [ E(3), E(4), -5, 7/3, -22/7, 3/7*E(15)-5*E(15)^2+11/13 ] do
+  if pickle_as(x,"CYCL") <> x then
+    Error( 49 );
+  fi;
+od;
+
+# ... and reject anything else rather than executing it
+
+pickle_raw := function( str, tag )
+  local s, f, res;
+  s := ""; f := IO_WrapFD(-1,false,s);
+  IO_Write(f,tag); IO_WriteSmallInt(f,Length(str)); IO_Write(f,str);
+  IO_Close(f);
+  f := IO_WrapFD(-1,s,false); res := IO_Unpickle(f); IO_Close(f);
+  return res;
+end;;
+
+IO_TestWasPwned := false;;
+SetInfoLevel(InfoWarning, 0);;
+for x in [ [ "IO_TestWasPwned := true;", "PERM" ],
+           [ "IO_TestWasPwned := true", "FFEL" ],
+           [ "IO_TestWasPwned := true", "CYCL" ],
+           [ "Exec(\"true\")", "CYCL" ],
+           [ "E(2^64)", "CYCL" ],           # memory bomb
+           [ "2^(2^64)", "CYCL" ],
+           [ "Z(2)+E(3)", "FFEL" ],         # mixing domains
+           [ "1/0", "CYCL" ],
+           [ "((((", "PERM" ],
+           [ "(1,2", "PERM" ] ] do
+  if pickle_raw(x[1],x[2]) <> IO_Error then
+    Error( 50 );
+  fi;
+od;
+SetInfoLevel(InfoWarning, old);;
+if IO_TestWasPwned <> false then
+  Error( 51 );
+fi;
+
+# Pickled function source is evaluated only on request
+
+pickled_func := IO_Pickle(function(x) return x+1; end);;
+SetInfoLevel(InfoWarning, 0);;
+if IO_Unpickle(pickled_func) <> IO_Error then
+  Error( 52 );
+fi;
+SetInfoLevel(InfoWarning, old);;
+IO_UnpickleAllowEvalOfFunctions := true;;
+if IO_Unpickle(pickled_func)(1) <> 2 then
+  Error( 53 );
+fi;
+IO_UnpickleAllowEvalOfFunctions := false;;
+# operations named by an operator, whose names are not identifiers
+for x in [ Size, IsPrimeInt, \+, \*, \=, \[\], \in, PrintObj ] do
+  if IO_Unpickle(IO_Pickle(x)) <> x then
+    Error( 54 );
+  fi;
+od;
+
+# Rationals, infinity and the new permutation, field element and cyclotomic
+# formats round trip
+
+for x in [ (1,2,3)(5,7), (), Z(4), 0*Z(2), Z(2,100)^3+Z(2,100)^5,
+           Z(65537)^3, 7/3, -22/7, E(3), 3/7*E(15)-5*E(15)^2+11/13,
+           2^100, infinity, -infinity ] do
+  if IO_Unpickle(IO_Pickle(x)) <> x then
+    Error( 66 );
+  fi;
+od;
+
+# A pickle written by GAP 4.17 / IO 4.11 on 2026-08-16, so that the formats
+# introduced there keep being readable.
+
+pickled_new := "MLIS\>6PRMLMLIS\>7INTG\>12INTG\>13INTG\>11INTG\>14INTG\>17INTG\>16INTG\
+\>15FFECINTG\>12INTG\>12MLIS\>2INTG\>10INTG\>11FRACINTG\>17INTG\>13CYC\
+CINTG\>13MLIS\>3INTG\>10INTG\>11INTG\>10PINFNINF";;
+
+unpickled_new := IO_Unpickle(pickled_new);;
+
+if unpickled_new <> [ (1,2,3)(5,7), Z(4), 7/3, E(3), infinity, -infinity ] then
+  Error( 67 );
+fi;

@@ -148,14 +148,253 @@ InstallGlobalFunction( IO_UnpickleByFunction,
       len := IO_ReadSmallInt(f);
       if len = IO_Error then return IO_Error; fi;
       s := IO_ReadBlock(f,len);
-      if s = fail then return IO_Error; fi;
+      if s = fail or Length(s) < len then return IO_Error; fi;
       return unpickleFn(s);
     end;
   end );
 
+# Deprecated: this evaluates its input, so a hostile pickle can run arbitrary
+# code. Kept only because it is a documented global. Use a parser instead.
 InstallGlobalFunction( IO_UnpickleByEvalString,
     IO_UnpickleByFunction(EvalString)
 );
+
+#############################################################################
+##
+##  Readers for the deprecated PERM, FFEL and CYCL formats.
+##
+##  These store the printed form of the object and used to be read back with
+##  EvalString, which let a hostile pickle run arbitrary code (issue #7). They
+##  are parsed instead. New pickles use PRML, FFEC and CYCC.
+##
+
+# The only functions a deprecated pickle may name. The bounds stop a hostile
+# pickle from asking for an object large enough to exhaust memory; they are
+# far above anything GAP ever printed.
+BindGlobal( "IO_LegacyFuncs", rec(
+  E := rec(
+    check := a -> Length(a) = 1 and a[1] >= 1 and a[1] <= 2^24,
+    call  := a -> E(a[1]) ),
+  Z := rec(
+    check := a -> (Length(a) = 1 and a[1] <= 2^48 and IsPrimePowerInt(a[1]))
+               or (Length(a) = 2 and a[1] <= 2^48 and IsPrimeInt(a[1])
+                                 and a[2] >= 1 and a[2] <= 2^16),
+    call  := a -> CallFuncList(Z,a) ),
+  ZmodnZObj := rec(
+    check := a -> Length(a) = 2 and a[2] >= 1 and a[2] <= 2^48,
+    call  := a -> ZmodnZObj(a[1],a[2]) ),
+  ZmodpZObj := rec(
+    check := a -> Length(a) = 2 and a[2] <= 2^48 and IsPrimeInt(a[2]),
+    call  := a -> ZmodpZObj(a[1],a[2]) ),
+) );
+
+# Finite field elements and cyclotomics live in disjoint modes so that no
+# expression can mix them; together with the guards below this makes every
+# operation total, so nothing in here can throw.
+BindGlobal( "IO_LegacyFFEMode", rec(
+    funcs    := [ "Z", "ZmodnZObj", "ZmodpZObj" ],
+    allowdiv := false,
+    ok       := v -> IsInt(v) or IsFFE(v),
+    final    := IsFFE ) );
+
+BindGlobal( "IO_LegacyCycMode", rec(
+    funcs    := [ "E" ],
+    allowdiv := true,
+    ok       := IsCyclotomic,
+    final    := IsCyclotomic ) );
+
+InstallGlobalFunction( IO_ParseLegacyExpression,
+  function( s, mode )
+    local len, pos, skip, integer, combine, atom, factor, term, expr, res;
+
+    len := Length(s);
+    pos := 1;
+
+    skip := function()
+        while pos <= len and s[pos] = ' ' do pos := pos + 1; od;
+      end;
+
+    integer := function()
+        local start;
+        start := pos;
+        while pos <= len and IsDigitChar(s[pos]) do pos := pos + 1; od;
+        if pos = start then return fail; fi;
+        return Int(s{[start..pos-1]});
+      end;
+
+    combine := function( op, a, b )
+        if IsFFE(a) and IsFFE(b) and Characteristic(a) <> Characteristic(b) then
+            return fail;
+        fi;
+        if op = '+' then return a + b;
+        elif op = '-' then return a - b;
+        elif op = '*' then return a * b;
+        elif IsZero(b) then return fail;
+        else return a / b; fi;
+      end;
+
+    atom := function()
+        local start, name, entry, args, a;
+        skip();
+        if pos > len then return fail; fi;
+        if s[pos] = '(' then
+            pos := pos + 1;
+            a := expr();
+            if a = fail then return fail; fi;
+            skip();
+            if pos > len or s[pos] <> ')' then return fail; fi;
+            pos := pos + 1;
+            return a;
+        fi;
+        if IsDigitChar(s[pos]) then return integer(); fi;
+        start := pos;
+        while pos <= len and IsAlphaChar(s[pos]) do pos := pos + 1; od;
+        name := s{[start..pos-1]};
+        if not name in mode.funcs then return fail; fi;
+        entry := IO_LegacyFuncs.(name);
+        skip();
+        if pos > len or s[pos] <> '(' then return fail; fi;
+        pos := pos + 1;
+        args := [];
+        skip();
+        if pos <= len and s[pos] = ')' then
+            pos := pos + 1;
+        else
+            while true do
+                a := expr();
+                if not IsInt(a) or a < 0 then return fail; fi;
+                Add(args,a);
+                skip();
+                if pos > len then return fail; fi;
+                if s[pos] = ')' then pos := pos + 1; break; fi;
+                if s[pos] <> ',' then return fail; fi;
+                pos := pos + 1;
+            od;
+        fi;
+        if not entry.check(args) then return fail; fi;
+        return entry.call(args);
+      end;
+
+    factor := function()
+        local neg, base, e;
+        skip();
+        neg := false;
+        while pos <= len and (s[pos] = '-' or s[pos] = '+') do
+            if s[pos] = '-' then neg := not neg; fi;
+            pos := pos + 1;
+            skip();
+        od;
+        base := atom();
+        if base = fail or not mode.ok(base) then return fail; fi;
+        skip();
+        if pos <= len and s[pos] = '^' then
+            pos := pos + 1;
+            e := factor();
+            if e = fail or not IsInt(e) then return fail; fi;
+            if e < 0 and IsZero(base) then return fail; fi;
+            # a rational base with a large exponent is a memory bomb, and no
+            # printed GAP object needs one
+            if IsRat(base) and AbsInt(e) > 1024 then return fail; fi;
+            base := base ^ e;
+        fi;
+        if neg then base := - base; fi;
+        return base;
+      end;
+
+    term := function()
+        local res, op, rhs;
+        res := factor();
+        if res = fail then return fail; fi;
+        while true do
+            skip();
+            if pos > len then return res; fi;
+            op := s[pos];
+            if op <> '*' and op <> '/' then return res; fi;
+            if op = '/' and not mode.allowdiv then return res; fi;
+            pos := pos + 1;
+            rhs := factor();
+            if rhs = fail then return fail; fi;
+            res := combine(op,res,rhs);
+            if res = fail or not mode.ok(res) then return fail; fi;
+        od;
+      end;
+
+    expr := function()
+        local res, op, rhs;
+        res := term();
+        if res = fail then return fail; fi;
+        while true do
+            skip();
+            if pos > len then return res; fi;
+            op := s[pos];
+            if op <> '+' and op <> '-' then return res; fi;
+            pos := pos + 1;
+            rhs := term();
+            if rhs = fail then return fail; fi;
+            res := combine(op,res,rhs);
+            if res = fail or not mode.ok(res) then return fail; fi;
+        od;
+      end;
+
+    res := expr();
+    if res = fail then return fail; fi;
+    skip();
+    if pos <= len or not mode.final(res) then return fail; fi;
+    return res;
+  end );
+
+InstallGlobalFunction( IO_ParsePermString,
+  function( s )
+    local imgs, len, pos, cyc, start, n, i;
+    imgs := [];
+    len := Length(s);
+    pos := 1;
+    while pos <= len do
+        if s[pos] <> '(' then return fail; fi;
+        pos := pos + 1;
+        cyc := [];
+        while pos <= len and s[pos] <> ')' do
+            if not IsEmpty(cyc) then
+                if s[pos] <> ',' then return fail; fi;
+                pos := pos + 1;
+            fi;
+            start := pos;
+            while pos <= len and IsDigitChar(s[pos]) do pos := pos + 1; od;
+            if pos = start then return fail; fi;
+            n := Int(s{[start..pos-1]});
+            # MAX_DEG_PERM4 is 2^28-1; anything beyond is not a permutation
+            if n < 1 or n >= 2^28 or IsBound(imgs[n]) then return fail; fi;
+            imgs[n] := n;
+            Add(cyc,n);
+        od;
+        if pos > len then return fail; fi;   # unterminated cycle
+        pos := pos + 1;
+        for i in [1..Length(cyc)] do
+            imgs[cyc[i]] := cyc[(i mod Length(cyc)) + 1];
+        od;
+    od;
+    for i in [1..Length(imgs)] do
+        if not IsBound(imgs[i]) then imgs[i] := i; fi;
+    od;
+    return PermList(imgs);
+  end );
+
+InstallGlobalFunction( IO_UnpickleByParser,
+  function( parse )
+    return function( f )
+      local len, s, res;
+      len := IO_ReadSmallInt(f);
+      if len = IO_Error then return IO_Error; fi;
+      s := IO_ReadBlock(f,len);
+      if s = fail or Length(s) < len then return IO_Error; fi;
+      res := parse(s);
+      if res = fail then
+          Info(InfoWarning, 1, "IO_Unpickle: malformed pickle \"",s,"\"");
+          return IO_Error;
+      fi;
+      return res;
+    end;
+  end );
 
 InstallGlobalFunction( IO_GenericObjectPickler,
   function( f, tag, prepickle, ob, atts, filts, comps )
@@ -381,10 +620,21 @@ IO_Unpicklers.SPRF :=
 InstallMethod( IO_Pickle, "for a permutation",
   [ IsFile, IsPerm ],
   function( f, p )
-    return IO_PickleByString( f, p, "PERM" );
+    if IO_Write(f,"PRML") = fail then return IO_Error; fi;
+    return IO_Pickle(f,ListPerm(p));
   end );
 
-IO_Unpicklers.PERM := IO_UnpickleByEvalString;
+IO_Unpicklers.PRML :=
+  function( f )
+    local l,p;
+    l := IO_Unpickle(f); if l = IO_Error then return IO_Error; fi;
+    if not IsList(l) then return IO_Error; fi;
+    p := PermList(l);
+    if p = fail then return IO_Error; fi;
+    return p;
+  end;
+
+IO_Unpicklers.PERM := IO_UnpickleByParser( IO_ParsePermString );
 
 InstallMethod( IO_Pickle, "for a transformation",
   [ IsFile, IsTransformation ],
@@ -459,18 +709,94 @@ IO_Unpicklers.CHAR :=
 InstallMethod( IO_Pickle, "for a finite field element",
   [ IsFile, IsFFE ],
   function( f, ffe )
-    return IO_PickleByString( f, ffe, "FFEL" );
+    local d,p;
+    p := Characteristic(ffe);
+    d := DegreeFFE(ffe);
+    if IO_Write(f,"FFEC") = fail then return IO_Error; fi;
+    if IO_Pickle(f,p) = IO_Error then return IO_Error; fi;
+    if IO_Pickle(f,d) = IO_Error then return IO_Error; fi;
+    return IO_Pickle(f,IntVecFFE(Coefficients(CanonicalBasis(GF(p,d)),ffe)));
   end );
 
-IO_Unpicklers.FFEL := IO_UnpickleByEvalString;
+IO_Unpicklers.FFEC :=
+  function( f )
+    local c,d,p,z;
+    p := IO_Unpickle(f); if p = IO_Error then return IO_Error; fi;
+    d := IO_Unpickle(f); if d = IO_Error then return IO_Error; fi;
+    c := IO_Unpickle(f); if c = IO_Error then return IO_Error; fi;
+    # requiring one coefficient per degree bounds the field by the file size
+    if not (IsInt(p) and IsPosInt(d) and IsList(c) and Length(c) = d and
+            IsPrimeInt(p) and ForAll(c,IsInt)) then
+        return IO_Error;
+    fi;
+    z := Z(p,d);
+    return ValuePol(c*(z^0),z);
+  end;
+
+IO_Unpicklers.FFEL := IO_UnpickleByParser(
+    s -> IO_ParseLegacyExpression(s,IO_LegacyFFEMode) );
+
+# Rationals need a method of their own: they are cyclotomics, so without one
+# the coefficients written below would pickle themselves forever. Integers are
+# unaffected, the IsInt method above is more specific still.
+InstallMethod( IO_Pickle, "for a rational",
+  [ IsFile, IsRat ],
+  function( f, x )
+    if IO_Write(f,"FRAC") = fail then return IO_Error; fi;
+    if IO_Pickle(f,NumeratorRat(x)) = IO_Error then return IO_Error; fi;
+    return IO_Pickle(f,DenominatorRat(x));
+  end );
+
+IO_Unpicklers.FRAC :=
+  function( f )
+    local d,n;
+    n := IO_Unpickle(f); if n = IO_Error then return IO_Error; fi;
+    d := IO_Unpickle(f); if d = IO_Error then return IO_Error; fi;
+    if not (IsInt(n) and IsPosInt(d)) then return IO_Error; fi;
+    return n/d;
+  end;
 
 InstallMethod( IO_Pickle, "for a cyclotomic",
   [ IsFile, IsCyclotomic ],
   function( f, cyc )
-    return IO_PickleByString( f, cyc, "CYCL" );
+    local n;
+    n := Conductor(cyc);
+    if IO_Write(f,"CYCC") = fail then return IO_Error; fi;
+    if IO_Pickle(f,n) = IO_Error then return IO_Error; fi;
+    return IO_Pickle(f,CoeffsCyc(cyc,n));
   end );
 
-IO_Unpicklers.CYCL := IO_UnpickleByEvalString;
+IO_Unpicklers.CYCC :=
+  function( f )
+    local c,n;
+    n := IO_Unpickle(f); if n = IO_Error then return IO_Error; fi;
+    c := IO_Unpickle(f); if c = IO_Error then return IO_Error; fi;
+    # one coefficient per root of unity bounds the conductor by the file size
+    if not (IsPosInt(n) and IsList(c) and Length(c) = n and ForAll(c,IsRat))
+       then return IO_Error; fi;
+    return CycList(c);
+  end;
+
+IO_Unpicklers.CYCL := IO_UnpickleByParser(
+    s -> IO_ParseLegacyExpression(s,IO_LegacyCycMode) );
+
+InstallMethod( IO_Pickle, "for infinity",
+  [ IsFile, IsInfinity ],
+  function( f, x )
+    if IO_Write(f,"PINF") = fail then return IO_Error; fi;
+    return IO_OK;
+  end );
+
+IO_Unpicklers.PINF := infinity;
+
+InstallMethod( IO_Pickle, "for negative infinity",
+  [ IsFile, IsNegInfinity ],
+  function( f, x )
+    if IO_Write(f,"NINF") = fail then return IO_Error; fi;
+    return IO_OK;
+  end );
+
+IO_Unpicklers.NINF := -infinity;
 
 InstallMethod( IO_Pickle, "for a list",
   [ IsFile, IsList ],
@@ -1021,14 +1347,11 @@ InstallMethod( IO_Pickle, "for an operation",
 IO_FuncToUnpickle := fail;
 IO_Unpicklers.OPER :=
   function( f )
-    local i,s;
+    local s;
     s := IO_Unpickle(f); if s = IO_Error then return IO_Error; fi;
-    s := Concatenation( "IO_FuncToUnpickle := ",s,";" );
-    i := InputTextString(s);
-    Read(i);
-    if not(IsBound(IO_FuncToUnpickle)) then return IO_Error; fi;
-    s := IO_FuncToUnpickle;
-    Unbind(IO_FuncToUnpickle);
+    if not (IsString(s) and IsBoundGlobal(s)) then return IO_Error; fi;
+    s := ValueGlobal(s);
+    if not IsOperation(s) then return IO_Error; fi;
     return s;
   end;
 
@@ -1056,6 +1379,20 @@ IO_Unpicklers.FUNC :=
   function( f )
     local i,s;
     s := IO_Unpickle(f); if s = IO_Error then return IO_Error; fi;
+    if not IsString(s) then return IO_Error; fi;
+    # the pickler writes a global's name where it can, and the function's
+    # source otherwise; only the latter needs evaluating
+    if IsBoundGlobal(s) then
+        s := ValueGlobal(s);
+        if not IsFunction(s) then return IO_Error; fi;
+        return s;
+    fi;
+    if not IO_UnpickleAllowEvalOfFunctions then
+        Info(InfoWarning, 1, "IO_Unpickle: refusing to evaluate the source of ",
+             "a pickled function; set IO_UnpickleAllowEvalOfFunctions := true ",
+             "if you trust this data");
+        return IO_Error;
+    fi;
     s := Concatenation( "IO_FuncToUnpickle := ",s,";" );
     i := InputTextString(s);
     Read(i);
