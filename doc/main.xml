@@ -2059,6 +2059,24 @@ to each other and to other objects.<P/>
 </ManSection>
 
 <ManSection>
+    <Oper Name="IO_Pickle" Arg="ob" Label="to a string"/>
+    <Returns> a string or <C>IO&uscore;Error</C> </Returns>
+    <Description>
+        As above, except that the result is returned as a string instead of
+        being written to a <C>File</C> object. Use this to keep pickled
+        objects in memory, or to hand them to code that has nowhere to write
+        a file. If the object cannot be pickled, <C>IO&uscore;Error</C> is
+        returned. Read the string back with
+        <Ref Oper="IO_Unpickle" Label="from a string"/>.
+<Example>
+gap> s := IO_Pickle( [ 1, "two", (3,4) ] );;
+gap> IO_Unpickle( s );
+[ 1, "two", (3,4) ]
+</Example>
+    </Description>
+</ManSection>
+
+<ManSection>
     <Oper Name="IO_Unpickle" Arg="f"/>
     <Returns> <C>IO&uscore;Error</C> or a &GAP; object </Returns>
     <Description>
@@ -2070,6 +2088,16 @@ to each other and to other objects.<P/>
         object is at end of file, the value <C>IO&uscore;Nothing</C> is returned.
         Note that these two values are not picklable, because of
         their special meaning as return values of this operation here.
+    </Description>
+</ManSection>
+
+<ManSection>
+    <Oper Name="IO_Unpickle" Arg="str" Label="from a string"/>
+    <Returns> <C>IO&uscore;Error</C> or a &GAP; object </Returns>
+    <Description>
+        Unpickles the first object stored in the string <A>str</A>, which
+        may be immutable and is not changed. Anything in <A>str</A> after
+        that first object is ignored.
     </Description>
 </ManSection>
 

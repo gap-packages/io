@@ -1,5 +1,12 @@
 This file describes changes in the IO package.
 
+Changes since 4.10.0
+  - Document `IO_Pickle( ob )` and `IO_Unpickle( str )`, which pickle to and
+    from a string instead of a file. These have existed since 2011 but were
+    never documented
+  - Make `IO_Pickle( ob )` report failure instead of returning a truncated
+    string, and drop its 1 MB preallocation
+
 4.10.0 (2026-07-14)
   - Handle chunked HTTP responses without waiting for the server to close the
     connection

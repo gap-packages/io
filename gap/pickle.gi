@@ -281,11 +281,12 @@ InstallMethod( IO_Unpickle, "for a file",
 InstallMethod(IO_Pickle, "for an object, pickle to string method",
   [IsObject],
   function(o)
-    local f,s;
-    s := EmptyString(1000000);
+    local f,res,s;
+    s := "";
     f := IO_WrapFD(-1,false,s);
-    IO_Pickle(f,o);
+    res := IO_Pickle(f,o);
     IO_Close(f);
+    if res = IO_Error then return IO_Error; fi;
     ShrinkAllocationString(s);
     return s;
   end);
