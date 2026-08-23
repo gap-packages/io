@@ -2208,6 +2208,29 @@ They should never go into a break loop, because after leaving the user
 has to call <Ref Func="IO_ClearPickleCache"/> explicitly!
 
 <P/>
+The helpers <C>IO&uscore;GenericObjectPickler</C> and
+<C>IO&uscore;GenericObjectUnpickler</C> cover the common case of an object
+that is rebuilt from a few constituents and then has attributes set on
+it. Those constituents, the <Q>prepickled</Q> objects, are written
+<E>before</E> the object itself is added to the pickle cache, since the
+object cannot be created without them. One consequence is easy to trip
+over: at the top of a stream the cache is empty, so each prepickled
+object is written, and the cache discarded, independently of the next.
+Two prepickled objects that are the same object in memory are therefore
+written twice and come back as two objects when the pickle is the
+outermost one, though not when it sits inside a list or record.
+<P/>
+So a pickler using these helpers must not rely on one prepickled object
+referring to another. Store plain data instead and rebuild the
+references afterwards, as the picklers for finitely presented groups in
+<F>pkg/io/gap/pickle.gi</F> do: they write the external representations
+of words rather than the words themselves, and turn them back into
+elements of a group the unpickler already holds. Note that this is a
+property of the byte format, not just of the implementation — changing
+when the cache is cleared would change the meaning of the
+self-references in every pickle already written.
+
+<P/>
 Perhaps the best way to learn how to extend the framework is to
 study the code for the basic &GAP; objects in the file
 <F>pkg/io/gap/pickle.gi</F>.
