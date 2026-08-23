@@ -6,6 +6,8 @@ This file describes changes in the IO package.
   not compile there
 - Make IO_InstallSIGCHLDHandler and IO_RestoreSIGCHLDHandler do nothing on
   platforms without SIGCHLD, instead of raising an error
+- Pickle free and finitely presented groups, their elements and their
+  subgroups
 - Stop unpickling from evaluating its input: permutations, finite field
   elements and cyclotomics used to be stored as their printed form and read
   back with EvalString, so a pickle from an untrusted source could run
