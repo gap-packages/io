@@ -1,6 +1,8 @@
 This file describes changes in the IO package.
 
 Changes since 4.10.0
+  - Pickle free and finitely presented groups, their elements and their
+    subgroups
   - Stop unpickling from evaluating its input: permutations, finite field
     elements and cyclotomics used to be stored as their printed form and read
     back with EvalString, so a pickle from an untrusted source could run

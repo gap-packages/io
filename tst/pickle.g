@@ -388,6 +388,61 @@ for x in [ Size, IsPrimeInt, \+, \*, \=, \[\], \in, PrintObj ] do
   fi;
 od;
 
+# Free and finitely presented groups. An element is only usable next to the
+# group it came from, so what matters is that objects pickled together still
+# fit together afterwards.
+
+fam_free := FreeGroup("a","b");;
+unpickle_free := IO_Unpickle(IO_Pickle(fam_free));;
+if not IsFreeGroup(unpickle_free) or
+   List(GeneratorsOfGroup(unpickle_free),String) <> [ "a", "b" ] then
+  Error( 55 );
+fi;
+
+fam_words := IO_Unpickle(IO_Pickle([ fam_free.1^3*fam_free.2^-2,
+                                     fam_free.2*fam_free.1 ]));;
+if List(fam_words,String) <> [ "a^3*b^-2", "b*a" ] then
+  Error( 56 );
+elif not IsIdenticalObj(FamilyObj(fam_words[1]),FamilyObj(fam_words[2])) then
+  Error( 57 );
+elif String(fam_words[1]*fam_words[2])
+     <> String(fam_free.1^3*fam_free.2^-2*fam_free.2*fam_free.1) then
+  Error( 58 );
+fi;
+
+# one copy of the free group per stream, not one per word
+if PositionSublist(IO_Pickle(GeneratorsOfGroup(fam_free)),"FREG",
+       PositionSublist(IO_Pickle(GeneratorsOfGroup(fam_free)),"FREG")) <> fail
+   then
+  Error( 59 );
+fi;
+
+fam_fp := fam_free / [ fam_free.1^2, fam_free.2^3,
+                       (fam_free.1*fam_free.2)^5 ];;
+unpickle_fp := IO_Unpickle(IO_Pickle(fam_fp));;
+if Size(unpickle_fp) <> 60 then
+  Error( 60 );
+elif List(RelatorsOfFpGroup(unpickle_fp),String)
+     <> List(RelatorsOfFpGroup(fam_fp),String) then
+  Error( 61 );
+fi;
+
+fam_elms := IO_Unpickle(IO_Pickle([ fam_fp.1*fam_fp.2, fam_fp.2^-1 ]));;
+if not IsIdenticalObj(FamilyObj(fam_elms[1]),FamilyObj(fam_elms[2])) then
+  Error( 62 );
+elif Order(fam_elms[1]*fam_elms[2]) <> Order(fam_fp.1) then
+  Error( 63 );
+fi;
+
+fam_sub := Subgroup(fam_fp,[fam_fp.1]);;
+unpickle_sub := IO_Unpickle(IO_Pickle(fam_sub));;
+if Index(Parent(unpickle_sub),unpickle_sub) <> Index(fam_fp,fam_sub) then
+  Error( 64 );
+elif Length(GeneratorsOfGroup(IO_Unpickle(IO_Pickle(
+         Subgroup(fam_free,[fam_free.1^2,fam_free.2]))))) <> 2 then
+  Error( 65 );
+fi;
+
 # Rationals, infinity and the new permutation, field element and cyclotomic
 # formats round trip
 

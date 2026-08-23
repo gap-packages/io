@@ -2056,6 +2056,16 @@ to each other and to other objects.<P/>
         Self-referential objects built from records and lists are handled
         correctly and are restored completely with the same self-references
         during unpickling.
+        <P/>
+        An element of a free or finitely presented group is only usable
+        next to the group it came from, so pickling one also pickles that
+        group. Objects pickled <E>together</E> share the group and can be
+        combined afterwards, but objects pickled in <E>separate</E> calls
+        cannot: each call rebuilds a group of its own, and &GAP; keeps
+        elements of different groups apart even when the presentations
+        agree. Unpickling never re-uses a group that already exists in the
+        session either. So pickle a list of elements, not one element at a
+        time.
     </Description>
 </ManSection>
 

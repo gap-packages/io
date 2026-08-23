@@ -1651,6 +1651,180 @@ IO_Unpicklers.CTBL:= function( f )
     return tbl;
   end;
 
+#############################################################################
+##
+##  Free and finitely presented groups.
+##
+##  An element only makes sense next to the group it came from: two elements
+##  unpickled against two different reconstructions of the same presentation
+##  land in different GAP families and cannot be multiplied. So an element
+##  pickles a reference to its group, which the pickle cache then emits once
+##  per stream -- everything pickled together shares one family. Objects
+##  pickled in *separate* streams cannot be combined; that is inherent.
+##
+##  Words are always stored as their external representation rather than as
+##  objects, and rebuilt against a group the reader already holds. Relying on
+##  the pickle cache instead would break: it is discarded between the objects
+##  IO_GenericObjectPickler writes before registering its own, so at the top
+##  of a stream each word would carry -- and unpickle to -- a free group of
+##  its own.
+##
+
+# The group an element belongs to. GAP stores this on the collections family
+# of the elements family, both for free groups (lib/grpfree.gi) and for
+# finitely presented ones (lib/grpfp.gi).
+BindGlobal( "IO_WholeGroupOfElement",
+  function( x )
+    local fam;
+    fam := CollectionsFamily(FamilyObj(x));
+    if not IsBound(fam!.wholeGroup) then return fail; fi;
+    return fam!.wholeGroup;
+  end );
+
+# The free group underlying <g>, which for a free group is <g> itself
+BindGlobal( "IO_FreeGroupUnderlying",
+  function( g )
+    local fam;
+    fam := ElementsFamily(FamilyObj(g));
+    if not IsBound(fam!.freeGroup) then return fail; fi;
+    return fam!.freeGroup;
+  end );
+
+BindGlobal( "IO_ExtRepOfFpWord",
+  function( x )
+    if IsElementOfFpGroup(x) then return ExtRepOfObj(UnderlyingElement(x)); fi;
+    return ExtRepOfObj(x);
+  end );
+
+BindGlobal( "IO_IsExtRepOfWord",
+  function( ext, rank )
+    local i;
+    if not IsList(ext) or IsOddInt(Length(ext)) then return false; fi;
+    for i in [1..Length(ext)/2] do
+        if not IsBound(ext[2*i-1]) or not IsBound(ext[2*i]) then return false; fi;
+        if not (IsPosInt(ext[2*i-1]) and ext[2*i-1] <= rank) then return false; fi;
+        if not (IsInt(ext[2*i]) and ext[2*i] <> 0) then return false; fi;
+    od;
+    return true;
+  end );
+
+# Turn external representations back into elements of <g>, or fail
+BindGlobal( "IO_FpWordsByExtRep",
+  function( g, exts )
+    local free, fam, rank;
+    free := IO_FreeGroupUnderlying(g);
+    if free = fail or not IsList(exts) then return fail; fi;
+    rank := Length(GeneratorsOfGroup(free));
+    if not ForAll(exts, e -> IO_IsExtRepOfWord(e,rank)) then return fail; fi;
+    fam := ElementsFamily(FamilyObj(free));
+    exts := List(exts, e -> ObjByExtRep(fam,e));
+    if IsFreeGroup(g) then return exts; fi;
+    fam := ElementsFamily(FamilyObj(g));
+    return List(exts, w -> ElementOfFpGroup(fam,w));
+  end );
+
+# One method for all of them: a free group also satisfies IsFpGroup, so
+# relying on filter ranking between competing methods would be fragile.
+InstallMethod( IO_Pickle, "for a free or finitely presented group",
+  [ IsFile, IsSubgroupFpGroup ],
+  function( f, g )
+    if HasIsWholeFamily(g) and IsWholeFamily(g) then
+        if IsFreeGroup(g) then
+            if not IsFinitelyGeneratedGroup(g) then
+                Info(InfoWarning, 1,
+                     "IO_Pickle: cannot pickle a free group of infinite rank");
+                return IO_Error;
+            fi;
+            return IO_GenericObjectPickler(f,"FREG",
+                       [ElementsFamily(FamilyObj(g))!.names],g,[Name],[],[]);
+        fi;
+        return IO_GenericObjectPickler(f,"FPGR",
+                   [IO_FreeGroupUnderlying(g),
+                    List(RelatorsOfFpGroup(g),ExtRepOfObj)],g,
+                   [Name,Size],[],[]);
+    fi;
+    return IO_GenericObjectPickler(f,"FPSG",
+               [FamilyObj(g)!.wholeGroup,
+                List(GeneratorsOfGroup(g),IO_ExtRepOfFpWord)],g,
+               [Name,Size],[],[]);
+  end );
+
+IO_Unpicklers.FREG :=
+  function( f )
+    local names;
+    names := IO_Unpickle(f); if names = IO_Error then return IO_Error; fi;
+    if not (IsList(names) and ForAll(names,IsString)) then return IO_Error; fi;
+    return IO_GenericObjectUnpickler(f,FreeGroup(names),[Name],[]);
+  end;
+
+IO_Unpicklers.FPGR :=
+  function( f )
+    local free,rels;
+    free := IO_Unpickle(f); if free = IO_Error then return IO_Error; fi;
+    rels := IO_Unpickle(f); if rels = IO_Error then return IO_Error; fi;
+    if not IsFreeGroup(free) then return IO_Error; fi;
+    rels := IO_FpWordsByExtRep(free,rels);
+    if rels = fail then return IO_Error; fi;
+    return IO_GenericObjectUnpickler(f,free/rels,[Name,Size],[]);
+  end;
+
+IO_Unpicklers.FPSG :=
+  function( f )
+    local gens,whole;
+    whole := IO_Unpickle(f); if whole = IO_Error then return IO_Error; fi;
+    gens := IO_Unpickle(f); if gens = IO_Error then return IO_Error; fi;
+    if not IsSubgroupFpGroup(whole) then return IO_Error; fi;
+    gens := IO_FpWordsByExtRep(whole,gens);
+    if gens = fail then return IO_Error; fi;
+    return IO_GenericObjectUnpickler(f,SubgroupNC(whole,gens),
+                                     [Name,Size],[]);
+  end;
+
+# IsAssocWordWithInverse also covers words that are not from a free group
+InstallMethod( IO_Pickle, "for an element of a free group",
+  [ IsFile, IsAssocWordWithInverse ],
+  function( f, w )
+    local free;
+    free := IO_WholeGroupOfElement(w);
+    if free = fail or not IsFreeGroup(free) then TryNextMethod(); fi;
+    if IO_Write(f,"FREW") = fail then return IO_Error; fi;
+    if IO_Pickle(f,free) = IO_Error then return IO_Error; fi;
+    return IO_Pickle(f,ExtRepOfObj(w));
+  end );
+
+IO_Unpicklers.FREW :=
+  function( f )
+    local ext,free;
+    free := IO_Unpickle(f); if free = IO_Error then return IO_Error; fi;
+    ext := IO_Unpickle(f); if ext = IO_Error then return IO_Error; fi;
+    if not IsFreeGroup(free) then return IO_Error; fi;
+    ext := IO_FpWordsByExtRep(free,[ext]);
+    if ext = fail then return IO_Error; fi;
+    return ext[1];
+  end;
+
+InstallMethod( IO_Pickle, "for an element of a finitely presented group",
+  [ IsFile, IsElementOfFpGroup ],
+  function( f, x )
+    local g;
+    g := IO_WholeGroupOfElement(x);
+    if g = fail then return IO_Error; fi;
+    if IO_Write(f,"FPEL") = fail then return IO_Error; fi;
+    if IO_Pickle(f,g) = IO_Error then return IO_Error; fi;
+    return IO_Pickle(f,ExtRepOfObj(UnderlyingElement(x)));
+  end );
+
+IO_Unpicklers.FPEL :=
+  function( f )
+    local ext,g;
+    g := IO_Unpickle(f); if g = IO_Error then return IO_Error; fi;
+    ext := IO_Unpickle(f); if ext = IO_Error then return IO_Error; fi;
+    if not IsSubgroupFpGroup(g) then return IO_Error; fi;
+    ext := IO_FpWordsByExtRep(g,[ext]);
+    if ext = fail then return IO_Error; fi;
+    return ext[1];
+  end;
+
 ##
 ##  This program is free software: you can redistribute it and/or modify
 ##  it under the terms of the GNU General Public License as published by

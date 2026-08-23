@@ -48,7 +48,12 @@ IO_UnpickleAllowEvalOfFunctions := false;
 # FALS  false
 # FFEC  a finite field element, as its coefficients over the prime field
 # FLOT  a Floating point number
+# FPEL  an element of a finitely presented group
+# FPGR  a finitely presented group
+# FPSG  a subgroup of a free or finitely presented group
 # FRAC  a rational number
+# FREG  a free group
+# FREW  an element of a free group
 # FUNC  a GAP function, if it is a global one, only its name is pickled
 # GAPL  a gap in a list (unbound entries)
 # GSLP  a GAP straight line program
