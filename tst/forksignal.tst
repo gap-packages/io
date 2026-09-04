@@ -7,7 +7,10 @@ gap> LoadPackage("IO", false);;
 # a regression fails instead of hanging.
 gap> pid := IO_fork();;
 gap> if pid = 0 then
->   # child: sleep, then exit in case the SIGTERM below never arrives
+>   # child: close the inherited line-by-line profile/coverage output (GAP
+>   # opens a per-child file; killed by a signal it would stay truncated),
+>   # then sleep, and exit in case the SIGTERM below never arrives
+>   if IsLineByLineProfileActive() then UnprofileLineByLine(); fi;
 >   IO_select([], [], [], 60, 0);
 >   IO_exit(0);
 > fi;
