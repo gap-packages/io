@@ -173,6 +173,147 @@ static int IO_CheckForIgnoredPid(int pid);
 
 static void (*oldhandler)(int whichsig) = 0;    // the old handler
 
+/***********************************************************************
+ * Child reaping strategy.
+ *
+ * In standalone GAP the SIGCHLD handler above reaps every child with
+ * waitpid(-1) and queues the statuses in the FIFO. That is unusable when
+ * something else in the process manages children of its own: HPC-GAP
+ * handles SIGCHLD on a dedicated thread, and a program embedding GAP as a
+ * library (e.g. julia via GAP.jl) reaps its subprocesses per pid; a foreign
+ * SIGCHLD handler or a waitpid(-1) stealing their statuses makes them hang.
+ *
+ *                       standalone GAP        HPC-GAP / embedded GAP
+ *   SIGCHLD handler     IO_SIGCHLDHandler     none
+ *   reaping             waitpid(-1) in the    waitpid(pid) on demand, for
+ *                       handler, FIFO         pids registered by IO_fork
+ *
+ * In the second mode io keeps a registry of the children it forked itself
+ * and touches no other process.
+ ***********************************************************************/
+static int use_sigchld_handler = 1;
+
+typedef struct {
+    int pid;
+    int ignored;    // disowned via IO_IgnorePid: reap and forget
+} OwnChild;
+
+static OwnChild ownchildren[MAXCHLDS];
+static int      numownchildren = 0;
+
+static void RegisterOwnChild(int pid)
+{
+    if (numownchildren >= MAXCHLDS) {
+        Pr("#E Overflow in table of child processes\n", 0, 0);
+        return;
+    }
+    ownchildren[numownchildren].pid = pid;
+    ownchildren[numownchildren].ignored = 0;
+    numownchildren++;
+}
+
+static int FindOwnChild(int pid)
+{
+    for (int i = 0; i < numownchildren; i++)
+        if (ownchildren[i].pid == pid)
+            return i;
+    return -1;
+}
+
+static void ForgetOwnChild(int i)
+{
+    ownchildren[i] = ownchildren[--numownchildren];
+}
+
+// Reap disowned children that have exited, so they do not linger as
+// zombies; called whenever io deals with child processes anyway.
+static void ReapIgnoredOwnChildren(void)
+{
+    int i = 0;
+    while (i < numownchildren) {
+        int status;
+        if (ownchildren[i].ignored &&
+            waitpid(ownchildren[i].pid, &status, WNOHANG) != 0)
+            ForgetOwnChild(i);    // exited, or not our child any more
+        else
+            i++;
+    }
+}
+
+static Obj MakeWaitPidRecord(int pid, int status)
+{
+    Obj tmp = NEW_PREC(0);
+    AssPRec(tmp, RNamName("pid"), INTOBJ_INT(pid));
+    AssPRec(tmp, RNamName("status"), INTOBJ_INT(status));
+    AssPRec(tmp, RNamName("WIFEXITED"), INTOBJ_INT(WIFEXITED(status)));
+    AssPRec(tmp, RNamName("WEXITSTATUS"), INTOBJ_INT(WEXITSTATUS(status)));
+    return tmp;
+}
+
+// The status of <pid> is not available any more: it never was our child,
+// or something else in the process reaped it first. Report it as
+// terminated with unknown status if it is gone.
+static Obj WaitPidStatusLost(int pid, int wait)
+{
+    if (kill((pid_t)pid, 0) == -1 && errno == ESRCH) {
+        Obj tmp = NEW_PREC(0);
+        AssPRec(tmp, RNamName("pid"), INTOBJ_INT(pid));
+        AssPRec(tmp, RNamName("status"), Fail);
+        AssPRec(tmp, RNamName("WIFEXITED"), Fail);
+        AssPRec(tmp, RNamName("WEXITSTATUS"), Fail);
+        return tmp;
+    }
+    // pid still exists, but is not a child of this process
+    return wait ? Fail : False;
+}
+
+// IO_WaitPid without a SIGCHLD handler: wait for one specific registered
+// child, or (pid = -1) for any of them, polling in the latter case.
+static Obj WaitForOwnChild(int pid, int wait)
+{
+    ReapIgnoredOwnChildren();
+
+    if (pid != -1) {
+        int status, retcode;
+        do {
+            retcode = waitpid(pid, &status, wait ? 0 : WNOHANG);
+        } while (retcode == -1 && errno == EINTR);
+        if (retcode == 0)
+            return False;
+        if (retcode == -1)
+            return WaitPidStatusLost(pid, wait);
+        int i = FindOwnChild(pid);
+        if (i != -1)
+            ForgetOwnChild(i);
+        return MakeWaitPidRecord(pid, status);
+    }
+
+    while (1) {
+        int waiting = 0;
+        for (int i = 0; i < numownchildren; i++) {
+            int status, retcode;
+            if (ownchildren[i].ignored)
+                continue;
+            retcode = waitpid(ownchildren[i].pid, &status, WNOHANG);
+            if (retcode == -1) {
+                ForgetOwnChild(i--);    // not our child any more
+                continue;
+            }
+            if (retcode == 0) {
+                waiting++;
+                continue;
+            }
+            ForgetOwnChild(i);
+            return MakeWaitPidRecord(retcode, status);
+        }
+        if (waiting == 0)
+            return Fail;    // nothing to wait for
+        if (!wait)
+            return False;
+        usleep(10000);
+    }
+}
+
 static void IO_HandleChildSignal(int retcode, int status)
 {
     if (retcode > 0) {    // One of our child processes terminated
@@ -215,6 +356,12 @@ void IO_SIGCHLDHandler(int whichsig)
 
 static Obj FuncIO_InstallSIGCHLDHandler(Obj self)
 {
+    if (!use_sigchld_handler) {
+        // still needed: writing to a pipe whose reader is gone must not
+        // kill the process
+        signal(SIGPIPE, SIG_IGN);
+        return False;
+    }
     // Do not install ourselves twice:
     if (oldhandler == 0) {
         oldhandler = signal(SIGCHLD, IO_SIGCHLDHandler);
@@ -226,7 +373,7 @@ static Obj FuncIO_InstallSIGCHLDHandler(Obj self)
 
 static Obj FuncIO_RestoreSIGCHLDHandler(Obj self)
 {
-    if (oldhandler == 0)
+    if (!use_sigchld_handler || oldhandler == 0)
         return False;
 
     signal(SIGCHLD, oldhandler);
@@ -267,6 +414,18 @@ static Obj FuncIO_IgnorePid(Obj self, Obj pid)
         return Fail;
     }
 
+    if (!use_sigchld_handler) {
+        int i = FindOwnChild(pidc);
+        if (i == -1) {
+            RegisterOwnChild(pidc);
+            i = FindOwnChild(pidc);
+        }
+        if (i != -1)
+            ownchildren[i].ignored = 1;
+        ReapIgnoredOwnChildren();
+        return True;
+    }
+
     // Make sure a new signal doesn't come in while we are changing array
     signal(SIGCHLD, SIG_DFL);
 
@@ -302,9 +461,13 @@ static Obj FuncIO_WaitPid(Obj self, Obj pid, Obj wait)
         SyClearErrorNo();
         return Fail;
     }
+    pidc = INT_INTOBJ(pid);
+
+    if (!use_sigchld_handler)
+        return WaitForOwnChild(pidc, wait == True);
+
     // First set SIGCHLD to default action to avoid clashes with access:
     signal(SIGCHLD, SIG_DFL);
-    pidc = INT_INTOBJ(pid);
     reallytried = 0;
     do {
         pos = findSignaledPid(pidc);
@@ -325,26 +488,12 @@ static Obj FuncIO_WaitPid(Obj self, Obj pid, Obj wait)
             // reaped it first and its status is lost. If the pid is gone,
             // report it as terminated with unknown status.
             signal(SIGCHLD, IO_SIGCHLDHandler);
-            if (kill((pid_t)pidc, 0) == -1 && errno == ESRCH) {
-                tmp = NEW_PREC(0);
-                AssPRec(tmp, RNamName("pid"), INTOBJ_INT(pidc));
-                AssPRec(tmp, RNamName("status"), Fail);
-                AssPRec(tmp, RNamName("WIFEXITED"), Fail);
-                AssPRec(tmp, RNamName("WEXITSTATUS"), Fail);
-                return tmp;
-            }
-            // pid still exists, but is not a child of this process
-            return (wait == True) ? Fail : False;
+            return WaitPidStatusLost(pidc, wait == True);
         }
         IO_HandleChildSignal(retcode, status);
         reallytried = 1;    // Do not try again.
     } while (1);            // Left by break
-    tmp = NEW_PREC(0);
-    AssPRec(tmp, RNamName("pid"), INTOBJ_INT(pids[pos]));
-    AssPRec(tmp, RNamName("status"), INTOBJ_INT(stats[pos]));
-    AssPRec(tmp, RNamName("WIFEXITED"), INTOBJ_INT(WIFEXITED(stats[pos])));
-    AssPRec(tmp, RNamName("WEXITSTATUS"),
-            INTOBJ_INT(WEXITSTATUS(stats[pos])));
+    tmp = MakeWaitPidRecord(pids[pos], stats[pos]);
 
     // Dequeue element:
     removeSignaledPidByPos(pos);
@@ -1594,12 +1743,16 @@ static Obj FuncIO_fork(Obj self)
         SySetErrorNo();
         return Fail;
     }
-#if GAP_KERNEL_MAJOR_VERSION >= 6
     if (res == 0) {
-        // In child
+        // In child: the parent's children are not ours
+        numownchildren = 0;
+#if GAP_KERNEL_MAJOR_VERSION >= 6
         InformProfilingThatThisIsAForkedGAP();
-    }
 #endif
+    }
+    else if (!use_sigchld_handler) {
+        RegisterOwnChild(res);
+    }
     return INTOBJ_INT(res);
 }
 #endif
@@ -2235,6 +2388,13 @@ static Int InitKernel(StructInitInfo * module)
 {
     // init filters and functions
     InitHdlrFuncsFromTable(GVarFuncs);
+
+    // see "Child reaping strategy" above
+#ifdef HPCGAP
+    use_sigchld_handler = 0;
+#else
+    use_sigchld_handler = !IsUsingLibGap();
+#endif
 
     // return success
     return 0;
