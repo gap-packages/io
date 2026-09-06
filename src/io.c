@@ -317,6 +317,25 @@ static Obj FuncIO_WaitPid(Obj self, Obj pid, Obj wait)
         }
         // Really wait for something
         retcode = waitpid(-1, &status, (wait == True) ? 0 : WNOHANG);
+        if (retcode == -1 && errno == ECHILD) {
+            // There is no unreaped child left, so waiting cannot succeed;
+            // with wait = true, retrying would busy-loop forever. This
+            // happens when pid never was our child, or when something else
+            // in the process (another library, or a program embedding GAP)
+            // reaped it first and its status is lost. If the pid is gone,
+            // report it as terminated with unknown status.
+            signal(SIGCHLD, IO_SIGCHLDHandler);
+            if (kill((pid_t)pidc, 0) == -1 && errno == ESRCH) {
+                tmp = NEW_PREC(0);
+                AssPRec(tmp, RNamName("pid"), INTOBJ_INT(pidc));
+                AssPRec(tmp, RNamName("status"), Fail);
+                AssPRec(tmp, RNamName("WIFEXITED"), Fail);
+                AssPRec(tmp, RNamName("WEXITSTATUS"), Fail);
+                return tmp;
+            }
+            // pid still exists, but is not a child of this process
+            return (wait == True) ? Fail : False;
+        }
         IO_HandleChildSignal(retcode, status);
         reallytried = 1;    // Do not try again.
     } while (1);            // Left by break
@@ -1514,11 +1533,63 @@ static Obj FuncIO_select(Obj self,
 #ifdef HAVE_FORK
 static Obj FuncIO_fork(Obj self)
 {
-    int res;
+    // Make the termination signals a parent may send to stop the child
+    // work even if a program embedding GAP (e.g. julia via GAP.jl) blocks,
+    // ignores, or catches them with handlers depending on threads that do
+    // not survive the fork; any of these would leave the child unkillable
+    // except via SIGKILL. Unblock them, and mirror exec() semantics for
+    // their dispositions: caught becomes default action, SIG_IGN is kept
+    // (it may be deliberate, e.g. SIGHUP under nohup). SIGTERM is reset
+    // unconditionally: stopping children with it is part of IO_fork's
+    // contract (IO_kill, background jobs), and julia sets it to SIG_IGN.
+    //
+    // This must happen BEFORE the fork, restoring the state in the parent
+    // afterwards: a signal sent to a child that has not yet reset its
+    // inherited state would be discarded (SIG_IGN) or misdelivered, so
+    // resetting in the child would leave a race with a fast parent.
+    // The reset state also survives exec, so all this matters for
+    // fork+exec children, too.
+    static const int termsigs[] = { SIGHUP, SIGINT, SIGQUIT, SIGALRM,
+                                    SIGTERM };
+    enum { NUMTERMSIGS = sizeof(termsigs) / sizeof(termsigs[0]) };
+    struct sigaction saved_sa[NUMTERMSIGS];
+    int              saved_sa_ok[NUMTERMSIGS];
+    sigset_t         unblock, saved_mask;
+    size_t           i;
+    int              res;
+
     FuncIO_InstallSIGCHLDHandler(0);
     // Ensure files are flushed before forking
     fflush(0);
+
+    sigemptyset(&unblock);
+    for (i = 0; i < NUMTERMSIGS; i++) {
+        struct sigaction dfl;
+        sigaddset(&unblock, termsigs[i]);
+        saved_sa_ok[i] = (sigaction(termsigs[i], NULL, &saved_sa[i]) == 0);
+        if (!saved_sa_ok[i])
+            continue;
+        if (saved_sa[i].sa_handler == SIG_DFL ||
+            (saved_sa[i].sa_handler == SIG_IGN && termsigs[i] != SIGTERM))
+            continue;
+        memset(&dfl, 0, sizeof(dfl));
+        dfl.sa_handler = SIG_DFL;
+        sigemptyset(&dfl.sa_mask);
+        sigaction(termsigs[i], &dfl, NULL);
+    }
+    sigprocmask(SIG_UNBLOCK, &unblock, &saved_mask);
+
     res = fork();
+
+    if (res != 0) {
+        // In parent (or fork failed): restore the signal state
+        sigprocmask(SIG_SETMASK, &saved_mask, NULL);
+        for (i = 0; i < NUMTERMSIGS; i++) {
+            if (saved_sa_ok[i])
+                sigaction(termsigs[i], &saved_sa[i], NULL);
+        }
+    }
+
     if (res == -1) {
         SySetErrorNo();
         return Fail;
