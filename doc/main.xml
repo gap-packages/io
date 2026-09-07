@@ -1105,7 +1105,7 @@ See <Ref Func="IO_fork"/>.
 In HPC-GAP, and when &GAP; is used as a library inside another program
 (such as Julia via GAP.jl), no SIGCHLD handler is installed at all, and this
 function returns <K>false</K>: the host manages child processes itself, and
-&IO; only ever waits for the children it created, by process id. All
+<Package>IO</Package> only ever waits for the children it created, by process id. All
 functions described here behave the same in both modes.
 </Description>
 </ManSection>
