@@ -268,7 +268,11 @@ static Obj WaitPidStatusLost(int pid, int wait)
 }
 
 // IO_WaitPid without a SIGCHLD handler: wait for one specific registered
-// child, or (pid = -1) for any of them, polling in the latter case.
+// child, or (pid = -1) for any of them. The latter has to poll: waitpid()
+// blocks on a single pid or on all children (which would steal the host's),
+// and waiting for SIGCHLD would compete with the host's own handler.
+#define OWN_CHILD_POLL_INTERVAL_USEC 10000
+
 static Obj WaitForOwnChild(int pid, int wait)
 {
     ReapIgnoredOwnChildren();
@@ -310,7 +314,7 @@ static Obj WaitForOwnChild(int pid, int wait)
             return Fail;    // nothing to wait for
         if (!wait)
             return False;
-        usleep(10000);
+        usleep(OWN_CHILD_POLL_INTERVAL_USEC);
     }
 }
 
