@@ -40,6 +40,8 @@
 #include <errno.h>
 #ifdef _WIN32
 #include <direct.h>    // for _mkdir
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>    // for GetComputerNameA
 #endif
 
 // Tracking child processes needs SIGCHLD and waitpid, which native Windows
@@ -1968,6 +1970,17 @@ static Obj FuncIO_gethostname(Obj self)
     }
     return MakeString(name);
 }
+#elif defined(_WIN32)
+// gethostname is part of Winsock; the computer name needs no network setup
+static Obj FuncIO_gethostname(Obj self)
+{
+    char  name[MAX_COMPUTERNAME_LENGTH + 1];
+    DWORD len = sizeof(name);
+    if (!GetComputerNameA(name, &len)) {
+        return Fail;
+    }
+    return MakeString(name);
+}
 #endif
 
 static Obj FuncIO_getenv(Obj self, Obj name)
@@ -2265,7 +2278,7 @@ static StructGVarFunc GVarFuncs[] = {
     GVAR_FUNC(IO_getsockname, 1, "fd"),
 #endif
 
-#ifdef HAVE_GETHOSTNAME
+#if defined(HAVE_GETHOSTNAME) || defined(_WIN32)
     GVAR_FUNC(IO_gethostname, 0, ""),
 #endif
 
