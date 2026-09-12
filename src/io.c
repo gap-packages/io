@@ -43,8 +43,10 @@
 #endif
 
 // Tracking child processes needs SIGCHLD and waitpid, which native Windows
-// lacks; without them IO cannot run subprocesses at all.
-#if defined(HAVE_SIGNAL) && defined(HAVE_SYS_WAIT_H) && defined(SIGCHLD)
+// lacks; without them IO cannot run subprocesses at all. Decided from the
+// configure results alone: whether <signal.h> has been included by this
+// point, and so whether SIGCHLD is visible, differs between platforms.
+#if defined(HAVE_SIGNAL_H) && defined(HAVE_SIGNAL) && defined(HAVE_SYS_WAIT_H)
 #define IO_HAVE_SIGCHLD 1
 #endif
 #ifdef HAVE_SYS_STAT_H
