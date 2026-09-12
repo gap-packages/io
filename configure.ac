@@ -27,6 +27,8 @@ AC_CHECK_HEADERS_ONCE([
     unistd.h
 ])
 
+AC_CHECK_MEMBERS([struct stat.st_blksize, struct stat.st_blocks])
+
 # Checks for library functions.
 AC_FUNC_FORK
 AC_CHECK_FUNCS_ONCE([
@@ -38,6 +40,7 @@ AC_CHECK_FUNCS_ONCE([
     connect
     dup
     dup2
+    fcntl
     fchmod
     fchown
     fstat
@@ -64,8 +67,10 @@ AC_CHECK_FUNCS_ONCE([
     mknod
     mkstemp
     opendir
+    pipe
     readdir
     readlink
+    realpath
     recv
     recvfrom
     rename

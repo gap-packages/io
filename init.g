@@ -17,6 +17,9 @@ if not LoadKernelExtension("io") then
   Error("failed to load the io package kernel extension");
 fi;
 
+# must come first: it binds the kernel functions this platform lacks
+ReadPackage("IO", "gap/unavailable.g");
+
 ReadPackage("IO", "gap/io.gd");
 ReadPackage("IO", "gap/pickle.gd");
 ReadPackage("IO", "gap/realrandom.gd");

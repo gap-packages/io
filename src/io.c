@@ -38,6 +38,17 @@
 #include <time.h>
 #endif
 #include <errno.h>
+#ifdef _WIN32
+#include <direct.h>    // for _mkdir
+#endif
+
+// Tracking child processes needs SIGCHLD and waitpid, which native Windows
+// lacks; without them IO cannot run subprocesses at all. Decided from the
+// configure results alone: whether <signal.h> has been included by this
+// point, and so whether SIGCHLD is visible, differs between platforms.
+#if defined(HAVE_SIGNAL_H) && defined(HAVE_SIGNAL) && defined(HAVE_SYS_WAIT_H)
+#define IO_HAVE_SIGCHLD 1
+#endif
 #ifdef HAVE_SYS_STAT_H
 #include <sys/stat.h>
 #endif
@@ -103,6 +114,8 @@
  * coming from streams is stored in one data structure here, such that
  * we can read it out from GAP using IO.Wait.
  ***********************************************************************/
+
+#ifdef IO_HAVE_SIGCHLD
 
 // FIXME: globals
 
@@ -200,7 +213,6 @@ static void IO_HandleChildSignal(int retcode, int status)
     }
 }
 
-#ifdef HAVE_SIGNAL
 void IO_SIGCHLDHandler(int whichsig)
 {
     int retcode, status;
@@ -352,7 +364,7 @@ static Obj FuncIO_WaitPid(Obj self, Obj pid, Obj wait)
     signal(SIGCHLD, IO_SIGCHLDHandler);
     return tmp;
 }
-#endif
+#endif    // IO_HAVE_SIGCHLD
 
 static Obj FuncIO_open(Obj self, Obj path, Obj flags, Obj mode)
 {
@@ -689,7 +701,11 @@ static Obj FuncIO_realpath(Obj self, Obj path)
     }
 
     char buf[PATH_MAX];
+#ifdef _WIN32
+    if (_fullpath(buf, CSTR_STRING(path), sizeof(buf))) {
+#else
     if (realpath(CSTR_STRING(path), buf)) {
+#endif
         return MakeImmString(buf);
     }
 
@@ -737,7 +753,12 @@ static Obj FuncIO_mkdir(Obj self, Obj pathname, Obj mode)
         return Fail;
     }
 
+#ifdef _WIN32
+    // Windows has no file permission bits, so <mode> is ignored
+    res = _mkdir(CSTR_STRING(pathname));
+#else
     res = mkdir(CSTR_STRING(pathname), INT_INTOBJ(mode));
+#endif
     if (res < 0) {
         SySetErrorNo();
         return Fail;
@@ -777,8 +798,12 @@ static Obj WrapStat(struct stat * statbuf)
     AssPRec(rec, RNamName("gid"), ObjInt_UInt(statbuf->st_gid));
     AssPRec(rec, RNamName("rdev"), ObjInt_UInt8(statbuf->st_rdev));
     AssPRec(rec, RNamName("size"), ObjInt_Int8(statbuf->st_size));
+#ifdef HAVE_STRUCT_STAT_ST_BLKSIZE
     AssPRec(rec, RNamName("blksize"), ObjInt_Int8(statbuf->st_blksize));
+#endif
+#ifdef HAVE_STRUCT_STAT_ST_BLOCKS
     AssPRec(rec, RNamName("blocks"), ObjInt_Int8(statbuf->st_blocks));
+#endif
     AssPRec(rec, RNamName("atime"), ObjInt_Int(statbuf->st_atime));
     AssPRec(rec, RNamName("mtime"), ObjInt_Int(statbuf->st_mtime));
     AssPRec(rec, RNamName("ctime"), ObjInt_Int(statbuf->st_ctime));
@@ -1725,7 +1750,12 @@ static Obj FuncIO_execve(Obj self, Obj path, Obj Argv, Obj Envp)
     return Fail;
 }
 
+#ifdef _WIN32
+// mingw declares _environ in stdlib.h
+#define environ _environ
+#else
 extern char ** environ;
+#endif
 
 static Obj FuncIO_environ(Obj self)
 {
@@ -1749,6 +1779,7 @@ static Obj FuncIO_environ(Obj self)
     return tmp;
 }
 
+#ifdef HAVE_PIPE
 static Obj FuncIO_pipe(Obj self)
 {
     Obj tmp;
@@ -1765,6 +1796,7 @@ static Obj FuncIO_pipe(Obj self)
     AssPRec(tmp, RNamName("towrite"), INTOBJ_INT(fds[1]));
     return tmp;
 }
+#endif
 
 static Obj FuncIO_exit(Obj self, Obj status)
 {
@@ -1777,7 +1809,7 @@ static Obj FuncIO_exit(Obj self, Obj status)
     return True;
 }
 
-#ifdef HAVE_FCNTL_H
+#ifdef HAVE_FCNTL
 static Obj FuncIO_fcntl(Obj self, Obj fd, Obj cmd, Obj arg)
 {
     int res;
@@ -1959,8 +1991,14 @@ static Obj FuncIO_setenv(Obj self, Obj name, Obj value, Obj overwrite)
         SyClearErrorNo();
         return Fail;
     }
+#ifdef _WIN32
+    // _putenv_s always overwrites
+    int res = _putenv_s(CONST_CSTR_STRING(name), CONST_CSTR_STRING(value));
+    (void)overwrite;
+#else
     int res = setenv(CONST_CSTR_STRING(name), CONST_CSTR_STRING(value),
                      overwrite == True);
+#endif
     if (res < 0) {
         SySetErrorNo();
         return Fail;
@@ -1974,7 +2012,12 @@ static Obj FuncIO_unsetenv(Obj self, Obj name)
         SyClearErrorNo();
         return Fail;
     }
+#ifdef _WIN32
+    // assigning the empty value removes the variable
+    int res = _putenv_s(CONST_CSTR_STRING(name), "");
+#else
     int res = unsetenv(CONST_CSTR_STRING(name));
+#endif
     if (res < 0) {
         SySetErrorNo();
         return Fail;
@@ -2166,8 +2209,10 @@ static StructGVarFunc GVarFuncs[] = {
         IO_select, 5, "inlist, outlist, exclist, timeoutsec, timeoutusec"),
 #endif
 
+#ifdef IO_HAVE_SIGCHLD
     GVAR_FUNC(IO_IgnorePid, 1, "pid"),
-#if defined(HAVE_SIGACTION) || defined(HAVE_SIGNAL)
+#endif
+#ifdef IO_HAVE_SIGCHLD
     GVAR_FUNC(IO_WaitPid, 2, "pid, wait"),
 #endif
 
@@ -2179,14 +2224,16 @@ static StructGVarFunc GVarFuncs[] = {
     GVAR_FUNC(IO_execvp, 2, "path, argv"),
     GVAR_FUNC(IO_execve, 3, "path, argv, envp"),
     GVAR_FUNC(IO_environ, 0, ""),
-#ifdef HAVE_SIGNAL
+#ifdef IO_HAVE_SIGCHLD
     GVAR_FUNC(IO_InstallSIGCHLDHandler, 0, ""),
     GVAR_FUNC(IO_RestoreSIGCHLDHandler, 0, ""),
 #endif
 
+#ifdef HAVE_PIPE
     GVAR_FUNC(IO_pipe, 0, ""),
+#endif
     GVAR_FUNC(IO_exit, 1, "status"),
-#ifdef HAVE_FCNTL_H
+#ifdef HAVE_FCNTL
     GVAR_FUNC(IO_fcntl, 3, "fd, cmd, arg"),
 #endif
 
