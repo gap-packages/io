@@ -479,7 +479,12 @@ For details see <Q><C>man 2 fork</C></Q>.
 Note that <Ref Func="IO_fork"/> activates our SIGCHLD handler (see <Ref
 Func="IO_InstallSIGCHLDHandler"/>). Note that you must use the
 <Ref Func="IO_WaitPid"/> function to wait or check for the termination of
-child processes, or call <Ref Func="IO_IgnorePid"/> to ignore the child. 
+child processes, or call <Ref Func="IO_IgnorePid"/> to ignore the child.
+<P/>
+The child starts with the signal mask and the dispositions of the
+termination signals (SIGHUP, SIGINT, SIGQUIT, SIGALRM, SIGTERM) reset to
+their defaults, even if the process embedding &GAP; had blocked or ignored
+them, so that it can be stopped with <Ref Func="IO_kill"/>.
 </Description>
 </ManSection>
 
@@ -1096,6 +1101,12 @@ automatically called by any function which creates new processes,
 so never needs to be called unless the handler was explictly disabled with
 <Ref Func="IO_RestoreSIGCHLDHandler"/>
 See <Ref Func="IO_fork"/>.
+<P/>
+In HPC-GAP, and when &GAP; is used as a library inside another program
+(such as Julia via GAP.jl), no SIGCHLD handler is installed at all, and this
+function returns <K>false</K>: the host manages child processes itself, and
+<Package>IO</Package> only ever waits for the children it created, by process id. All
+functions described here behave the same in both modes.
 </Description>
 </ManSection>
 
