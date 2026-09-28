@@ -1,6 +1,8 @@
 This file describes changes in the IO package.
 
-4.10.1 (unreleased)
+4.11.0 (2026-09-28)
+  - Build on native Windows (mingw); functions without a Windows
+    equivalent, including sockets, remain unavailable there
   - Reset blocked/ignored/caught termination signals around IO_fork so that
     children can be stopped with SIGTERM etc. even when a program embedding
     GAP (e.g. julia via GAP.jl) redirects signal handling
@@ -10,6 +12,7 @@ This file describes changes in the IO package.
     another program (e.g. julia via GAP.jl); wait only for the children
     created by IO_fork, by process id, so that the host's own child
     process handling keeps working (resolves issue #5)
+  - Implement IO_gethostname on Windows
 
 4.10.0 (2026-07-14)
   - Handle chunked HTTP responses without waiting for the server to close the
