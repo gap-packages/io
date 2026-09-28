@@ -3,6 +3,8 @@ name: Check for pending release
 on:
   schedule:
     - cron: '0 6 * * 1'   # every Monday at 06:00 UTC
+  release:
+    types: [published]    # close the issue once a release is made
   workflow_dispatch:
 
 permissions:
