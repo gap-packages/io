@@ -1,306 +1,352 @@
 This file describes changes in the IO package.
 
-4.11.0 (2026-09-28)
-  - Build on native Windows (mingw); functions without a Windows
-    equivalent, including sockets, remain unavailable there
-  - Reset blocked/ignored/caught termination signals around IO_fork so that
-    children can be stopped with SIGTERM etc. even when a program embedding
-    GAP (e.g. julia via GAP.jl) redirects signal handling
-  - Make IO_WaitPid return instead of looping forever when the waited-for
-    process is not an unreaped child
-  - Do not install a SIGCHLD handler in HPC-GAP or when GAP is embedded in
-    another program (e.g. julia via GAP.jl); wait only for the children
-    created by IO_fork, by process id, so that the host's own child
-    process handling keeps working (resolves issue #5)
-  - Implement IO_gethostname on Windows
+## 4.11.0 (2026-09-28)
 
-4.10.0 (2026-07-14)
-  - Handle chunked HTTP responses without waiting for the server to close the
-    connection
-  - Avoid hangs in the external HTTP test by requesting connection closure
+- Build on native Windows (mingw); functions without a Windows
+  equivalent, including sockets, remain unavailable there
+- Reset blocked/ignored/caught termination signals around IO_fork so that
+  children can be stopped with SIGTERM etc. even when a program embedding
+  GAP (e.g. julia via GAP.jl) redirects signal handling
+- Make IO_WaitPid return instead of looping forever when the waited-for
+  process is not an unreaped child
+- Do not install a SIGCHLD handler in HPC-GAP or when GAP is embedded in
+  another program (e.g. julia via GAP.jl); wait only for the children
+  created by IO_fork, by process id, so that the host's own child
+  process handling keeps working (resolves issue #5)
+- Implement IO_gethostname on Windows
 
-4.9.3 (2025-06-21)
-  - More preparation for future GAP versions
+## 4.10.0 (2026-07-14)
 
-4.9.2 (2025-06-20)
-  - Prepare code for future GAP versions
+- Handle chunked HTTP responses without waiting for the server to close the
+  connection
+- Avoid hangs in the external HTTP test by requesting connection closure
 
-4.9.1 (2024-11-18)
-  - Various janitorial changes
+## 4.9.3 (2025-06-21)
 
-4.9.0 (2024-09-05)
-  - Require GAP >= 4.12 so that we can use `LoadKernelExtension`
+- More preparation for future GAP versions
 
-4.8.3 (2024-07-29)
-  - Validates arguments to IO_gmtime and IO_localtime
+## 4.9.2 (2025-06-20)
 
-4.8.2 (2023-10-16)
-  - Properly close all open files on exit.
+- Prepare code for future GAP versions
 
-4.8.1 (2023-02-03)
-  - Improve compatibility with future GAP releases
+## 4.9.1 (2024-11-18)
 
-4.8.0 (2022-10-18)
-  - Change minimal required GAP version to 4.11
-  - Add IO_getenv, IO_setenv, IO_unsetenv
+- Various janitorial changes
 
-4.7.3 (2022-09-25)
-  - Fix a build issue where running `make clean` would break the build
-    system (and hence building this package via GAP's BuildPackages.sh
-    script was broken, as that always runs `make clean` first)
-  - Various janitorial changes
+## 4.9.0 (2024-09-05)
 
-4.7.2 (2021-10-21)
-  - Change `Random( RandomSource( IsRealRandomSource, "random" ), 1, 1 )` from `fail` to `1`.
-  - Improve `IO_CallWithTimeout` documentation
+- Require GAP >= 4.12 so that we can use `LoadKernelExtension`
 
-4.7.1 (2021-04-11)
-  - Add IO_realpath
-  - Handle crashing GAP in IO_CallWithTimeout
-  - Fix unpickling of permutation groups with no generators
-  - Switch to a new build system
-  - Various janitorial changes
+## 4.8.3 (2024-07-29)
 
-4.7.0 (2019-07-17)
-  - Add IO_CallWithTimeout
-  - Remove CheckForUpdates, it was hopelessly broken
-  - Make IO_stat/IO_lstat/IO_fstat compatible with large files
-  - Various janitorial changes
+- Validates arguments to IO_gmtime and IO_localtime
 
-4.6.0 (2019-03-15)
-  - Change minimal required GAP version to 4.10
-  - Fix for profiling when IO_fork is called
-  - Add License field to PackageInfo.g
-  - Fix various (harmless) compiler warnings
-  - Various internal changes to better work with newer (and future) GAP versions
-    (avoid including src/iostream.h, avoid C_NEW_STRING, modernize build system)
+## 4.8.2 (2023-10-16)
 
-4.5.4 (2018-09-19)
-  - Add IO_getcwd to query the current working directory
-  - Fix ChangeDirectoryCurrent when used with relative paths
-    (it used to set GAPInfo.DirectoryCurrent to an invalid value)
+- Properly close all open files on exit.
 
-4.5.3 (2018-09-18)
-  - Minimal GAP version is 4.9 (it already effectively was in 4.5.2, but PackageInfo.g
-    had not been updated)
+## 4.8.1 (2023-02-03)
 
-4.5.2 (2018-08-21)
-  - Add exit status to IO_WaitPid (contributed by Chris Jefferson, PR #64)
-  - Make IO usable in the HPC-GAP threads (contributed by Mohamed Barakat, PR #65)
-  - Fix a failure in the HTTP part of the test suite
-  - Replace the deprecated `Elements` in examples by `AsSet`
-  - Clarify IO_WaitPid documentation
-  - Various minor changes to the build system and test suite
+- Improve compatibility with future GAP releases
 
-4.5.1 (2018-01-10)
-  - Fix a bug which could break usage IO_mkstemp or IO_mkdtemp in
-    a loaded GAP workspace
-  - Improve integration with GAP 4.9 build system
+## 4.8.0 (2022-10-18)
 
-4.5.0 (2017-11-20)
-  - Compatible with GAP 4.9
-  - Add support for (un)pickling ranges and character tables
-    (contributed by Thomas Breuer)
-  - Add automatic call to InstallSIGCHLDHandler() when IO_Fork is used
-    directly or indirectly. As a consequence, code directly calling
-    IO_fork must now always call IO_WaitPid or the new IO_IgnorePid
-  - Fix error handling in ChangeDirectoryCurrent
-  - Fix link to issue tracker in the manual
-  - Fix building the documentation on case sensitive file systems
-  - Remove undocumented function IO_MasterPointerNumber
+- Change minimal required GAP version to 4.11
+- Add IO_getenv, IO_setenv, IO_unsetenv
 
-4.4.6 (2016-03-08)
-  - Remove support for (un)pickling SuPeRfail
-  - Add wrappers for mkstemp and mkdtemp
-  - Some maintenance changes
+## 4.7.3 (2022-09-25)
 
-4.4.5 (2016-01-07)
-  - Move website to https://gap-packages.github.io/io/
-  - Change IO_PipeThroughWithError to also return the exit status of
-    the child process
-  - Improve test suite a little bit
-  - GAP 4.8 also provides ChangeDirectoryCurrent, so we only
-    define it if it does not already exist
-  - Don't wait for child processes to exit on GAP exit
+- Fix a build issue where running `make clean` would break the build
+  system (and hence building this package via GAP's BuildPackages.sh
+  script was broken, as that always runs `make clean` first)
+- Various janitorial changes
 
-4.4.4 (2014-11-19)
-  - Fix a bug in the IO_Write code, which for example could cause
-    IO_WriteLine to fail for certain long string
+## 4.7.2 (2021-10-21)
 
-4.4.3 (2014-11-08)
-  - Tweak the build system to avoid potential issues when the source
-    code gets repackages by third parties (e.g. by the GAP team, when
-    creating their big package archives)
+- Change `Random( RandomSource( IsRealRandomSource, "random" ), 1, 1 )` from `fail` to `1`.
+- Improve `IO_CallWithTimeout` documentation
 
-4.4.2 (2014-10-02)
-  - Recompress tst/test.txt with 'gzip --no-name'
-  - Fix package name in manual title ("io" -> "IO")
+## 4.7.1 (2021-04-11)
 
-4.4.1 (2014-09-25)
-  - Fix the release archive (it extracted to a directory starting with
-    "IO" instead of "io")
+- Add IO_realpath
+- Handle crashing GAP in IO_CallWithTimeout
+- Fix unpickling of permutation groups with no generators
+- Switch to a new build system
+- Various janitorial changes
 
-4.4 (2014-09-24)
-  - Fix problem with IO_Pickling some very large objects
-  - Add pickle support for transformations and partial
-    permutations
-  - Try to ensure files are flushed on exit, even if they are
-    not explicitly closed.
-  - Ensure file buffers are flushed before GAP closes, to
-    avoid data loss when files are not closed before exiting.
-  - Add = and < methods for IsFile objects
-  - Update Max Neunhoeffer's contact data
-  - Use AutoDoc to generate title page of the manual from PackageInfo.g
-  - Add Max Horn as a maintainer
+## 4.7.0 (2019-07-17)
 
-4.3.1 (2014-04-04)
-  - Previous release had an invalid release date in
-    PackageInfo.g (2014-04-31 instead of 2014-03-31).
-  - Merge HISTORY and CHANGES files.
+- Add IO_CallWithTimeout
+- Remove CheckForUpdates, it was hopelessly broken
+- Make IO_stat/IO_lstat/IO_fstat compatible with large files
+- Various janitorial changes
 
-4.3 (2014-03-31)
-  - Update and tweak the package build system
-  - Move package repository and website to GitHub
-  - Pickling/Unpickling of Floats
+## 4.6.0 (2019-03-15)
 
-4.2 (2012-05-28)
-  - Fix behaviour of IO_select to try again if the system call was
-    interrupted. This fixes an infinite loop bug in
-    ParTakeFirstResultByFork.
-  - Change "source" to "." in AC_FIND_GAP to provide support for BSD.
-  - Add script "configure_like_gap"
-  - Compile documentation against 4.5.4
-  - Fix installations instructions, remove static linking from README.
+- Change minimal required GAP version to 4.10
+- Fix for profiling when IO_fork is called
+- Add License field to PackageInfo.g
+- Fix various (harmless) compiler warnings
+- Various internal changes to better work with newer (and future) GAP versions
+  (avoid including src/iostream.h, avoid C_NEW_STRING, modernize build system)
 
-4.1 (2012-01-30)
-  - Make it compile on Windows.
+## 4.5.4 (2018-09-19)
 
-4.0 (2012-01-27)
-  - Use new build setup using automake/autoconf/libtool
-  - Move repository to git@git.gap-system.org/io
-  - Updated the documentation of IO_select
+- Add IO_getcwd to query the current working directory
+- Fix ChangeDirectoryCurrent when used with relative paths
+  (it used to set GAPInfo.DirectoryCurrent to an invalid value)
 
-3.3 (2011-03-23)
-  - Fixed a bug to compile on latest cygwin without warning.
-  - Added IOHub functionality and documented it.
-  - Hashserver example.
-  - Cleanup autoconf configuration.
+## 4.5.3 (2018-09-18)
 
-3.2 (2011-02-02)
-  - Remove the global function f which was accidentally put in there
-    in 3.1.
-  - Update cnf files for clang and to compile on GAP 4.4 and 4.5
-  - Update cnf files to autoconf 2.65
-  - Add functions gethostname and getsockname.
-  - Change license to GPL 3
+- Minimal GAP version is 4.9 (it already effectively was in 4.5.2, but PackageInfo.g
+  had not been updated)
 
-3.1 (2010-07-23)
-  - Fix documentation of /dev/random and /dev/urandom
-  - Background jobs
-  - Parallel patterns: ParMapReduce, ParTakeFirstResult, ParDo
+## 4.5.2 (2018-08-21)
 
-3.0 (2009-04-08)
-  - Added ignoring of SIGPIPE for architectures where standard
-    behaviour is to terminate the process.
-  - Completely new configure process with our own autoconf scripts
-  - IO_gettimeofday new
-  - IO_gmtime and IO_localtime new
-  - Check for IO_getpid and IO_getppid and IO_kill
-  - Load dynamic module earlier (in init.g at the beginning)
-  - Release revision 342 as 3.0: 8.4.2009
+- Add exit status to IO_WaitPid (contributed by Chris Jefferson, PR #64)
+- Make IO usable in the HPC-GAP threads (contributed by Mohamed Barakat, PR #65)
+- Fix a failure in the HTTP part of the test suite
+- Replace the deprecated `Elements` in examples by `AsSet`
+- Clarify IO_WaitPid documentation
+- Various minor changes to the build system and test suite
 
-2.3 (2007-10-03)
-  - Require GAP >= 4.4.9 in PackageInfo.g
-  - Change addresses to St Andrews.
-  - Add understanding of chunked transfer encoding.
-  - Make IO compile on FreeBSD.
-  - Added IO_getpid, IO_getppid, IO_kill.
-  - Change license to GPL V2 or later.
-  - Released revision 328 as 2.3: 3.10.2007
+## 4.5.1 (2018-01-10)
 
-2.2 (2007-04-02)
-  - Fixed a serious bug with the generic object pickler.
-  - Released version 296 as 2.2: 2.4.2007
+- Fix a bug which could break usage IO_mkstemp or IO_mkdtemp in
+  a loaded GAP workspace
+- Improve integration with GAP 4.9 build system
 
+## 4.5.0 (2017-11-20)
 
-2.1 (2007-02-26)
-  - Fixed bug with IO_stat, that time stamps are usually >= 2^28.
-  - Add framework for other packages to install picklers and unpicklers
-    even if they are loaded before the IO package.
-  - Pickling/Unpickling of functions and operations (methods still a problem)
-  - Leave out last argument of IO_GenericObjectUnpickler because it
-    was never needed, return either IO_Error or unpickled object. This
-    changes the semantics!
-  - Pickling/Unpickling of WeakPointerObjects
-  - Pickling/Unpickling of permutation groups (including Size and base of
-    StabChain)
-  - Pickling/Unpickling of matrix groups (only generators and Size)
-  - Pickling/Unpickling of finite fields
-  - Set Host component of HTTP request header by default of the name
-    of the server argument in SingleHTTPRequest.
-  - Olexandr Konovalov's CheckForUpdates function.
-  - Released revision 289 as 2.1: 26.2.2007
+- Compatible with GAP 4.9
+- Add support for (un)pickling ranges and character tables
+  (contributed by Thomas Breuer)
+- Add automatic call to InstallSIGCHLDHandler() when IO_Fork is used
+  directly or indirectly. As a consequence, code directly calling
+  IO_fork must now always call IO_WaitPid or the new IO_IgnorePid
+- Fix error handling in ChangeDirectoryCurrent
+- Fix link to issue tracker in the manual
+- Fix building the documentation on case sensitive file systems
+- Remove undocumented function IO_MasterPointerNumber
 
-2.0 (2006-12-12)
-  - See to SIGCHLD signal handler in Popen, Popen2, and Popen3
-  - WaitPid in PipeThrough*
-  - Loop around IO_select calls to ignore EINTR error
-  - Sort out __stack_chk_fail_local gcc 4.1 problem
-  - case insensitivity in header field names in HTTP protocol
-  - fix bug that crashed GAP when starting another process or terminating
-    GAP after calling Popen*
-  - Added http protocol test.
-  - Add tst/platform.g to have a check of "standard things"
-  - include more headers with #include
-  - take care of PIPE_BUF variable (might not exist on platform!)
-  - Improved installation instructions in the manual and the README file.
-  - Add proper preface to the manual
-  - Fix documentation of Popen*
-  - Clean up code for Popen, create IO_ForkExecWithFDs
-  - IO_StartPipeline
-  - IO_StringFilterFile, IO_FileFilterString
-  - paths to executables do PATH lookups using IO_FindExecutable
-  - IO_FilteredFile to create a File object which filteres through a pipeline.
-  - Let IO_Close automatically call IO_WaitPid under certain circumstances.
-  - Released revision 238 as 2.0: 12.12.2006
+## 4.4.6 (2016-03-08)
 
-1.6 (2006-11-16)
-  - New binding IO_fcntl with corresponding constants in IO
-    (this is necessary for switching a file descriptor to O_NONBLOCK)
-  - In IO_WriteNonBlocking only try to send PIPE_BUF bytes instead
-    of full buffer to avoid blocking (is this the solution?)
-  - Functionality to pipe a string through an external command
-    using I/O multiplexing
-  - New client side HTTP protocol implementation
-  - Use chapters in documentation
-  - New functions IO_PipeThrough and IO_PipeThroughWithError to pipe
-    a string through a process.
-  - Released version 1.6: 16.11.2006
+- Remove support for (un)pickling SuPeRfail
+- Add wrappers for mkstemp and mkdtemp
+- Some maintenance changes
 
-1.5 (??)
-  - Big changes in the buffered I/O functionality to allow for non-blocking
-    I/O with buffers. Documented all. This changed the interface to buffered
-    I/O considerable!
-  - Test code for buffered I/O.
-  - Test code for pickling/unpickling.
-  - Some small bug fixes of bugs found during development of test code.
+## 4.4.5 (2016-01-07)
 
-1.4 (??)
-  - moved real random sources from the orb package here
-    adjust them to new library code
-  - implement picklers/unpicklers for random sources
+- Move website to https://gap-packages.github.io/io/
+- Change IO_PipeThroughWithError to also return the exit status of
+  the child process
+- Improve test suite a little bit
+- GAP 4.8 also provides ChangeDirectoryCurrent, so we only
+  define it if it does not already exist
+- Don't wait for child processes to exit on GAP exit
 
-1.3 (2006-09-01)
-  - hint to load a package if there is no handler for magic during unpickling
-  - follow Frank's suggestion to allow more than one package with a
-    C-part to be linked to a statically compiled GAP, document this
-  - release subversion revision 155 as Version 1.3
+## 4.4.4 (2014-11-19)
 
-1.2 (??)
-  - ?
+- Fix a bug in the IO_Write code, which for example could cause
+  IO_WriteLine to fail for certain long string
 
-1.1 (??)
-  - ?
+## 4.4.3 (2014-11-08)
 
-1.0 (??)
-  - Initial release
+- Tweak the build system to avoid potential issues when the source
+  code gets repackages by third parties (e.g. by the GAP team, when
+  creating their big package archives)
+
+## 4.4.2 (2014-10-02)
+
+- Recompress tst/test.txt with 'gzip --no-name'
+- Fix package name in manual title ("io" -> "IO")
+
+## 4.4.1 (2014-09-25)
+
+- Fix the release archive (it extracted to a directory starting with
+  "IO" instead of "io")
+
+## 4.4 (2014-09-24)
+
+- Fix problem with IO_Pickling some very large objects
+- Add pickle support for transformations and partial
+  permutations
+- Try to ensure files are flushed on exit, even if they are
+  not explicitly closed.
+- Ensure file buffers are flushed before GAP closes, to
+  avoid data loss when files are not closed before exiting.
+- Add = and < methods for IsFile objects
+- Update Max Neunhoeffer's contact data
+- Use AutoDoc to generate title page of the manual from PackageInfo.g
+- Add Max Horn as a maintainer
+
+## 4.3.1 (2014-04-04)
+
+- Previous release had an invalid release date in
+  PackageInfo.g (2014-04-31 instead of 2014-03-31).
+- Merge HISTORY and CHANGES files.
+
+## 4.3 (2014-03-31)
+
+- Update and tweak the package build system
+- Move package repository and website to GitHub
+- Pickling/Unpickling of Floats
+
+## 4.2 (2012-05-28)
+
+- Fix behaviour of IO_select to try again if the system call was
+  interrupted. This fixes an infinite loop bug in
+  ParTakeFirstResultByFork.
+- Change "source" to "." in AC_FIND_GAP to provide support for BSD.
+- Add script "configure_like_gap"
+- Compile documentation against 4.5.4
+- Fix installations instructions, remove static linking from README.
+
+## 4.1 (2012-01-30)
+
+- Make it compile on Windows.
+
+## 4.0 (2012-01-27)
+
+- Use new build setup using automake/autoconf/libtool
+- Move repository to git@git.gap-system.org/io
+- Updated the documentation of IO_select
+
+## 3.3 (2011-03-23)
+
+- Fixed a bug to compile on latest cygwin without warning.
+- Added IOHub functionality and documented it.
+- Hashserver example.
+- Cleanup autoconf configuration.
+
+## 3.2 (2011-02-02)
+
+- Remove the global function f which was accidentally put in there
+  in 3.1.
+- Update cnf files for clang and to compile on GAP 4.4 and 4.5
+- Update cnf files to autoconf 2.65
+- Add functions gethostname and getsockname.
+- Change license to GPL 3
+
+## 3.1 (2010-07-23)
+
+- Fix documentation of /dev/random and /dev/urandom
+- Background jobs
+- Parallel patterns: ParMapReduce, ParTakeFirstResult, ParDo
+
+## 3.0 (2009-04-08)
+
+- Added ignoring of SIGPIPE for architectures where standard
+  behaviour is to terminate the process.
+- Completely new configure process with our own autoconf scripts
+- IO_gettimeofday new
+- IO_gmtime and IO_localtime new
+- Check for IO_getpid and IO_getppid and IO_kill
+- Load dynamic module earlier (in init.g at the beginning)
+- Release revision 342 as 3.0: 8.4.2009
+
+## 2.3 (2007-10-03)
+
+- Require GAP >= 4.4.9 in PackageInfo.g
+- Change addresses to St Andrews.
+- Add understanding of chunked transfer encoding.
+- Make IO compile on FreeBSD.
+- Added IO_getpid, IO_getppid, IO_kill.
+- Change license to GPL V2 or later.
+- Released revision 328 as 2.3: 3.10.2007
+
+## 2.2 (2007-04-02)
+
+- Fixed a serious bug with the generic object pickler.
+- Released version 296 as 2.2: 2.4.2007
+
+## 2.1 (2007-02-26)
+
+- Fixed bug with IO_stat, that time stamps are usually >= 2^28.
+- Add framework for other packages to install picklers and unpicklers
+  even if they are loaded before the IO package.
+- Pickling/Unpickling of functions and operations (methods still a problem)
+- Leave out last argument of IO_GenericObjectUnpickler because it
+  was never needed, return either IO_Error or unpickled object. This
+  changes the semantics!
+- Pickling/Unpickling of WeakPointerObjects
+- Pickling/Unpickling of permutation groups (including Size and base of
+  StabChain)
+- Pickling/Unpickling of matrix groups (only generators and Size)
+- Pickling/Unpickling of finite fields
+- Set Host component of HTTP request header by default of the name
+  of the server argument in SingleHTTPRequest.
+- Olexandr Konovalov's CheckForUpdates function.
+- Released revision 289 as 2.1: 26.2.2007
+
+## 2.0 (2006-12-12)
+
+- See to SIGCHLD signal handler in Popen, Popen2, and Popen3
+- WaitPid in PipeThrough*
+- Loop around IO_select calls to ignore EINTR error
+- Sort out __stack_chk_fail_local gcc 4.1 problem
+- case insensitivity in header field names in HTTP protocol
+- fix bug that crashed GAP when starting another process or terminating
+  GAP after calling Popen*
+- Added http protocol test.
+- Add tst/platform.g to have a check of "standard things"
+- include more headers with #include
+- take care of PIPE_BUF variable (might not exist on platform!)
+- Improved installation instructions in the manual and the README file.
+- Add proper preface to the manual
+- Fix documentation of Popen*
+- Clean up code for Popen, create IO_ForkExecWithFDs
+- IO_StartPipeline
+- IO_StringFilterFile, IO_FileFilterString
+- paths to executables do PATH lookups using IO_FindExecutable
+- IO_FilteredFile to create a File object which filteres through a pipeline.
+- Let IO_Close automatically call IO_WaitPid under certain circumstances.
+- Released revision 238 as 2.0: 12.12.2006
+
+## 1.6 (2006-11-16)
+
+- New binding IO_fcntl with corresponding constants in IO
+  (this is necessary for switching a file descriptor to O_NONBLOCK)
+- In IO_WriteNonBlocking only try to send PIPE_BUF bytes instead
+  of full buffer to avoid blocking (is this the solution?)
+- Functionality to pipe a string through an external command
+  using I/O multiplexing
+- New client side HTTP protocol implementation
+- Use chapters in documentation
+- New functions IO_PipeThrough and IO_PipeThroughWithError to pipe
+  a string through a process.
+- Released version 1.6: 16.11.2006
+
+## 1.5 (??)
+
+- Big changes in the buffered I/O functionality to allow for non-blocking
+  I/O with buffers. Documented all. This changed the interface to buffered
+  I/O considerable!
+- Test code for buffered I/O.
+- Test code for pickling/unpickling.
+- Some small bug fixes of bugs found during development of test code.
+
+## 1.4 (??)
+
+- moved real random sources from the orb package here
+  adjust them to new library code
+- implement picklers/unpicklers for random sources
+
+## 1.3 (2006-09-01)
+
+- hint to load a package if there is no handler for magic during unpickling
+- follow Frank's suggestion to allow more than one package with a
+  C-part to be linked to a statically compiled GAP, document this
+- release subversion revision 155 as Version 1.3
+
+## 1.2 (??)
+
+- ?
+
+## 1.1 (??)
+
+- ?
+
+## 1.0 (??)
+
+- Initial release
