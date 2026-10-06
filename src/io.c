@@ -519,6 +519,18 @@ static Obj FuncIO_WaitPid(Obj self, Obj pid, Obj wait)
     signal(SIGCHLD, IO_SIGCHLDHandler);
     return tmp;
 }
+#else    // !IO_HAVE_SIGCHLD
+
+// without SIGCHLD there is no handler to install or restore
+static Obj FuncIO_InstallSIGCHLDHandler(Obj self)
+{
+    return False;
+}
+
+static Obj FuncIO_RestoreSIGCHLDHandler(Obj self)
+{
+    return False;
+}
 #endif    // IO_HAVE_SIGCHLD
 
 static Obj FuncIO_open(Obj self, Obj path, Obj flags, Obj mode)
@@ -2394,10 +2406,8 @@ static StructGVarFunc GVarFuncs[] = {
     GVAR_FUNC(IO_execvp, 2, "path, argv"),
     GVAR_FUNC(IO_execve, 3, "path, argv, envp"),
     GVAR_FUNC(IO_environ, 0, ""),
-#ifdef IO_HAVE_SIGCHLD
     GVAR_FUNC(IO_InstallSIGCHLDHandler, 0, ""),
     GVAR_FUNC(IO_RestoreSIGCHLDHandler, 0, ""),
-#endif
 
 #ifdef HAVE_PIPE
     GVAR_FUNC(IO_pipe, 0, ""),
@@ -2454,10 +2464,12 @@ static Int InitKernel(StructInitInfo * module)
     InitHdlrFuncsFromTable(GVarFuncs);
 
     // see "Child reaping strategy" above
+#ifdef IO_HAVE_SIGCHLD
 #ifdef HPCGAP
     use_sigchld_handler = 0;
 #else
     use_sigchld_handler = !IsUsingLibGap();
+#endif
 #endif
 
     // return success
