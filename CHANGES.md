@@ -1,5 +1,11 @@
 This file describes changes in the IO package.
 
+## Unreleased
+
+- Fix the build on native Windows (mingw), which 4.11.0 broke
+- Make IO_InstallSIGCHLDHandler and IO_RestoreSIGCHLDHandler do nothing on
+  platforms without SIGCHLD, instead of raising an error
+
 ## 4.11.0 (2026-09-28)
 
 - Build on native Windows (mingw); functions without a Windows
