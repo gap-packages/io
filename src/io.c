@@ -2464,10 +2464,12 @@ static Int InitKernel(StructInitInfo * module)
     InitHdlrFuncsFromTable(GVarFuncs);
 
     // see "Child reaping strategy" above
+#ifdef IO_HAVE_SIGCHLD
 #ifdef HPCGAP
     use_sigchld_handler = 0;
 #else
     use_sigchld_handler = !IsUsingLibGap();
+#endif
 #endif
 
     // return success
