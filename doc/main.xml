@@ -1107,6 +1107,9 @@ In HPC-GAP, and when &GAP; is used as a library inside another program
 function returns <K>false</K>: the host manages child processes itself, and
 <Package>IO</Package> only ever waits for the children it created, by process id. All
 functions described here behave the same in both modes.
+<P/>
+On platforms without SIGCHLD, such as native Windows, this function and
+<Ref Func="IO_RestoreSIGCHLDHandler"/> do nothing and return <K>false</K>.
 </Description>
 </ManSection>
 
