@@ -21,8 +21,7 @@ BindGlobal( "IO_UnavailableFunc", function( name )
 end );
 
 BindGlobal( "IO_MaybeUnavailable", [
-  "IO_IgnorePid", "IO_InstallSIGCHLDHandler", "IO_RestoreSIGCHLDHandler",
-  "IO_WaitPid", "IO_accept", "IO_bind", "IO_chmod", "IO_chown",
+  "IO_IgnorePid", "IO_WaitPid", "IO_accept", "IO_bind", "IO_chmod", "IO_chown",
   "IO_closedir", "IO_connect", "IO_dup", "IO_dup2", "IO_fchmod",
   "IO_fchown", "IO_fcntl", "IO_fork", "IO_fstat", "IO_gethostbyname",
   "IO_gethostname", "IO_getpid", "IO_getppid", "IO_getsockname",
