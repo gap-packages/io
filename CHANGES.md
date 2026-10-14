@@ -6,6 +6,24 @@ This file describes changes in the IO package.
   not compile there
 - Make IO_InstallSIGCHLDHandler and IO_RestoreSIGCHLDHandler do nothing on
   platforms without SIGCHLD, instead of raising an error
+- Pickle free and finitely presented groups, their elements and their
+  subgroups
+- Stop unpickling from evaluating its input: permutations, finite field
+  elements and cyclotomics used to be stored as their printed form and read
+  back with EvalString, so a pickle from an untrusted source could run
+  arbitrary code. They now use formats that need no evaluation, and the old
+  formats are parsed rather than evaluated. Pickles written by earlier
+  versions are still readable; pickles written by this version cannot be
+  read by earlier ones
+- Unpickle functions stored by name without evaluating anything, and refuse
+  to evaluate pickled function source unless
+  IO_UnpickleAllowEvalOfFunctions is set to true
+- Pickle rationals, infinity and -infinity directly
+- Document `IO_Pickle( ob )` and `IO_Unpickle( str )`, which pickle to and
+  from a string instead of a file. These have existed since 2011 but were
+  never documented
+- Make `IO_Pickle( ob )` report failure instead of returning a truncated
+  string, and drop its 1 MB preallocation
 
 ## 4.11.0 (2026-09-28)
 
