@@ -214,11 +214,11 @@ InstallGlobalFunction( IO_ParseLegacyExpression,
         while pos <= len and s[pos] = ' ' do pos := pos + 1; od;
       end;
 
+    # only ever called with a digit under the cursor, so it cannot fail
     integer := function()
         local start;
         start := pos;
         while pos <= len and IsDigitChar(s[pos]) do pos := pos + 1; od;
-        if pos = start then return fail; fi;
         return Int(s{[start..pos-1]});
       end;
 
@@ -349,6 +349,7 @@ InstallGlobalFunction( IO_ParsePermString,
     imgs := [];
     len := Length(s);
     pos := 1;
+    if len = 0 then return fail; fi;   # String() writes at least "()"
     while pos <= len do
         if s[pos] <> '(' then return fail; fi;
         pos := pos + 1;
