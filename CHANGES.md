@@ -1,6 +1,6 @@
 This file describes changes in the IO package.
 
-## Unreleased
+## 4.11.1 (2026-11-23)
 
 - Make IO build on native Windows (mingw): 4.11.0 announced this, but did
   not compile there
